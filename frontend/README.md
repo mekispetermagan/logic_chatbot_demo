@@ -20,8 +20,9 @@ Haskell editor executable as described in `backend/api/README.md` before editing
 Chat accepts the engine's atomic sentences and restores persisted messages on
 restart. User bubbles use Material primary container colors; machine bubbles use
 secondary container colors. Replies preserve prettyprinted sentences and answers;
-parse errors have a distinct label and border. The multiline composer uses the
-Send button; failed requests retain the draft. For example, send
+parse errors have a distinct label and border. Enter submits, Shift+Enter inserts
+a new line, and the Send button remains available; failed requests retain the
+draft. For example, send
 `#0 blue. #0 blue? color of #0?`. A whole entry is one undoable world update,
 and Undo keeps chat messages. The
 previous local editor controller and fixture remain for existing interaction

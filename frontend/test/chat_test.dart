@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -26,6 +27,50 @@ Map<String, dynamic> state({bool history = false}) => {
 };
 
 void main() {
+  testWidgets(
+    'Enter submits, Shift+Enter inserts a newline, and mobile Send submits',
+    (tester) async {
+      final submitted = <String>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ChatPanel(
+              messages: const [],
+              canSend: true,
+              sending: false,
+              onRefresh: () {},
+              onSend: (text) async {
+                submitted.add(text);
+                return true;
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.enterText(find.byType(TextField), '#0 red.');
+      await tester.pump();
+      await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+      await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+      await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+      await tester.pump();
+      expect(submitted, isEmpty);
+      expect(
+        tester.widget<TextField>(find.byType(TextField)).controller!.text,
+        '#0 red.\n',
+      );
+      await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+      await tester.pumpAndSettle();
+      expect(submitted, ['#0 red.\n']);
+      expect(
+        tester.widget<TextField>(find.byType(TextField)).controller!.text,
+        isEmpty,
+      );
+      await tester.enterText(find.byType(TextField), '#0 red?');
+      await tester.testTextInput.receiveAction(TextInputAction.send);
+      await tester.pumpAndSettle();
+      expect(submitted, ['#0 red.\n', '#0 red?']);
+    },
+  );
   test(
     'chat sends text once, blocks edits, and accepts persisted history',
     () async {
@@ -47,8 +92,8 @@ void main() {
       expect(subject.sendingChat, isTrue);
       expect(subject.canEdit, isFalse);
       expect(await subject.sendChat('#0 blue?'), isFalse);
-    await subject.clear();
-    await Future<void>.delayed(Duration.zero);
+      await subject.clear();
+      await Future<void>.delayed(Duration.zero);
       expect(requests.single.url.path, '/conversations/saved/chat');
       expect(jsonDecode(requests.single.body), {'text': '#0 red?'});
       pending.complete(http.Response(jsonEncode(state(history: true)), 200));
