@@ -1,0 +1,70 @@
+{
+  "width": 8,
+  "height": 8,
+  "objects": [
+    {
+      "id": 0,
+      "shape": "cube",
+      "size": "medium",
+      "color": "red",
+      "position": {
+        "x": 1,
+        "y": 7
+      }
+    },
+    {
+      "id": 1,
+      "shape": "sphere",
+      "size": "small",
+      "color": "blue",
+      "position": {
+        "x": 5,
+        "y": 6
+      }
+    },
+    {
+      "id": 2,
+      "shape": "pyramid",
+      "size": "large",
+      "color": null,
+      "position": {
+        "x": 3,
+        "y": 5
+      }
+    },
+    {
+      "id": 3,
+      "shape": null,
+      "size": "large",
+      "color": "green",
+      "position": {
+        "x": 0,
+        "y": 3
+      }
+    },
+    {
+      "id": 4,
+      "shape": "cube",
+      "size": null,
+      "color": "yellow",
+      "position": {
+        "x": 6,
+        "y": 3
+      }
+    },
+    {
+      "id": 5,
+      "shape": "pyramid",
+      "size": "medium",
+      "color": "blue",
+      "position": null
+    },
+    {
+      "id": 6,
+      "shape": "cube",
+      "size": "large",
+      "color": null,
+      "position": null
+    }
+  ]
+}

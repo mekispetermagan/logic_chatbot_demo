@@ -73,3 +73,33 @@ ghci -XInstanceSigs Grammar.hs AtomicParser.hs
 `InstanceSigs` is needed for the existing signature in the `Ord Identifier`
 instance. Cabal enables it for this project. Parsing does not perform collision
 checks or apply updates; those belong to the world-update layer.
+
+## Visual editor bridge
+
+`WorldEditor.hs` evaluates property edits, placement, erasure, and clearing as
+pure operations. Property edits reuse atomic performatives; placement requires
+an existing unplaced object. Undo belongs to FastAPI persistence.
+
+`bridge/EditorJson.hs` handles JSON; `bridge/Main.hs` provides a one-request
+executable. Each process reads one JSON document from stdin and writes one
+response to stdout. Invalid protocol input exits unsuccessfully with diagnostics
+on stderr. The bridge validates 8×8 dimensions, unique identifiers, bounds, and
+occupancy of the supplied world before evaluation.
+
+```sh
+cabal build exe:logic-engine-editor
+mkdir -p bin
+cp "$(cabal list-bin exe:logic-engine-editor)" bin/logic-engine-editor
+cabal test
+```
+
+Rebuild and copy after changes to engine code. FastAPI uses the copied executable.
+A request has `world` (the shared JSON representation) and `action`, for example:
+
+```json
+{"world":{"width":8,"height":8,"objects":[]},"action":{"type":"property","position":{"x":0,"y":0},"property":"red"}}
+```
+
+The response contains the resulting `world` and concise `feedback`. Other action
+types are `place` (with `objectId` and `position`), `erase` (with `position`), and
+`clear`. Haskell contains no HTTP, database, or conversation handling.

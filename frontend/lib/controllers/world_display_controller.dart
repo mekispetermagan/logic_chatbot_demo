@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../models/world.dart';
+import '../models/object_property.dart';
 import '../models/world_object.dart';
 
 class WorldDisplayController extends ChangeNotifier {
@@ -12,28 +13,28 @@ class WorldDisplayController extends ChangeNotifier {
   List<World> get history => List.unmodifiable(_history);
   bool get canUndo => _history.length >= 2;
 
-  ObjectColor _color = ObjectColor.red;
-  ObjectSize _size = ObjectSize.medium;
-  ObjectShape _shape = ObjectShape.cube;
-  ObjectColor get color => _color;
-  ObjectSize get size => _size;
-  ObjectShape get shape => _shape;
+  ObjectProperty _selectedProperty = ObjectProperty.red;
+  ObjectProperty get selectedProperty => _selectedProperty;
 
-  void selectColor(ObjectColor value) {
-    if (_color == value) return;
-    _color = value;
+  int? _selectedUnplacedObjectId;
+  int? get selectedUnplacedObjectId => _selectedUnplacedObjectId;
+
+  void selectUnplacedObject(int id) {
+    if (!world.objects.any(
+      (object) => object.id == id && object.position == null,
+    )) {
+      return;
+    }
+    _selectedUnplacedObjectId = _selectedUnplacedObjectId == id ? null : id;
     notifyListeners();
   }
 
-  void selectSize(ObjectSize value) {
-    if (_size == value) return;
-    _size = value;
-    notifyListeners();
-  }
-
-  void selectShape(ObjectShape value) {
-    if (_shape == value) return;
-    _shape = value;
+  void selectProperty(ObjectProperty property) {
+    if (_selectedProperty == property && _selectedUnplacedObjectId == null) {
+      return;
+    }
+    _selectedUnplacedObjectId = null;
+    _selectedProperty = property;
     notifyListeners();
   }
 
@@ -42,38 +43,69 @@ class WorldDisplayController extends ChangeNotifier {
 
   void paint(int x, int y) {
     if (!_contains(x, y)) return;
-    if (world.objects.any(
-      (object) =>
-          object.x == x &&
-          object.y == y &&
-          object.color == color &&
-          object.size == size &&
-          object.shape == shape,
-    )) {
+    final position = BoardPosition(x, y);
+    final matching = world.objects
+        .where((object) => object.position == position)
+        .toList();
+    final selectedId = _selectedUnplacedObjectId;
+    if (selectedId != null) {
+      if (matching.isNotEmpty) return;
+      final unplaced = world.objects
+          .where((object) => object.id == selectedId && object.position == null)
+          .toList();
+      if (unplaced.length != 1) return;
+      final selected = unplaced.single;
+      final placed = WorldObject(
+        id: selected.id,
+        shape: selected.shape,
+        size: selected.size,
+        color: selected.color,
+        position: position,
+      );
+      _selectedUnplacedObjectId = null;
+      _append([
+        for (final object in world.objects)
+          if (identical(object, selected)) placed else object,
+      ]);
+      return;
+    }
+    if (matching.length > 1) return;
+    if (matching.isEmpty) {
+      final created = WorldObject(id: world.nextId, position: position);
+      _append([...world.objects, selectedProperty.applyTo(created)]);
+      return;
+    }
+    final previous = matching.single;
+    final updated = selectedProperty.applyTo(previous);
+    if (previous.color == updated.color &&
+        previous.size == updated.size &&
+        previous.shape == updated.shape) {
       return;
     }
     _append([
-      ...world.objects.where((object) => object.x != x || object.y != y),
-      WorldObject(shape: shape, size: size, color: color, x: x, y: y),
+      for (final object in world.objects)
+        if (identical(object, previous)) updated else object,
     ]);
   }
 
   void erase(int x, int y) {
     if (!_contains(x, y)) return;
     final objects = world.objects
-        .where((object) => object.x != x || object.y != y)
+        .where((object) => object.position != BoardPosition(x, y))
         .toList();
     if (objects.length == world.objects.length) return;
     _append(objects);
   }
 
   void clear() {
+    _selectedUnplacedObjectId = null;
     if (world.objects.isEmpty) return;
     _append([]);
   }
 
   void undo() {
     if (!canUndo) return;
+    _selectedUnplacedObjectId = null;
     _history.removeLast();
     notifyListeners();
   }

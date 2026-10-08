@@ -8,7 +8,7 @@ Read `specification/logic-dialogue-concept-note.pdf` for that overall goal, then
 
 ## Project Structure & Module Organization
 
-The Flutter skeleton lives in `frontend/`, with widgets in `frontend/lib/main.dart` and platform configuration in `frontend/web/`, `frontend/linux/`, and `frontend/android/`. Backend and engine modules do not exist yet. Keep Flutter presentation, FastAPI orchestration, and the Haskell engine separate, with tests for each stack. Keep specifications in `specification/`.
+Flutter lives in `frontend/`, with presentation in `frontend/lib/widgets/`, editing state in `frontend/lib/controllers/`, and platform configuration in `frontend/web/`, `frontend/linux/`, and `frontend/android/`. FastAPI lives in `backend/api/app/`; Haskell modules live in `backend/logic_engine/`. Shared JSON fixtures live in `backend/shared/`. Keep presentation, orchestration, and semantic world updates separate. Keep specifications in `specification/`.
 
 ## Architecture & Scope
 
@@ -24,13 +24,15 @@ Keep logic out of UI and UI out of logic. Prefer stateless widgets where natural
 
 From `frontend/`, run `flutter pub get`, `flutter analyze`, and `dart format lib`. Launch with `flutter run -d chrome`, `flutter run -d linux`, or an Android device ID from `flutter devices`. Build with `flutter build web`, `flutter build linux`, or `flutter build apk`. See `frontend/README.md` for prerequisites. The Dart SDK constraint is in `frontend/pubspec.yaml`.
 
+From `backend/api/`, install `requirements.txt` into a virtual environment, run `uvicorn app.main:app --reload`, and test with `python -m unittest discover -s tests -v`. First build `exe:logic-engine-editor` from `backend/logic_engine/` and copy it into that directory's `bin/`; API editing tests call this real executable. From `backend/logic_engine/`, run `cabal test` or `cabal repl`. See each backend directory's README for setup.
+
 ## Coding Style & Naming Conventions
 
 Use standard language formatters and descriptive names for board state, dialogue turns, and references. Keep Markdown concise with descriptive headings.
 
 ## Testing Guidelines
 
-Flutter's `flutter_test` is available; no tests or coverage threshold are defined yet. Place Flutter tests in `frontend/test/` with `_test.dart` filenames and run `flutter test`. Later, test board boundaries, occupancy, ambiguity, revisions, and derived answers against the supplied logic. Test API persistence and Flutter interaction separately.
+Place Flutter tests in `frontend/test/` with `_test.dart` filenames and run `flutter test`. Python persistence/API tests live in `backend/api/tests/` and use temporary SQLite databases; Haskell tests live in `backend/logic_engine/test/`. Test board boundaries, occupancy, reference resolution, revisions, persistence, and frontend interactions at their respective layers. No coverage threshold is defined.
 
 ## Commit & Pull Request Guidelines
 

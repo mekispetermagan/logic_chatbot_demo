@@ -1,6 +1,13 @@
 import 'world_object.dart';
 
 class World {
+  factory World.fromJson(Map<String, dynamic> json) => World(
+    width: json['width'] as int,
+    height: json['height'] as int,
+    objects: (json['objects'] as List<dynamic>)
+        .map((object) => WorldObject.fromJson(object as Map<String, dynamic>))
+        .toList(),
+  );
   World({int width = 8, int height = 8, List<WorldObject> objects = const []})
     : objects = List.unmodifiable(objects),
       width = width,
@@ -17,19 +24,28 @@ class World {
   final int height;
   final List<WorldObject> objects;
 
-  /// Whether any object lies outside this world's dimensions.
-  bool hasOutOfRangeCoordinates() => objects.any(
-    (object) =>
-        object.x < 0 || object.x >= width || object.y < 0 || object.y >= height,
-  );
+  int get nextId =>
+      objects.fold<int>(
+        -1,
+        (largest, object) => object.id > largest ? object.id : largest,
+      ) +
+      1;
 
-  /// Whether two or more objects occupy the same cell.
+  /// Unplaced objects do not have coordinates to validate.
+  bool hasOutOfRangeCoordinates() => objects.any((object) {
+    final position = object.position;
+    return position != null &&
+        (position.x < 0 ||
+            position.x >= width ||
+            position.y < 0 ||
+            position.y >= height);
+  });
+
   bool hasCollisions() {
-    final occupiedCells = <(int, int)>{};
+    final occupiedCells = <BoardPosition>{};
     for (final object in objects) {
-      if (!occupiedCells.add((object.x, object.y))) {
-        return true;
-      }
+      final position = object.position;
+      if (position != null && !occupiedCells.add(position)) return true;
     }
     return false;
   }

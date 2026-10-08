@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'data/toy_world.dart';
-import 'controllers/world_display_controller.dart';
-import 'widgets/world_display.dart';
+import 'api/conversation_api.dart';
+import 'config/api_config.dart';
+import 'controllers/conversation_controller.dart';
+import 'storage/conversation_id_store.dart';
+import 'widgets/conversation_world_panel.dart';
 
 void main() {
   runApp(const MainApp());
@@ -36,12 +38,17 @@ class DemoScreen extends StatefulWidget {
 }
 
 class _DemoScreenState extends State<DemoScreen> {
-  late final WorldDisplayController _controller;
+  late final ConversationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = WorldDisplayController(initialWorld: toyWorld);
+    final baseUrl = ApiConfig.baseUrl;
+    _controller = ConversationController(
+      api: ConversationApi(baseUrl: baseUrl),
+      store: PreferencesConversationIdStore(baseUrl: baseUrl),
+    );
+    _controller.load();
   }
 
   @override
@@ -58,18 +65,24 @@ class _DemoScreenState extends State<DemoScreen> {
         builder: (context, constraints) {
           final wide = constraints.maxWidth >= 900;
           final worldPanel = PanelFrame(
-            child: WorldDisplay(
-              world: _controller.world,
-              color: _controller.color,
-              size: _controller.size,
-              shape: _controller.shape,
-              onColorChanged: _controller.selectColor,
-              onSizeChanged: _controller.selectSize,
-              onShapeChanged: _controller.selectShape,
-              onPaint: _controller.paint,
-              onErase: _controller.erase,
-              onClear: _controller.clear,
-              onUndo: _controller.canUndo ? _controller.undo : null,
+            child: ConversationWorldPanel(
+              conversation: _controller.conversation,
+              loading: _controller.loading,
+              editing: _controller.editing,
+              error: _controller.error,
+              onRetry: _controller.load,
+              selectedProperty: _controller.selectedProperty,
+              selectedUnplacedObjectId: _controller.selectedUnplacedObjectId,
+              onPropertyChanged: _controller.canEdit
+                  ? _controller.selectProperty
+                  : null,
+              onUnplacedObjectSelected: _controller.canEdit
+                  ? _controller.selectUnplacedObject
+                  : null,
+              onPaint: _controller.canEdit ? _controller.paint : null,
+              onErase: _controller.canEdit ? _controller.erase : null,
+              onClear: _controller.canEdit ? _controller.clear : null,
+              onUndo: _controller.canEdit ? _controller.undo : null,
             ),
           );
 

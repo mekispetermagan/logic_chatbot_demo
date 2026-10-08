@@ -37,11 +37,15 @@ class WorldWidget extends StatelessWidget {
 
             return GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onTapUp: (details) => act(details.localPosition, onPaint),
-              onSecondaryTapUp: (details) =>
-                  act(details.localPosition, onErase),
-              onLongPressStart: (details) =>
-                  act(details.localPosition, onErase),
+              onTapUp: onPaint == null
+                  ? null
+                  : (details) => act(details.localPosition, onPaint),
+              onSecondaryTapUp: onErase == null
+                  ? null
+                  : (details) => act(details.localPosition, onErase),
+              onLongPressStart: onErase == null
+                  ? null
+                  : (details) => act(details.localPosition, onErase),
               child: Stack(
                 fit: StackFit.expand,
                 children: [
@@ -53,10 +57,12 @@ class WorldWidget extends StatelessWidget {
                       painter: _BoardPainter(world.width, world.height),
                     ),
                   ),
-                  for (final object in world.objects)
+                  for (final object in world.objects.where(
+                    (object) => object.position != null,
+                  ))
                     Positioned(
-                      left: object.x * cellWidth,
-                      top: (world.height - 1 - object.y) * cellHeight,
+                      left: object.position!.x * cellWidth,
+                      top: (world.height - 1 - object.position!.y) * cellHeight,
                       width: cellWidth,
                       height: cellHeight,
                       child: WorldObjectWidget(object: object),
