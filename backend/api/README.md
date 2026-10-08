@@ -28,7 +28,7 @@ packaging configuration. Interactive API documentation is at `/docs`.
 - `GET /conversations/{id}`: retrieves the latest stored world. Unknown UUIDs
   return 404; malformed IDs return 422.
 
-Both return `conversationId`, `world`, and `canUndo`. World JSON has `width`,
+Both return `conversationId`, `world`, `canUndo`, and ordered `messages`. World JSON has `width`,
 `height`, and `objects`; each object has an integer `id`, nullable `shape`,
 `size`, `color`, and nullable `position`. A present position requires integer
 `x` and `y`, zero-based with A1 at the bottom left. Missing attributes mean
@@ -65,6 +65,26 @@ unchanged world and feedback. Only changed worlds create snapshots. Each edit
 is a SQLite transaction covering retrieval, evaluation, and persistence. Undo
 retains the initial snapshot; editing after Undo starts a new history branch.
 
+## Chat
+
+`POST /conversations/{id}/chat` accepts `{"text":"#0 blue. #0 blue? color of #0?"}`.
+It returns the current conversation state plus `feedback`, like editing calls.
+Haskell parses the entire entry, then evaluates its atomic sentences in order.
+Machine text includes each prettyprinted sentence and its update feedback or
+answer. Parse errors leave the world unchanged and are saved as error replies.
+Blank entries and malformed request bodies return 422.
+
+`messages` contains ordered objects with `role` (`user` or `machine`), `text`,
+and `isError`. Retrieval, editing, and Undo all return the existing messages.
+Each submission saves the user/machine pair and at most one changed-world
+snapshot together. Questions, parse errors, and entries whose final world equals
+the starting world create no snapshot. Undo reverses a submission's world changes
+together and retains messages. Engine failures save neither messages nor snapshots;
+clients should refresh after a lost response rather than automatically resend.
+
+`chat_messages` is created automatically on startup, including for existing
+databases; conversation IDs and world history remain valid.
+
 ## Persistence
 
 Flutter web development uses port 8080. CORS allows `http://localhost:8080` and
@@ -82,8 +102,8 @@ JSON worlds, starting at sequence 0. The latest snapshot is the current state.
 file and its SQLite sidecars on persistent storage when deploying.
 
 There is no authentication, cookie, shared conversation, or session expiry.
-Clients will retain their conversation ID to resume after restart. The API does
-not yet offer chat. Semantic world validation and updates belong to Haskell;
+Clients will retain their conversation ID to resume after restart. The API
+offers atomic-sentence chat. Semantic world validation and updates belong to Haskell;
 Python schemas validate only the transport shape. Flutter calls these endpoints
 for visual edits and uses the returned world, feedback, and `canUndo` state.
 

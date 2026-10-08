@@ -4,7 +4,10 @@ module EditorJson (processRequest) where
 import Control.Monad (unless)
 import Data.Aeson hiding (Object)
 import Data.Aeson.Types (Parser, parseEither)
-import Data.List (nub)
+import Data.List (nub, intercalate)
+import AtomicParser (parseAtomicSentences)
+import AtomicEvaluation (evaluateAtomicSentences)
+import Pretty (pretty)
 import Ontology
 import ReferenceResolution (inBounds)
 import WorldEditor
@@ -75,9 +78,14 @@ parseAction = withObject "action" $ \value -> do
     "clear" -> pure ClearWorld
     _ -> fail "Invalid editor action"
 
-parseRequest :: Value -> Parser (World, EditorAction)
-parseRequest = withObject "request" $ \value ->
-  (,) <$> (value .: "world" >>= parseWorld) <*> (value .: "action" >>= parseAction)
+parseRequest :: Value -> Parser (World, Either String EditorAction)
+parseRequest = withObject "request" $ \value -> do
+  world <- value .: "world" >>= parseWorld
+  action <- value .: "action"
+  operation <- withObject "action" (\fields -> do
+    kind <- fields .: "type" :: Parser String
+    if kind == "chat" then Left <$> fields .: "text" else Right <$> parseAction action) action
+  pure (world, operation)
 
 positionJson :: Position -> Value
 positionJson (x, y) = object ["x" .= x, "y" .= y]
@@ -108,7 +116,14 @@ objectJson value = object
 processRequest :: Value -> Either String Value
 processRequest input = do
   (world, action) <- parseEither parseRequest input
-  let (World objects, feedback) = evaluateEditorAction world action
-  pure (object ["world" .= object ["width" .= (8 :: Int), "height" .= (8 :: Int),
+  let (World objects, feedback, isError) = case action of
+        Right edit -> let (updated, message) = evaluateEditorAction world edit
+                      in (updated, message, False)
+        Left text -> case parseAtomicSentences text of
+          Left message -> (world, message, True)
+          Right sentences -> let (updated, answers) = evaluateAtomicSentences world sentences
+                             in (updated, intercalate "\n" (map pretty answers), False)
+  pure (object (["world" .= object ["width" .= (8 :: Int), "height" .= (8 :: Int),
                                   "objects" .= map objectJson objects],
-                "feedback" .= feedback])
+                "feedback" .= feedback] ++
+                ["isError" .= isError | Left _ <- [action]]))

@@ -2,7 +2,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
 
-from .schemas import ConversationState, EditState, EraseEdit, PlaceEdit, PropertyEdit
+from .schemas import ChatEntry, ConversationState, EditState, EraseEdit, PlaceEdit, PropertyEdit
 from .service import ConversationService
 
 router = APIRouter(prefix="/conversations", tags=["conversations"])
@@ -25,6 +25,14 @@ def require_edit(state: EditState | None) -> EditState:
     if state is None:
         raise HTTPException(status_code=404, detail="Conversation not found")
     return state
+
+
+@router.post("/{conversation_id}/chat", response_model=EditState)
+def chat(conversation_id: UUID, entry: ChatEntry,
+         service: ConversationService = Depends(get_service)) -> EditState:
+    if not entry.text.strip():
+        raise HTTPException(status_code=422, detail="Message must not be blank")
+    return require_edit(service.chat(conversation_id, entry.text))
 
 
 @router.post("/{conversation_id}/property", response_model=EditState)

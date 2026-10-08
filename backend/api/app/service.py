@@ -23,3 +23,7 @@ class ConversationService:
 
     def undo(self, conversation_id: UUID) -> EditState | None:
         return self.repository.undo(conversation_id)
+
+    def chat(self, conversation_id: UUID, text: str) -> EditState | None:
+        return self.repository.edit(conversation_id,
+            lambda world: self.engine.edit(world, {"type": "chat", "text": text}), user_text=text)

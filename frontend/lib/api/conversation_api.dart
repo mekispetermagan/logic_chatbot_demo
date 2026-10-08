@@ -70,6 +70,9 @@ class ConversationApi {
   Future<ConversationState> undo(String id) =>
       _request('POST', id: id, action: 'undo');
 
+  Future<ConversationState> chat(String id, String text) =>
+      _request('POST', id: id, action: 'chat', body: {'text': text});
+
   Future<ConversationState> _request(
     String method, {
     String? id,

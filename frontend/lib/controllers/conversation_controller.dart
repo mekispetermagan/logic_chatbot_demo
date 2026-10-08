@@ -16,6 +16,7 @@ class ConversationController extends ChangeNotifier {
   ConversationState? _pending;
   bool loading = false;
   bool editing = false;
+  bool sendingChat = false;
   String? error;
   ObjectProperty selectedProperty = ObjectProperty.red;
   int? selectedUnplacedObjectId;
@@ -97,27 +98,37 @@ class ConversationController extends ChangeNotifier {
     await _edit(api.undo, clearSelection: true);
   }
 
-  Future<void> _edit(
+  Future<bool> sendChat(String text) async {
+    if (text.trim().isEmpty) return false;
+    return _edit((id) => api.chat(id, text), chat: true);
+  }
+
+  Future<bool> _edit(
     Future<ConversationState> Function(String) request, {
     bool clearSelection = false,
+    bool chat = false,
   }) async {
-    if (!canEdit || _disposed) return;
+    if (!canEdit || _disposed) return false;
     editing = true;
+    sendingChat = chat;
     notifyListeners();
     try {
       final updated = await request(conversation!.id);
-      if (_disposed) return;
+      if (_disposed) return false;
       conversation = updated;
       if (clearSelection) selectedUnplacedObjectId = null;
       _reconcileSelection();
+      return true;
     } on ApiException catch (exception) {
       error = exception.message;
     } catch (_) {
       error = 'Could not update the world.';
     } finally {
       editing = false;
+      sendingChat = false;
       if (!_disposed) notifyListeners();
     }
+    return false;
   }
 
   void _reconcileSelection() {

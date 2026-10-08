@@ -5,6 +5,7 @@ import 'config/api_config.dart';
 import 'controllers/conversation_controller.dart';
 import 'storage/conversation_id_store.dart';
 import 'widgets/conversation_world_panel.dart';
+import 'widgets/chat_panel.dart';
 
 void main() {
   runApp(const MainApp());
@@ -86,6 +87,17 @@ class _DemoScreenState extends State<DemoScreen> {
             ),
           );
 
+          final chatPanel = PanelFrame(
+            child: ChatPanel(
+              messages: _controller.conversation?.messages ?? const [],
+              canSend: _controller.canEdit,
+              sending: _controller.sendingChat,
+              error: _controller.error,
+              onSend: _controller.sendChat,
+              onRefresh: _controller.load,
+            ),
+          );
+
           return DefaultTabController(
             length: 2,
             child: Scaffold(
@@ -105,10 +117,10 @@ class _DemoScreenState extends State<DemoScreen> {
                     ? Row(
                         children: [
                           Expanded(child: worldPanel),
-                          const Expanded(child: ChatPanel()),
+                          Expanded(child: chatPanel),
                         ],
                       )
-                    : TabBarView(children: [worldPanel, const ChatPanel()]),
+                    : TabBarView(children: [worldPanel, chatPanel]),
               ),
             ),
           );
@@ -133,42 +145,6 @@ class PanelFrame extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         child: Padding(padding: const EdgeInsets.all(16), child: child),
-      ),
-    );
-  }
-}
-
-class ChatPanel extends StatelessWidget {
-  const ChatPanel({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const PanelFrame(
-      child: Column(
-        children: [
-          Expanded(child: SizedBox.expand()),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(
-                child: TextField(
-                  minLines: 1,
-                  maxLines: 4,
-                  decoration: InputDecoration(
-                    hintText: 'Enter a message',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              SizedBox(width: 8),
-              IconButton(
-                tooltip: 'Send',
-                onPressed: null,
-                icon: Icon(Icons.send),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }

@@ -17,7 +17,13 @@ The server supplies the initial toy world. The running app no longer uses local
 world history or the Dart toy fixture. Property edits, placement, erasure, Clear,
 and Undo call the API and display its returned world and feedback. Build the
 Haskell editor executable as described in `backend/api/README.md` before editing.
-Chat is still a placeholder. The
+Chat accepts the engine's atomic sentences and restores persisted messages on
+restart. User bubbles use Material primary container colors; machine bubbles use
+secondary container colors. Replies preserve prettyprinted sentences and answers;
+parse errors have a distinct label and border. The multiline composer uses the
+Send button; failed requests retain the draft. For example, send
+`#0 blue. #0 blue? color of #0?`. A whole entry is one undoable world update,
+and Undo keeps chat messages. The
 previous local editor controller and fixture remain for existing interaction
 tests and reference.
 

@@ -101,5 +101,8 @@ A request has `world` (the shared JSON representation) and `action`, for example
 ```
 
 The response contains the resulting `world` and concise `feedback`. Other action
-types are `place` (with `objectId` and `position`), `erase` (with `position`), and
-`clear`. Haskell contains no HTTP, database, or conversation handling.
+types are `place` (with `objectId` and `position`), `erase` (with `position`),
+`clear`, and `chat` (with `text`). Chat uses `parseAtomicSentences` followed by
+`evaluateAtomicSentences`, returning each prettyprinted sentence and its answer.
+Chat responses also contain `isError`, true for parse errors; those preserve the
+input world. Haskell contains no HTTP, database, or conversation handling.

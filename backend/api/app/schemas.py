@@ -27,10 +27,21 @@ class World(Schema):
     objects: list[WorldObject]
 
 
+class ChatMessage(Schema):
+    role: Literal["user", "machine"]
+    text: str
+    isError: bool = False
+
+
+class ChatEntry(Schema):
+    text: str = Field(min_length=1)
+
+
 class ConversationState(Schema):
     conversationId: UUID
     world: World
     canUndo: bool
+    messages: list[ChatMessage] = Field(default_factory=list)
 
 
 class EditState(ConversationState):

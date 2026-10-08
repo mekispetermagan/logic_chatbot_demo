@@ -82,9 +82,6 @@ class ConversationWorldPanel extends StatelessWidget {
             style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
           TextButton(onPressed: onRetry, child: const Text('Refresh world')),
-        ] else if (state.feedback != null) ...[
-          Text(state.feedback!, textAlign: TextAlign.center),
-          const SizedBox(height: 8),
         ],
         Expanded(
           child: WorldDisplay(
