@@ -100,7 +100,6 @@ void main() {
                 onPaint: controller.paint,
                 onErase: controller.erase,
                 onClear: controller.clear,
-                onUndo: controller.canUndo ? controller.undo : null,
               ),
             ),
           ),
@@ -142,7 +141,7 @@ void main() {
       await tester.pump();
       expect(controller.world.objects.last.position, const BoardPosition(1, 1));
       expect(find.text('Unplaced'), findsNothing);
-      await tester.tap(find.byTooltip('Undo'));
+      controller.undo();
       await tester.pump();
       expect(find.text('Unplaced'), findsOneWidget);
       expect(controller.world.objects.last.position, isNull);

@@ -5,8 +5,9 @@ import Control.Monad (unless)
 import Data.Aeson hiding (Object)
 import Data.Aeson.Types (Parser, parseEither)
 import Data.List (nub, intercalate)
-import AtomicParser (parseAtomicSentences)
-import AtomicEvaluation (evaluateAtomicSentences)
+import Layer2Parser (parseSentences)
+import Discourse
+import Layer2Evaluation
 import Pretty (pretty)
 import Ontology
 import ReferenceResolution (inBounds)
@@ -78,14 +79,44 @@ parseAction = withObject "action" $ \value -> do
     "clear" -> pure ClearWorld
     _ -> fail "Invalid editor action"
 
-parseRequest :: Value -> Parser (World, Either String EditorAction)
+data Operation = Chat String | Clarify Identifier | Edit EditorAction
+
+parseRanking :: Value -> Parser SalienceRanking
+parseRanking = withArray "salience" $ mapM parseMention . foldr (:) []
+  where
+    parseMention = withObject "mention" $ \value -> do
+      entry <- value .: "entry"
+      utterance <- value .: "utterance"
+      identifier <- Id <$> value .: "objectId"
+      properties <- value .: "properties" >>= mapM parseMentionProperty
+      unless (entry >= 0 && utterance >= 0) (fail "Invalid recency")
+      pure ((entry, utterance), identifier, properties)
+    parseMentionProperty = withObject "property" $ \value -> do
+      kind <- value .: "kind" :: Parser String
+      if kind == "position" then P <$> (value .: "value" >>= parsePosition)
+      else value .: "value" >>= parseProperty
+
+parsePending :: Value -> Parser Pending
+parsePending = withObject "pending" $ \value -> do
+  text <- value .: "remaining"
+  sentences <- either fail pure (parseSentences text)
+  identifiers <- map Id <$> value .: "candidateIds"
+  unless (not (null sentences) && not (null identifiers)) (fail "Invalid pending entry")
+  pure (Pending sentences identifiers)
+
+parseRequest :: Value -> Parser (World, SalienceRanking, Maybe Pending, Operation)
 parseRequest = withObject "request" $ \value -> do
   world <- value .: "world" >>= parseWorld
+  ranking <- value .:? "salience" .!= Array mempty >>= parseRanking
+  pending <- value .:? "pending" >>= traverse parsePending
   action <- value .: "action"
   operation <- withObject "action" (\fields -> do
     kind <- fields .: "type" :: Parser String
-    if kind == "chat" then Left <$> fields .: "text" else Right <$> parseAction action) action
-  pure (world, operation)
+    case kind of
+      "chat" -> Chat <$> fields .: "text"
+      "clarify" -> Clarify . Id <$> fields .: "objectId"
+      _ -> Edit <$> parseAction action) action
+  pure (world, ranking, pending, operation)
 
 positionJson :: Position -> Value
 positionJson (x, y) = object ["x" .= x, "y" .= y]
@@ -113,17 +144,42 @@ objectJson value = object
     shapeName Sphere = "sphere"
     shapeName Pyramid = "pyramid"
 
+rankingJson :: SalienceRanking -> Value
+rankingJson ranking = toJSON [object
+  ["entry" .= entry, "utterance" .= utterance, "objectId" .= idToInt identifier,
+   "properties" .= map propertyJson properties]
+  | ((entry, utterance), identifier, properties) <- ranking]
+  where
+    propertyJson (P position) = object ["kind" .= ("position" :: String), "value" .= positionJson position]
+    propertyJson property = object ["kind" .= ("descriptor" :: String), "value" .= pretty property]
+
+pendingJson :: World -> Pending -> Value
+pendingJson (World objects) pending = object
+  [ "remaining" .= intercalate " " (map pretty (remainingSentences pending))
+  , "sentence" .= case remainingSentences pending of sentence:_ -> pretty sentence; [] -> ""
+  , "candidateIds" .= map idToInt (candidateIds pending)
+  , "candidates" .= [object ["objectId" .= idToInt identifier, "label" .= pretty value]
+       | identifier <- candidateIds pending, value <- objects, idOf value == identifier]
+  ]
+
 processRequest :: Value -> Either String Value
 processRequest input = do
-  (world, action) <- parseEither parseRequest input
-  let (World objects, feedback, isError) = case action of
-        Right edit -> let (updated, message) = evaluateEditorAction world edit
-                      in (updated, message, False)
-        Left text -> case parseAtomicSentences text of
-          Left message -> (world, message, True)
-          Right sentences -> let (updated, answers) = evaluateAtomicSentences world sentences
-                             in (updated, intercalate "\n" (map pretty answers), False)
-  pure (object (["world" .= object ["width" .= (8 :: Int), "height" .= (8 :: Int),
+  (world, ranking, pending, action) <- parseEither parseRequest input
+  let (updated@(World objects), salience, nextPending, feedback, isError) = case (pending, action) of
+        (Just paused, Clarify identifier) ->
+          let (w, r, p, message) = resumeEntry world ranking paused identifier
+          in (w, r, p, message, False)
+        (Just _, _) -> (world, ranking, pending, "Choose an object or undo", True)
+        (Nothing, Clarify _) -> (world, ranking, Nothing, "No clarification pending", True)
+        (Nothing, Chat text) -> case parseSentences text of
+          Left message -> (world, ranking, Nothing, message, True)
+          Right sentences -> let (w, r, p, message) = evaluateEntry world ranking sentences
+                             in (w, r, p, message, False)
+        (Nothing, Edit edit) ->
+          let (w, message) = evaluateEditorAction world edit
+          in (w, purge w ranking, Nothing, message, False)
+  pure (object ["world" .= object ["width" .= (8 :: Int), "height" .= (8 :: Int),
                                   "objects" .= map objectJson objects],
-                "feedback" .= feedback] ++
-                ["isError" .= isError | Left _ <- [action]]))
+                "salience" .= rankingJson salience,
+                "pending" .= fmap (pendingJson updated) nextPending,
+                "feedback" .= feedback, "isError" .= isError])

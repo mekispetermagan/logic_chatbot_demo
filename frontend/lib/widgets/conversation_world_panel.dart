@@ -19,7 +19,6 @@ class ConversationWorldPanel extends StatelessWidget {
     this.onPaint,
     this.onErase,
     this.onClear,
-    this.onUndo,
   });
 
   final ConversationState? conversation;
@@ -34,7 +33,6 @@ class ConversationWorldPanel extends StatelessWidget {
   final void Function(int, int)? onPaint;
   final void Function(int, int)? onErase;
   final VoidCallback? onClear;
-  final VoidCallback? onUndo;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +65,7 @@ class ConversationWorldPanel extends StatelessWidget {
       );
     }
     final busy = loading || editing;
-    final enabled = !busy && error == null;
+    final enabled = !busy && error == null && state.pending == null;
     return Column(
       children: [
         if (busy) ...[
@@ -93,11 +91,12 @@ class ConversationWorldPanel extends StatelessWidget {
             onPaint: enabled ? onPaint : null,
             onErase: enabled ? onErase : null,
             onClear: enabled ? onClear : null,
-            onUndo: enabled && state.canUndo ? onUndo : null,
             interactionHint: busy
                 ? 'Please wait…'
                 : error != null
                 ? 'Refresh the world before editing.'
+                : state.pending != null
+                ? 'Choose an object in Chat, or undo the entry.'
                 : null,
           ),
         ),

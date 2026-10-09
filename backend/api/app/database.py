@@ -44,3 +44,8 @@ class Database:
                     PRIMARY KEY (conversation_id, sequence)
                 );
             """)
+
+            columns = {row["name"] for row in connection.execute("PRAGMA table_info(world_snapshots)")}
+            for name, default in (("salience_json", "[]"), ("pending_json", "null")):
+                if name not in columns:
+                    connection.execute(f"ALTER TABLE world_snapshots ADD COLUMN {name} TEXT NOT NULL DEFAULT '{default}'")

@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 from .config import Settings, TOY_WORLD_PATH
 from .database import Database
 from .engine import EngineUnavailable, LogicEngine
-from .repository import ConversationRepository
+from .repository import ConversationRepository, PendingConflict
 from .routes import router
 from .schemas import World
 from .service import ConversationService
@@ -31,6 +31,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.exception_handler(EngineUnavailable)
     async def engine_unavailable(request, exception):
         return JSONResponse(status_code=503, content={"detail": "Logic engine unavailable"})
+
+    @app.exception_handler(PendingConflict)
+    async def pending_conflict(request, exception):
+        return JSONResponse(status_code=409, content={"detail": str(exception)})
 
     app.add_middleware(CORSMiddleware, allow_origins=list(settings.cors_origins),
                        allow_methods=["GET", "POST"], allow_headers=["Accept", "Content-Type"])

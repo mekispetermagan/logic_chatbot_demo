@@ -102,8 +102,8 @@ atomicAssertionOrCheck = do
 
 sentenceEnd :: Parser (Maybe Char)
 sentenceEnd = do
-  mark <- (space1 *> optional (oneOf ".?"))
-    <|> (Just <$> oneOf ".?")
+  space
+  mark <- (Just <$> oneOf ".?")
     <|> (Nothing <$ eof)
   space
   pure mark

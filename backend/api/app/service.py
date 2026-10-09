@@ -19,11 +19,17 @@ class ConversationService:
         return self.repository.get(conversation_id)
 
     def edit(self, conversation_id: UUID, action: dict) -> EditState | None:
-        return self.repository.edit(conversation_id, lambda world: self.engine.edit(world, action))
+        return self.repository.edit(conversation_id, lambda world, salience, pending: self.engine.edit(world, action, salience, pending))
 
     def undo(self, conversation_id: UUID) -> EditState | None:
         return self.repository.undo(conversation_id)
 
     def chat(self, conversation_id: UUID, text: str) -> EditState | None:
         return self.repository.edit(conversation_id,
-            lambda world: self.engine.edit(world, {"type": "chat", "text": text}), user_text=text)
+            lambda world, salience, pending: self.engine.edit(world, {"type": "chat", "text": text}, salience, pending), user_text=text)
+
+    def clarify(self, conversation_id: UUID, object_id: int) -> EditState | None:
+        return self.repository.edit(conversation_id,
+            lambda world, salience, pending: self.engine.edit(
+                world, {"type": "clarify", "objectId": object_id}, salience, pending),
+            user_text=f"#{object_id}", continuation=True)

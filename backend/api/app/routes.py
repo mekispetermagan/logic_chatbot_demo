@@ -2,7 +2,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
 
-from .schemas import ChatEntry, ConversationState, EditState, EraseEdit, PlaceEdit, PropertyEdit
+from .schemas import ClarificationChoice, ChatEntry, ConversationState, EditState, EraseEdit, PlaceEdit, PropertyEdit
 from .service import ConversationService
 
 router = APIRouter(prefix="/conversations", tags=["conversations"])
@@ -73,3 +73,9 @@ def get_conversation(
     if state is None:
         raise HTTPException(status_code=404, detail="Conversation not found")
     return state
+
+
+@router.post("/{conversation_id}/clarify", response_model=EditState)
+def clarify(conversation_id: UUID, choice: ClarificationChoice,
+            service: ConversationService = Depends(get_service)) -> EditState:
+    return require_edit(service.clarify(conversation_id, choice.objectId))

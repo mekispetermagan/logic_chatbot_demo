@@ -157,7 +157,6 @@ void main() {
                   onPaint: controller.paint,
                   onErase: controller.erase,
                   onClear: controller.clear,
-                  onUndo: controller.canUndo ? controller.undo : null,
                 ),
               ),
             ),

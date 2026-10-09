@@ -29,7 +29,7 @@ main = do
       (parseAtomicPerformative ("#0 " ++ word) == Right (AP (ById (Id 0)) property))
   let expected = [AP (ById (Id 1)) (P (1, 2)), AP (ById (Id 1)) (C Red),
                   AP (ById (Id 1)) (S Medium), AP (ById (Id 1)) (Sh Cube), AP (ById (Id 1)) (Sh Sphere)]
-  let input = "#1 on B3. #1 red. #1 medium #1 is cube. #1 is sphere"
+  let input = "#1 on B3. #1 red. #1 medium. #1 is cube. #1 is sphere"
   check "mixed separators" (parseAtomicPerformatives input == Right expected)
   check "period without spaces"
     (parseAtomicPerformatives "#1 red.#1 cube." ==
@@ -48,7 +48,7 @@ main = do
   check "position check" (parseAtomicSentence "#3 is on A4?" ==
     Right (PropertyCheck (APC (ById (Id 3)) (P (0, 3)))))
   check "mixed atomic sentences" (parseAtomicSentences
-    "#1 on B3. #1 red?#1 medium #1 is cube. #1 is sphere ?" == Right
+    "#1 on B3. #1 red?#1 medium. #1 is cube. #1 is sphere ?" == Right
     [Performative (AP (ById (Id 1)) (P (1, 2))), PropertyCheck (APC (ById (Id 1)) (C Red)),
      Performative (AP (ById (Id 1)) (S Medium)), Performative (AP (ById (Id 1)) (Sh Cube)),
      PropertyCheck (APC (ById (Id 1)) (Sh Sphere))])

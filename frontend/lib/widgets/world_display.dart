@@ -16,7 +16,6 @@ class WorldDisplay extends StatelessWidget {
     required this.onPaint,
     required this.onErase,
     required this.onClear,
-    required this.onUndo,
     this.interactionHint,
   });
 
@@ -28,7 +27,6 @@ class WorldDisplay extends StatelessWidget {
   final void Function(int, int)? onPaint;
   final void Function(int, int)? onErase;
   final VoidCallback? onClear;
-  final VoidCallback? onUndo;
   final String? interactionHint;
 
   @override
@@ -126,12 +124,6 @@ class WorldDisplay extends StatelessWidget {
                         tooltip: 'Clear world',
                         onPressed: onClear,
                         icon: const Icon(Icons.clear_all),
-                        visualDensity: VisualDensity.compact,
-                      ),
-                      IconButton(
-                        tooltip: 'Undo',
-                        onPressed: onUndo,
-                        icon: const Icon(Icons.undo),
                         visualDensity: VisualDensity.compact,
                       ),
                     ],

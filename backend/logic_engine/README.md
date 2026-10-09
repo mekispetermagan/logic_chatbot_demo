@@ -12,8 +12,8 @@ without updating state.
 
 Identifiers use `#3`; square references use A1-H8. The old `o3` spelling is
 not accepted. The parser accepts case-insensitive properties and squares, optional `is`,
-optional `on` for positions, and optional final periods. Adjacent performatives
-must be separated by whitespace or a period. Squares A1-H8 map to zero-based
+optional `on` for positions, and optional periods only at the end of an entry.
+Adjacent performatives must be separated by a period. Squares A1-H8 map to zero-based
 coordinates with A1 at `(0, 0)`. Empty input and malformed suffixes are rejected.
 
 `parseAtomicPerformative` parses exactly one performative;
@@ -102,7 +102,31 @@ A request has `world` (the shared JSON representation) and `action`, for example
 
 The response contains the resulting `world` and concise `feedback`. Other action
 types are `place` (with `objectId` and `position`), `erase` (with `position`),
-`clear`, and `chat` (with `text`). Chat uses `parseAtomicSentences` followed by
-`evaluateAtomicSentences`, returning each prettyprinted sentence and its answer.
-Chat responses also contain `isError`, true for parse errors; those preserve the
-input world. Haskell contains no HTTP, database, or conversation handling.
+`clear`, `chat` (with `text`), and `clarify` (with `objectId`). Requests also
+carry `salience` and nullable `pending`; both default to empty for older callers.
+Responses return both alongside `world`, `feedback`, and `isError`.
+The bridge owns JSON transport; `Discourse.hs` and `Layer2Evaluation.hs` own
+pure reference resolution, salience updates, ordered evaluation, and continuations.
+Haskell contains no HTTP or database handling.
+
+## Layer 2 syntax and evaluation
+
+`Layer2Syntax.hs` records pronouns, definite/indefinite descriptions, compound
+attributions, single-property checks, and attribute questions. `Layer2Parser.hs`
+exports `parseSentence` and `parseSentences`; `Grammar` re-exports both modules.
+The parser retains arbitrary descriptor order and repetition, requires explicit
+boundaries for descriptive property subjects, and requires destinations last.
+See [Layer 2 Syntax](../../specification/controlled-english-layer2.md).
+
+```haskell
+:module + Grammar
+either putStrLn (mapM_ (putStrLn . pretty)) $ parseSentences "Turn the cube large to green. What is the shape of it?"
+```
+
+Chat uses this parser and `evaluateEntry world ranking sentences`. Pronouns,
+definite/indefinite descriptions, and compound updates now evaluate. Ambiguity
+returns a `Pending` value containing the paused sentence, remaining sentences,
+and candidate identifiers. `resumeEntry` continues without beginning a new entry.
+See the [Layer 2 reference](../../specification/controlled-english-layer2.md)
+for scoring, salience purging, clarification, and whole-entry Undo rules.
+The console still uses the narrower atomic parser.

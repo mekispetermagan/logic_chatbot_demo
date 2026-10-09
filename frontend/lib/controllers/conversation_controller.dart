@@ -20,8 +20,9 @@ class ConversationController extends ChangeNotifier {
   String? error;
   ObjectProperty selectedProperty = ObjectProperty.red;
   int? selectedUnplacedObjectId;
-  bool get canEdit =>
+  bool get canRequest =>
       conversation != null && !loading && !editing && error == null;
+  bool get canEdit => canRequest && conversation?.pending == null;
   bool _disposed = false;
 
   Future<void> load() async {
@@ -95,7 +96,7 @@ class ConversationController extends ChangeNotifier {
   Future<void> clear() => _edit(api.clear, clearSelection: true);
   Future<void> undo() async {
     if (conversation?.canUndo != true) return;
-    await _edit(api.undo, clearSelection: true);
+    await _edit(api.undo, clearSelection: true, allowPending: true);
   }
 
   Future<bool> sendChat(String text) async {
@@ -103,12 +104,16 @@ class ConversationController extends ChangeNotifier {
     return _edit((id) => api.chat(id, text), chat: true);
   }
 
+  Future<bool> clarify(int objectId) =>
+      _edit((id) => api.clarify(id, objectId), chat: true, allowPending: true);
+
   Future<bool> _edit(
     Future<ConversationState> Function(String) request, {
     bool clearSelection = false,
     bool chat = false,
+    bool allowPending = false,
   }) async {
-    if (!canEdit || _disposed) return false;
+    if (!(allowPending ? canRequest : canEdit) || _disposed) return false;
     editing = true;
     sendingChat = chat;
     notifyListeners();

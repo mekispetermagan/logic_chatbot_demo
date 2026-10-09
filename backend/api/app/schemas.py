@@ -37,11 +37,27 @@ class ChatEntry(Schema):
     text: str = Field(min_length=1)
 
 
+class ClarificationChoice(Schema):
+    objectId: StrictInt = Field(ge=0)
+
+
+class Candidate(ClarificationChoice):
+    label: str
+
+
+class PendingEntry(Schema):
+    sentence: str
+    remaining: str
+    candidateIds: list[StrictInt]
+    candidates: list[Candidate]
+
+
 class ConversationState(Schema):
     conversationId: UUID
     world: World
     canUndo: bool
     messages: list[ChatMessage] = Field(default_factory=list)
+    pending: PendingEntry | None = None
 
 
 class EditState(ConversationState):

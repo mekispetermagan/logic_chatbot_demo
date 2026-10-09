@@ -51,3 +51,14 @@ world'' :: World
 world'' = world' `updateWorldWith` perf'
 world''' :: World
 world''' = world'' `updateWorldWith` perf''
+
+type SalienceRanking = [(Int, Identifier, [Property])]
+
+sR :: SalienceRanking
+sR =
+  [ (0, Id 4, [C Red])
+  , (1, Id 3, [C Blue, Sh Sphere])
+  , (1, Id 2, [C Green, Sh Sphere])
+  , (2, Id 1, [C Green])
+  , (3, Id 0, [S Large, Sh Sphere])
+  ]

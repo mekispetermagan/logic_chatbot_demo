@@ -32,7 +32,9 @@ class MainApp extends StatelessWidget {
 }
 
 class DemoScreen extends StatefulWidget {
-  const DemoScreen({super.key});
+  const DemoScreen({super.key, this.createController});
+
+  final ConversationController Function()? createController;
 
   @override
   State<DemoScreen> createState() => _DemoScreenState();
@@ -45,10 +47,12 @@ class _DemoScreenState extends State<DemoScreen> {
   void initState() {
     super.initState();
     final baseUrl = ApiConfig.baseUrl;
-    _controller = ConversationController(
-      api: ConversationApi(baseUrl: baseUrl),
-      store: PreferencesConversationIdStore(baseUrl: baseUrl),
-    );
+    _controller =
+        widget.createController?.call() ??
+        ConversationController(
+          api: ConversationApi(baseUrl: baseUrl),
+          store: PreferencesConversationIdStore(baseUrl: baseUrl),
+        );
     _controller.load();
   }
 
@@ -83,7 +87,6 @@ class _DemoScreenState extends State<DemoScreen> {
               onPaint: _controller.canEdit ? _controller.paint : null,
               onErase: _controller.canEdit ? _controller.erase : null,
               onClear: _controller.canEdit ? _controller.clear : null,
-              onUndo: _controller.canEdit ? _controller.undo : null,
             ),
           );
 
@@ -91,6 +94,8 @@ class _DemoScreenState extends State<DemoScreen> {
             child: ChatPanel(
               messages: _controller.conversation?.messages ?? const [],
               canSend: _controller.canEdit,
+              pending: _controller.conversation?.pending,
+              onChoose: _controller.canRequest ? _controller.clarify : null,
               sending: _controller.sendingChat,
               error: _controller.error,
               onSend: _controller.sendChat,
@@ -103,6 +108,17 @@ class _DemoScreenState extends State<DemoScreen> {
             child: Scaffold(
               appBar: AppBar(
                 title: const Text('Logic Chatbot Demo'),
+                actions: [
+                  IconButton(
+                    tooltip: 'Undo',
+                    onPressed:
+                        _controller.canRequest &&
+                            _controller.conversation?.canUndo == true
+                        ? _controller.undo
+                        : null,
+                    icon: const Icon(Icons.undo),
+                  ),
+                ],
                 bottom: wide
                     ? null
                     : const TabBar(

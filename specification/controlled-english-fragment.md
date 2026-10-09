@@ -1,5 +1,12 @@
 # Controlled English Fragment for the Logic Demo
 
+For the implemented atomic language, see the
+[Core Language Reference](controlled-english-core.md). This design note describes
+the broader planned layers. [Layer 2 Syntax](controlled-english-layer2.md) documents
+the newly implemented description/pronoun parser, without their evaluation.
+This note’s original identifier notation and unknown-value
+terminology have since changed in the core implementation.
+
 ## Purpose and scope
 
 The demo uses a deliberately small fragment of English to create and inspect a world of objects on an 8×8 chessboard. It demonstrates three language layers, from statements that directly update the world model to ordinary-looking sentences that introduce and refer to objects.
@@ -13,10 +20,10 @@ Coordinates follow chessboard convention: **A1 is the bottom-left square**. Inte
 | Layer | What it expresses | Example |
 |---|---|---|
 | 1. Direct ontological atoms | Explicit facts or questions about an object and the base ontology | `o12 red`; `o12 on A3`; `o12 color?` |
-| 2. Atoms with derived terms | Facts or questions using a relation or property defined over base ontology facts | `near(o12, o3)` |
-| 3. Compositional and discourse sentences | Descriptions, quantifiers, and pronouns that introduce, identify, or relate discourse referents | “Cube on A3. It is large and red.” |
+| 2. Compositional and discourse sentences | Descriptions, quantifiers, and pronouns that introduce, identify, or relate discourse referents | “Cube on A3. It is large and red.” |
+| 3. Atoms with derived terms | Facts or questions using a relation or property defined over base ontology facts | `near(o12, o3)` |
 
-The layers build on one another: Layer 2 terms must resolve to Layer 1 facts, and Layer 3 sentences are interpreted using the lower layers and dialogue context.
+Layer 2 adds subjects and sentence constructions interpreted against the core world and dialogue context. Layer 3 adds derived terms grounded in base ontology facts; these may be used by the descriptive language.
 
 ## Layer 1: Direct ontological atomic language
 
@@ -61,25 +68,7 @@ An object may be only partially specified. Unknown attributes remain unknown; th
 
 The facts are not all logically independent. For example, an object cannot be both red and blue when color is a single-valued attribute. The model must represent such exclusivity as a constraint; it should not assume each positive color predicate is independent.
 
-## Layer 2: Atomic sentences with derived terms
-
-This layer adds atomic-looking properties or relations whose meanings are defined over the base ontology. The derived term is not stored as a primitive fact in the world model. It must be evaluated from the underlying object attributes and board state.
-
-### Example: `near`
-
-In this chessboard demo, `near(x, y)` means that the objects occupy orthogonally neighboring squares: one square apart horizontally or vertically. Diagonal contact does not count.
-
-For example, if `o3` is on A1, then the possible neighboring squares are A2 and B1. B2 is diagonal and is not near under this definition.
-
-Thus `near(o12, o3)` is evaluated from the two objects' positions. If a user says “Put a sphere near the cube” and the cube is on A1, the system can ask the user to choose A2 or B1, for example with buttons, then update the sphere's base position after selection. `near` itself is not written into the base board state.
-
-### Design principle
-
-Derived properties and relations should be grounded in a systematic investigation of the ontology and its possible states, rather than accumulated as manually invented axioms. Discovering candidate derived concepts is a potential AI task; naming or mapping those concepts to ordinary English may use a language model. Any term used in the demo still needs an explicit, checkable interpretation over base facts.
-
-For a small demo, a fixed, transparent definition such as the one above can illustrate the layer. That does not imply that all useful derived terms should be hand-authored in the full system.
-
-## Layer 3: Descriptions, quantifiers, and pronouns
+## Layer 2: Descriptions, quantifiers, and pronouns
 
 This layer lets the user speak naturally enough to introduce objects, make multiple claims, and refer back to them. It includes descriptions, quantifiers, and/or pronouns, but the demo should keep the grammar narrow and demonstrate only selected constructions.
 
@@ -110,7 +99,25 @@ When a description or reference could identify more than one object, the system 
 
 ### Quantifiers and descriptors
 
-Quantifiers and richer descriptions belong to this top layer because they can refer to one or more objects rather than naming a specific internal ID. The broad demo scope includes this layer, but it does not require a broad English grammar. Choose one or two constructions that visibly add value and keep the rest out of scope.
+Quantifiers and richer descriptions belong to this descriptive layer because they can refer to one or more objects rather than naming a specific internal ID. The broad demo scope includes this layer, but it does not require a broad English grammar. Choose one or two constructions that visibly add value and keep the rest out of scope.
+
+## Layer 3: Atomic sentences with derived terms
+
+This layer adds atomic-looking properties or relations whose meanings are defined over the base ontology. The derived term is not stored as a primitive fact in the world model. It must be evaluated from the underlying object attributes and board state.
+
+### Example: `near`
+
+In this chessboard demo, `near(x, y)` means that the objects occupy orthogonally neighboring squares: one square apart horizontally or vertically. Diagonal contact does not count.
+
+For example, if `o3` is on A1, then the possible neighboring squares are A2 and B1. B2 is diagonal and is not near under this definition.
+
+Thus `near(o12, o3)` is evaluated from the two objects' positions. If a user says “Put a sphere near the cube” and the cube is on A1, the system can ask the user to choose A2 or B1, for example with buttons, then update the sphere's base position after selection. `near` itself is not written into the base board state.
+
+### Design principle
+
+Derived properties and relations should be grounded in a systematic investigation of the ontology and its possible states, rather than accumulated as manually invented axioms. Discovering candidate derived concepts is a potential AI task; naming or mapping those concepts to ordinary English may use a language model. Any term used in the demo still needs an explicit, checkable interpretation over base facts.
+
+For a small demo, a fixed, transparent definition such as the one above can illustrate the layer. That does not imply that all useful derived terms should be hand-authored in the full system.
 
 ## Interpretation pipeline
 
@@ -132,7 +139,7 @@ A compact demonstration can exercise all three layers in sequence:
 2. User: “Put a sphere near it.” The system resolves “it” to the cube, evaluates the derived relation `near`, and offers legal neighboring squares if a choice is needed.
 3. User asks a direct question such as “What color is the cube?” or “Is the cube red?” The system answers from the base facts.
 
-This demonstrates referent introduction and anaphora (Layer 3), a derived relation (Layer 2), and direct ontology queries and updates (Layer 1), without requiring an all-purpose dialogue system.
+This demonstrates referent introduction and anaphora (Layer 2), a derived relation (Layer 3), and direct ontology queries and updates (Layer 1), without requiring an all-purpose dialogue system.
 
 ## Keep out of the narrowest fragment
 

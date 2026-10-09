@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../models/chat_message.dart';
+import '../models/conversation_state.dart';
 
 /// Owns only composer text; conversation state and requests stay in the controller.
 class ChatPanel extends StatefulWidget {
@@ -13,12 +14,16 @@ class ChatPanel extends StatefulWidget {
     required this.onSend,
     required this.onRefresh,
     this.error,
+    this.pending,
+    this.onChoose,
   });
 
   final List<ChatMessage> messages;
   final bool canSend;
   final bool sending;
   final String? error;
+  final PendingEntry? pending;
+  final ValueChanged<int>? onChoose;
   final Future<bool> Function(String) onSend;
   final VoidCallback onRefresh;
 
@@ -81,7 +86,7 @@ class _ChatPanelState extends State<ChatPanel> {
       children: [
         Expanded(
           child: widget.messages.isEmpty
-              ? const Center(child: Text('Enter an atomic sentence to begin.'))
+              ? const Center(child: Text('Enter a sentence to begin.'))
               : ListView.builder(
                   reverse: true,
                   padding: const EdgeInsets.symmetric(vertical: 8),
@@ -92,6 +97,27 @@ class _ChatPanelState extends State<ChatPanel> {
                   ),
                 ),
         ),
+        if (widget.pending case final pending?) ...[
+          Text('Which object? ${pending.sentence}'),
+          Flexible(
+            child: SingleChildScrollView(
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: [
+                  for (final candidate in pending.candidates)
+                    OutlinedButton(
+                      onPressed: busy || widget.onChoose == null
+                          ? null
+                          : () => widget.onChoose!(candidate.objectId),
+                      child: Text(candidate.label),
+                    ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
         if (widget.error != null) ...[
           Text(
             widget.error!,
@@ -134,7 +160,7 @@ class _ChatPanelState extends State<ChatPanel> {
                 child: TextField(
                   controller: _composer,
                   focusNode: _composerFocus,
-                  enabled: !busy,
+                  enabled: !busy && widget.pending == null,
                   minLines: 1,
                   maxLines: 4,
                   textInputAction: TextInputAction.send,

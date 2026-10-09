@@ -52,7 +52,8 @@ main = do
                                           "size" .= (Nothing :: Maybe String),
                                           "shape" .= (Nothing :: Maybe String),
                                           "position" .= object ["x" .= (0 :: Int), "y" .= (0 :: Int)]]]],
-                         "feedback" .= ("Created #0: red" :: String)]
+                         "feedback" .= ("Created #0: red" :: String), "salience" .= ([] :: [Value]),
+                         "pending" .= (Nothing :: Maybe Value), "isError" .= False]
   check "JSON round trip with explicit null attributes"
     ((eitherDecode (encode request) >>= processRequest) == Right expected)
   check "JSON rejects unsupported board dimensions"

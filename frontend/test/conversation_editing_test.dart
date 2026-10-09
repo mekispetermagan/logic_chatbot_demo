@@ -261,7 +261,6 @@ void main() {
                 onPaint: subject.paint,
                 onErase: subject.erase,
                 onClear: subject.clear,
-                onUndo: subject.undo,
               ),
             ),
           ),

@@ -73,6 +73,9 @@ class ConversationApi {
   Future<ConversationState> chat(String id, String text) =>
       _request('POST', id: id, action: 'chat', body: {'text': text});
 
+  Future<ConversationState> clarify(String id, int objectId) =>
+      _request('POST', id: id, action: 'clarify', body: {'objectId': objectId});
+
   Future<ConversationState> _request(
     String method, {
     String? id,

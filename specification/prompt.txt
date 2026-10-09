@@ -1,0 +1,60 @@
+Layer 2 of the controlled english fragment: 
+Same forms of performatives and questions as before. But there are new subject types:
+New subjects:
+- pronoun: "it"
+- indefinite term: "a cube", "a red", "a red cube"; only with position attribution like "to/on a3"; possibly omitting "a", "cube", "red", "red cube"
+- definite term: "the cube", "the large cube", "the red"
+
+Examples of performatives:
+"It is cube."
+"It to a4."
+"The cube is red."
+"A cube on a4".
+
+Questions will be discussed later.
+
+To make sentences sound less weird, maybe: 
+- allow an indefinite article when the predicate is a shape (without turning it into an indefinite term):
+  "#23 is a cube."
+- allow "move" when attributing position or "turn"/"turn ... to" when attributing prooperty:
+  "Move it to a4"
+  "Move the red 
+  "Turn it red"
+  "Turn it to a cube"
+  "Turn the 
+- allow "one" after definite and indefinite terms where they only contain an adjective:
+  "a red one"
+  "the red one"
+
+Feel free to overgenerate if it makes rules simpler. These weirdos are harmless to be accepted:
+"the cube one"
+"turn a4 to red"
+"turn a4 a cube"
+"#23 is a red"
+
+What matters is to keep the syntax unambiguous. I think so far there are no strings that can be accepted in two different senses. Can you please confirm/disconfirm this for me?
+
+MS DA
+
+Semantics/evaluation/reference resolution later
+
+
+Evaluation: basically what we need is reference resolution. What I'm having in mind is a very simple model of conversation state: a salience ranking. It should be of the form:
+```
+sR :: SalienceRanking
+sR =
+  [ (0, Id 4, Just (C Red))
+  , (1, Id 3, Just (C Blue))
+  , (1, Id 3, Just (Sh Sphere))
+  , (2, Id 2, Just (C Green))
+  , (2, Id 1, Just (C Green))
+  , (3, Id 0, Nothing)
+  ]
+```
+That is: recency score, identifier, nullable mentioned property.
+Most recent is also most salient. "It" refers to most recent; "the..." refers to most recent compatible.
+
+"A..." introduces a new object.
+
+You can choose between two options:
+1. translate your 

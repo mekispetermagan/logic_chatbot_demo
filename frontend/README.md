@@ -15,16 +15,19 @@ replacement; other failures show Retry and preserve the saved ID.
 
 The server supplies the initial toy world. The running app no longer uses local
 world history or the Dart toy fixture. Property edits, placement, erasure, Clear,
-and Undo call the API and display its returned world and feedback. Build the
+and Undo call the API and display its returned world. Chat feedback stays in Chat. Build the
 Haskell editor executable as described in `backend/api/README.md` before editing.
-Chat accepts the engine's atomic sentences and restores persisted messages on
+Chat accepts the engine's controlled-English sentences and restores persisted messages on
 restart. User bubbles use Material primary container colors; machine bubbles use
 secondary container colors. Replies preserve prettyprinted sentences and answers;
 parse errors have a distinct label and border. Enter submits, Shift+Enter inserts
 a new line, and the Send button remains available; failed requests retain the
 draft. For example, send
-`#0 blue. #0 blue? color of #0?`. A whole entry is one undoable world update,
-and Undo keeps chat messages. The
+`#0 blue. #0 blue? color of #0?`. A whole entry is one undoable world/discourse update,
+and Undo keeps chat messages. Ambiguity displays candidate buttons; choosing one
+resumes the same entry. While clarification is pending, new entries and visual
+edits are disabled. The shared Undo in the app bar cancels the whole entry,
+including any updates before the pause. Pending choices survive restart. The
 previous local editor controller and fixture remain for existing interaction
 tests and reference.
 

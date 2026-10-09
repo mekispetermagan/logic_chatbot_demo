@@ -28,7 +28,7 @@ packaging configuration. Interactive API documentation is at `/docs`.
 - `GET /conversations/{id}`: retrieves the latest stored world. Unknown UUIDs
   return 404; malformed IDs return 422.
 
-Both return `conversationId`, `world`, `canUndo`, and ordered `messages`. World JSON has `width`,
+Both return `conversationId`, `world`, `canUndo`, ordered `messages`, and nullable `pending`. World JSON has `width`,
 `height`, and `objects`; each object has an integer `id`, nullable `shape`,
 `size`, `color`, and nullable `position`. A present position requires integer
 `x` and `y`, zero-based with A1 at the bottom left. Missing attributes mean
@@ -61,7 +61,7 @@ changing history. Creation/retrieval and Undo work without the executable.
 
 Malformed requests return 422; unknown conversations return 404. Blocked actions
 (occupied destinations, coordinates outside the board) return 200 with the
-unchanged world and feedback. Only changed worlds create snapshots. Each edit
+unchanged world and feedback. Changes to world or discourse state create snapshots. Each edit
 is a SQLite transaction covering retrieval, evaluation, and persistence. Undo
 retains the initial snapshot; editing after Undo starts a new history branch.
 
@@ -69,21 +69,33 @@ retains the initial snapshot; editing after Undo starts a new history branch.
 
 `POST /conversations/{id}/chat` accepts `{"text":"#0 blue. #0 blue? color of #0?"}`.
 It returns the current conversation state plus `feedback`, like editing calls.
-Haskell parses the entire entry, then evaluates its atomic sentences in order.
-Machine text includes each prettyprinted sentence and its update feedback or
-answer. Parse errors leave the world unchanged and are saved as error replies.
+Haskell parses the entire entry, then evaluates its sentences in order using
+[Layer 2 resolution](../../specification/controlled-english-layer2.md).
+Non-final performatives require periods; questions always require `?`.
+Feedback includes each prettyprinted sentence and its changes or answer.
+Parse errors preserve world and discourse and are saved as error replies.
 Blank entries and malformed request bodies return 422.
 
 `messages` contains ordered objects with `role` (`user` or `machine`), `text`,
-and `isError`. Retrieval, editing, and Undo all return the existing messages.
-Each submission saves the user/machine pair and at most one changed-world
-snapshot together. Questions, parse errors, and entries whose final world equals
-the starting world create no snapshot. Undo reverses a submission's world changes
-together and retains messages. Engine failures save neither messages nor snapshots;
-clients should refresh after a lost response rather than automatically resend.
+and `isError`. Messages remain visible after Undo. Each submission saves a
+user/machine pair and at most one paired world/salience snapshot. Questions can
+create snapshots through salience changes. Engine failures save neither messages
+nor snapshots; refresh after a lost response instead of automatically resending.
 
-`chat_messages` is created automatically on startup, including for existing
-databases; conversation IDs and world history remain valid.
+Ambiguity returns `pending` with `sentence`, canonical `remaining` entry text,
+`candidateIds`, and `candidates` (`objectId`, printable `label`). Resume with
+`POST /conversations/{id}/clarify`, body `{"objectId":3}`. Candidate selection
+is evaluated by Haskell. An invalid choice leaves the pending state intact.
+Further ambiguity can pause again. All continuations replace the same entry
+snapshot, so one Undo restores the complete pre-entry world and salience.
+The choice and feedback are also recorded as chat messages.
+
+While pending, ordinary chat/editor requests return 409. Clarification without a
+pending entry also returns 409. Undo cancels the entry, including earlier partial
+progress. Retrieval restores pending state and choices after restart.
+
+Startup migrates old snapshots with empty salience and no pending entry; it
+preserves existing world history and does not reinterpret old messages.
 
 ## Persistence
 
@@ -97,13 +109,13 @@ Android and Linux native clients do not require CORS configuration.
 Parent directories and tables are created during application startup. Each
 conversation and its initial snapshot are inserted in one transaction.
 `conversations` stores IDs and creation times; `world_snapshots` stores ordered
-JSON worlds, starting at sequence 0. The latest snapshot is the current state.
+JSON worlds, salience rankings, and nullable pending entries, starting at sequence 0. The latest snapshot is the current state.
 `canUndo` becomes true when that sequence is greater than 0. Keep the database
 file and its SQLite sidecars on persistent storage when deploying.
 
 There is no authentication, cookie, shared conversation, or session expiry.
 Clients will retain their conversation ID to resume after restart. The API
-offers atomic-sentence chat. Semantic world validation and updates belong to Haskell;
+offers controlled-English chat. Semantic world validation and updates belong to Haskell;
 Python schemas validate only the transport shape. Flutter calls these endpoints
 for visual edits and uses the returned world, feedback, and `canUndo` state.
 
