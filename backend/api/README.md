@@ -72,6 +72,10 @@ It returns the current conversation state plus `feedback`, like editing calls.
 Haskell parses the entire entry, then evaluates its sentences in order using
 [Layer 2 resolution](../../specification/controlled-english-layer2.md).
 Non-final performatives require periods; questions always require `?`.
+Chat also supports `remove`, `swap`, and `erase`/`delete` with references,
+pronouns, or definite descriptions. Swap clarification may pause once per operand;
+resolved operands are persisted without partial world changes. No extra editing
+endpoint is needed.
 Feedback includes each prettyprinted sentence and its changes or answer.
 Parse errors preserve world and discourse and are saved as error replies.
 Blank entries and malformed request bodies return 422.
@@ -89,7 +93,8 @@ create snapshots through salience changes. Engine failures save neither messages
 nor snapshots; refresh after a lost response instead of automatically resending.
 
 Ambiguity returns `pending` with `sentence`, canonical `remaining` entry text,
-`candidateIds`, and `candidates` (`objectId`, printable `label`). Resume with
+`candidateIds`, `candidates` (`objectId`, printable `label`), and
+`resolvedSubjects` (already resolved operand IDs, defaulting to `[]`). Resume with
 `POST /conversations/{id}/clarify`, body `{"objectId":3}`. Candidate selection
 is evaluated by Haskell. An invalid choice leaves the pending state intact.
 Further ambiguity can pause again. All continuations replace the same entry

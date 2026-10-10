@@ -102,7 +102,8 @@ parsePending = withObject "pending" $ \value -> do
   sentences <- either fail pure (parseSentences text)
   identifiers <- map Id <$> value .: "candidateIds"
   unless (not (null sentences) && not (null identifiers)) (fail "Invalid pending entry")
-  pure (Pending sentences identifiers)
+  resolved <- map Id <$> (value .:? "resolvedSubjects" .!= [])
+  pure (Pending sentences identifiers resolved)
 
 parseRequest :: Value -> Parser (World, SalienceRanking, Maybe Pending, Operation)
 parseRequest = withObject "request" $ \value -> do
@@ -158,6 +159,7 @@ pendingJson (World objects) pending = object
   [ "remaining" .= intercalate " " (map pretty (remainingSentences pending))
   , "sentence" .= case remainingSentences pending of sentence:_ -> pretty sentence; [] -> ""
   , "candidateIds" .= map idToInt (candidateIds pending)
+  , "resolvedSubjects" .= map idToInt (resolvedSubjects pending)
   , "candidates" .= [object ["objectId" .= idToInt identifier, "label" .= pretty value]
        | identifier <- candidateIds pending, value <- objects, idOf value == identifier]
   ]

@@ -9,11 +9,17 @@ data AtomicPerformative = AP
                         { subjectPart :: ObjectReference
                         , propPart    :: Property
                         }
+                        | Remove ObjectReference
+                        | Swap ObjectReference ObjectReference
+                        | Delete ObjectReference
                         deriving (Eq, Show)
 
 instance PrettyShow AtomicPerformative where
   pretty (AP identifier property) =
     pretty identifier ++ " " ++ pretty property ++ "."
+  pretty (Remove reference) = "remove " ++ pretty reference ++ "."
+  pretty (Swap first second) = "swap " ++ pretty first ++ " and " ++ pretty second ++ "."
+  pretty (Delete reference) = "delete " ++ pretty reference ++ "."
 
 updateObjectWith :: Object -> Property -> Object
 updateObjectWith (Object i mc ms msh mp) (C c)    = (Object i (Just c) ms msh mp)
@@ -23,6 +29,9 @@ updateObjectWith (Object i mc ms msh mp) (P p)    = (Object i mc ms msh (Just p)
 
 data UpdateChange = ObjectCreated Identifier Property
                   | PropertyChanged Identifier (Maybe Property) Property
+                  | ObjectRemoved Identifier Position
+                  | ObjectsSwapped Identifier Identifier
+                  | ObjectDeleted Identifier
                   | NoChange
                   | UpdateBlocked (Maybe Identifier) String
                   deriving (Eq, Show)
@@ -31,6 +40,9 @@ instance PrettyShow UpdateChange where
   pretty (ObjectCreated identifier property) = "Created " ++ pretty identifier ++ ": " ++ pretty property
   pretty (PropertyChanged identifier previous property) =
     pretty identifier ++ ": " ++ maybe "none" pretty previous ++ " -> " ++ pretty property
+  pretty (ObjectRemoved identifier position) = pretty identifier ++ ": on " ++ prettyPosition position ++ " -> unplaced"
+  pretty (ObjectsSwapped first second) = "Swapped " ++ pretty first ++ " and " ++ pretty second
+  pretty (ObjectDeleted identifier) = "Deleted " ++ pretty identifier
   pretty NoChange = "No change"
   pretty (UpdateBlocked Nothing message) = message
   pretty (UpdateBlocked (Just identifier) message) = "Created " ++ pretty identifier ++ "; " ++ message
@@ -57,6 +69,32 @@ evaluateAtomicPerformative world (AP reference property) =
           | any (\o -> idOf o /= identifier && positionOf o == Just position) objects ->
               blocked (prettyPosition position ++ " occupied")
         _ -> apply
+
+-- Structural operations resolve existing objects only; failure leaves the world intact.
+evaluateAtomicPerformative world@(World objects) (Remove reference) =
+  case resolveReference world reference of
+    Message message -> (world, Message message)
+    Result object -> case positionOf object of
+      Nothing -> (world, Result NoChange)
+      Just position ->
+        (World [if sameId current object then current {positionOf = Nothing} else current | current <- objects],
+         Result (ObjectRemoved (idOf object) position))
+evaluateAtomicPerformative world@(World objects) (Delete reference) =
+  case resolveReference world reference of
+    Message message -> (world, Message message)
+    Result object -> (World (filter (not . sameId object) objects), Result (ObjectDeleted (idOf object)))
+evaluateAtomicPerformative world@(World objects) (Swap first second) =
+  case (resolveReference world first, resolveReference world second) of
+    (Message message, _) -> (world, Message message)
+    (_, Message message) -> (world, Message message)
+    (Result left, Result right)
+      | sameId left right || positionOf left == positionOf right -> (world, Result NoChange)
+      | otherwise ->
+          let exchange object
+                | sameId object left = object {positionOf = positionOf right}
+                | sameId object right = object {positionOf = positionOf left}
+                | otherwise = object
+          in (World (map exchange objects), Result (ObjectsSwapped (idOf left) (idOf right)))
 
 updateWorldWith :: World -> AtomicPerformative -> World
 updateWorldWith world performative = fst (evaluateAtomicPerformative world performative)

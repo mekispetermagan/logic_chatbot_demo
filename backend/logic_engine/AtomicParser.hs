@@ -51,7 +51,29 @@ atomicPerformative = do
     _ -> fail "expected a performative, not a question"
 
 atomicSentence :: Parser AtomicSentence
-atomicSentence = (PropertyQuery <$> atomicPropertyQuery) <|> atomicAssertionOrCheck
+atomicSentence = structuralPerformative <|> (PropertyQuery <$> atomicPropertyQuery) <|> atomicAssertionOrCheck
+
+structuralPerformative :: Parser AtomicSentence
+structuralPerformative = do
+  performative <- removal <|> deletion <|> swapping
+  mark <- sentenceEnd
+  when (mark == Just '?') $ fail "structural operations are performative-only"
+  pure (Performative performative)
+  where
+    removal = do
+      keyword "remove" *> space1
+      reference <- referenceParser
+      void (optional (try (space1 *> keyword "from" *> space1 *> keyword "board")))
+      pure (Remove reference)
+    deletion = do
+      (keyword "erase" <|> keyword "delete") *> space1
+      Delete <$> referenceParser
+    swapping = do
+      keyword "swap" *> space1
+      first <- referenceParser
+      space1
+      void (optional (keyword "and" *> space1))
+      Swap first <$> referenceParser
 
 atomicPropertyQuery :: Parser AtomicPropertyQuery
 atomicPropertyQuery = do

@@ -50,6 +50,7 @@ class PendingEntry(Schema):
     remaining: str
     candidateIds: list[StrictInt]
     candidates: list[Candidate]
+    resolvedSubjects: list[StrictInt] = Field(default_factory=list)
 
 
 class ConversationState(Schema):

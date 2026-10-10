@@ -69,4 +69,36 @@ main = do
   check "creation precedes blocked movement" (case blocked of World [created,_] -> positionOf created == Just (1,0); _ -> False)
   let (_, r4, _, _) = run two [] "#0 red? #1 blue? #0 cube?"
   check "utterance ages" (map (\(age,_,_) -> age) r4 == [(0,0),(0,1),(0,2)])
+  structuralTests
   putStrLn "All layer 2 evaluation checks passed."
+
+
+structuralTests = do
+  let cube n pos = (object n (Just Red) (Just Cube)) {positionOf=Just pos}
+      sphere n pos = (object n (Just Blue) (Just Sphere)) {positionOf=Just pos}
+      world = World [cube 0 (0,0),cube 1 (1,0),sphere 2 (2,0),sphere 3 (3,0)]
+      (removed, removedRanking, _, _) = run world [] "#0 on A1? Remove it from board."
+  check "remove pronoun and purge old position mentions"
+    ((case removed of World objects -> positionOf (head objects) == Nothing) &&
+      all (\(_,i,ps) -> i /= Id 0 || P (0,0) `notElem` ps) removedRanking)
+  let (deleted, deletedRanking, _, _) = run world [] "#0 red? Delete it."
+  check "delete purges all mentions of deleted object"
+    (not (hasId deleted (Id 0)) && all (\(_,i,_) -> i /= Id 0) deletedRanking)
+  let (_, _, p1, _) = run world [] "Swap the cube and the sphere."
+  first <- maybe (fail "expected first ambiguity") pure p1
+  check "first swap ambiguity has no resolved operands" (null (resolvedSubjects first))
+  let (stillWorld, stillRanking, p2, _) = resumeEntry world [] first (Id 0)
+  second <- maybe (fail "expected second ambiguity") pure p2
+  check "second ambiguity preserves first resolution without partial changes"
+    (stillWorld == world && null stillRanking && resolvedSubjects second == [Id 0] && candidateIds second == [Id 2,Id 3])
+  let (swapped, swapRanking, done, _) = resumeEntry stillWorld stillRanking second (Id 2)
+  check "second clarification completes atomic swap"
+    (done == Nothing && case swapped of
+      World objects -> positionOf (head objects) == Just (2,0) && positionOf (objects !! 2) == Just (0,0))
+  check "swap operands share recency" (map (\(age,i,_) -> (age,i)) swapRanking == [((0,0),Id 0),((0,0),Id 2)])
+  check "pronoun after swap asks rather than preferring one operand"
+    (case resolveSubject False swapped swapRanking It of Ambiguous ids -> ids == [Id 0,Id 2]; _ -> False)
+  let (_, _, afterSwap, _) = run world [((0,0),Id 2,[])] "Swap #0 and it."
+  check "swap resolves pronoun against pre-utterance ranking" (afterSwap == Nothing)
+  let (unchanged, _, _, _) = run world [] "Swap #0 and #99. Remove #99. Delete #99."
+  check "missing structural operands never create" (unchanged == world)

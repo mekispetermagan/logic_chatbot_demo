@@ -12,7 +12,11 @@ type SalienceRanking = [((Int, Int), Identifier, [Property])]
 data Resolution = Resolved World Identifier | Unresolved String | Ambiguous [Identifier]
   deriving (Eq, Show)
 
-data Pending = Pending { remainingSentences :: [Sentence], candidateIds :: [Identifier] }
+data Pending = Pending
+  { remainingSentences :: [Sentence]
+  , candidateIds :: [Identifier]
+  , resolvedSubjects :: [Identifier]
+  }
   deriving (Eq, Show)
 
 holds :: Object -> Property -> Bool
@@ -42,13 +46,20 @@ advanceUtterance ranking =
   | ((entry, utterance), identifier, properties) <- ranking]
 
 mention :: World -> Identifier -> [Property] -> SalienceRanking -> SalienceRanking
-mention world identifier properties ranking = purge world $
-  ((0, 0), identifier, nub properties) : advanceUtterance ranking
+mention world identifier properties = mentionMany world [(identifier, properties)]
 
-subjectOf :: Sentence -> Subject
-subjectOf (Attribution subject _) = subject
-subjectOf (Check subject _) = subject
-subjectOf (Query _ subject) = subject
+-- All operands of one utterance share recency; do not age once per operand.
+mentionMany :: World -> [(Identifier, [Property])] -> SalienceRanking -> SalienceRanking
+mentionMany world mentions ranking = purge world $
+  [((0, 0), identifier, nub properties) | (identifier, properties) <- mentions] ++ advanceUtterance ranking
+
+subjectsOf :: Sentence -> [Subject]
+subjectsOf (Attribution subject _) = [subject]
+subjectsOf (Removal subject) = [subject]
+subjectsOf (Swapping first second) = [first, second]
+subjectsOf (Deletion subject) = [subject]
+subjectsOf (Check subject _) = [subject]
+subjectsOf (Query _ subject) = [subject]
 
 descriptorsOf :: Subject -> [Property]
 descriptorsOf (Definite properties) = properties
@@ -66,7 +77,7 @@ resolveSubject create world@(World objects) ranking subject = case subject of
       Message message -> Unresolved message
   Indefinite _ | create -> let identifier = nextId world
                           in Resolved (World (emptyObject identifier : objects)) identifier
-  Indefinite _ -> Unresolved "Indefinite question"
+  Indefinite _ -> Unresolved "Expected an existing object"
   It -> case clean of
     [] -> Unresolved "No antecedent for it"
     _ -> choose [identifier | (age, identifier, _) <- clean, age == minimum [a | (a, _, _) <- clean]]

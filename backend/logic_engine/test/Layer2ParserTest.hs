@@ -17,7 +17,10 @@ main = do
   forM_ ["", "   ", "und", "#3 red. undo", "do undo"] $ \input ->
     check ("not undo prefix: " ++ show input) (not (isUndoEntry input))
   let accepted =
-        [ "It is cube.", "It to a4.", "The cube is red.", "A cube on a4"
+        [ "remove #3 from board.", "remove it.", "REMOVE the large cube FROM BOARD",
+          "swap #3 #4.", "swap it and the red cube", "swap the cube the sphere.",
+          "erase the red one.", "delete A1.", "remove A1. swap B1 and #3. delete #4.",
+          "It is cube.", "It to a4.", "The cube is red.", "A cube on a4"
         , "#23 is a cube.", "#23 is a red.", "a red on A3.", "red cube A3."
         , "a cube red cube on A4.", "the red red cube is large green."
         , "the red cube red cube on A4"
@@ -50,6 +53,10 @@ main = do
     , "#3 on I1.", "#3 on A9.", "o3 red.", "#3red."
     , "the is red.", "a on A4.", "color of it", "the cube one one is red."
     ] $ \input -> check ("reject: " ++ input) (isLeft (parseSentences input))
+  forM_ ["remove a cube.", "swap a cube and #3.", "swap #3 red cube.", "delete red.",
+         "remove #3?", "swap it and #4?", "erase #3?", "swap the cube.",
+         "remove the cube from.", "delete #3 remove #4."] $ \input ->
+    check ("reject structural: " ++ input) (isLeft (parseSentences input))
   check "descriptor order and repetition preserved"
     (parseSentence "a cube red cube on A4" == Right
       (Attribution (Indefinite [Sh Cube, C Red, Sh Cube]) [P (0,3)]))

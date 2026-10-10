@@ -236,3 +236,71 @@ class ChatTests(unittest.TestCase):
         self.assertEqual(loaded["world"], before["world"])
         self.assertEqual(loaded["messages"], before["messages"])
         self.assertEqual(self.snapshots(), 2)
+
+    def test_structural_sequence_and_undo_restore_world_and_salience(self):
+        self.client.post(f"{self.base}/clear")
+        before = self.chat("#0 red cube on A1. #1 blue sphere on B1.")
+        count = self.snapshots()
+        result = self.chat("Swap #0 #1. Remove #0 from board. Erase #1. Position of #0?")
+        self.assertIsNone(result["pending"])
+        self.assertEqual(result["world"]["objects"], [
+            {"id": 0, "color": "red", "shape": "cube", "size": None, "position": None}])
+        self.assertIn("Swapped #0 and #1", result["feedback"])
+        self.assertIn("Deleted #1", result["feedback"])
+        self.assertIn("position of #0?\n  none", result["feedback"])
+        self.assertEqual(self.snapshots(), count + 1)
+        with Database(self.path).connection() as connection:
+            import json
+            ranking = json.loads(connection.execute(
+                "SELECT salience_json FROM world_snapshots ORDER BY sequence DESC LIMIT 1").fetchone()[0])
+        self.assertTrue(all(mention["objectId"] != 1 for mention in ranking))
+        self.assertTrue(all(prop["kind"] != "position" for mention in ranking for prop in mention["properties"]))
+        restored = self.chat("undo")
+        self.assertEqual(restored["world"], before["world"])
+        referenced = self.chat("It is green.")
+        self.assertEqual(next(o for o in referenced["world"]["objects"] if o["id"] == 1)["color"], "green")
+
+    def test_swap_placed_and_unplaced_then_both_unplaced(self):
+        self.client.post(f"{self.base}/clear")
+        self.chat("#0 red on A3. #1 blue.")
+        result = self.chat("swap #0 and #1")
+        objects = {o["id"]: o for o in result["world"]["objects"]}
+        self.assertIsNone(objects[0]["position"])
+        self.assertEqual(objects[1]["position"], {"x": 0, "y": 2})
+        self.assertEqual(objects[0]["color"], "red")
+        self.assertEqual(objects[1]["color"], "blue")
+        result = self.chat("Remove #1. Swap #0 #1.")
+        self.assertTrue(all(o["position"] is None for o in result["world"]["objects"]))
+        self.assertIn("No change", result["feedback"])
+
+    def test_swap_resolves_both_ambiguous_operands_across_restarts(self):
+        self.client.post(f"{self.base}/clear")
+        before = self.chat("#0 cube on A1. #1 cube on B1. #2 sphere on C1. #3 sphere on D1.")
+        paused = self.chat("swap the cube and the sphere")
+        self.assertCountEqual(paused["pending"]["candidateIds"], [0, 1])
+        count = self.snapshots()
+        second = self.client.post(f"{self.base}/clarify", json={"objectId": 0}).json()
+        self.assertEqual(second["world"], before["world"])
+        self.assertEqual(second["pending"]["resolvedSubjects"], [0])
+        self.assertCountEqual(second["pending"]["candidateIds"], [2, 3])
+        self.assertEqual(self.snapshots(), count)
+        with TestClient(create_app(self.settings)) as restarted:
+            loaded = restarted.get(self.base).json()
+            self.assertEqual(loaded["pending"], second["pending"])
+            result = restarted.post(f"{self.base}/clarify", json={"objectId": 2}).json()
+        self.assertIsNone(result["pending"])
+        objects = {o["id"]: o for o in result["world"]["objects"]}
+        self.assertEqual(objects[0]["position"], {"x": 2, "y": 0})
+        self.assertEqual(objects[2]["position"], {"x": 0, "y": 0})
+        self.assertEqual(self.snapshots(), count)
+        restored = self.client.post(f"{self.base}/undo").json()
+        self.assertEqual(restored["world"], before["world"])
+
+    def test_structural_failures_do_not_create_objects_or_partially_swap(self):
+        before = self.chat("#99 red on A1.")
+        result = self.chat("Swap #99 #999. Remove H8. Delete #999.")
+        self.assertEqual(result["world"], before["world"])
+        self.assertIn("No object", result["feedback"])
+        rejected = self.chat("Remove #99?")
+        self.assertTrue(rejected["messages"][-1]["isError"])
+        self.assertEqual(rejected["world"], before["world"])

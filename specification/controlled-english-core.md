@@ -1,8 +1,7 @@
 # Controlled English: Core Language Reference
 
-This document describes the **implemented atomic core**, as of October 9, 2026. The additional Layer 2 syntax is described in
-[Layer 2 Syntax](controlled-english-layer2.md); its reference-resolution semantics
-are not implemented yet.
+This document describes the **implemented atomic core**. Layer 2 syntax and
+reference-resolution semantics are described in [Layer 2](controlled-english-layer2.md).
 It is a reference for writing demo chat entries and understanding their evaluation.
 
 [Controlled English Fragment for the Logic Demo](controlled-english-fragment.md)
@@ -55,7 +54,7 @@ There are three distinct atomic sentence categories:
 
 | Category | Example | Effect |
 | --- | --- | --- |
-| Performative | `#3 red.` | Set one attribute, creating the subject if necessary |
+| Performative | `#3 red.`, `remove #3.`, `swap #3 #4.`, `delete #3.` | Attribute an object, unplace it, exchange positions, or delete it |
 | Property check | `#3 red?` | Return whether the object has that property |
 | Attribute-value question | `color of #3?` | Return the value of an attribute |
 
@@ -70,7 +69,7 @@ sentences. A subject and its following words require whitespace: `#3red` fails.
 
 ### Performatives
 
-Each performative sets exactly one color, size, shape, or position. `is` is
+An attribution performative sets exactly one color, size, shape, or position. `is` is
 optional. Before a position, `on` is optional; `to` is another movement spelling.
 
 ```text
@@ -89,6 +88,36 @@ A4 to B3.
 
 `to` is performative-only: `#3 to A4?` is rejected. To ask about a position,
 use `#3 on A4?` or `#3 A4?`.
+
+### Removal, swapping, and deletion
+
+These are three additional primitive performatives. Every operand must resolve
+to an existing object; a missing identifier or empty square produces a diagnostic
+without creating anything or changing the world.
+
+```text
+remove #3.
+remove A4 from board.
+swap #3 and #4.
+swap A4 B3.
+erase #3.
+delete A4.
+```
+
+`remove subject [from board]` clears only the object's position. Identity and
+all other attributes remain intact. Removing an unplaced object reports `No change`.
+
+`swap subject [and] subject` exchanges the two nullable positions atomically.
+Two placed objects exchange squares, with no free temporary square required.
+A placed and unplaced object exchange the square and absence of position.
+Two unplaced objects, or an object swapped with itself, report `No change`.
+Other attributes and identities remain intact. Both operands resolve against
+the pre-swap world, including when both are square references.
+
+`erase subject` and `delete subject` are synonyms that delete the entire object,
+including unplaced objects. Prettyprinting uses `delete`, omits `from board`,
+and inserts `and` in swaps. These operations follow the usual period rule and
+never accept `?`; they introduce no new question forms.
 
 ### Property checks
 
@@ -142,6 +171,9 @@ attribute    = color | size | shape | position | row | column
 performative = subject [is] base-value [ . ]
              | subject [is] [on] square [ . ]
              | subject [is] to square [ . ]
+             | remove subject [from board] [ . ]
+             | swap subject [and] subject [ . ]
+             | (erase | delete) subject [ . ]
 
 check        = subject [is] base-value ?
              | subject [is] [on] square ?
@@ -215,7 +247,7 @@ identifiers and square occupancy; the evaluator does not silently choose a match
 
 ## 6. Updates and creation during reference resolution
 
-Evaluation first resolves the subject, then applies the requested property:
+Property attribution first resolves the subject, then applies the requested property:
 
 1. An existing subject is selected without changing its identity.
 2. A missing identifier creates an object with that exact identifier and no attributes.
@@ -309,8 +341,8 @@ snapshot through salience changes. Parse errors preserve both states. Layer 2
 clarification pauses can expose partial progress, but one Undo still reverses
 the whole entry. See [Layer 2](controlled-english-layer2.md) for those rules.
 
-Visual edits and chat share the same stored world and history. Erase and Clear
-are interface/API operations. An entry starting with `undo` after optional
+Visual edits and chat share the same stored world and history. Clear remains
+an interface/API operation; object deletion is also available as `erase`/`delete`. An entry starting with `undo` after optional
 leading whitespace requests Undo, case-insensitively; all remaining text is
 ignored. For example, `  UnDo #3 red.` undoes once without applying `#3 red.`.
 Haskell recognizes the request before sentence parsing and returns it to FastAPI,
@@ -327,7 +359,7 @@ to retrieve committed state rather than automatically repeating the submission.
 | [Ontology.hs](../backend/logic_engine/Ontology.hs) | Objects, references, properties, world |
 | [AtomicParser.hs](../backend/logic_engine/AtomicParser.hs) | Parse one sentence or a complete sequence |
 | [ReferenceResolution.hs](../backend/logic_engine/ReferenceResolution.hs) | Resolve references; create performative subjects |
-| [AtomicPerformative.hs](../backend/logic_engine/AtomicPerformative.hs) | Update one property and report its change |
+| [AtomicPerformative.hs](../backend/logic_engine/AtomicPerformative.hs) | Attribute, unplace, swap, or delete objects and report changes |
 | [AtomicPropertyCheck.hs](../backend/logic_engine/AtomicPropertyCheck.hs) | Evaluate Boolean checks |
 | [AtomicPropertyQuery.hs](../backend/logic_engine/AtomicPropertyQuery.hs) | Evaluate attribute-value questions |
 | [AtomicEvaluation.hs](../backend/logic_engine/AtomicEvaluation.hs) | Evaluate sequences and format feedback |
@@ -339,6 +371,7 @@ SQLite handling remain outside Haskell.
 
 The atomic evaluator currently has no negation, conjunction, disjunction,
 quantifiers, description/pronoun resolution, or spatial relations such as `near`.
-Layer 2 now parses descriptions and pronouns without evaluating them. Attribute absence
-cannot be assigned through a core sentence. See the Layer 2 reference for additional accepted syntax and the boundary
+Layer 2 evaluates descriptions and pronouns. Position absence can be assigned
+with `remove`; other attribute absences cannot be assigned. See the Layer 2
+reference for additional accepted syntax and the boundary
 between parsing and evaluation. Derived terms belong to Layer 3 and remain future work.

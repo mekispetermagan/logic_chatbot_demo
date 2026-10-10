@@ -134,3 +134,18 @@ and candidate identifiers. `resumeEntry` continues without beginning a new entry
 See the [Layer 2 reference](../../specification/controlled-english-layer2.md)
 for scoring, salience purging, clarification, and whole-entry Undo rules.
 The console still uses the narrower atomic parser.
+
+## Structural performatives
+
+`AtomicPerformative` includes `Remove reference`, `Swap first second`, and
+`Delete reference`. Parse `remove #3 [from board]`, `swap #3 [and] #4`, or
+`erase/delete #3`; square references work too. These never create missing objects.
+Removal clears position, swap exchanges nullable positions atomically, and deletion
+removes the object. Both unplaced or identical swap operands report no change.
+
+Layer 2 accepts references, pronouns, and definite descriptions as operands,
+with no indefinites or question forms. Swap resolves both operands before any
+update and records both at the same recency. `Pending.resolvedSubjects` preserves
+a resolved prefix across clarification of the other operand; its JSON field is
+optional for compatibility with existing pending entries. See the core and
+Layer 2 references for syntax, salience purging, and Undo examples.

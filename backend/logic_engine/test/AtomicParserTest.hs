@@ -143,6 +143,7 @@ main = do
   check "pretty query feedback"
     (pretty (last feedback) == "position of #1?\n  H8")
   squareReferenceTests
+  structuralTests
   putStrLn "All atomic parser and evaluation checks passed."
 
 
@@ -217,3 +218,49 @@ squareReferenceTests = do
     Left message -> fail message
     Right sentences -> check "mixed reference pretty round trip"
       (parseAtomicSentences (unwords (map pretty sentences)) == Right sentences)
+
+
+structuralTests :: IO ()
+structuralTests = do
+  let ref n = ById (Id n)
+      forms = [("remove #3", Remove (ref 3)), ("REMOVE A1 FROM BOARD.", Remove (AtSquare (0,0))),
+               ("swap #3 #4", Swap (ref 3) (ref 4)), ("Swap A1 and B1.", Swap (AtSquare (0,0)) (AtSquare (1,0))),
+               ("erase #3.", Delete (ref 3)), ("DELETE #3", Delete (ref 3))]
+  forM_ forms $ \(text, expected) -> do
+    check ("structural parse " ++ text) (parseAtomicPerformative text == Right expected)
+    check "structural pretty round trip" (parseAtomicPerformative (pretty expected) == Right expected)
+  forM_ ["remove #3?", "swap #3 and #4?", "delete #3?", "remove #3 from.",
+         "swap #3", "swap #3 #4 #5", "erase it", "remove #3 delete #4"] $ \text ->
+    check ("structural rejection " ++ text) (isLeft (parseAtomicSentences text))
+  let left = Object (Id 0) (Just Red) (Just Small) (Just Cube) (Just (0,0))
+      right = Object (Id 1) (Just Blue) Nothing (Just Sphere) (Just (1,0))
+      loose = Object (Id 2) Nothing (Just Large) Nothing Nothing
+      world = World [left, right, loose]
+      normalized (updated, Result change) = (updated, Just change)
+      normalized (updated, Message _) = (updated, Nothing)
+      eval = normalized . evaluateAtomicPerformative world
+  check "remove preserves object attributes and identity"
+    (eval (Remove (ref 0)) == (World [left {positionOf=Nothing},right,loose], Just (ObjectRemoved (Id 0) (0,0))))
+  check "remove unplaced is no change" (eval (Remove (ref 2)) == (world, Just NoChange))
+  check "delete unplaced object" (eval (Delete (ref 2)) == (World [left,right], Just (ObjectDeleted (Id 2))))
+  check "swap occupied squares atomically"
+    (fst (eval (Swap (AtSquare (0,0)) (AtSquare (1,0)))) ==
+      World [left {positionOf=Just (1,0)},right {positionOf=Just (0,0)},loose])
+  check "swap placed and unplaced exchanges absence and position"
+    (fst (eval (Swap (ref 0) (ref 2))) ==
+      World [left {positionOf=Nothing},right,loose {positionOf=Just (0,0)}])
+  check "swap self is no change" (eval (Swap (ref 0) (AtSquare (0,0))) == (world, Just NoChange))
+  let unplacedWorld = World [left {positionOf=Nothing}, loose]
+  check "swap two unplaced is no change"
+    (normalized (evaluateAtomicPerformative unplacedWorld (Swap (ref 0) (ref 2))) == (unplacedWorld, Just NoChange))
+  forM_ [Remove (ref 99), Delete (ref 99), Swap (ref 0) (ref 99), Swap (ref 99) (ref 0),
+         Remove (AtSquare (7,7))] $ \operation ->
+    check "missing structural operand never creates or partially updates" (fst (eval operation) == world)
+  let full = World [(emptyObject (Id n)) {positionOf=Just (n `mod` 8,n `div` 8)} | n <- [0..63]]
+      swapped = fst (evaluateAtomicPerformative full (Swap (ref 0) (ref 63)))
+  check "swap needs no spare square on full board"
+    (case swapped of World objects -> positionOf (head objects) == Just (7,7) && positionOf (last objects) == Just (0,0))
+  check "mixed structural sentence sequence"
+    (case parseAtomicSentences "remove #0. position of #0? swap #0 #1. erase #1. #0 red?" of
+      Right sentences -> length sentences == 5
+      Left _ -> False)

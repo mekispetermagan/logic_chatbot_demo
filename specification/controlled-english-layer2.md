@@ -78,6 +78,42 @@ Repeated or conflicting predicates evaluate in their original order after the
 subject is resolved once. The last value of an attribute wins; the destination
 is applied last. A blocked movement preserves earlier property updates.
 
+## Removal, swapping, and deletion
+
+The core structural performatives also accept `it` and definite descriptions:
+
+```text
+Remove it from board.
+Remove the large cube.
+Swap the red cube and the blue sphere.
+Swap it #4.
+Erase the red one.
+Delete A4.
+```
+
+`from board` and swap's `and` are optional. Indefinite operands are not allowed:
+these operations must resolve existing objects and never create them. They are
+performatives, so `?` is rejected and non-final sentences require periods.
+`Removal`, `Swapping`, and `Deletion` are distinct Layer 2 sentence cases; their
+reference-only forms convert to the corresponding atomic constructors.
+
+Removal clears only position; deletion removes the object entirely. Swap
+exchanges nullable positions, including placed/unplaced cases. Both operands
+resolve before any world change, against the same world and salience ranking.
+Missing operands leave the world unchanged and produce short feedback.
+
+Each ambiguous operand is clarified independently. The pending state preserves
+already resolved operand identifiers without adding partial mentions or applying
+half a swap. This state survives restart; a single Undo still cancels the whole
+entry. Original sentence wording remains in canonical feedback throughout.
+
+After a swap, both operands are mentioned at the same recency, with their subject
+descriptors and new positions where present. A following `it` therefore asks if
+the operands are distinct. Removal preserves the object mention and purges its
+old position; deletion purges every mention of the deleted object. Removing an
+unplaced object, swapping two unplaced objects, and swapping an object with
+itself report `No change` while still registering the resolved mentions.
+
 ## Property checks
 
 A check tests **exactly one value**: color, size, shape, or position. Indefinite
@@ -134,8 +170,8 @@ multiple complete parses produce an ambiguity error rather than a greedy choice.
 ## Parser and prettyprinting
 
 `Layer2Syntax.Subject` distinguishes `Reference`, `It`, `Indefinite`, and `Definite`.
-`Layer2Syntax.Sentence` distinguishes compound `Attribution`, single-value `Check`,
-and attribute `Query`. Lists preserve descriptor order and repetition.
+`Layer2Syntax.Sentence` distinguishes compound `Attribution`, structural
+`Removal`/`Swapping`/`Deletion`, single-value `Check`, and attribute `Query`. Lists preserve descriptor order and repetition.
 
 `Layer2Parser.parseSentence` parses one sentence; `parseSentences` parses a whole
 nonempty entry. Both return `Either String ...` and are re-exported by `Grammar`.

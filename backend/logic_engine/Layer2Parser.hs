@@ -135,6 +135,30 @@ attribution words' = mapMaybe candidate (splits tokens)
         || (verb == "move" && not positional) || (verb == "turn" && positional)
         then Nothing else Just (Attribution who properties)
 
+-- Structural operands must denote existing objects. Description boundaries
+-- are enumerated just like attribution boundaries, with optional 'and'.
+structural :: [String] -> [Sentence]
+structural ("remove":tokens) = unary Removal (stripFromBoard tokens)
+  where
+    stripFromBoard words' = case reverse words' of
+      "board":"from":rest -> reverse rest
+      _ -> words'
+structural ("erase":tokens) = unary Deletion tokens
+structural ("delete":tokens) = unary Deletion tokens
+structural ("swap":tokens) = mapMaybe candidate (splits tokens)
+  where
+    candidate (before, after) = Swapping <$> existingSubject before
+                                          <*> existingSubject (dropWord "and" after)
+structural _ = []
+
+existingSubject :: [String] -> Maybe Subject
+existingSubject tokens = do
+  who <- subject tokens
+  if isIndefinite who then Nothing else Just who
+
+unary :: (Subject -> Sentence) -> [String] -> [Sentence]
+unary constructor tokens = maybe [] ((:[]) . constructor) (existingSubject tokens)
+
 questions :: [String] -> [Sentence]
 questions words' = valueQueries ++ checks
   where
@@ -164,7 +188,7 @@ questions words' = valueQueries ++ checks
       if boundary then Just (Check who property) else Nothing
 
 parseChunk :: ([String], Maybe Char) -> Either String Sentence
-parseChunk (tokens, mark) = case (if mark == Just '?' then questions tokens else attribution tokens) of
+parseChunk (tokens, mark) = case (if mark == Just '?' then questions tokens else structural tokens ++ attribution tokens) of
   [sentence] -> Right sentence
   [] -> Left ("Unsupported syntax: " ++ unwords tokens ++ maybe "" (:[]) mark)
   _ -> Left ("Ambiguous subject/predicate boundary: " ++ unwords tokens)
