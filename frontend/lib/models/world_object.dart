@@ -1,4 +1,4 @@
-enum ObjectShape { cube, sphere, pyramid }
+enum ObjectShape { bloom, spark, drop, loop }
 
 enum ObjectSize { small, medium, large }
 

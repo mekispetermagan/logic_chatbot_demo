@@ -20,7 +20,7 @@ Coordinates follow chessboard convention: **A1 is the bottom-left square**. Inte
 | Layer | What it expresses | Example |
 |---|---|---|
 | 1. Direct ontological atoms | Explicit facts or questions about an object and the base ontology | `o12 red`; `o12 on A3`; `o12 color?` |
-| 2. Compositional and discourse sentences | Descriptions, quantifiers, and pronouns that introduce, identify, or relate discourse referents | “Cube on A3. It is large and red.” |
+| 2. Compositional and discourse sentences | Descriptions, quantifiers, and pronouns that introduce, identify, or relate discourse referents | “Bloom on A3. It is large and red.” |
 | 3. Atoms with derived terms | Facts or questions using a relation or property defined over base ontology facts | `near(o12, o3)` |
 
 Layer 2 adds subjects and sentence constructions interpreted against the core world and dialogue context. Layer 3 adds derived terms grounded in base ontology facts; these may be used by the descriptive language.
@@ -35,7 +35,7 @@ Illustrative internal forms:
 
 - `o5 on A3`
 - `o12 red`
-- `o3 cube`
+- `o3 bloom`
 - `o4 large`
 
 A question is marked with `?`:
@@ -52,7 +52,7 @@ These are semantic/internal forms for Codex and the engine. The user-facing cont
 
 For the demo, the board contains objects with a persistent identity and base attributes such as:
 
-- shape: sphere, cube, pyramid
+- shape: bloom (flower), spark (star), drop (tear), loop (ring)
 - color
 - size
 - board position (row and column, or one square such as A3)
@@ -78,12 +78,12 @@ Users do not supply internal IDs. A description can introduce a new discourse re
 
 Example:
 
-> Cube on A3. It is large and red.
+> Bloom on A3. It is large and red.
 
 If this introduces a new object assigned ID `o12`, interpretation yields these Layer 1 facts:
 
 ```text
-o12 cube
+o12 bloom
 o12 on A3
 o12 large
 o12 red
@@ -91,7 +91,7 @@ o12 red
 
 The pronoun `It` is resolved from dialogue context to `o12`. No indexed-pronoun notation such as `it_0` is part of the user-facing or narrowest atomic fragment.
 
-Descriptions can leave an object partially specified. “Cube on A3” supplies shape and position; size and color remain unknown until stated or clarified.
+Descriptions can leave an object partially specified. “Bloom on A3” supplies shape and position; size and color remain unknown until stated or clarified.
 
 ### Ambiguity and clarification
 
@@ -111,7 +111,7 @@ In this chessboard demo, `near(x, y)` means that the objects occupy orthogonally
 
 For example, if `o3` is on A1, then the possible neighboring squares are A2 and B1. B2 is diagonal and is not near under this definition.
 
-Thus `near(o12, o3)` is evaluated from the two objects' positions. If a user says “Put a sphere near the cube” and the cube is on A1, the system can ask the user to choose A2 or B1, for example with buttons, then update the sphere's base position after selection. `near` itself is not written into the base board state.
+Thus `near(o12, o3)` is evaluated from the two objects' positions. If a user says “Put a spark near the bloom” and the bloom is on A1, the system can ask the user to choose A2 or B1, for example with buttons, then update the spark's base position after selection. `near` itself is not written into the base board state.
 
 ### Design principle
 
@@ -135,9 +135,9 @@ The world model remains the source of base facts. Derived evaluations and discou
 
 A compact demonstration can exercise all three layers in sequence:
 
-1. User: “Cube on A3. It is large and red.” The system creates an object and assigns an internal ID, then updates the board with its base properties.
-2. User: “Put a sphere near it.” The system resolves “it” to the cube, evaluates the derived relation `near`, and offers legal neighboring squares if a choice is needed.
-3. User asks a direct question such as “What color is the cube?” or “Is the cube red?” The system answers from the base facts.
+1. User: “Bloom on A3. It is large and red.” The system creates an object and assigns an internal ID, then updates the board with its base properties.
+2. User: “Put a spark near it.” The system resolves “it” to the bloom, evaluates the derived relation `near`, and offers legal neighboring squares if a choice is needed.
+3. User asks a direct question such as “What color is the bloom?” or “Is the bloom red?” The system answers from the base facts.
 
 This demonstrates referent introduction and anaphora (Layer 2), a derived relation (Layer 3), and direct ontology queries and updates (Layer 1), without requiring an all-purpose dialogue system.
 

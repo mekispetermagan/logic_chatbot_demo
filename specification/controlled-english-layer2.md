@@ -13,8 +13,8 @@ separate sentences. Words and coordinates are case-insensitive. The complete
 entry is parsed before anything is evaluated.
 
 ```text
-#3 red. #3 cube. Is #3 red?
-It is large. The red cube is small
+#3 red. #3 bloom. Is #3 red?
+It is large. The red bloom is small
 ```
 
 ## Subjects
@@ -24,13 +24,13 @@ It is large. The red cube is small
 | Identifier | `#23` | Yes | Yes |
 | Square | `A4` | Yes | Yes |
 | Pronoun | `it` | Yes | Yes |
-| Indefinite | `a cube`, `a red`, `red cube` | Only with a destination | No |
-| Definite | `the cube`, `the large cube`, `the red` | Yes | Yes |
+| Indefinite | `a bloom`, `a red`, `red bloom` | Only with a destination | No |
+| Definite | `the bloom`, `the large bloom`, `the red` | Yes | Yes |
 
 Descriptions contain one or more color, size, or shape descriptors. Order is
-arbitrary and repetition is preserved: `a cube red cube`, `the red red cube`.
+arbitrary and repetition is preserved: `a bloom red bloom`, `the red red bloom`.
 An indefinite article can be omitted. Optional terminal `one` is accepted for
-either description kind, including `a red one` and `the cube one`.
+either description kind, including `a red one` and `the bloom one`.
 
 ## Performatives
 
@@ -39,10 +39,10 @@ or a destination alone. There is at most one destination and it comes **last**.
 Optional predicate article `a` is decoration, not another subject.
 
 ```text
-#23 is a cube.
+#23 is a bloom.
 #23 is a red.
-A4 large blue sphere.
-A4 is a red cube on B3.
+A4 large blue spark.
+A4 is a red bloom on B3.
 It is small red.
 It to A4.
 ```
@@ -52,12 +52,12 @@ subjects followed by property descriptors, `is` or `to` is compulsory. A
 position-only predicate is already distinguishable by its coordinate or marker.
 
 ```text
-The cube is large green.
-The cube large is green.
-The cube on A4.
-A red cube on A4.
-Cube A4.
-A red cube is large on B3.
+The bloom is large green.
+The bloom large is green.
+The bloom on A4.
+A red bloom on A4.
+Bloom A4.
+A red bloom is large on B3.
 ```
 
 An indefinite performative must include a destination. Optional `move` introduces
@@ -66,12 +66,12 @@ descriptor, optionally followed by a destination.
 
 ```text
 Move it to A4.
-Move the red cube on A4.
+Move the red bloom on A4.
 Turn it red.
-Turn it to a cube.
-Turn the cube large to green.
+Turn it to a bloom.
+Turn the bloom large to green.
 Turn A4 a red.
-Turn A4 to a large blue sphere on B3.
+Turn A4 to a large blue spark on B3.
 ```
 
 Repeated or conflicting predicates evaluate in their original order after the
@@ -82,7 +82,7 @@ is applied last. A blocked movement preserves earlier property updates.
 
 `S remove color/size/shape/square` clears one attribute through the Layer 1
 primitive. Subjects may be identifiers, squares, `it`, or definite descriptions:
-`H7 remove color.`, `it remove size.`, `the red cube remove shape.`
+`H7 remove color.`, `it remove size.`, `the red bloom remove shape.`
 `square` clears position. Missing subjects never create objects; absent
 attributes report `No change`. Indefinite subjects and question marks are
 rejected. Use a period except at the end of an entry.
@@ -97,8 +97,8 @@ The core structural performatives also accept `it` and definite descriptions:
 
 ```text
 Remove it from board.
-Remove the large cube.
-Swap the red cube and the blue sphere.
+Remove the large bloom.
+Swap the red bloom and the blue spark.
 Swap it #4.
 Erase the red one.
 Delete A4.
@@ -135,9 +135,9 @@ subjects and the performative verbs `move`/`turn` are not accepted.
 ```text
 B3 red?
 It on A4?
-The large cube is red?
+The large bloom is red?
 Is it red?
-Is the large cube red?
+Is the large bloom red?
 Is #3 on A4?
 ```
 
@@ -146,11 +146,11 @@ Position checks may use a coordinate or `on`; positional `to` remains
 performative-only, so `it to A4?` is rejected.
 
 In inverted checks, the single final property fixes the boundary. Thus
-`Is the large cube red?` checks red of subject `the large cube`.
-`Is the cube red green?` is also accepted, but checks green of subject
-`the cube red`; it does not check two values.
+`Is the large bloom red?` checks red of subject `the large bloom`.
+`Is the bloom red green?` is also accepted, but checks green of subject
+`the bloom red`; it does not check two values.
 
-`B3 red green sphere?` and `the cube is red green?` are rejected.
+`B3 red green spark?` and `the bloom is red green?` are rejected.
 
 ## Attribute-value questions
 
@@ -159,10 +159,10 @@ non-indefinite subjects are allowed. Full, shorthand, and natural forms work:
 
 ```text
 Color of it?
-Shape of the red cube?
-The red cube color?
+Shape of the red bloom?
+The red bloom color?
 The red one is size?
-What is the shape of the red cube?
+What is the shape of the red bloom?
 What is shape of it?
 ```
 
@@ -172,10 +172,10 @@ definite subject's article after `of`.
 
 ## Unambiguous boundaries
 
-`the cube large green` is rejected because it lacks a subject/predicate boundary.
-`The cube is large green.` and `The cube large is green.` are distinct parses.
+`the bloom large green` is rejected because it lacks a subject/predicate boundary.
+`The bloom is large green.` and `The bloom large is green.` are distinct parses.
 
-`the red cube red cube on A4` is accepted as one repeated-description subject
+`the red bloom red bloom on A4` is accepted as one repeated-description subject
 and one position predicate. It cannot mean two whitespace-separated sentences.
 The parser enumerates legal boundaries and accepts only one complete parse;
 multiple complete parses produce an ambiguity error rather than a greedy choice.
@@ -194,13 +194,13 @@ In `cabal repl`:
 
 ```haskell
 :module + Grammar
-either putStrLn (mapM_ (putStrLn . pretty)) $ parseSentences "Turn the cube large to green. What is the shape of it?"
+either putStrLn (mapM_ (putStrLn . pretty)) $ parseSentences "Turn the bloom large to green. What is the shape of it?"
 ```
 
 Prettyprinting uses explicit `is`, `on` for positions, and
 `attribute of subject?` for value queries. It prints indefinite articles and
-omits decorative `one`, `move`, and `turn`. `Turn A4 to a cube` prints as
-`A4 is cube.`. Prettyprinted syntax parses back to the same syntax tree.
+omits decorative `one`, `move`, and `turn`. `Turn A4 to a bloom` prints as
+`A4 is bloom.`. Prettyprinted syntax parses back to the same syntax tree.
 
 ## Reference resolution and evaluation
 
@@ -211,7 +211,7 @@ salience ranking, optional pending clarification, and printable feedback.
 
 ```haskell
 :module + Grammar
-either putStrLn (\sentences -> let (w, r, pending, feedback) = evaluateEntry world [] sentences in putStrLn feedback >> putStrLn (pretty w) >> print r >> print pending) $ parseSentences "#0 red. It is a cube. What is the color of it?"
+either putStrLn (\sentences -> let (w, r, pending, feedback) = evaluateEntry world [] sentences in putStrLn feedback >> putStrLn (pretty w) >> print r >> print pending) $ parseSentences "#0 red. It is a bloom. What is the color of it?"
 ```
 
 Identifiers and squares keep the core resolution rules. Missing identifiers or

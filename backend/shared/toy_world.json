@@ -4,7 +4,7 @@
   "objects": [
     {
       "id": 0,
-      "shape": "cube",
+      "shape": "bloom",
       "size": "medium",
       "color": "red",
       "position": {
@@ -14,7 +14,7 @@
     },
     {
       "id": 1,
-      "shape": "sphere",
+      "shape": "spark",
       "size": "small",
       "color": "blue",
       "position": {
@@ -24,7 +24,7 @@
     },
     {
       "id": 2,
-      "shape": "pyramid",
+      "shape": "drop",
       "size": "large",
       "color": null,
       "position": {
@@ -44,7 +44,7 @@
     },
     {
       "id": 4,
-      "shape": "cube",
+      "shape": "bloom",
       "size": null,
       "color": "yellow",
       "position": {
@@ -54,14 +54,14 @@
     },
     {
       "id": 5,
-      "shape": "pyramid",
+      "shape": "loop",
       "size": "medium",
       "color": "blue",
       "position": null
     },
     {
       "id": 6,
-      "shape": "cube",
+      "shape": "bloom",
       "size": "large",
       "color": null,
       "position": null

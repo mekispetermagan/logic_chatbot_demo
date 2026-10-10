@@ -9,7 +9,7 @@ except at the end of an entry.
 ## Subjects and reference resolution
 
 `S` and `S'` are existing-object subjects: `#3`, `A4`, `it`, or a definite
-description such as `the large red cube`. Indefinite descriptions are not
+description such as `the large red bloom`. Indefinite descriptions are not
 accepted in these new forms. Missing subjects produce diagnostics without
 creating objects. Reference resolution, anaphoric salience, and object-choice
 clarification follow Layer 2. Both operands resolve against the world before
@@ -20,7 +20,7 @@ that utterance changes anything.
 ```text
 Move #3 up.
 Move it down.
-Move the cube left.
+Move the bloom left.
 Move A4 right.
 Move #3 just above #4.
 Move #3 under #4.
@@ -49,7 +49,7 @@ occupied and is not a free destination.
 
 ```text
 Make #3 the same color as #4.
-Make it the same size as the sphere.
+Make it the same size as the spark.
 Make #3 the same shape as #4.
 ```
 
@@ -94,7 +94,7 @@ unequal. Missing objects still produce diagnostics, rather than null comparisons
 ## Counting
 
 ```text
-How many objects are red cube?
+How many objects are red bloom?
 How many red?
 How many objects are next to #3?
 How many objects are at the edge?
@@ -117,17 +117,17 @@ synonyms; unplaced objects occupy no squares.
 ## Quantified questions
 
 ```text
-Is every red object a cube?
+Is every red object a bloom?
 Every red object is large?
-Every red is cube?
-Some red objects are large sphere?
-Some cube objects green?
+Every red is bloom?
+Some red objects are large spark?
+Some bloom objects green?
 ```
 
 For `every`, leading `is` is optional. At least one of `object` and `is` must
 separate the subject description from its predicate. An optional `a` can precede
 the predicate. Both descriptions are nonempty conjunctions of color, size, and
-shape values; order and repetition are allowed. `every red cube?` is rejected
+shape values; order and repetition are allowed. `every red bloom?` is rejected
 because it has no boundary. The former `all` syntax is no longer accepted.
 
 For `some`, leading `are` remains optional, and at least one of `objects` and

@@ -9,9 +9,10 @@ enum ObjectProperty {
   small,
   medium,
   large,
-  cube,
-  sphere,
-  pyramid;
+  bloom,
+  spark,
+  drop,
+  loop;
 
   WorldObject applyTo(WorldObject object) => WorldObject(
     id: object.id,
@@ -30,9 +31,10 @@ enum ObjectProperty {
       _ => object.size,
     },
     shape: switch (this) {
-      cube => ObjectShape.cube,
-      sphere => ObjectShape.sphere,
-      pyramid => ObjectShape.pyramid,
+      bloom => ObjectShape.bloom,
+      spark => ObjectShape.spark,
+      drop => ObjectShape.drop,
+      loop => ObjectShape.loop,
       _ => object.shape,
     },
   );

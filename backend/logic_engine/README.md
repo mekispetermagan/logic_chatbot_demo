@@ -10,6 +10,10 @@ defines evaluation results. `Sandbox.hs` holds the experimental examples.
 `AtomicParser.hs` uses Megaparsec to parse controlled-English atomic sentences
 without updating state.
 
+Shapes are `Bloom`, `Spark`, `Drop`, and `Loop`. Both natural-language parsers
+accept `flower`, `star`, `tear`, and `ring` as aliases; prettyprinting and JSON
+normalize to `bloom`, `spark`, `drop`, and `loop`.
+
 Identifiers use `#3`; square references use A1-H8. The old `o3` spelling is
 not accepted. The parser accepts case-insensitive properties and squares, optional `is`,
 optional `on` for positions, and optional periods only at the end of an entry.
@@ -124,7 +128,7 @@ See [Layer 2 Syntax](../../specification/controlled-english-layer2.md).
 
 ```haskell
 :module + Grammar
-either putStrLn (mapM_ (putStrLn . pretty)) $ parseSentences "Turn the cube large to green. What is the shape of it?"
+either putStrLn (mapM_ (putStrLn . pretty)) $ parseSentences "Turn the bloom large to green. What is the shape of it?"
 ```
 
 Chat uses this parser and `evaluateEntry world ranking sentences`. Pronouns,

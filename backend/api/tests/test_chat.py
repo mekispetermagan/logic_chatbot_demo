@@ -93,11 +93,24 @@ class ChatTests(unittest.TestCase):
         self.assertEqual(self.snapshots(), 1)
         self.assertEqual(self.client.get(self.base).json(), self.initial)
 
+    def test_new_shape_aliases_evaluate_and_return_canonical_names(self):
+        self.client.post(f"{self.base}/clear")
+        result = self.chat("A flower on A1. A star on B1. A tear on C1. A ring on D1. Shape of the ring?")
+        self.assertFalse(result["messages"][-1]["isError"])
+        self.assertIsNone(result["pending"])
+        shapes = {obj["id"]: obj["shape"] for obj in result["world"]["objects"]}
+        self.assertEqual(shapes, {0: "bloom", 1: "spark", 2: "drop", 3: "loop"})
+        self.assertIn("shape of the loop?\n  loop", result["feedback"])
+        for shape in ["cube", "sphere", "pyramid"]:
+            rejected = self.chat(f"#0 {shape}")
+            self.assertTrue(rejected["messages"][-1]["isError"])
+            self.assertEqual(rejected["world"], result["world"])
+
     def test_layer2_evaluation(self):
-        result = self.chat("#99 is a large blue sphere. It is red. Color of the sphere?")
+        result = self.chat("#99 is a large blue spark. It is red. Color of the spark?")
         self.assertIn("red", result["feedback"])
         obj = next(o for o in result["world"]["objects"] if o["id"] == 99)
-        self.assertEqual((obj["color"], obj["shape"], obj["size"]), ("red", "sphere", "large"))
+        self.assertEqual((obj["color"], obj["shape"], obj["size"]), ("red", "spark", "large"))
         self.assertEqual(self.snapshots(), 2)
 
     def test_natural_atomic_forms_use_existing_evaluation(self):
@@ -111,8 +124,8 @@ class ChatTests(unittest.TestCase):
 
     def test_pending_restart_resume_and_whole_entry_undo(self):
         self.client.post(f"{self.base}/clear")
-        before = self.chat("#0 cube. #1 cube.")
-        paused = self.chat("#2 red. The cube is blue. It is large.")
+        before = self.chat("#0 bloom. #1 bloom.")
+        paused = self.chat("#2 red. The bloom is blue. It is large.")
         self.assertIsNotNone(paused["pending"])
         self.assertCountEqual(paused["pending"]["candidateIds"], [0, 1])
         self.assertIsNone(next(o for o in paused["world"]["objects"] if o["id"] == 0)["color"])
@@ -142,8 +155,8 @@ class ChatTests(unittest.TestCase):
 
     def test_invalid_choice_keeps_pending_and_no_new_snapshot(self):
         self.client.post(f"{self.base}/clear")
-        before = self.chat("#0 cube. #1 cube.")
-        paused = self.chat("The cube is blue.")
+        before = self.chat("#0 bloom. #1 bloom.")
+        paused = self.chat("The bloom is blue.")
         count = self.snapshots()
         reply = self.client.post(f"{self.base}/clarify", json={"objectId": 99}).json()
         self.assertEqual(reply["pending"], paused["pending"])
@@ -155,8 +168,8 @@ class ChatTests(unittest.TestCase):
 
     def test_repeated_clarifications_stay_in_one_undo_unit(self):
         self.client.post(f"{self.base}/clear")
-        before = self.chat("#0 cube. #1 cube. #2 sphere. #3 sphere.")
-        first = self.chat("The cube is blue. The sphere is green.")
+        before = self.chat("#0 bloom. #1 bloom. #2 spark. #3 spark.")
+        first = self.chat("The bloom is blue. The spark is green.")
         count = self.snapshots()
         second = self.client.post(f"{self.base}/clarify", json={"objectId": 0}).json()
         self.assertIsNotNone(second["pending"])
@@ -170,8 +183,8 @@ class ChatTests(unittest.TestCase):
 
     def test_continuation_failure_rolls_back_world_salience_and_pending(self):
         self.client.post(f"{self.base}/clear")
-        self.chat("#0 cube. #1 cube.")
-        paused = self.chat("The cube is blue.")
+        self.chat("#0 bloom. #1 bloom.")
+        paused = self.chat("The bloom is blue.")
         with Database(self.path).connection() as connection:
             connection.execute("""CREATE TRIGGER reject_continuation BEFORE UPDATE ON world_snapshots
                 BEGIN SELECT RAISE(ABORT, 'continuation rejected'); END;""")
@@ -216,8 +229,8 @@ class ChatTests(unittest.TestCase):
 
     def test_chat_undo_cancels_pending_entry_and_prior_partial_updates(self):
         self.client.post(f"{self.base}/clear")
-        before = self.chat("#0 cube. #1 cube.")
-        paused = self.chat("#2 red. The cube is blue.")
+        before = self.chat("#0 bloom. #1 bloom.")
+        paused = self.chat("#2 red. The bloom is blue.")
         self.assertIsNotNone(paused["pending"])
         result = self.chat("  UNDO rest ignored")
         self.assertIsNone(result["pending"])
@@ -239,7 +252,7 @@ class ChatTests(unittest.TestCase):
 
     def test_layer3_square_choices_restart_resume_and_whole_entry_undo(self):
         self.client.post(f"{self.base}/clear")
-        before = self.chat("#0 red cube on A1. #1 blue sphere on D4.")
+        before = self.chat("#0 red bloom on A1. #1 blue spark on D4.")
         count = self.snapshots()
         paused = self.chat("#0 green. Move #0 next to #1. #0 large.")
         self.assertEqual(paused["pending"]["candidateIds"], [])
@@ -266,14 +279,14 @@ class ChatTests(unittest.TestCase):
 
     def test_layer3_null_and_vacuous_answers_and_choice_validation(self):
         self.client.post(f"{self.base}/clear")
-        self.chat("#0 cube. #1 sphere.")
-        result = self.chat("#0 same color as #1? Is every red object a cube? Some red are cube? How many free?")
+        self.chat("#0 bloom. #1 spark.")
+        result = self.chat("#0 same color as #1? Is every red object a bloom? Some red are bloom? How many free?")
         self.assertFalse(result["messages"][-1]["isError"])
         self.assertIn("true — both lack color", result["feedback"])
         self.assertIn("true — no matching objects", result["feedback"])
         self.assertIn("false — no matching objects", result["feedback"])
         self.assertIn("\n  64", result["feedback"])
-        rejected = self.chat("All red objects are cube?")
+        rejected = self.chat("All red objects are bloom?")
         self.assertTrue(rejected["messages"][-1]["isError"])
         self.assertEqual(rejected["world"], result["world"])
         for choice in [{}, {"objectId": 0, "position": {"x": 0, "y": 0}}, {"position": {"x": "0", "y": 0}}]:
@@ -281,9 +294,9 @@ class ChatTests(unittest.TestCase):
 
     def test_attribute_removal_chat_and_whole_entry_undo(self):
         self.client.post(f"{self.base}/clear")
-        before = self.chat("#0 red small cube on H7.")
+        before = self.chat("#0 red small bloom on H7.")
         count = self.snapshots()
-        result = self.chat("H7 remove color. It remove size. The cube remove shape. #0 remove square.")
+        result = self.chat("H7 remove color. It remove size. The bloom remove shape. #0 remove square.")
         self.assertFalse(result["messages"][-1]["isError"])
         self.assertIsNone(result["pending"])
         self.assertEqual(result["world"]["objects"], [
@@ -292,18 +305,18 @@ class ChatTests(unittest.TestCase):
         self.assertEqual(self.snapshots(), count + 1)
         restored = self.chat("undo")
         self.assertEqual(restored["world"], before["world"])
-        referenced = self.chat("The red cube remove color.")
+        referenced = self.chat("The red bloom remove color.")
         self.assertIsNone(referenced["pending"])
         self.assertIsNone(referenced["world"]["objects"][0]["color"])
 
     def test_structural_sequence_and_undo_restore_world_and_salience(self):
         self.client.post(f"{self.base}/clear")
-        before = self.chat("#0 red cube on A1. #1 blue sphere on B1.")
+        before = self.chat("#0 red bloom on A1. #1 blue spark on B1.")
         count = self.snapshots()
         result = self.chat("Swap #0 #1. Remove #0 from board. Erase #1. Position of #0?")
         self.assertIsNone(result["pending"])
         self.assertEqual(result["world"]["objects"], [
-            {"id": 0, "color": "red", "shape": "cube", "size": None, "position": None}])
+            {"id": 0, "color": "red", "shape": "bloom", "size": None, "position": None}])
         self.assertIn("Swapped #0 and #1", result["feedback"])
         self.assertIn("Deleted #1", result["feedback"])
         self.assertIn("position of #0?\n  none", result["feedback"])
@@ -334,8 +347,8 @@ class ChatTests(unittest.TestCase):
 
     def test_swap_resolves_both_ambiguous_operands_across_restarts(self):
         self.client.post(f"{self.base}/clear")
-        before = self.chat("#0 cube on A1. #1 cube on B1. #2 sphere on C1. #3 sphere on D1.")
-        paused = self.chat("swap the cube and the sphere")
+        before = self.chat("#0 bloom on A1. #1 bloom on B1. #2 spark on C1. #3 spark on D1.")
+        paused = self.chat("swap the bloom and the spark")
         self.assertCountEqual(paused["pending"]["candidateIds"], [0, 1])
         count = self.snapshots()
         second = self.client.post(f"{self.base}/clarify", json={"objectId": 0}).json()

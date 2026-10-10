@@ -3,7 +3,7 @@
 Flutter Material 3 interface with a dark, teal-seeded theme. At widths of 900
 logical pixels or more, world and chat appear side by side; smaller screens use
 tabs. The vector board uses a `Stack`, with chessboard coordinates and partial
-objects. Missing shape uses `?`, missing color a neutral outline, and missing
+objects. Missing shape uses `?`, missing color a neutral grey silhouette, and missing
 size a medium footprint with a superscript `?`. Tooltips describe all attributes.
 
 ## Conversations
@@ -31,7 +31,7 @@ including any updates before the pause. Pending choices survive restart. The
 previous local editor controller and fixture remain for existing interaction
 tests and reference.
 
-Select one of ten properties and tap a square to apply it. Right click or long
+Select one of eleven properties and tap a square to apply it. Right click or long
 press erases. Select an unplaced object, then tap an empty square to place it;
 blocked placement retains the selection. Choosing a property cancels placement.
 Clear and Undo clear placement selection after a successful response.
@@ -69,3 +69,12 @@ HTTP; release APKs should use an HTTPS API URL. Build with `flutter build web`,
 `flutter build linux`, or `flutter build apk --dart-define=API_BASE_URL=https://your-api.example`.
 Use `flutter devices` to find device IDs. Linux requires GTK development libraries
 and the native desktop toolchain; Android requires its SDK and a compatible JDK.
+
+
+## Shape assets
+
+Bloom, Spark, Drop, and Loop use the existing SVG silhouettes in
+`assets/images/shapes/`, rendered with `flutter_svg`. Selector icons and pieces
+share these assets. Colored pieces retain vertical material gradients; colorless
+pieces use neutral grey, and the loop's hole remains transparent. Size scaling,
+unknown-shape question marks, and unknown-size badges remain supported.

@@ -49,8 +49,9 @@ All editing endpoints use `POST /conversations/{id}/...` and return
 | `undo` | No body | Restore the previous snapshot |
 
 Property options are `red`, `blue`, `green`, `yellow`, `small`, `medium`, `large`,
-`cube`, `sphere`, and `pyramid`. Coordinates are zero-based, A1 = `(0,0)`.
-The engine currently supports only 8×8 worlds. Placement preserves identity and
+`bloom`, `spark`, `drop`, and `loop`. Coordinates are zero-based, A1 = `(0,0)`.
+Shape aliases (`flower`, `star`, `tear`, `ring`) are accepted in chat only; JSON
+uses canonical names. The engine currently supports only 8×8 worlds. Placement preserves identity and
 attributes, never creates, and requires an empty destination.
 
 FastAPI sends the stored world and structured action to the Haskell executable.

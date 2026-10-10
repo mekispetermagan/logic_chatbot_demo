@@ -6,7 +6,7 @@ import Pretty
 newtype Identifier      = Id Int                      deriving (Eq, Show)
 data Color              = Blue | Green | Red | Yellow deriving (Eq, Show)
 data Size               = Small | Medium | Large      deriving (Eq, Show)
-data Shape              = Sphere | Cube | Pyramid     deriving (Eq, Show)
+data Shape              = Bloom | Spark | Drop | Loop     deriving (Eq, Show)
 type Position           = (Int, Int)
 
 instance Ord Identifier where

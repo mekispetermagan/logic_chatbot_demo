@@ -19,8 +19,14 @@ attributes. Each attribute has at most one value.
 | --- | --- |
 | Color | `red`, `blue`, `green`, `yellow` |
 | Size | `small`, `medium`, `large` |
-| Shape | `cube`, `sphere`, `pyramid` |
+| Shape | `bloom`, `spark`, `drop`, `loop` |
 | Position | A square from `A1` to `H8` |
+
+Shape aliases are accepted case-insensitively in every parser layer: `flower`
+means `bloom`, `star` means `spark`, `tear` means `drop`, and `ring` means `loop`.
+Prettyprinting and JSON use only the canonical names. The old shape vocabulary
+is no longer accepted. Aliases work in predicates and descriptions alike:
+`#3 flower.`, `a ring on A1.`, and `the star is red?`.
 
 The board is currently fixed at 8×8. A1 is the bottom-left square, H8 the
 top-right. Internally, coordinates are zero-based: A1 is `(0,0)`, A4 is `(0,3)`,
@@ -76,7 +82,7 @@ optional. Before a position, `on` is optional; `to` is another movement spelling
 #3 red.
 #3 is red
 #3 medium.
-#3 cube.
+#3 bloom.
 #3 A4.
 #3 on A4
 #3 is on A4.
@@ -135,7 +141,7 @@ and position-specific `on` work as in performatives.
 ```text
 #3 red?
 #3 is medium?
-#3 sphere?
+#3 spark?
 #3 on A4?
 #3 is A4?
 A4 green?
@@ -195,7 +201,7 @@ value-query  = attribute of subject ?
 One chat entry can contain an ordered sequence of any of these categories:
 
 ```text
-#3 on B3. #3 red. #3 medium. #3 is cube. #3 red? color of #3?
+#3 on B3. #3 red. #3 medium. #3 is bloom. #3 red? color of #3?
 ```
 
 Every non-final performative requires a period. Whitespace alone does not
@@ -203,7 +209,7 @@ separate sentences. A period or question mark separates sentences even without
 following whitespace:
 
 ```text
-#3 red.#3 cube.#3 red?shape of #3?
+#3 red.#3 bloom.#3 red?shape of #3?
 ```
 
 The parser consumes the **entire entry before evaluation begins**. Empty input,
@@ -236,7 +242,7 @@ If an object has only a red color:
 | --- | --- |
 | `#3 red?` | `true` |
 | `#3 blue?` | `false` |
-| `#3 cube?` | `false` |
+| `#3 bloom?` | `false` |
 | `color of #3?` | `red` |
 | `shape of #3?` | `none` |
 | `position of #3?` | `none` |
@@ -306,7 +312,7 @@ of individually unsuccessful operations.
 For example, starting with an empty world:
 
 ```text
-#3 red. #3 small. #3 cube. #3 on A4. #3 red? color of #3? row of #3? column of #3?
+#3 red. #3 small. #3 bloom. #3 on A4. #3 red? color of #3? row of #3? column of #3?
 ```
 
 The reply is:
@@ -316,8 +322,8 @@ The reply is:
   Created #3: red
 #3 small.
   #3: none -> small
-#3 cube.
-  #3: none -> cube
+#3 bloom.
+  #3: none -> bloom
 #3 on A4.
   #3: none -> on A4
 #3 red?

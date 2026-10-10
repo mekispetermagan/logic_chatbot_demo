@@ -9,7 +9,7 @@ import 'package:logic_chatbot/widgets/world_widget.dart';
 
 const unplaced = WorldObject(
   id: 12,
-  shape: ObjectShape.sphere,
+  shape: ObjectShape.spark,
   color: ObjectColor.blue,
 );
 const occupied = WorldObject(
@@ -38,7 +38,7 @@ void main() {
     expect(placed.id, 12);
     expect(placed.position, const BoardPosition(1, 2));
     expect(placed.color, ObjectColor.blue);
-    expect(placed.shape, ObjectShape.sphere);
+    expect(placed.shape, ObjectShape.spark);
     expect(placed.size, isNull);
     expect(controller.selectedUnplacedObjectId, isNull);
     expect(initial.objects.last.position, isNull);

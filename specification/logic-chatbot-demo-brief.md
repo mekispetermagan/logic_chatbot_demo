@@ -15,7 +15,7 @@ Use a small, flat 8×8 grid. It can hold up to 64 pieces, one per cell, plus the
 Each piece has:
 
 - A persistent identity
-- A shape: cube, sphere, or pyramid
+- A shape: bloom, spark, drop, or loop
 - A color: red, blue, green, or yellow
 - A size: small, medium, or large
 - A grid coordinate

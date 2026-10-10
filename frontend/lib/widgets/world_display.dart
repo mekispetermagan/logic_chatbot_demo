@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../models/object_property.dart';
 import '../models/world.dart';
+import '../models/world_object.dart';
 import 'world_object_widget.dart';
+import 'shape_glyph.dart';
 import 'world_widget.dart';
 
 class WorldDisplay extends StatelessWidget {
@@ -106,7 +108,7 @@ class WorldDisplay extends StatelessWidget {
                 runSpacing: 8,
                 alignment: WrapAlignment.center,
                 children: [
-                  // Keep all ten options in one control. It scrolls on narrow screens.
+                  // Keep all eleven options in one control. It scrolls on narrow screens.
                   ConstrainedBox(
                     constraints: BoxConstraints(maxWidth: constraints.maxWidth),
                     child: SingleChildScrollView(
@@ -214,12 +216,21 @@ class _PropertySelector extends StatelessWidget {
 
   Widget? _symbol(BuildContext context, ObjectProperty property) {
     final shape = switch (property) {
-      ObjectProperty.cube => '■',
-      ObjectProperty.sphere => '●',
-      ObjectProperty.pyramid => '▲',
+      ObjectProperty.bloom => ObjectShape.bloom,
+      ObjectProperty.spark => ObjectShape.spark,
+      ObjectProperty.drop => ObjectShape.drop,
+      ObjectProperty.loop => ObjectShape.loop,
       _ => null,
     };
-    if (shape != null) return Text(shape, style: const TextStyle(fontSize: 20));
+    if (shape != null) {
+      return SizedBox.square(
+        dimension: 22,
+        child: ShapeGlyph(
+          shape: shape,
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+      );
+    }
     final diameter = switch (property) {
       ObjectProperty.small => 8.0,
       ObjectProperty.medium => 12.0,

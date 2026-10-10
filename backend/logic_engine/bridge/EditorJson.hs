@@ -33,9 +33,10 @@ parseSize value = case value of
 
 parseShape :: String -> Parser Shape
 parseShape value = case value of
-  "cube" -> pure Cube
-  "sphere" -> pure Sphere
-  "pyramid" -> pure Pyramid
+  "bloom" -> pure Bloom
+  "spark" -> pure Spark
+  "drop" -> pure Drop
+  "loop" -> pure Loop
   _ -> fail "Invalid shape"
 
 parseObject :: Value -> Parser Object
@@ -150,9 +151,10 @@ objectJson value = object
     sizeName Medium = "medium"
     sizeName Large = "large"
     shapeName :: Shape -> String
-    shapeName Cube = "cube"
-    shapeName Sphere = "sphere"
-    shapeName Pyramid = "pyramid"
+    shapeName Bloom = "bloom"
+    shapeName Spark = "spark"
+    shapeName Drop = "drop"
+    shapeName Loop = "loop"
 
 rankingJson :: SalienceRanking -> Value
 rankingJson ranking = toJSON [object

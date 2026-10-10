@@ -21,13 +21,13 @@ void main() {
       controller.paint(2, 3);
       expect(initial.objects, isEmpty);
       expect(controller.world.objects.single.color, ObjectColor.blue);
-      controller.selectProperty(ObjectProperty.sphere);
+      controller.selectProperty(ObjectProperty.spark);
       controller.paint(2, 3);
       expect(controller.world.objects.length, 1);
       expect(controller.world.hasCollisions(), isFalse);
       controller.undo();
       expect(controller.world.objects.single.shape, isNull);
-      expect(controller.selectedProperty, ObjectProperty.sphere);
+      expect(controller.selectedProperty, ObjectProperty.spark);
       controller.clear();
       expect(controller.world.objects, isEmpty);
       controller.undo();

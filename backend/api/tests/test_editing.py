@@ -44,6 +44,16 @@ class EditingTests(unittest.TestCase):
             return connection.execute("SELECT count(*) FROM world_snapshots WHERE conversation_id = ?",
                                       (self.initial["conversationId"],)).fetchone()[0]
 
+    def test_all_four_shape_properties_use_canonical_transport_names(self):
+        for index, shape in enumerate(["bloom", "spark", "drop", "loop"]):
+            with self.subTest(shape=shape):
+                result = self.edit("property", {"position": {"x": index, "y": 0}, "property": shape})
+                obj = next(o for o in result["world"]["objects"] if o["position"] == {"x": index, "y": 0})
+                self.assertEqual(obj["shape"], shape)
+        for shape in ["cube", "sphere", "pyramid", "flower", "star", "tear", "ring"]:
+            response = self.client.post(f"{self.base}/property", json={"position": {"x": 0, "y": 0}, "property": shape})
+            self.assertEqual(response.status_code, 422)
+
     def test_property_creation_addition_revision_and_no_op(self):
         action = {"position": {"x": 0, "y": 0}, "property": "red"}
         created = self.edit("property", action)
@@ -64,7 +74,7 @@ class EditingTests(unittest.TestCase):
         self.assertEqual(loaded["world"], revised["world"])
 
     def test_missing_properties_are_added_without_replacing_objects(self):
-        for identifier, prop in [(2, "green"), (3, "sphere"), (4, "small")]:
+        for identifier, prop in [(2, "green"), (3, "spark"), (4, "small")]:
             previous = next(value for value in self.initial["world"]["objects"] if value["id"] == identifier)
             updated = self.edit("property", {"position": previous["position"], "property": prop})
             value = next(value for value in updated["world"]["objects"] if value["id"] == identifier)

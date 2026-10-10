@@ -157,8 +157,10 @@ propertyParser = choice
   , C Red <$ keyword "red", C Yellow <$ keyword "yellow"
   , S Small <$ keyword "small", S Medium <$ keyword "medium"
   , S Large <$ keyword "large"
-  , Sh Cube <$ keyword "cube", Sh Sphere <$ keyword "sphere"
-  , Sh Pyramid <$ keyword "pyramid"
+  , Sh Bloom <$ (keyword "bloom" <|> keyword "flower")
+  , Sh Spark <$ (keyword "spark" <|> keyword "star")
+  , Sh Drop <$ (keyword "drop" <|> keyword "tear")
+  , Sh Loop <$ (keyword "loop" <|> keyword "ring")
   , P <$> positionParser
   ] <?> "color, size, shape, or square A1-H8"
 

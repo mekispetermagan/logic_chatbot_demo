@@ -35,7 +35,7 @@ void main() {
       }
       const previous = WorldObject(
         id: 20,
-        shape: ObjectShape.cube,
+        shape: ObjectShape.bloom,
         size: ObjectSize.small,
         position: BoardPosition(2, 3),
       );
@@ -47,16 +47,16 @@ void main() {
       expect(edited.id, 20);
       expect(edited.color, ObjectColor.red);
       expect(edited.size, ObjectSize.small);
-      expect(edited.shape, ObjectShape.cube);
+      expect(edited.shape, ObjectShape.bloom);
       controller.selectProperty(ObjectProperty.blue);
       controller.paint(2, 3);
       edited = controller.world.objects.last;
       expect(edited.color, ObjectColor.blue);
       controller.selectProperty(ObjectProperty.large);
       controller.paint(2, 3);
-      expect(controller.world.objects.last.shape, ObjectShape.cube);
+      expect(controller.world.objects.last.shape, ObjectShape.bloom);
       expect(controller.world.objects.last.color, ObjectColor.blue);
-      controller.selectProperty(ObjectProperty.sphere);
+      controller.selectProperty(ObjectProperty.spark);
       controller.paint(2, 3);
       expect(controller.world.objects.last.size, ObjectSize.large);
       controller.paint(4, 4);
@@ -165,7 +165,7 @@ void main() {
         final selector = tester.widget<SegmentedButton<ObjectProperty>>(
           find.byType(SegmentedButton<ObjectProperty>),
         );
-        expect(selector.segments.length, 10);
+        expect(selector.segments.length, 11);
         expect(selector.selected, {ObjectProperty.red});
         expect(find.text('Unplaced'), findsOneWidget);
         expect(find.text('#5'), findsOneWidget);

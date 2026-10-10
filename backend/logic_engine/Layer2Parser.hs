@@ -46,7 +46,8 @@ descriptor :: String -> Maybe Property
 descriptor word = lookup word
   [("red", C Red), ("blue", C Blue), ("green", C Green), ("yellow", C Yellow),
    ("small", S Small), ("medium", S Medium), ("large", S Large),
-   ("cube", Sh Cube), ("sphere", Sh Sphere), ("pyramid", Sh Pyramid)]
+   ("bloom", Sh Bloom), ("flower", Sh Bloom), ("spark", Sh Spark), ("star", Sh Spark),
+   ("drop", Sh Drop), ("tear", Sh Drop), ("loop", Sh Loop), ("ring", Sh Loop)]
 
 attribute :: String -> Maybe Attribute
 attribute word = lookup word

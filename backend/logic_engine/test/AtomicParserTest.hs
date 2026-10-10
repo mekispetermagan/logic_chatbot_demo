@@ -24,19 +24,19 @@ main = do
     check input (parseAtomicPerformative input == Right (AP (ById (Id 3)) (P (0, 3))))
   forM_ [("blue", C Blue), ("green", C Green), ("yellow", C Yellow),
          ("small", S Small), ("medium", S Medium), ("large", S Large),
-         ("cube", Sh Cube), ("sphere", Sh Sphere), ("pyramid", Sh Pyramid)] $
+         ("bloom", Sh Bloom), ("spark", Sh Spark), ("drop", Sh Drop)] $
     \(word, property) -> check word
       (parseAtomicPerformative ("#0 " ++ word) == Right (AP (ById (Id 0)) property))
   let expected = [AP (ById (Id 1)) (P (1, 2)), AP (ById (Id 1)) (C Red),
-                  AP (ById (Id 1)) (S Medium), AP (ById (Id 1)) (Sh Cube), AP (ById (Id 1)) (Sh Sphere)]
-  let input = "#1 on B3. #1 red. #1 medium. #1 is cube. #1 is sphere"
+                  AP (ById (Id 1)) (S Medium), AP (ById (Id 1)) (Sh Bloom), AP (ById (Id 1)) (Sh Spark)]
+  let input = "#1 on B3. #1 red. #1 medium. #1 is bloom. #1 is spark"
   check "mixed separators" (parseAtomicPerformatives input == Right expected)
   check "period without spaces"
-    (parseAtomicPerformatives "#1 red.#1 cube." ==
-      Right [AP (ById (Id 1)) (C Red), AP (ById (Id 1)) (Sh Cube)])
+    (parseAtomicPerformatives "#1 red.#1 bloom." ==
+      Right [AP (ById (Id 1)) (C Red), AP (ById (Id 1)) (Sh Bloom)])
   check "sequential revision"
     (foldl updateWorldWith (World []) expected == World
-      [Object (Id 1) (Just Red) (Just Medium) (Just Sphere) (Just (1, 2))])
+      [Object (Id 1) (Just Red) (Just Medium) (Just Spark) (Just (1, 2))])
   forM_ ["", "  ", "o-1 red", "#1red", "#1 on red", "#1 I1", "#1 A0",
          "#1 A9", "#1 A10", "#1 red junk", "#1 red?", "#1 redo2 blue",
          "#1 red #2 purple", "#1 red..", "#999999999999999999999999999 red"] $
@@ -48,21 +48,21 @@ main = do
   check "position check" (parseAtomicSentence "#3 is on A4?" ==
     Right (PropertyCheck (APC (ById (Id 3)) (P (0, 3)))))
   check "mixed atomic sentences" (parseAtomicSentences
-    "#1 on B3. #1 red?#1 medium. #1 is cube. #1 is sphere ?" == Right
+    "#1 on B3. #1 red?#1 medium. #1 is bloom. #1 is spark ?" == Right
     [Performative (AP (ById (Id 1)) (P (1, 2))), PropertyCheck (APC (ById (Id 1)) (C Red)),
-     Performative (AP (ById (Id 1)) (S Medium)), Performative (AP (ById (Id 1)) (Sh Cube)),
-     PropertyCheck (APC (ById (Id 1)) (Sh Sphere))])
+     Performative (AP (ById (Id 1)) (S Medium)), Performative (AP (ById (Id 1)) (Sh Bloom)),
+     PropertyCheck (APC (ById (Id 1)) (Sh Spark))])
   forM_ ["", "#1 red??", "#1 red?.", "#1 red? junk", "#1 red?#2 I9"] $
     \bad -> check ("reject mixed " ++ show bad) (isLeft (parseAtomicSentences bad))
-  forM_ [C Blue, S Small, Sh Cube, P (0, 0)] $ \property ->
+  forM_ [C Blue, S Small, Sh Bloom, P (0, 0)] $ \property ->
     check "matching property" (case evaluateAtomicPropertyCheck world (APC (ById (Id 0)) property) of
       Result True -> True
       _ -> False)
-  forM_ [C Red, S Large, Sh Pyramid, P (7, 7)] $ \property ->
+  forM_ [C Red, S Large, Sh Drop, P (7, 7)] $ \property ->
     check "different property" (case evaluateAtomicPropertyCheck world (APC (ById (Id 0)) property) of
       Result False -> True
       _ -> False)
-  forM_ [C Blue, S Small, Sh Cube, P (0, 0)] $ \property ->
+  forM_ [C Blue, S Small, Sh Bloom, P (0, 0)] $ \property ->
     check "absent property" (case evaluateAtomicPropertyCheck
       (World [emptyObject (Id 0)]) (APC (ById (Id 0)) property) of
         Result False -> True
@@ -81,7 +81,7 @@ main = do
     (parseAtomicSentences (unwords (map pretty sentences)) == Right sentences)
   forM_ [(ColorAttribute, PropertyValue (C Blue)),
          (SizeAttribute, PropertyValue (S Small)),
-         (ShapeAttribute, PropertyValue (Sh Cube)),
+         (ShapeAttribute, PropertyValue (Sh Bloom)),
          (PositionAttribute, PropertyValue (P (0, 0))),
          (RowAttribute, RowValue 0), (ColumnAttribute, ColumnValue 0)] $ \(attribute, answer) -> do
     let query = APQ attribute (ById (Id 0))
@@ -110,7 +110,7 @@ main = do
       Message _ -> True
       _ -> False)
   forM_ [(PropertyValue (C Red), "red"), (PropertyValue (S Medium), "medium"),
-         (PropertyValue (Sh Sphere), "sphere"), (PropertyValue (P (7, 7)), "H8"),
+         (PropertyValue (Sh Spark), "spark"), (PropertyValue (P (7, 7)), "H8"),
          (RowValue 7, "8"), (ColumnValue 7, "H"), (Absent, "none")] $ \(answer, text) ->
     check "pretty query answer" (pretty answer == text)
   let sequenceInput = [
@@ -142,6 +142,7 @@ main = do
     (pretty (feedback !! 3) == "#1 blue.\n  #1: red -> blue")
   check "pretty query feedback"
     (pretty (last feedback) == "position of #1?\n  H8")
+  shapeVocabularyTests
   squareReferenceTests
   structuralTests
   attributeRemovalTests
@@ -233,8 +234,8 @@ structuralTests = do
   forM_ ["remove #3?", "swap #3 and #4?", "delete #3?", "remove #3 from.",
          "swap #3", "swap #3 #4 #5", "erase it", "remove #3 delete #4"] $ \text ->
     check ("structural rejection " ++ text) (isLeft (parseAtomicSentences text))
-  let left = Object (Id 0) (Just Red) (Just Small) (Just Cube) (Just (0,0))
-      right = Object (Id 1) (Just Blue) Nothing (Just Sphere) (Just (1,0))
+  let left = Object (Id 0) (Just Red) (Just Small) (Just Bloom) (Just (0,0))
+      right = Object (Id 1) (Just Blue) Nothing (Just Spark) (Just (1,0))
       loose = Object (Id 2) Nothing (Just Large) Nothing Nothing
       world = World [left, right, loose]
       normalized (updated, Result change) = (updated, Just change)
@@ -270,7 +271,7 @@ structuralTests = do
 attributeRemovalTests :: IO ()
 attributeRemovalTests = do
   let ref = ById (Id 3)
-      object = Object (Id 3) (Just Red) (Just Small) (Just Cube) (Just (0,3))
+      object = Object (Id 3) (Just Red) (Just Small) (Just Bloom) (Just (0,3))
       other = (emptyObject (Id 4)) {colorOf = Just Blue}
       world = World [object, other]
       cases = [(RemoveColor, object {colorOf = Nothing}),
@@ -290,7 +291,7 @@ attributeRemovalTests = do
       Result change -> pretty change == case attribute of
         RemoveColor -> "#3: red -> none"
         RemoveSize -> "#3: small -> none"
-        RemoveShape -> "#3: cube -> none"
+        RemoveShape -> "#3: bloom -> none"
         RemoveSquare -> "#3: on A4 -> unplaced"
       _ -> False)
     check "clearing absent attribute is no change"
@@ -325,3 +326,18 @@ attributeRemovalTests = do
         [UpdateAnswer (PropertyCleared (Id 3) (C Red)), CheckAnswer False,
          QueryAnswerValue Absent, UpdateAnswer (PropertyChanged (Id 3) Nothing (C Blue))] -> True
         _ -> False)
+
+
+shapeVocabularyTests :: IO ()
+shapeVocabularyTests = do
+  forM_ [("bloom",Bloom),("flower",Bloom),("spark",Spark),("star",Spark),
+         ("drop",Drop),("tear",Drop),("loop",Loop),("ring",Loop)] $ \(name,shape) -> do
+    let operation = AP (ById (Id 0)) (Sh shape)
+    check ("shape alias " ++ name) (parseAtomicPerformative ("#0 " ++ name) == Right operation)
+    check "shape alias check" (parseAtomicSentence ("A1 " ++ name ++ "?") ==
+      Right (PropertyCheck (APC (AtSquare (0,0)) (Sh shape))))
+    check "shape canonical pretty" (pretty operation == "#0 " ++ pretty (Sh shape) ++ ".")
+  check "shape aliases are case insensitive" (parseAtomicPerformative "#0 FLOWER" ==
+    Right (AP (ById (Id 0)) (Sh Bloom)))
+  forM_ ["cube", "sphere", "pyramid", "flowers", "starfish", "teardrop", "rings"] $ \name ->
+    check ("reject removed or unsupported shape " ++ name) (isLeft (parseAtomicSentence ("#0 " ++ name)))

@@ -16,10 +16,10 @@ Map<String, dynamic> pausedState() => {
   'world': {'width': 8, 'height': 8, 'objects': []},
   'canUndo': true,
   'pending': {
-    'sentence': 'the cube is red.',
+    'sentence': 'the bloom is red.',
     'candidates': [
-      {'objectId': 0, 'label': '#0: blue medium cube on A1'},
-      {'objectId': 1, 'label': '#1: green small cube on B1'},
+      {'objectId': 0, 'label': '#0: blue medium bloom on A1'},
+      {'objectId': 1, 'label': '#1: green small bloom on B1'},
     ],
   },
   'messages': [],
@@ -80,8 +80,8 @@ void main() {
         ),
       );
       expect(tester.widget<TextField>(find.byType(TextField)).enabled, isFalse);
-      expect(find.text('Which object? the cube is red.'), findsOneWidget);
-      await tester.tap(find.text('#1: green small cube on B1'));
+      expect(find.text('Which object? the bloom is red.'), findsOneWidget);
+      await tester.tap(find.text('#1: green small bloom on B1'));
       expect(selected, 1);
       expect(tester.takeException(), isNull);
     },
@@ -173,11 +173,11 @@ void main() {
       expect(find.byTooltip('Undo'), findsOneWidget);
       await tester.tap(find.text('Chat'));
       await tester.pumpAndSettle();
-      expect(find.text('Which object? the cube is red.'), findsOneWidget);
+      expect(find.text('Which object? the bloom is red.'), findsOneWidget);
       await tester.tap(find.byTooltip('Undo'));
       await tester.pumpAndSettle();
       expect(requests.last.url.path, '/conversations/saved/undo');
-      expect(find.text('Which object? the cube is red.'), findsNothing);
+      expect(find.text('Which object? the bloom is red.'), findsNothing);
       expect(
         tester
             .widget<IconButton>(

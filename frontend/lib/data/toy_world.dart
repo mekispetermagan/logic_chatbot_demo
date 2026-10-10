@@ -8,21 +8,21 @@ final toyWorld = World(
   objects: const [
     WorldObject(
       id: 0,
-      shape: ObjectShape.cube,
+      shape: ObjectShape.bloom,
       size: ObjectSize.medium,
       color: ObjectColor.red,
       position: BoardPosition(1, 7),
     ),
     WorldObject(
       id: 1,
-      shape: ObjectShape.sphere,
+      shape: ObjectShape.spark,
       size: ObjectSize.small,
       color: ObjectColor.blue,
       position: BoardPosition(5, 6),
     ),
     WorldObject(
       id: 2,
-      shape: ObjectShape.pyramid,
+      shape: ObjectShape.drop,
       size: ObjectSize.large,
       position: BoardPosition(3, 5),
     ),
@@ -34,16 +34,16 @@ final toyWorld = World(
     ),
     WorldObject(
       id: 4,
-      shape: ObjectShape.cube,
+      shape: ObjectShape.bloom,
       color: ObjectColor.yellow,
       position: BoardPosition(6, 3),
     ),
     WorldObject(
       id: 5,
-      shape: ObjectShape.pyramid,
+      shape: ObjectShape.loop,
       size: ObjectSize.medium,
       color: ObjectColor.blue,
     ),
-    WorldObject(id: 6, shape: ObjectShape.cube, size: ObjectSize.large),
+    WorldObject(id: 6, shape: ObjectShape.bloom, size: ObjectSize.large),
   ],
 );
