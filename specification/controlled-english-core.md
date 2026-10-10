@@ -309,10 +309,15 @@ snapshot through salience changes. Parse errors preserve both states. Layer 2
 clarification pauses can expose partial progress, but one Undo still reverses
 the whole entry. See [Layer 2](controlled-english-layer2.md) for those rules.
 
-Visual edits and chat share the same stored world and history. Erase, Clear, and
-Undo are interface/API operations; the corresponding words are not sentences in
-the current core grammar. An engine or connection failure is distinct from a
-parse error: it does not persist a new chat pair. After a lost response, refresh
+Visual edits and chat share the same stored world and history. Erase and Clear
+are interface/API operations. An entry starting with `undo` after optional
+leading whitespace requests Undo, case-insensitively; all remaining text is
+ignored. For example, `  UnDo #3 red.` undoes once without applying `#3 red.`.
+Haskell recognizes the request before sentence parsing and returns it to FastAPI,
+which restores the previous world/salience snapshot. The input and `Undone`
+(or `No change` at the initial snapshot) are saved as chat messages. Undo is an
+entry-level command, not a core sentence; `#3 red. undo` is not accepted.
+An engine or connection failure is distinct from a parse error: it does not persist a new chat pair. After a lost response, refresh
 to retrieve committed state rather than automatically repeating the submission.
 
 ## 9. Implementation map and current limits

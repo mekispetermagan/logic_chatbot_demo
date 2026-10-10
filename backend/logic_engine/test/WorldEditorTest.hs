@@ -63,4 +63,13 @@ main = do
     (isLeft (processRequest (object ["world" .= emptyJson, "action" .= object
       ["type" .= ("property" :: String), "property" .= ("purple" :: String),
        "position" .= object ["x" .= (0 :: Int), "y" .= (0 :: Int)]]])))
+  let undoRequest = object ["world" .= emptyJson,
+                           "action" .= object ["type" .= ("chat" :: String),
+                             "text" .= (" \tUnDo #999 red. invalid suffix" :: String)]]
+      undoReply = object ["world" .= emptyJson, "salience" .= ([] :: [Value]),
+                          "pending" .= (Nothing :: Maybe Value),
+                          "feedback" .= ("" :: String), "isError" .= False,
+                          "undoRequested" .= True]
+  check "undo request precedes grammar parsing without evaluating suffix"
+    (processRequest undoRequest == Right undoReply)
   putStrLn "All world editor checks passed."

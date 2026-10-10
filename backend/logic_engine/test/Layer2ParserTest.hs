@@ -12,6 +12,10 @@ check name success = unless success (fail name)
 
 main :: IO ()
 main = do
+  forM_ ["undo", "  UnDo #3 red. garbage?", "\n\tUNDOanything"] $ \input ->
+    check ("undo prefix: " ++ show input) (isUndoEntry input)
+  forM_ ["", "   ", "und", "#3 red. undo", "do undo"] $ \input ->
+    check ("not undo prefix: " ++ show input) (not (isUndoEntry input))
   let accepted =
         [ "It is cube.", "It to a4.", "The cube is red.", "A cube on a4"
         , "#23 is a cube.", "#23 is a red.", "a red on A3.", "red cube A3."

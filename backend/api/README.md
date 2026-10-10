@@ -76,6 +76,12 @@ Feedback includes each prettyprinted sentence and its changes or answer.
 Parse errors preserve world and discourse and are saved as error replies.
 Blank entries and malformed request bodies return 422.
 
+An entry beginning with `undo` after optional whitespace, in any case, is checked
+first by Haskell. Everything after the prefix is ignored. The engine returns
+`undoRequested: true`; FastAPI uses the same Undo operation as the button,
+restoring both world and salience and recording the chat reply atomically.
+An Undo entry is also accepted by the API while clarification is pending.
+
 `messages` contains ordered objects with `role` (`user` or `machine`), `text`,
 and `isError`. Messages remain visible after Undo. Each submission saves a
 user/machine pair and at most one paired world/salience snapshot. Questions can

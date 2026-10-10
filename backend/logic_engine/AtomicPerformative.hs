@@ -62,7 +62,7 @@ updateWorldWith :: World -> AtomicPerformative -> World
 updateWorldWith world performative = fst (evaluateAtomicPerformative world performative)
 
 previousProperty :: Object -> Property -> Maybe Property
-previousProperty object (C _) = C <$> colorOf object
-previousProperty object (S _) = S <$> sizeOf object
-previousProperty object (Sh _) = Sh <$> shapeOf object
-previousProperty object (P _) = P <$> positionOf object
+previousProperty object (C _)   = C <$> colorOf object
+previousProperty object (S _)   = S <$> sizeOf object
+previousProperty object (Sh _)  = Sh <$> shapeOf object
+previousProperty object (P _)   = P <$> positionOf object

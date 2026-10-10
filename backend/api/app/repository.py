@@ -61,28 +61,34 @@ class ConversationRepository:
             if row is None:
                 return None
             pending = self._pending(row)
-            if bool(pending) != continuation:
+            if (continuation and not pending) or (pending and not continuation and user_text is None):
                 raise PendingConflict("Choose an object or undo" if pending else "No clarification pending")
             previous = World.model_validate_json(row["world_json"])
             salience = json.loads(row["salience_json"])
             reply = update(previous, salience, pending)
-            changed = reply.world != previous or reply.salience != salience or reply.pending != pending
-            if changed:
-                values = (reply.world.model_dump_json(), json.dumps(reply.salience),
-                          reply.pending.model_dump_json() if reply.pending else "null")
-                if continuation:
-                    # All continuations replace this entry's snapshot; its predecessor
-                    # remains the complete pre-entry world AND discourse state.
-                    connection.execute("""
-                        UPDATE world_snapshots SET world_json = ?, salience_json = ?, pending_json = ?
-                        WHERE conversation_id = ? AND sequence = ?
-                    """, (*values, str(conversation_id), row["sequence"]))
-                else:
-                    connection.execute("""
-                        INSERT INTO world_snapshots
-                        (world_json, salience_json, pending_json, conversation_id, sequence)
-                        VALUES (?, ?, ?, ?, ?)
-                    """, (*values, str(conversation_id), row["sequence"] + 1))
+            feedback = reply.feedback
+            if reply.undoRequested:
+                row, feedback = self._undo_snapshot(connection, conversation_id, row)
+            else:
+                if pending and not continuation:
+                    raise PendingConflict("Choose an object or undo")
+                changed = reply.world != previous or reply.salience != salience or reply.pending != pending
+                if changed:
+                    values = (reply.world.model_dump_json(), json.dumps(reply.salience),
+                              reply.pending.model_dump_json() if reply.pending else "null")
+                    if continuation:
+                        # All continuations replace this entry's snapshot; its predecessor
+                        # remains the complete pre-entry world AND discourse state.
+                        connection.execute("""
+                            UPDATE world_snapshots SET world_json = ?, salience_json = ?, pending_json = ?
+                            WHERE conversation_id = ? AND sequence = ?
+                        """, (*values, str(conversation_id), row["sequence"]))
+                    else:
+                        connection.execute("""
+                            INSERT INTO world_snapshots
+                            (world_json, salience_json, pending_json, conversation_id, sequence)
+                            VALUES (?, ?, ?, ?, ?)
+                        """, (*values, str(conversation_id), row["sequence"] + 1))
             if user_text is not None:
                 next_message = connection.execute(
                     "SELECT COALESCE(MAX(sequence), -1) + 1 FROM chat_messages WHERE conversation_id = ?",
@@ -91,10 +97,17 @@ class ConversationRepository:
                 connection.executemany(
                     "INSERT INTO chat_messages (conversation_id, sequence, role, text, is_error) VALUES (?, ?, ?, ?, ?)",
                     [(str(conversation_id), next_message, "user", user_text, 0),
-                     (str(conversation_id), next_message + 1, "machine", reply.feedback, int(reply.isError))],
+                     (str(conversation_id), next_message + 1, "machine", feedback, int(reply.isError))],
                 )
             return self._state(self._latest(connection, conversation_id), conversation_id,
-                               self._messages(connection, conversation_id), reply.feedback)
+                               self._messages(connection, conversation_id), feedback)
+
+    def _undo_snapshot(self, connection, conversation_id, row):
+        if row["sequence"] == 0:
+            return row, "No change"
+        connection.execute("DELETE FROM world_snapshots WHERE conversation_id = ? AND sequence = ?",
+                           (str(conversation_id), row["sequence"]))
+        return self._latest(connection, conversation_id), "Undone"
 
     def undo(self, conversation_id: UUID) -> EditState | None:
         with self.database.connection() as connection:
@@ -102,10 +115,5 @@ class ConversationRepository:
             row = self._latest(connection, conversation_id)
             if row is None:
                 return None
-            feedback = "No change"
-            if row["sequence"] > 0:
-                connection.execute("DELETE FROM world_snapshots WHERE conversation_id = ? AND sequence = ?",
-                                   (str(conversation_id), row["sequence"]))
-                row = self._latest(connection, conversation_id)
-                feedback = "Undone"
+            row, feedback = self._undo_snapshot(connection, conversation_id, row)
             return self._state(row, conversation_id, self._messages(connection, conversation_id), feedback)

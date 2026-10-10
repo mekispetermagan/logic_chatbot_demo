@@ -15,6 +15,7 @@ class EngineReply(Schema):
     world: World
     feedback: str
     isError: bool = False
+    undoRequested: bool = False
     salience: list[dict] = Field(default_factory=list)
     pending: PendingEntry | None = None
 

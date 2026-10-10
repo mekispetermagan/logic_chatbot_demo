@@ -193,3 +193,46 @@ class ChatTests(unittest.TestCase):
         with Database(self.path).connection() as connection:
             restored = connection.execute("SELECT salience_json FROM world_snapshots ORDER BY sequence DESC LIMIT 1").fetchone()[0]
         self.assertEqual(restored, before)
+
+    def test_chat_undo_prefix_restores_world_and_salience_ignores_suffix(self):
+        before = self.chat("#0 red?")
+        self.chat("#1 green. #1 large.")
+        result = self.chat(" \tUnDo #99 red. ignored garbage?")
+        self.assertEqual(result["world"], before["world"])
+        self.assertEqual(result["feedback"], "Undone")
+        self.assertEqual(result["messages"][-2]["text"], " \tUnDo #99 red. ignored garbage?")
+        self.assertFalse(result["messages"][-1]["isError"])
+        self.assertEqual(self.snapshots(), 2)
+        referenced = self.chat("It is yellow.")
+        self.assertEqual(next(o for o in referenced["world"]["objects"] if o["id"] == 0)["color"], "yellow")
+
+    def test_chat_undo_preserves_initial_snapshot(self):
+        for text in ("undo", "UNDOanything", "\n undo."):
+            result = self.chat(text)
+            self.assertEqual(result["world"], self.initial["world"])
+            self.assertEqual(result["feedback"], "No change")
+            self.assertFalse(result["canUndo"])
+            self.assertEqual(self.snapshots(), 1)
+
+    def test_chat_undo_cancels_pending_entry_and_prior_partial_updates(self):
+        self.client.post(f"{self.base}/clear")
+        before = self.chat("#0 cube. #1 cube.")
+        paused = self.chat("#2 red. The cube is blue.")
+        self.assertIsNotNone(paused["pending"])
+        result = self.chat("  UNDO rest ignored")
+        self.assertIsNone(result["pending"])
+        self.assertEqual(result["world"], before["world"])
+        self.assertEqual(result["feedback"], "Undone")
+        self.assertEqual(self.snapshots(), 3)
+
+    def test_chat_undo_rolls_back_if_feedback_cannot_be_saved(self):
+        before = self.chat("#0 blue.")
+        with Database(self.path).connection() as connection:
+            connection.execute("""CREATE TRIGGER reject_undo_message BEFORE INSERT ON chat_messages
+                BEGIN SELECT RAISE(ABORT, 'undo message rejected'); END;""")
+        with self.assertRaises(sqlite3.IntegrityError):
+            self.client.post(f"{self.base}/chat", json={"text": "undo"})
+        loaded = self.client.get(self.base).json()
+        self.assertEqual(loaded["world"], before["world"])
+        self.assertEqual(loaded["messages"], before["messages"])
+        self.assertEqual(self.snapshots(), 2)

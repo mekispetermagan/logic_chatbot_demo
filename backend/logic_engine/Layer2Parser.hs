@@ -1,7 +1,8 @@
-module Layer2Parser (parseSentence, parseSentences) where
+module Layer2Parser (parseSentence, parseSentences, isUndoEntry) where
 
 import Control.Applicative (some, (<|>))
 import Data.Char (isSpace, toLower, ord, isDigit)
+import Data.List (isPrefixOf)
 import Data.Maybe (mapMaybe)
 import Data.Void (Void)
 import Text.Read (readMaybe)
@@ -10,6 +11,10 @@ import Text.Megaparsec.Char (space)
 import Ontology
 import AtomicPropertyQuery
 import Layer2Syntax
+
+-- Undo is an entry-level request: all text following the prefix is ignored.
+isUndoEntry :: String -> Bool
+isUndoEntry = isPrefixOf "undo" . map toLower . dropWhile isSpace
 
 type Parser = Parsec Void String
 

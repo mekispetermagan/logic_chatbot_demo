@@ -105,6 +105,10 @@ types are `place` (with `objectId` and `position`), `erase` (with `position`),
 `clear`, `chat` (with `text`), and `clarify` (with `objectId`). Requests also
 carry `salience` and nullable `pending`; both default to empty for older callers.
 Responses return both alongside `world`, `feedback`, and `isError`.
+Chat entries with a case-insensitive `undo` prefix after optional whitespace
+return `undoRequested: true` before grammar parsing or clarification checks.
+All trailing text is ignored; Haskell leaves the state intact for FastAPI to
+restore from history.
 The bridge owns JSON transport; `Discourse.hs` and `Layer2Evaluation.hs` own
 pure reference resolution, salience updates, ordered evaluation, and continuations.
 Haskell contains no HTTP or database handling.

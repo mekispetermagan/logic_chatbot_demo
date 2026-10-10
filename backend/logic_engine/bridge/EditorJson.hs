@@ -5,7 +5,7 @@ import Control.Monad (unless)
 import Data.Aeson hiding (Object)
 import Data.Aeson.Types (Parser, parseEither)
 import Data.List (nub, intercalate)
-import Layer2Parser (parseSentences)
+import Layer2Parser (parseSentences, isUndoEntry)
 import Discourse
 import Layer2Evaluation
 import Pretty (pretty)
@@ -165,7 +165,9 @@ pendingJson (World objects) pending = object
 processRequest :: Value -> Either String Value
 processRequest input = do
   (world, ranking, pending, action) <- parseEither parseRequest input
-  let (updated@(World objects), salience, nextPending, feedback, isError) = case (pending, action) of
+  let undoRequested = case action of Chat text -> isUndoEntry text; _ -> False
+      (updated@(World objects), salience, nextPending, feedback, isError) = case (pending, action) of
+        (_, Chat _) | undoRequested -> (world, ranking, pending, "", False)
         (Just paused, Clarify identifier) ->
           let (w, r, p, message) = resumeEntry world ranking paused identifier
           in (w, r, p, message, False)
@@ -178,8 +180,9 @@ processRequest input = do
         (Nothing, Edit edit) ->
           let (w, message) = evaluateEditorAction world edit
           in (w, purge w ranking, Nothing, message, False)
-  pure (object ["world" .= object ["width" .= (8 :: Int), "height" .= (8 :: Int),
+  pure (object (["world" .= object ["width" .= (8 :: Int), "height" .= (8 :: Int),
                                   "objects" .= map objectJson objects],
                 "salience" .= rankingJson salience,
                 "pending" .= fmap (pendingJson updated) nextPending,
-                "feedback" .= feedback, "isError" .= isError])
+                "feedback" .= feedback, "isError" .= isError] ++
+                ["undoRequested" .= True | undoRequested]))
