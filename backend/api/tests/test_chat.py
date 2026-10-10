@@ -267,12 +267,15 @@ class ChatTests(unittest.TestCase):
     def test_layer3_null_and_vacuous_answers_and_choice_validation(self):
         self.client.post(f"{self.base}/clear")
         self.chat("#0 cube. #1 sphere.")
-        result = self.chat("#0 same color as #1? All red objects are cube? Some red are cube? How many free?")
+        result = self.chat("#0 same color as #1? Is every red object a cube? Some red are cube? How many free?")
         self.assertFalse(result["messages"][-1]["isError"])
         self.assertIn("true — both lack color", result["feedback"])
         self.assertIn("true — no matching objects", result["feedback"])
         self.assertIn("false — no matching objects", result["feedback"])
         self.assertIn("\n  64", result["feedback"])
+        rejected = self.chat("All red objects are cube?")
+        self.assertTrue(rejected["messages"][-1]["isError"])
+        self.assertEqual(rejected["world"], result["world"])
         for choice in [{}, {"objectId": 0, "position": {"x": 0, "y": 0}}, {"position": {"x": "0", "y": 0}}]:
             self.assertEqual(self.client.post(f"{self.base}/clarify", json=choice).status_code, 422)
 

@@ -32,15 +32,15 @@ main = do
          "how many red?", "how many objects are next to it?", "how many at the edge?",
          "how many objects in a corner?", "how many squares are empty?",
          "how many free?", "how many squares occupied?", "how many are taken?",
-         "Are all red objects cube?", "all red are cube?", "some red objects are large cube?"] $ \input ->
+         "Is every red object a cube?", "every red is cube?", "Every red object is large?", "EVERY red object cube?", "some red objects are large cube?"] $ \input ->
     case parseSentences input of
       Left message -> fail (input ++ ": " ++ message)
       Right sentences -> check ("round trip " ++ input)
         (parseSentences (unwords (map pretty sentences)) == Right sentences)
   forM_ ["move a cube up.", "move #0 up?", "make #0 same color as #1?",
          "make #0 same square as #1.", "#0 next to #1.", "is a cube on board?",
-         "all red cube?", "some cube green?", "how many red", "#0 on board",
-         "move #0 up move #0 down", "all red objects are?", "move #0 above #1 junk"] $ \input ->
+         "every red cube?", "all red objects are cube?", "Are all red objects cube?", "every red objects are cube?", "are every red object cube?", "some cube green?", "how many red", "#0 on board",
+         "move #0 up move #0 down", "every red object is?", "move #0 above #1 junk"] $ \input ->
     check ("reject " ++ input) (isLeft (parseSentences input))
   let first = Object (Id 0) (Just Red) (Just Small) (Just Cube) (Just (1,1))
       second = Object (Id 1) Nothing Nothing (Just Sphere) (Just (4,4))
@@ -71,8 +71,8 @@ main = do
          ("how many squares are empty?","62"),("how many occupied?","2"),
          ("how many objects next to #0?","0"),
          ("how many at the edge?","0"),("how many in a corner?","0"),
-         ("all red objects are cube?","true"),("some red are sphere?","false"),
-         ("all green are cube?","true — no matching objects"),
+         ("every red object is cube?","true"),("some red are sphere?","false"),
+         ("every green is a cube?","true — no matching objects"),
          ("some green objects cube?","false — no matching objects")] $ \(text, expected) ->
     let (_,_,_,feedback) = run world text in check text (("\n  " ++ expected) `isInfixOf` feedback)
   let (_,_,_,edgeAnswers) = run cornerWorld "#0 next to #1? #0 at the edge? #0 in a corner? how many next to #0?"

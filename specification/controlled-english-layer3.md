@@ -117,20 +117,25 @@ synonyms; unplaced objects occupy no squares.
 ## Quantified questions
 
 ```text
-Are all red objects cube?
-All red are cube?
+Is every red object a cube?
+Every red object is large?
+Every red is cube?
 Some red objects are large sphere?
 Some cube objects green?
 ```
 
-Leading `are` is optional. At least one of `objects` and `are` must separate the
-subject description from its predicate. Both descriptions are nonempty
-conjunctions of color, size, and shape values; order and repetition are allowed.
-`all red cube?` is rejected because it has no boundary.
+For `every`, leading `is` is optional. At least one of `object` and `is` must
+separate the subject description from its predicate. An optional `a` can precede
+the predicate. Both descriptions are nonempty conjunctions of color, size, and
+shape values; order and repetition are allowed. `every red cube?` is rejected
+because it has no boundary. The former `all` syntax is no longer accepted.
 
-`all` checks every matching object; `some` checks whether at least one matching
-object satisfies the predicate. `all` carries no existential commitment. An
-empty subject class returns `true — no matching objects` for `all` and
+For `some`, leading `are` remains optional, and at least one of `objects` and
+`are` separates the descriptions. Its syntax and evaluation are unchanged.
+
+`every` checks every matching object; `some` checks whether at least one matching
+object satisfies the predicate. `every` carries no existential commitment. An
+empty subject class returns `true — no matching objects` for `every` and
 `false — no matching objects` for `some`.
 
 ## Clarification, salience, and undo

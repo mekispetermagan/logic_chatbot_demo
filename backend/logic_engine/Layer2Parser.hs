@@ -264,19 +264,23 @@ derivedQuestions words' = quantified ++ relations
       "is":rest -> rest
       "does":rest -> rest
       _ -> words'
-    quantifierTokens = dropWord "are" words'
-    quantified = case quantifierTokens of
-      quantifier:rest | quantifier `elem` ["all", "some"] ->
-        mapMaybe (quantifiedCandidate (quantifier == "all")) (splits rest)
-      _ -> []
+    quantified = case words' of
+      "is":"every":rest -> universalCandidates rest
+      "every":rest -> universalCandidates rest
+      _ -> case dropWord "are" words' of
+        "some":rest -> mapMaybe (quantifiedCandidate False) (splits rest)
+        _ -> []
+    universalCandidates rest = mapMaybe (quantifiedCandidate True) (splits rest)
     quantifiedCandidate universal (before, after) = do
-      -- At least one separator is mandatory. Consume 'objects are' together.
+      -- A noun or copula marks the boundary between the two descriptions.
+      let noun = if universal then "object" else "objects"
+          copula = if universal then "is" else "are"
       following <- case after of
-        "objects":rest -> Just (dropWord "are" rest)
-        "are":rest -> Just rest
+        word:rest | word == noun -> Just (dropWord copula rest)
+        word:rest | word == copula -> Just rest
         _ -> Nothing
       first <- description before
-      second <- description following
+      second <- description (if universal then dropWord "a" following else following)
       pure (Quantified universal first second)
     relations = mapMaybe relation (splits tokens)
     relation (before, after) = do

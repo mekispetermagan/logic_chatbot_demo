@@ -79,7 +79,7 @@ instance PrettyShow Sentence where
   pretty (SpatialQuestion subject relation target) = pretty subject ++ " " ++ spatialName relation ++ maybe "" ((" " ++) . pretty) target ++ "?"
   pretty (CountObjects predicate) = "how many objects are " ++ pretty predicate ++ "?"
   pretty (CountSquares occupied) = "how many squares are " ++ (if occupied then "occupied" else "empty") ++ "?"
-  pretty (Quantified universal before after) = (if universal then "all " else "some ") ++ unwords (map pretty before) ++ " objects are " ++ unwords (map pretty after) ++ "?"
+  pretty (Quantified universal before after) = (if universal then "every " else "some ") ++ unwords (map pretty before) ++ (if universal then " object is " else " objects are ") ++ unwords (map pretty after) ++ "?"
   pretty (Check subject property) = pretty subject ++ " is " ++ pretty property ++ "?"
   pretty (Query attribute subject) = pretty attribute ++ " of " ++ pretty subject ++ "?"
 
