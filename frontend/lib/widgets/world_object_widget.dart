@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../models/world_object.dart';
 import 'shape_glyph.dart';
+import 'object_palette.dart';
 
 class WorldObjectWidget extends StatelessWidget {
   const WorldObjectWidget({
@@ -43,13 +44,7 @@ class WorldObjectWidget extends StatelessWidget {
             final side = cellSide * scale;
             final left = (constraints.maxWidth - side) / 2;
             final top = (constraints.maxHeight - side) / 2;
-            final color = switch (object.color) {
-              ObjectColor.red => Colors.red,
-              ObjectColor.blue => Colors.blue,
-              ObjectColor.green => Colors.green,
-              ObjectColor.yellow => Colors.yellow,
-              null => null,
-            };
+            final color = ObjectPalette.forColor(object.color);
             final tint = color == null ? Colors.grey.shade700 : Colors.white;
             final glyph = object.shape != null
                 ? ShapeGlyph(shape: object.shape!, color: tint)
@@ -76,10 +71,8 @@ class WorldObjectWidget extends StatelessWidget {
                       ? glyph
                       : ShaderMask(
                           blendMode: BlendMode.srcIn,
-                          shaderCallback: (bounds) => LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [color.shade400, color.shade600],
+                          shaderCallback: (bounds) => ObjectPalette.gradient(
+                            color,
                           ).createShader(bounds),
                           child: glyph,
                         ),

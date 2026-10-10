@@ -159,8 +159,8 @@ class _BoardPainter extends CustomPainter {
     for (var row = 0; row < rows; row++) {
       for (var column = 0; column < columns; column++) {
         paint.color = (row + column).isEven
-            ? Colors.blueGrey.shade200
-            : Colors.blueGrey.shade400;
+            ? Colors.blueGrey.shade400
+            : Colors.blueGrey.shade300;
         canvas.drawRect(
           Rect.fromLTWH(
             column * cellWidth,

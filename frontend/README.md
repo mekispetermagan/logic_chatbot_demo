@@ -75,6 +75,8 @@ and the native desktop toolchain; Android requires its SDK and a compatible JDK.
 
 Bloom, Spark, Drop, and Loop use the existing SVG silhouettes in
 `assets/images/shapes/`, rendered with `flutter_svg`. Selector icons and pieces
-share these assets. Colored pieces retain vertical material gradients; colorless
+share these assets. Pieces and selector swatches use red `#C91A09`, blue `#0055BF`, yellow
+`#FEC401`, and green `#237841`. Piece gradients mix 20% white at the top
+and 20% black at the bottom; colorless
 pieces use neutral grey, and the loop's hole remains transparent. Size scaling,
 unknown-shape question marks, and unknown-size badges remain supported.

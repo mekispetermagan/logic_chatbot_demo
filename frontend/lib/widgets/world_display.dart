@@ -5,6 +5,7 @@ import '../models/world.dart';
 import '../models/world_object.dart';
 import 'world_object_widget.dart';
 import 'shape_glyph.dart';
+import 'object_palette.dart';
 import 'world_widget.dart';
 
 class WorldDisplay extends StatelessWidget {
@@ -185,10 +186,10 @@ class _PropertySelector extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: switch (property) {
-                    ObjectProperty.red => Colors.red,
-                    ObjectProperty.blue => Colors.blue,
-                    ObjectProperty.green => Colors.green,
-                    ObjectProperty.yellow => Colors.yellow,
+                    ObjectProperty.red => ObjectPalette.red,
+                    ObjectProperty.blue => ObjectPalette.blue,
+                    ObjectProperty.green => ObjectPalette.green,
+                    ObjectProperty.yellow => ObjectPalette.yellow,
                     _ => null,
                   },
                   border: Border.all(
