@@ -70,6 +70,7 @@ main = do
   let (_, r4, _, _) = run two [] "#0 red? #1 blue? #0 cube?"
   check "utterance ages" (map (\(age,_,_) -> age) r4 == [(0,0),(0,1),(0,2)])
   structuralTests
+  attributeRemovalTests
   putStrLn "All layer 2 evaluation checks passed."
 
 
@@ -102,3 +103,24 @@ structuralTests = do
   check "swap resolves pronoun against pre-utterance ranking" (afterSwap == Nothing)
   let (unchanged, _, _, _) = run world [] "Swap #0 and #99. Remove #99. Delete #99."
   check "missing structural operands never create" (unchanged == world)
+
+
+attributeRemovalTests = do
+  let initial = World [redCube {sizeOf=Just Small, positionOf=Just (7,6)}, blueCube]
+      (updated, ranking, pending, feedback) = run initial []
+        "#0 cube? #0 red? H7 remove color. It remove size. The cube remove shape. #0 remove square."
+  check "attribute removal resolves squares, pronouns, and anaphoric descriptions"
+    (updated == World [emptyObject (Id 0), blueCube] && pending == Nothing)
+  check "attribute removal purges false salience properties"
+    (all (\(_, identifier, properties) -> identifier /= Id 0 || null properties) ranking)
+  check "attribute removal concise feedback" ("#0: red -> none" `isInfixOf` feedback)
+  let (unchanged, _, _, answer) = run initial [] "#99 remove color. A8 remove shape."
+  check "missing attribute removal subjects never create" (unchanged == initial && not (null answer))
+  let (same, _, _, noChange) = run (World [emptyObject (Id 0)]) [] "#0 remove color."
+  check "absent attribute removal reports no change"
+    (same == World [emptyObject (Id 0)] && "No change" `isInfixOf` noChange)
+  let (_, _, paused, _) = run initial [] "The cube remove color. It is green."
+  clarification <- maybe (fail "expected attribute removal ambiguity") pure paused
+  let (finished, _, done, _) = resumeEntry initial [] clarification (Id 1)
+  check "attribute removal resumes after clarification"
+    (done == Nothing && finished == World [redCube {sizeOf=Just Small, positionOf=Just (7,6)}, blueCube {colorOf=Just Green}])

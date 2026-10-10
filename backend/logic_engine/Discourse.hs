@@ -17,6 +17,12 @@ data Pending = Pending
   , candidateIds :: [Identifier]
   , resolvedSubjects :: [Identifier]
   }
+  | SquarePending
+  { remainingSentences :: [Sentence]
+  , candidateIds :: [Identifier]
+  , resolvedSubjects :: [Identifier]
+  , squareChoices :: [Position]
+  }
   deriving (Eq, Show)
 
 holds :: Object -> Property -> Bool
@@ -55,9 +61,19 @@ mentionMany world mentions ranking = purge world $
 
 subjectsOf :: Sentence -> [Subject]
 subjectsOf (Attribution subject _) = [subject]
+subjectsOf (AttributeRemoval subject _) = [subject]
 subjectsOf (Removal subject) = [subject]
 subjectsOf (Swapping first second) = [first, second]
 subjectsOf (Deletion subject) = [subject]
+subjectsOf (StepMove subject _) = [subject]
+subjectsOf (RelativeMove subject _ target) = [subject, target]
+subjectsOf (NeighborMove subject target) = [subject, target]
+subjectsOf (CopyAttribute subject _ target) = [subject, target]
+subjectsOf (SpatialQuestion subject _ target) = subject : maybe [] (:[]) target
+subjectsOf (CountObjects (Neighboring subject)) = [subject]
+subjectsOf (CountObjects _) = []
+subjectsOf (CountSquares _) = []
+subjectsOf (Quantified _ _ _) = []
 subjectsOf (Check subject _) = [subject]
 subjectsOf (Query _ subject) = [subject]
 

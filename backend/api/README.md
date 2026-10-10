@@ -74,7 +74,9 @@ Haskell parses the entire entry, then evaluates its sentences in order using
 Non-final performatives require periods; questions always require `?`.
 Chat also supports `remove`, `swap`, and `erase`/`delete` with references,
 pronouns, or definite descriptions. Swap clarification may pause once per operand;
-resolved operands are persisted without partial world changes. No extra editing
+resolved operands are persisted without partial world changes. Layer 3 adds
+relative movement, attribute copying, spatial questions, counts, and quantifiers;
+see [Layer 3](../../specification/controlled-english-layer3.md). No extra editing
 endpoint is needed.
 Feedback includes each prettyprinted sentence and its changes or answer.
 Parse errors preserve world and discourse and are saved as error replies.
@@ -97,6 +99,11 @@ Ambiguity returns `pending` with `sentence`, canonical `remaining` entry text,
 `resolvedSubjects` (already resolved operand IDs, defaulting to `[]`). Resume with
 `POST /conversations/{id}/clarify`, body `{"objectId":3}`. Candidate selection
 is evaluated by Haskell. An invalid choice leaves the pending state intact.
+For square clarification, `pending.squareChoices` contains `{x,y}` positions,
+`candidateIds` and `candidates` are empty, and resolved operand IDs are retained.
+Resume with `{"position":{"x":3,"y":4}}` at the same `/clarify` endpoint.
+Exactly one of `objectId` and `position` is required. Existing pending object
+choices default to an empty `squareChoices` list. Haskell validates the selection.
 Further ambiguity can pause again. All continuations replace the same entry
 snapshot, so one Undo restores the complete pre-entry world and salience.
 The choice and feedback are also recorded as chat messages.

@@ -87,6 +87,63 @@ void main() {
     },
   );
   testWidgets(
+    'square choices render labels and submit coordinates through the controller',
+    (tester) async {
+      final requests = <http.Request>[];
+      final state = pausedState();
+      state['pending'] = {
+        'sentence': 'move #0 next to #1.',
+        'candidates': [],
+        'squareChoices': [
+          {'x': 3, 'y': 4},
+          {'x': 4, 'y': 3},
+        ],
+      };
+      final controller = ConversationController(
+        store: SavedId(),
+        api: ConversationApi(
+          baseUrl: Uri.parse('http://localhost:8000'),
+          client: MockClient((request) async {
+            requests.add(request);
+            return http.Response(
+              jsonEncode({...state, 'pending': null, 'feedback': 'Moved'}),
+              200,
+            );
+          }),
+        ),
+      )..conversation = ConversationState.fromJson(state);
+      addTearDown(controller.dispose);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ChatPanel(
+              messages: const [],
+              canSend: false,
+              sending: false,
+              pending: controller.conversation!.pending,
+              onChooseSquare: controller.clarifySquare,
+              onSend: (_) async => false,
+              onRefresh: () {},
+            ),
+          ),
+        ),
+      );
+      expect(find.text('Which square? move #0 next to #1.'), findsOneWidget);
+      expect(find.text('D5'), findsOneWidget);
+      expect(find.text('E4'), findsOneWidget);
+      await tester.tap(find.text('D5'));
+      await tester.pumpAndSettle();
+      expect(requests.single.url.path, '/conversations/saved/clarify');
+      expect(jsonDecode(requests.single.body), {
+        'position': {'x': 3, 'y': 4},
+      });
+      expect(controller.conversation!.pending, isNull);
+      expect(controller.canEdit, isTrue);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
     'one app bar Undo is available from the mobile Chat tab during clarification',
     (tester) async {
       final requests = <http.Request>[];

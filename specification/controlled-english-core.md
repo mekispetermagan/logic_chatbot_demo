@@ -91,7 +91,7 @@ use `#3 on A4?` or `#3 A4?`.
 
 ### Removal, swapping, and deletion
 
-These are three additional primitive performatives. Every operand must resolve
+These are additional primitive performatives. Every operand must resolve
 to an existing object; a missing identifier or empty square produces a diagnostic
 without creating anything or changing the world.
 
@@ -106,6 +106,14 @@ delete A4.
 
 `remove subject [from board]` clears only the object's position. Identity and
 all other attributes remain intact. Removing an unplaced object reports `No change`.
+
+`subject remove color/size/shape/square` clears the named attribute, preserving
+identity and every other attribute. For example, `#3 remove color.` clears its
+color and `A4 remove shape.` clears the shape of the object on A4.
+`square` clears position and is equivalent to `remove subject`.
+An already absent attribute reports `No change`; a missing subject produces a
+diagnostic without creating an object. A period is required except at the end
+of an entry, and `?` is rejected. Layer 2 also supports pronouns and definite descriptions as subjects.
 
 `swap subject [and] subject` exchanges the two nullable positions atomically.
 Two placed objects exchange squares, with no free temporary square required.

@@ -79,7 +79,7 @@ parseAction = withObject "action" $ \value -> do
     "clear" -> pure ClearWorld
     _ -> fail "Invalid editor action"
 
-data Operation = Chat String | Clarify Identifier | Edit EditorAction
+data Operation = Chat String | Clarify Identifier | ClarifySquare Position | Edit EditorAction
 
 parseRanking :: Value -> Parser SalienceRanking
 parseRanking = withArray "salience" $ mapM parseMention . foldr (:) []
@@ -101,9 +101,12 @@ parsePending = withObject "pending" $ \value -> do
   text <- value .: "remaining"
   sentences <- either fail pure (parseSentences text)
   identifiers <- map Id <$> value .: "candidateIds"
-  unless (not (null sentences) && not (null identifiers)) (fail "Invalid pending entry")
+  squares <- value .:? "squareChoices" .!= [] >>= mapM parsePosition
+  unless (not (null sentences) && (not (null identifiers) /= not (null squares)) && all inBounds squares)
+    (fail "Invalid pending entry")
   resolved <- map Id <$> (value .:? "resolvedSubjects" .!= [])
-  pure (Pending sentences identifiers resolved)
+  pure (if null squares then Pending sentences identifiers resolved
+        else SquarePending sentences identifiers resolved squares)
 
 parseRequest :: Value -> Parser (World, SalienceRanking, Maybe Pending, Operation)
 parseRequest = withObject "request" $ \value -> do
@@ -115,7 +118,13 @@ parseRequest = withObject "request" $ \value -> do
     kind <- fields .: "type" :: Parser String
     case kind of
       "chat" -> Chat <$> fields .: "text"
-      "clarify" -> Clarify . Id <$> fields .: "objectId"
+      "clarify" -> do
+        identifier <- fields .:? "objectId"
+        position <- fields .:? "position"
+        case (identifier, position) of
+          (Just i, Nothing) -> pure (Clarify (Id i))
+          (Nothing, Just p) -> ClarifySquare <$> parsePosition p
+          _ -> fail "Choose an object or a square"
       _ -> Edit <$> parseAction action) action
   pure (world, ranking, pending, operation)
 
@@ -159,6 +168,9 @@ pendingJson (World objects) pending = object
   [ "remaining" .= intercalate " " (map pretty (remainingSentences pending))
   , "sentence" .= case remainingSentences pending of sentence:_ -> pretty sentence; [] -> ""
   , "candidateIds" .= map idToInt (candidateIds pending)
+  , "squareChoices" .= case pending of
+      SquarePending {squareChoices = positions} -> map positionJson positions
+      _ -> []
   , "resolvedSubjects" .= map idToInt (resolvedSubjects pending)
   , "candidates" .= [object ["objectId" .= idToInt identifier, "label" .= pretty value]
        | identifier <- candidateIds pending, value <- objects, idOf value == identifier]
@@ -173,8 +185,12 @@ processRequest input = do
         (Just paused, Clarify identifier) ->
           let (w, r, p, message) = resumeEntry world ranking paused identifier
           in (w, r, p, message, False)
-        (Just _, _) -> (world, ranking, pending, "Choose an object or undo", True)
+        (Just paused, ClarifySquare position) ->
+          let (w, r, p, message) = resumeSquareEntry world ranking paused position
+          in (w, r, p, message, False)
+        (Just _, _) -> (world, ranking, pending, "Choose an object or square, or undo", True)
         (Nothing, Clarify _) -> (world, ranking, Nothing, "No clarification pending", True)
+        (Nothing, ClarifySquare _) -> (world, ranking, Nothing, "No clarification pending", True)
         (Nothing, Chat text) -> case parseSentences text of
           Left message -> (world, ranking, Nothing, message, True)
           Right sentences -> let (w, r, p, message) = evaluateEntry world ranking sentences

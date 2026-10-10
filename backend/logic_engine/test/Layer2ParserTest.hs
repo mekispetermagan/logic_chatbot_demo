@@ -2,6 +2,8 @@ module Main where
 
 import Control.Monad (forM_, unless)
 import Data.Either (isLeft)
+import AtomicPerformative
+import AtomicSentence
 import Layer2Parser
 import Layer2Syntax
 import Ontology
@@ -17,7 +19,8 @@ main = do
   forM_ ["", "   ", "und", "#3 red. undo", "do undo"] $ \input ->
     check ("not undo prefix: " ++ show input) (not (isUndoEntry input))
   let accepted =
-        [ "remove #3 from board.", "remove it.", "REMOVE the large cube FROM BOARD",
+        [ "H7 REMOVE COLOR", "it remove size.", "the red cube remove shape.",
+          "#3 remove square. color of #3?", "remove #3 from board.", "remove it.", "REMOVE the large cube FROM BOARD",
           "swap #3 #4.", "swap it and the red cube", "swap the cube the sphere.",
           "erase the red one.", "delete A1.", "remove A1. swap B1 and #3. delete #4.",
           "It is cube.", "It to a4.", "The cube is red.", "A cube on a4"
@@ -53,7 +56,9 @@ main = do
     , "#3 on I1.", "#3 on A9.", "o3 red.", "#3red."
     , "the is red.", "a on A4.", "color of it", "the cube one one is red."
     ] $ \input -> check ("reject: " ++ input) (isLeft (parseSentences input))
-  forM_ ["remove a cube.", "swap a cube and #3.", "swap #3 red cube.", "delete red.",
+  forM_ ["a cube remove color.", "cube remove shape.", "it remove color?",
+         "H7 remove square?", "#3 remove row.", "#3 remove position.",
+         "#3 remove color it red.", "#3 is remove color.", "remove a cube.", "swap a cube and #3.", "swap #3 red cube.", "delete red.",
          "remove #3?", "swap it and #4?", "erase #3?", "swap the cube.",
          "remove the cube from.", "delete #3 remove #4."] $ \input ->
     check ("reject structural: " ++ input) (isLeft (parseSentences input))
@@ -67,4 +72,7 @@ main = do
     (toAtomicSentence (Attribution (Reference (AtSquare (0,0))) [C Red, Sh Cube]) == Nothing)
   check "pronouns do not lower to atomic evaluation"
     (toAtomicSentence (Check It (C Red)) == Nothing)
+  check "attribute removal lowers to layer 1"
+    (toAtomicSentence (AttributeRemoval (Reference (AtSquare (7,6))) RemoveColor) ==
+      Just (Performative (RemoveAttribute (AtSquare (7,6)) RemoveColor)))
   putStrLn "All Layer 2 parser checks passed."

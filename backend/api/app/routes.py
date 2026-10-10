@@ -78,4 +78,4 @@ def get_conversation(
 @router.post("/{conversation_id}/clarify", response_model=EditState)
 def clarify(conversation_id: UUID, choice: ClarificationChoice,
             service: ConversationService = Depends(get_service)) -> EditState:
-    return require_edit(service.clarify(conversation_id, choice.objectId))
+    return require_edit(service.clarify(conversation_id, choice))

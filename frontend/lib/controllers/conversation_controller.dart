@@ -104,6 +104,12 @@ class ConversationController extends ChangeNotifier {
     return _edit((id) => api.chat(id, text), chat: true);
   }
 
+  Future<bool> clarifySquare(BoardPosition position) => _edit(
+    (id) => api.clarifySquare(id, position),
+    chat: true,
+    allowPending: true,
+  );
+
   Future<bool> clarify(int objectId) =>
       _edit((id) => api.clarify(id, objectId), chat: true, allowPending: true);
 

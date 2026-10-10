@@ -2,7 +2,7 @@ from uuid import UUID, uuid4
 
 from .repository import ConversationRepository
 from .engine import LogicEngine
-from .schemas import ConversationState, EditState, World
+from .schemas import ConversationState, EditState, World, ClarificationChoice
 
 
 class ConversationService:
@@ -28,8 +28,13 @@ class ConversationService:
         return self.repository.edit(conversation_id,
             lambda world, salience, pending: self.engine.edit(world, {"type": "chat", "text": text}, salience, pending), user_text=text)
 
-    def clarify(self, conversation_id: UUID, object_id: int) -> EditState | None:
+    def clarify(self, conversation_id: UUID, choice: ClarificationChoice) -> EditState | None:
+        action = {"type": "clarify", **choice.model_dump(exclude_none=True)}
+        if choice.objectId is not None:
+            label = f"#{choice.objectId}"
+        else:
+            x, y = choice.position.x, choice.position.y
+            label = f"{chr(65 + x)}{y + 1}" if 0 <= x < 8 and 0 <= y < 8 else f"({x}, {y})"
         return self.repository.edit(conversation_id,
-            lambda world, salience, pending: self.engine.edit(
-                world, {"type": "clarify", "objectId": object_id}, salience, pending),
-            user_text=f"#{object_id}", continuation=True)
+            lambda world, salience, pending: self.engine.edit(world, action, salience, pending),
+            user_text=label, continuation=True)

@@ -1,4 +1,5 @@
 import 'world.dart';
+import 'world_object.dart';
 import 'chat_message.dart';
 
 class ConversationState {
@@ -50,9 +51,18 @@ class ClarificationCandidate {
 }
 
 class PendingEntry {
-  const PendingEntry({required this.sentence, required this.candidates});
+  const PendingEntry({
+    required this.sentence,
+    required this.candidates,
+    this.squareChoices = const [],
+  });
   factory PendingEntry.fromJson(Map<String, dynamic> json) => PendingEntry(
     sentence: json['sentence'] as String,
+    squareChoices: List.unmodifiable(
+      (json['squareChoices'] as List<dynamic>? ?? []).map(
+        (value) => BoardPosition.fromJson(value as Map<String, dynamic>),
+      ),
+    ),
     candidates: List.unmodifiable(
       (json['candidates'] as List<dynamic>).map(
         (value) =>
@@ -62,4 +72,5 @@ class PendingEntry {
   );
   final String sentence;
   final List<ClarificationCandidate> candidates;
+  final List<BoardPosition> squareChoices;
 }

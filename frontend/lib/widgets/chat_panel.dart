@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../models/chat_message.dart';
+import '../models/world_object.dart';
 import '../models/conversation_state.dart';
 
 /// Owns only composer text; conversation state and requests stay in the controller.
@@ -16,6 +17,7 @@ class ChatPanel extends StatefulWidget {
     this.error,
     this.pending,
     this.onChoose,
+    this.onChooseSquare,
   });
 
   final List<ChatMessage> messages;
@@ -24,6 +26,7 @@ class ChatPanel extends StatefulWidget {
   final String? error;
   final PendingEntry? pending;
   final ValueChanged<int>? onChoose;
+  final ValueChanged<BoardPosition>? onChooseSquare;
   final Future<bool> Function(String) onSend;
   final VoidCallback onRefresh;
 
@@ -98,13 +101,22 @@ class _ChatPanelState extends State<ChatPanel> {
                 ),
         ),
         if (widget.pending case final pending?) ...[
-          Text('Which object? ${pending.sentence}'),
+          Text(
+            '${pending.squareChoices.isEmpty ? 'Which object?' : 'Which square?'} ${pending.sentence}',
+          ),
           Flexible(
             child: SingleChildScrollView(
               child: Wrap(
                 spacing: 8,
                 runSpacing: 4,
                 children: [
+                  for (final square in pending.squareChoices)
+                    OutlinedButton(
+                      onPressed: busy || widget.onChooseSquare == null
+                          ? null
+                          : () => widget.onChooseSquare!(square),
+                      child: Text(square.square),
+                    ),
                   for (final candidate in pending.candidates)
                     OutlinedButton(
                       onPressed: busy || widget.onChoose == null

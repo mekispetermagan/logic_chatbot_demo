@@ -144,6 +144,7 @@ main = do
     (pretty (last feedback) == "position of #1?\n  H8")
   squareReferenceTests
   structuralTests
+  attributeRemovalTests
   putStrLn "All atomic parser and evaluation checks passed."
 
 
@@ -264,3 +265,63 @@ structuralTests = do
     (case parseAtomicSentences "remove #0. position of #0? swap #0 #1. erase #1. #0 red?" of
       Right sentences -> length sentences == 5
       Left _ -> False)
+
+
+attributeRemovalTests :: IO ()
+attributeRemovalTests = do
+  let ref = ById (Id 3)
+      object = Object (Id 3) (Just Red) (Just Small) (Just Cube) (Just (0,3))
+      other = (emptyObject (Id 4)) {colorOf = Just Blue}
+      world = World [object, other]
+      cases = [(RemoveColor, object {colorOf = Nothing}),
+               (RemoveSize, object {sizeOf = Nothing}),
+               (RemoveShape, object {shapeOf = Nothing}),
+               (RemoveSquare, object {positionOf = Nothing})]
+  forM_ cases $ \(attribute, expected) -> do
+    let operation = RemoveAttribute ref attribute
+        text = pretty operation
+        (updated, result) = evaluateAtomicPerformative world operation
+    check "attribute removal round trip" (parseAtomicPerformative text == Right operation)
+    check "attribute removal final period optional"
+      (parseAtomicPerformative (init text) == Right operation)
+    check "attribute removal preserves identity, other attributes, and other objects"
+      (updated == World [expected, other])
+    check "attribute removal feedback" (case result of
+      Result change -> pretty change == case attribute of
+        RemoveColor -> "#3: red -> none"
+        RemoveSize -> "#3: small -> none"
+        RemoveShape -> "#3: cube -> none"
+        RemoveSquare -> "#3: on A4 -> unplaced"
+      _ -> False)
+    check "clearing absent attribute is no change"
+      (case evaluateAtomicPerformative updated operation of
+        (again, Result NoChange) -> again == updated
+        _ -> False)
+    forM_ [ById (Id 99), AtSquare (7,7)] $ \missing ->
+      check "attribute removal never creates missing subjects"
+        (case evaluateAtomicPerformative world (RemoveAttribute missing attribute) of
+          (unchanged, Message _) -> unchanged == world
+          _ -> False)
+  check "square subject case insensitive"
+    (parseAtomicPerformative " A4 REMOVE COLOR. " ==
+      Right (RemoveAttribute (AtSquare (0,3)) RemoveColor))
+  check "square subject resolves existing object"
+    (fst (evaluateAtomicPerformative world (RemoveAttribute (AtSquare (0,3)) RemoveColor)) ==
+      World [object {colorOf = Nothing}, other])
+  check "square removal agrees with prefix remove"
+    (fst (evaluateAtomicPerformative world (RemoveAttribute ref RemoveSquare)) ==
+      fst (evaluateAtomicPerformative world (Remove ref)))
+  forM_ ["#3 remove color?", "A4 remove square?", "#3 remove row.",
+         "#3 remove column.", "#3 remove position.", "#3 remove.",
+         "#3 remove color #3 red", "#3 remove color size.", "#3 is remove color."] $ \bad ->
+    check ("reject attribute removal " ++ bad) (isLeft (parseAtomicSentences bad))
+  case parseAtomicSentences "#3 remove color. #3 red? color of #3? #3 blue" of
+    Left message -> fail message
+    Right sentences -> do
+      let (updated, feedback) = evaluateAtomicSentences world sentences
+      check "removal participates in sequential evaluation"
+        (updated == World [object {colorOf = Just Blue}, other])
+      check "questions see cleared attribute" (case map feedbackAnswer feedback of
+        [UpdateAnswer (PropertyCleared (Id 3) (C Red)), CheckAnswer False,
+         QueryAnswerValue Absent, UpdateAnswer (PropertyChanged (Id 3) Nothing (C Blue))] -> True
+        _ -> False)

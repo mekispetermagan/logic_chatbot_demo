@@ -237,6 +237,62 @@ class ChatTests(unittest.TestCase):
         self.assertEqual(loaded["messages"], before["messages"])
         self.assertEqual(self.snapshots(), 2)
 
+    def test_layer3_square_choices_restart_resume_and_whole_entry_undo(self):
+        self.client.post(f"{self.base}/clear")
+        before = self.chat("#0 red cube on A1. #1 blue sphere on D4.")
+        count = self.snapshots()
+        paused = self.chat("#0 green. Move #0 next to #1. #0 large.")
+        self.assertEqual(paused["pending"]["candidateIds"], [])
+        self.assertEqual(len(paused["pending"]["squareChoices"]), 4)
+        self.assertEqual(paused["pending"]["resolvedSubjects"], [0, 1])
+        self.assertEqual(self.snapshots(), count + 1)
+        invalid = self.client.post(f"{self.base}/clarify", json={"position": {"x": 7, "y": 7}})
+        self.assertEqual(invalid.status_code, 200)
+        self.assertEqual(invalid.json()["pending"], paused["pending"])
+        with TestClient(create_app(self.settings)) as restarted:
+            loaded = restarted.get(self.base).json()
+            self.assertEqual(loaded["pending"], paused["pending"])
+            selected = restarted.post(f"{self.base}/clarify", json={"position": {"x": 3, "y": 4}})
+        self.assertEqual(selected.status_code, 200, selected.text)
+        result = selected.json()
+        self.assertIsNone(result["pending"])
+        obj = next(o for o in result["world"]["objects"] if o["id"] == 0)
+        self.assertEqual((obj["position"], obj["color"], obj["size"]), ({"x": 3, "y": 4}, "green", "large"))
+        self.assertEqual(self.snapshots(), count + 1)
+        restored = self.chat("undo")
+        self.assertEqual(restored["world"], before["world"])
+        referenced = self.chat("It remove color.")
+        self.assertIsNone(next(o for o in referenced["world"]["objects"] if o["id"] == 1)["color"])
+
+    def test_layer3_null_and_vacuous_answers_and_choice_validation(self):
+        self.client.post(f"{self.base}/clear")
+        self.chat("#0 cube. #1 sphere.")
+        result = self.chat("#0 same color as #1? All red objects are cube? Some red are cube? How many free?")
+        self.assertFalse(result["messages"][-1]["isError"])
+        self.assertIn("true — both lack color", result["feedback"])
+        self.assertIn("true — no matching objects", result["feedback"])
+        self.assertIn("false — no matching objects", result["feedback"])
+        self.assertIn("\n  64", result["feedback"])
+        for choice in [{}, {"objectId": 0, "position": {"x": 0, "y": 0}}, {"position": {"x": "0", "y": 0}}]:
+            self.assertEqual(self.client.post(f"{self.base}/clarify", json=choice).status_code, 422)
+
+    def test_attribute_removal_chat_and_whole_entry_undo(self):
+        self.client.post(f"{self.base}/clear")
+        before = self.chat("#0 red small cube on H7.")
+        count = self.snapshots()
+        result = self.chat("H7 remove color. It remove size. The cube remove shape. #0 remove square.")
+        self.assertFalse(result["messages"][-1]["isError"])
+        self.assertIsNone(result["pending"])
+        self.assertEqual(result["world"]["objects"], [
+            {"id": 0, "color": None, "size": None, "shape": None, "position": None}])
+        self.assertIn("#0: red -> none", result["feedback"])
+        self.assertEqual(self.snapshots(), count + 1)
+        restored = self.chat("undo")
+        self.assertEqual(restored["world"], before["world"])
+        referenced = self.chat("The red cube remove color.")
+        self.assertIsNone(referenced["pending"])
+        self.assertIsNone(referenced["world"]["objects"][0]["color"])
+
     def test_structural_sequence_and_undo_restore_world_and_salience(self):
         self.client.post(f"{self.base}/clear")
         before = self.chat("#0 red cube on A1. #1 blue sphere on B1.")

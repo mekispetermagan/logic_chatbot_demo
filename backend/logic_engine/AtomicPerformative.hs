@@ -9,14 +9,26 @@ data AtomicPerformative = AP
                         { subjectPart :: ObjectReference
                         , propPart    :: Property
                         }
+                        | RemoveAttribute ObjectReference RemovableAttribute
                         | Remove ObjectReference
                         | Swap ObjectReference ObjectReference
                         | Delete ObjectReference
                         deriving (Eq, Show)
 
+-- Only whole stored attributes can be cleared; row and column are derived.
+data RemovableAttribute = RemoveColor | RemoveSize | RemoveShape | RemoveSquare
+  deriving (Eq, Show)
+
+instance PrettyShow RemovableAttribute where
+  pretty RemoveColor = "color"
+  pretty RemoveSize = "size"
+  pretty RemoveShape = "shape"
+  pretty RemoveSquare = "square"
+
 instance PrettyShow AtomicPerformative where
   pretty (AP identifier property) =
     pretty identifier ++ " " ++ pretty property ++ "."
+  pretty (RemoveAttribute reference attribute) = pretty reference ++ " remove " ++ pretty attribute ++ "."
   pretty (Remove reference) = "remove " ++ pretty reference ++ "."
   pretty (Swap first second) = "swap " ++ pretty first ++ " and " ++ pretty second ++ "."
   pretty (Delete reference) = "delete " ++ pretty reference ++ "."
@@ -29,6 +41,7 @@ updateObjectWith (Object i mc ms msh mp) (P p)    = (Object i mc ms msh (Just p)
 
 data UpdateChange = ObjectCreated Identifier Property
                   | PropertyChanged Identifier (Maybe Property) Property
+                  | PropertyCleared Identifier Property
                   | ObjectRemoved Identifier Position
                   | ObjectsSwapped Identifier Identifier
                   | ObjectDeleted Identifier
@@ -40,6 +53,7 @@ instance PrettyShow UpdateChange where
   pretty (ObjectCreated identifier property) = "Created " ++ pretty identifier ++ ": " ++ pretty property
   pretty (PropertyChanged identifier previous property) =
     pretty identifier ++ ": " ++ maybe "none" pretty previous ++ " -> " ++ pretty property
+  pretty (PropertyCleared identifier property) = pretty identifier ++ ": " ++ pretty property ++ " -> none"
   pretty (ObjectRemoved identifier position) = pretty identifier ++ ": on " ++ prettyPosition position ++ " -> unplaced"
   pretty (ObjectsSwapped first second) = "Swapped " ++ pretty first ++ " and " ++ pretty second
   pretty (ObjectDeleted identifier) = "Deleted " ++ pretty identifier
@@ -71,14 +85,22 @@ evaluateAtomicPerformative world (AP reference property) =
         _ -> apply
 
 -- Structural operations resolve existing objects only; failure leaves the world intact.
-evaluateAtomicPerformative world@(World objects) (Remove reference) =
+evaluateAtomicPerformative world (Remove reference) =
+  evaluateAtomicPerformative world (RemoveAttribute reference RemoveSquare)
+evaluateAtomicPerformative world@(World objects) (RemoveAttribute reference attribute) =
   case resolveReference world reference of
     Message message -> (world, Message message)
-    Result object -> case positionOf object of
-      Nothing -> (world, Result NoChange)
-      Just position ->
-        (World [if sameId current object then current {positionOf = Nothing} else current | current <- objects],
-         Result (ObjectRemoved (idOf object) position))
+    Result object ->
+      let (old, updated) = case attribute of
+            RemoveColor -> (C <$> colorOf object, object {colorOf = Nothing})
+            RemoveSize -> (S <$> sizeOf object, object {sizeOf = Nothing})
+            RemoveShape -> (Sh <$> shapeOf object, object {shapeOf = Nothing})
+            RemoveSquare -> (P <$> positionOf object, object {positionOf = Nothing})
+          change = case old of
+            Nothing -> NoChange
+            Just (P position) -> ObjectRemoved (idOf object) position
+            Just property -> PropertyCleared (idOf object) property
+      in (World [if sameId current object then updated else current | current <- objects], Result change)
 evaluateAtomicPerformative world@(World objects) (Delete reference) =
   case resolveReference world reference of
     Message message -> (world, Message message)

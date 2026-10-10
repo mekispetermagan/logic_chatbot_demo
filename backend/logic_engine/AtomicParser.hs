@@ -102,8 +102,18 @@ atomicAssertionOrCheck :: Parser AtomicSentence
 atomicAssertionOrCheck = do
   identifier <- referenceParser
   space1
-  void (optional (keyword "is" *> space1))
-  let shorthand = do
+  copula <- optional (keyword "is" *> space1)
+  let removal = do
+        keyword "remove"
+        when (copula /= Nothing) $ fail "remove follows its subject directly"
+        space1
+        attribute <- choice
+          [RemoveColor <$ keyword "color", RemoveSize <$ keyword "size",
+           RemoveShape <$ keyword "shape", RemoveSquare <$ keyword "square"]
+        mark <- sentenceEnd
+        when (mark == Just '?') $ fail "attribute removal is performative-only"
+        pure (Performative (RemoveAttribute identifier attribute))
+      shorthand = do
         attribute <- attributeParser
         questionEnd
         pure (PropertyQuery (APQ attribute identifier))
@@ -120,7 +130,7 @@ atomicAssertionOrCheck = do
         pure $ case mark of
           Just '?' -> PropertyCheck (APC identifier property)
           _ -> Performative (AP identifier property)
-  shorthand <|> move <|> assertion
+  removal <|> shorthand <|> move <|> assertion
 
 sentenceEnd :: Parser (Maybe Char)
 sentenceEnd = do

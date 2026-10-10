@@ -62,7 +62,7 @@ class ConversationRepository:
                 return None
             pending = self._pending(row)
             if (continuation and not pending) or (pending and not continuation and user_text is None):
-                raise PendingConflict("Choose an object or undo" if pending else "No clarification pending")
+                raise PendingConflict("Choose an object or square, or undo" if pending else "No clarification pending")
             previous = World.model_validate_json(row["world_json"])
             salience = json.loads(row["salience_json"])
             reply = update(previous, salience, pending)
@@ -71,7 +71,7 @@ class ConversationRepository:
                 row, feedback = self._undo_snapshot(connection, conversation_id, row)
             else:
                 if pending and not continuation:
-                    raise PendingConflict("Choose an object or undo")
+                    raise PendingConflict("Choose an object or square, or undo")
                 changed = reply.world != previous or reply.salience != salience or reply.pending != pending
                 if changed:
                     values = (reply.world.model_dump_json(), json.dumps(reply.salience),

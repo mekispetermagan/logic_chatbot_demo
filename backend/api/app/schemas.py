@@ -1,7 +1,7 @@
 from typing import Literal
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, model_validator
 
 
 class Schema(BaseModel):
@@ -38,10 +38,18 @@ class ChatEntry(Schema):
 
 
 class ClarificationChoice(Schema):
+    objectId: StrictInt | None = Field(default=None, ge=0)
+    position: Position | None = None
+
+    @model_validator(mode="after")
+    def exactly_one_choice(self):
+        if (self.objectId is None) == (self.position is None):
+            raise ValueError("Choose an object or a square")
+        return self
+
+
+class Candidate(Schema):
     objectId: StrictInt = Field(ge=0)
-
-
-class Candidate(ClarificationChoice):
     label: str
 
 
@@ -51,6 +59,7 @@ class PendingEntry(Schema):
     candidateIds: list[StrictInt]
     candidates: list[Candidate]
     resolvedSubjects: list[StrictInt] = Field(default_factory=list)
+    squareChoices: list[Position] = Field(default_factory=list)
 
 
 class ConversationState(Schema):

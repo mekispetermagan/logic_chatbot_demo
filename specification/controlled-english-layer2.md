@@ -78,6 +78,19 @@ Repeated or conflicting predicates evaluate in their original order after the
 subject is resolved once. The last value of an attribute wins; the destination
 is applied last. A blocked movement preserves earlier property updates.
 
+## Attribute removal
+
+`S remove color/size/shape/square` clears one attribute through the Layer 1
+primitive. Subjects may be identifiers, squares, `it`, or definite descriptions:
+`H7 remove color.`, `it remove size.`, `the red cube remove shape.`
+`square` clears position. Missing subjects never create objects; absent
+attributes report `No change`. Indefinite subjects and question marks are
+rejected. Use a period except at the end of an entry.
+
+Resolution, clarification, salience cleanup, and whole-entry undo follow the
+same rules as other structural performatives. Cleared properties are purged
+from earlier mentions; the object's identity remains salient.
+
 ## Removal, swapping, and deletion
 
 The core structural performatives also accept `it` and definite descriptions:
@@ -171,7 +184,7 @@ multiple complete parses produce an ambiguity error rather than a greedy choice.
 
 `Layer2Syntax.Subject` distinguishes `Reference`, `It`, `Indefinite`, and `Definite`.
 `Layer2Syntax.Sentence` distinguishes compound `Attribution`, structural
-`Removal`/`Swapping`/`Deletion`, single-value `Check`, and attribute `Query`. Lists preserve descriptor order and repetition.
+`AttributeRemoval`/`Removal`/`Swapping`/`Deletion`, single-value `Check`, and attribute `Query`. Lists preserve descriptor order and repetition.
 
 `Layer2Parser.parseSentence` parses one sentence; `parseSentences` parses a whole
 nonempty entry. Both return `Either String ...` and are re-exported by `Grammar`.
@@ -262,3 +275,6 @@ Existing database snapshots acquire empty salience automatically; older chat
 messages are not reinterpreted to invent historical mentions. Pending entries
 and their candidates survive restart. The console remains an atomic-only
 experiment; the demo uses the API chat loop.
+
+Layer 3 extends these entry points with derived operations and questions. See
+[Layer 3](controlled-english-layer3.md) for its syntax, square clarification, and evaluation.

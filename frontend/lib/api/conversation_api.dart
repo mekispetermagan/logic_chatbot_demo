@@ -73,6 +73,16 @@ class ConversationApi {
   Future<ConversationState> chat(String id, String text) =>
       _request('POST', id: id, action: 'chat', body: {'text': text});
 
+  Future<ConversationState> clarifySquare(String id, BoardPosition position) =>
+      _request(
+        'POST',
+        id: id,
+        action: 'clarify',
+        body: {
+          'position': {'x': position.x, 'y': position.y},
+        },
+      );
+
   Future<ConversationState> clarify(String id, int objectId) =>
       _request('POST', id: id, action: 'clarify', body: {'objectId': objectId});
 

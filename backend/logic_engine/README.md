@@ -102,7 +102,7 @@ A request has `world` (the shared JSON representation) and `action`, for example
 
 The response contains the resulting `world` and concise `feedback`. Other action
 types are `place` (with `objectId` and `position`), `erase` (with `position`),
-`clear`, `chat` (with `text`), and `clarify` (with `objectId`). Requests also
+`clear`, `chat` (with `text`), and `clarify` (with either `objectId` or `position`). Requests also
 carry `salience` and nullable `pending`; both default to empty for older callers.
 Responses return both alongside `world`, `feedback`, and `isError`.
 Chat entries with a case-insensitive `undo` prefix after optional whitespace
@@ -149,3 +149,19 @@ update and records both at the same recency. `Pending.resolvedSubjects` preserve
 a resolved prefix across clarification of the other operand; its JSON field is
 optional for compatibility with existing pending entries. See the core and
 Layer 2 references for syntax, salience purging, and Undo examples.
+
+
+## Layer 3
+
+The shared `Layer2Syntax` and `Layer2Parser` entry points also represent and parse
+Layer 3. `Layer3Evaluation.hs` evaluates relative movement, copying, spatial
+questions, counts, and quantifiers; moves and copies reuse Layer 1 updates.
+`Layer2Evaluation` dispatches these forms while preserving ordered evaluation
+and discourse updates. See [Layer 3](../../specification/controlled-english-layer3.md)
+for syntax and semantics.
+
+`SquarePending` retains free square choices and resolved object IDs.
+`resumeSquareEntry world ranking pending position` resumes without aging the
+entry or resolving those IDs again. JSON uses `squareChoices` for these choices;
+object choices retain the existing fields. FastAPI stores both forms, and Flutter
+renders square labels as buttons. All clarification steps share one Undo snapshot.

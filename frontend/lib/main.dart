@@ -96,6 +96,9 @@ class _DemoScreenState extends State<DemoScreen> {
               canSend: _controller.canEdit,
               pending: _controller.conversation?.pending,
               onChoose: _controller.canRequest ? _controller.clarify : null,
+              onChooseSquare: _controller.canRequest
+                  ? _controller.clarifySquare
+                  : null,
               sending: _controller.sendingChat,
               error: _controller.error,
               onSend: _controller.sendChat,
