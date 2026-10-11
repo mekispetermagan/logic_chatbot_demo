@@ -184,9 +184,9 @@ void main() {
           tester.getRect(find.byTooltip('loop')).right,
           lessThanOrEqualTo(width),
         );
-        expect(find.text('Unplaced'), findsOneWidget);
-        expect(find.text('#5'), findsOneWidget);
-        expect(find.text('#6'), findsOneWidget);
+        expect(find.text('Unplaced:'), findsOneWidget);
+        expect(find.text('#5'), findsNothing);
+        expect(find.text('#6'), findsNothing);
         expect(find.byType(WorldObjectWidget), findsNWidgets(7));
         await tester.tap(find.byTooltip('blue'));
         await tester.pump();

@@ -139,10 +139,10 @@ void main() {
       await tester.tapAt(origin + Offset(cell * 1.5, cell * 6.5));
       await tester.pump();
       expect(controller.world.objects.last.position, const BoardPosition(1, 1));
-      expect(find.text('Unplaced'), findsNothing);
+      expect(find.text('Unplaced:'), findsNothing);
       controller.undo();
       await tester.pump();
-      expect(find.text('Unplaced'), findsOneWidget);
+      expect(find.text('Unplaced:'), findsOneWidget);
       expect(controller.world.objects.last.position, isNull);
       expect(controller.selectedUnplacedObjectId, isNull);
       expect(tester.takeException(), isNull);

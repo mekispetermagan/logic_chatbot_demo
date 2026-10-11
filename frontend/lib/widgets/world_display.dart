@@ -56,69 +56,71 @@ class WorldDisplay extends StatelessWidget {
                 ),
                 SizedBox(
                   // Reserve the same row even when every object is placed.
-                  height: 128,
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 12),
-                      if (unplaced.isNotEmpty) const Text('Unplaced'),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            spacing: 8,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              for (final object in unplaced)
-                                Semantics(
-                                  selected:
-                                      object.id == selectedUnplacedObjectId,
-                                  button: true,
-                                  child: InkWell(
-                                    key: ValueKey('unplaced-${object.id}'),
-                                    onTap: onUnplacedObjectSelected == null
-                                        ? null
-                                        : () => onUnplacedObjectSelected!(
-                                            object.id,
-                                          ),
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Container(
-                                      padding: const EdgeInsets.all(4),
-                                      decoration: BoxDecoration(
+                  height: 80,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Center(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (unplaced.isNotEmpty) ...[
+                            const Text('Unplaced:'),
+                            const SizedBox(width: 8),
+                          ],
+                          Flexible(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                spacing: 8,
+                                children: [
+                                  for (final object in unplaced)
+                                    Semantics(
+                                      selected:
+                                          object.id == selectedUnplacedObjectId,
+                                      button: true,
+                                      child: InkWell(
+                                        key: ValueKey('unplaced-${object.id}'),
+                                        onTap: onUnplacedObjectSelected == null
+                                            ? null
+                                            : () => onUnplacedObjectSelected!(
+                                                object.id,
+                                              ),
                                         borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          color:
-                                              object.id ==
-                                                  selectedUnplacedObjectId
-                                              ? Theme.of(
-                                                  context,
-                                                ).colorScheme.primary
-                                              : Colors.transparent,
-                                          width: 2,
-                                        ),
-                                      ),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          SizedBox(
-                                            width: 56,
-                                            height: 56,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(4),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                            border: Border.all(
+                                              color:
+                                                  object.id ==
+                                                      selectedUnplacedObjectId
+                                                  ? Theme.of(
+                                                      context,
+                                                    ).colorScheme.primary
+                                                  : Colors.transparent,
+                                              width: 2,
+                                            ),
+                                          ),
+                                          child: SizedBox.square(
+                                            dimension: 56,
                                             child: WorldObjectWidget(
                                               object: object,
                                               tooltipTriggerMode:
                                                   TooltipTriggerMode.longPress,
                                             ),
                                           ),
-                                          Text('#${object.id}'),
-                                        ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                            ],
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
