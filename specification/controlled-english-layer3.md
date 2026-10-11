@@ -182,3 +182,157 @@ resulting attributes. False or cleared properties are purged. Aggregate counts
 and quantified classes do not introduce individual-object antecedents. Explicit
 reference targets within quantified questions do receive mentions; comparisons
 associate their actual attribute values.
+
+## Complete syntax reference
+
+These tables cover the chat parser across Layers 1–3. They describe syntax;
+successful reference resolution and execution also depend on the current world
+and discourse state. Examples need not refer to objects that actually exist.
+
+### Notation and vocabulary
+
+Square brackets mean optional text; braces with `|` mean alternatives.
+Metavariables are defined below. Literal punctuation is significant. Input is
+case-insensitive, and whitespace separates words. Every question ends in `?`.
+Every performative ends in `.`, except that the final performative of an entry
+may omit it. An entry may contain multiple sentences.
+
+| Symbol | Accepted values or construction | Examples / notes |
+|---|---|---|
+| `p` | One color, size, or shape descriptor | `red`, `small`, `bloom` |
+| Color | `red`, `blue`, `green`, `yellow` | No `gray` or `unknown` descriptor |
+| Size | `small`, `medium`, `large` | No numerical sizes |
+| Shape | `bloom` / `flower`, `spark` / `star`, `drop` / `tear`, `loop` / `ring` | Aliases denote the same shape |
+| `V` | One or more descriptors `p`, separated by spaces | `red small bloom`; order and repetition are allowed, including conflicting values |
+| `D` | `V [one]` | `red bloom`, `bloom red one`; used in descriptions |
+| `Q` | A square from `A1` through `H8` | One column letter and one row digit |
+| `A` | `color`, `size`, `shape`, `position`, `row`, `column` | Attributes available in value questions |
+| `R` | `color`, `size`, `shape`, `square` | Stored attributes available for removal and presence checks |
+| `C` | Any `A`, or `square` | Equality uses `square` as an alias for `position` |
+| `T` | `square`, `row`, `column` | Attributes supporting the `in ... same` form |
+| `K` | `color`, `size`, `shape` | Attributes available for copying |
+| `B` | `[is] [to] [a]` | Optional attribution prefix, in this order |
+| `L` | `[to] [on] Q` | Destination; accepts `A4`, `on A4`, `to A4`, and `to on A4` |
+
+`V` contains no `and` and no trailing `one`. Descriptions `D` allow a trailing
+`one`; quantified property clauses allow it too. Syntactic acceptance of
+conflicting descriptors does not imply that any object can satisfy them.
+
+### Subjects and reference targets
+
+| Kind | Form | Where allowed |
+|---|---|---|
+| Identifier | `#n` | All subject positions; `n` is nonnegative decimal digits within Haskell's `Int` range |
+| Square reference | `Q` | All subject positions; denotes the object at that square |
+| Pronoun | `it` | All existing-object subject positions and attributions |
+| Definite description | `the D` | All existing-object subject positions and attributions |
+| Indefinite description | `[a] D` | Attributions containing a destination only |
+
+In the tables below, `S` and `S'` mean identifier, square reference, pronoun,
+or definite description. `U` means any subject, including an indefinite.
+Quantifier restrictions are descriptions `D`, not subjects `S`.
+
+### Performatives
+
+| Operation | Form | Example |
+|---|---|---|
+| Attribute properties | `[turn] U B V [L].` | `Turn the bloom to a red small spark.` |
+| Attribute a destination | `[move] U B L.` | `Move it to A4.` |
+| Remove one attribute | `S remove R.` | `The red bloom remove color.` |
+| Remove position | `remove S [from board].` | `Remove #3 from board.` |
+| Delete object | `{erase\|delete} S.` | `Delete A4.` |
+| Swap positions | `swap S [and] S'.` | `Swap the bloom and #4.` |
+| Move one square | `move S {up\|down\|left\|right}.` | `Move it up.` |
+| Move relative to an object | `move S [just] {above\|under\|right of\|left of} S'.` | `Move #3 just above the spark.` |
+| Move to a free neighbor | `move S next to S'.` | `Move #3 next to #4.` |
+| Copy an attribute | `make S [the] same K as S'.` | `Make it the same size as #4.` |
+
+For attributions with a definite or indefinite subject, the predicate must
+start with `is` or `to`, unless it consists solely of a destination. Indefinite
+subjects always require a destination. A destination occurs at most once and
+comes last. `move` accepts destination-only predicates; `turn` requires at
+least one descriptor, optionally followed by a destination. Without either
+verb, both forms are accepted. Examples: `A4 red.`, `The bloom is red small.`,
+`A red bloom on A4.`, `Turn #3 red to A4.`
+
+### Single-object property and value questions
+
+| Operation | Form | Example |
+|---|---|---|
+| Check one descriptor | `[is] S B p?` | `Is the bloom red?` |
+| Check one position | `[is] S B [on] Q?` | `Is it on A4?` |
+| Query an attribute | `[what is [the]] A of S?` | `What is the shape of the red bloom?` |
+| Query shorthand | `S [is] A?` | `A4 color?` |
+
+Checks accept exactly one property. For definite subjects, a property check
+needs either leading `is` or predicate-initial `is`. No `to` is permitted in
+position checks, including within `B`. `square of #3?` is not a value query;
+use `position of #3?`. Indefinite subjects are excluded from every question.
+
+### Relation predicates
+
+Each relation below can follow `[is|does] S` to form a single-object question,
+or serve as one quantified predicate clause. The leading word in an ordinary
+relation question is optional; the parser accepts either `is` or `does` for
+any relation, even where English would prefer just one.
+
+| Meaning | Relation predicate | Example question |
+|---|---|---|
+| Position present | `on [the] board` | `Is it on the board?` |
+| Attribute present | `have [the] a R` | `Does #3 have a shape?` |
+| Orthogonal adjacency | `next to S'` | `Is the bloom next to #4?` |
+| Attribute equality | `[have] [the] same C as S'` | `Does #3 have the same color as #4?` |
+| Coordinate equality | `[in] [the] same T as S'` | `Is #3 in the same row as #4?` |
+| Board edge | `at the edge` | `Is it at the edge?` |
+| Board corner | `in a corner` | `Is it in a corner?` |
+
+Comparison targets are compulsory and must be `S'`; indefinite targets are
+excluded. `has`, `at an edge`, and `at edge` are not accepted spellings.
+Conjunctions of these relations are supported under quantifiers, not in ordinary
+single-object questions.
+
+### Counting questions
+
+| What is counted | Form | Example |
+|---|---|---|
+| All objects or property matches | `how many [objects] [are] [V]?` | `How many objects are red bloom?` |
+| Neighbors of an object | `how many [objects] [are] next to S?` | `How many next to it?` |
+| Objects at an edge | `how many [objects] [are] at the edge?` | `How many objects at the edge?` |
+| Objects in a corner | `how many [objects] [are] in a corner?` | `How many in a corner?` |
+| Free squares | `how many [squares] [are] {empty\|free}?` | `How many squares are free?` |
+| Occupied squares | `how many [squares] [are] {occupied\|taken}?` | `How many taken?` |
+
+With no descriptors, the first row counts all objects. Counting does not accept
+`and` conjunctions, arbitrary relation predicates, or indefinite targets.
+
+### Quantified questions
+
+Let `F` be either `[a] D` (a property clause) or a relation predicate from the
+table above. Let `J` be one or more `F` clauses separated by explicit `and`.
+
+| Quantifier | Form | Example |
+|---|---|---|
+| Every, noun boundary | `[is\|does] every D object [is] J?` | `Is every red object small and at the edge?` |
+| Every, copula boundary | `[is\|does] every D is J?` | `Every red is bloom?` |
+| Some, noun boundary | `[are\|do] some D objects [are] J?` | `Do some red objects have a shape?` |
+| Some, copula boundary | `[are\|do] some D are J?` | `Some red are small and next to #3?` |
+
+Restriction and predicate clauses must be nonempty. `all`, `or`, nested
+quantifiers, implicit comparison targets, and indefinite relation targets are
+excluded. All clauses in `J` concern the same quantified object. Only quantified
+questions accept explicit predicate conjunctions; this does not add `and` to
+descriptions or performative property lists.
+
+### Entry-level command and acceptance rules
+
+| Item | Rule / example |
+|---|---|
+| Undo | After leading whitespace, any case-insensitive prefix `undo` requests undo; the rest of the entry is ignored, including attached suffixes |
+| Multiple sentences | `#3 red. Is #3 red? Move #3 up` |
+| Syntax ambiguity | The parser requires exactly one complete analysis; multiple analyses are rejected |
+| Semantic ambiguity | A syntactically valid reference can still require object or square clarification |
+| No available referent or move | Syntax may be valid even when evaluation reports a missing object, occupied square, or out-of-board destination |
+
+Optional words are shown in their accepted order. These are deliberately
+permissive templates rather than a guide to idiomatic English. The unique-parse
+rule applies to every combination of template choices.
