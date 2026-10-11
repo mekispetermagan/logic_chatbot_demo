@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../models/object_property.dart';
@@ -40,106 +42,128 @@ class WorldDisplay extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: (constraints.maxHeight - (unplaced.isEmpty ? 140 : 250))
-                    .clamp(120.0, double.infinity)
-                    .clamp(0.0, constraints.maxWidth)
-                    .toDouble(),
-                child: WorldWidget(
-                  world: world,
-                  onPaint: onPaint,
-                  onErase: onErase,
+          child: SizedBox(
+            // Scroll on short screens; otherwise the viewport determines size.
+            height: math.max(constraints.maxHeight, 520),
+            child: Column(
+              children: [
+                Expanded(
+                  child: WorldWidget(
+                    world: world,
+                    onPaint: onPaint,
+                    onErase: onErase,
+                  ),
                 ),
-              ),
-              if (unplaced.isNotEmpty) ...[
-                const SizedBox(height: 12),
-                const Text('Unplaced'),
+                SizedBox(
+                  // Reserve the same row even when every object is placed.
+                  height: 128,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 12),
+                      if (unplaced.isNotEmpty) const Text('Unplaced'),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            spacing: 8,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              for (final object in unplaced)
+                                Semantics(
+                                  selected:
+                                      object.id == selectedUnplacedObjectId,
+                                  button: true,
+                                  child: InkWell(
+                                    key: ValueKey('unplaced-${object.id}'),
+                                    onTap: onUnplacedObjectSelected == null
+                                        ? null
+                                        : () => onUnplacedObjectSelected!(
+                                            object.id,
+                                          ),
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(4),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color:
+                                              object.id ==
+                                                  selectedUnplacedObjectId
+                                              ? Theme.of(
+                                                  context,
+                                                ).colorScheme.primary
+                                              : Colors.transparent,
+                                          width: 2,
+                                        ),
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          SizedBox(
+                                            width: 56,
+                                            height: 56,
+                                            child: WorldObjectWidget(
+                                              object: object,
+                                              tooltipTriggerMode:
+                                                  TooltipTriggerMode.longPress,
+                                            ),
+                                          ),
+                                          Text('#${object.id}'),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   alignment: WrapAlignment.center,
                   children: [
-                    for (final object in unplaced)
-                      Semantics(
-                        selected: object.id == selectedUnplacedObjectId,
-                        button: true,
-                        child: InkWell(
-                          key: ValueKey('unplaced-${object.id}'),
-                          onTap: onUnplacedObjectSelected == null
-                              ? null
-                              : () => onUnplacedObjectSelected!(object.id),
-                          borderRadius: BorderRadius.circular(8),
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: object.id == selectedUnplacedObjectId
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Colors.transparent,
-                                width: 2,
-                              ),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SizedBox(
-                                  width: 56,
-                                  height: 56,
-                                  child: WorldObjectWidget(
-                                    object: object,
-                                    tooltipTriggerMode:
-                                        TooltipTriggerMode.longPress,
-                                  ),
-                                ),
-                                Text('#${object.id}'),
-                              ],
-                            ),
-                          ),
-                        ),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: constraints.maxWidth,
                       ),
+                      child: _PropertySelector(
+                        selected: selectedProperty,
+                        onChanged: onPropertyChanged,
+                      ),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          tooltip: 'Clear world',
+                          onPressed: onClear,
+                          icon: const Icon(Icons.clear_all),
+                          visualDensity: VisualDensity.compact,
+                        ),
+                      ],
+                    ),
                   ],
                 ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  height: 64,
+                  child: Text(
+                    interactionHint ??
+                        (onPaint == null
+                            ? 'World editing will be available soon.'
+                            : selectedUnplacedObjectId == null
+                            ? 'Click or tap to apply one property. Right click or long press to erase.'
+                            : 'Tap an empty square to place #$selectedUnplacedObjectId. Select a property to cancel.'),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ],
-              const SizedBox(height: 16),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                alignment: WrapAlignment.center,
-                children: [
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: constraints.maxWidth),
-                    child: _PropertySelector(
-                      selected: selectedProperty,
-                      onChanged: onPropertyChanged,
-                    ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        tooltip: 'Clear world',
-                        onPressed: onClear,
-                        icon: const Icon(Icons.clear_all),
-                        visualDensity: VisualDensity.compact,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Text(
-                interactionHint ??
-                    (onPaint == null
-                        ? 'World editing will be available soon.'
-                        : selectedUnplacedObjectId == null
-                        ? 'Click or tap to apply one property. Right click or long press to erase.'
-                        : 'Tap an empty square to place #$selectedUnplacedObjectId. Select a property to cancel.'),
-                textAlign: TextAlign.center,
-              ),
-            ],
+            ),
           ),
         );
       },

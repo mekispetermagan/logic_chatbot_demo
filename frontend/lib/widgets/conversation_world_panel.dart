@@ -66,40 +66,56 @@ class ConversationWorldPanel extends StatelessWidget {
     }
     final busy = loading || editing;
     final enabled = !busy && error == null && state.pending == null;
-    return Column(
+    return Stack(
+      fit: StackFit.expand,
       children: [
-        if (busy) ...[
-          const LinearProgressIndicator(),
-          const SizedBox(height: 8),
-          Text(editing ? 'Updating world…' : 'Refreshing world…'),
-          const SizedBox(height: 8),
-        ] else if (error != null) ...[
-          Text(
-            error!,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
-          ),
-          TextButton(onPressed: onRetry, child: const Text('Refresh world')),
-        ],
-        Expanded(
-          child: WorldDisplay(
-            world: state.world,
-            selectedProperty: selectedProperty,
-            selectedUnplacedObjectId: selectedUnplacedObjectId,
-            onUnplacedObjectSelected: enabled ? onUnplacedObjectSelected : null,
-            onPropertyChanged: enabled ? onPropertyChanged : null,
-            onPaint: enabled ? onPaint : null,
-            onErase: enabled ? onErase : null,
-            onClear: enabled ? onClear : null,
-            interactionHint: busy
-                ? 'Please wait…'
-                : error != null
-                ? 'Refresh the world before editing.'
-                : state.pending != null
-                ? 'Choose an object in Chat, or undo the entry.'
-                : null,
-          ),
+        WorldDisplay(
+          world: state.world,
+          selectedProperty: selectedProperty,
+          selectedUnplacedObjectId: selectedUnplacedObjectId,
+          onUnplacedObjectSelected: enabled ? onUnplacedObjectSelected : null,
+          onPropertyChanged: enabled ? onPropertyChanged : null,
+          onPaint: enabled ? onPaint : null,
+          onErase: enabled ? onErase : null,
+          onClear: enabled ? onClear : null,
+          interactionHint: busy
+              ? 'Please wait…'
+              : error != null
+              ? 'Refresh the world before editing.'
+              : state.pending != null
+              ? 'Choose an object in Chat, or undo the entry.'
+              : null,
         ),
+        if (busy)
+          const Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: LinearProgressIndicator(),
+          ),
+        if (!busy && error != null)
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Material(
+              child: Column(
+                children: [
+                  Text(
+                    error!,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: onRetry,
+                    child: const Text('Refresh world'),
+                  ),
+                ],
+              ),
+            ),
+          ),
       ],
     );
   }
