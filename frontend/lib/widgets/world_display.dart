@@ -109,15 +109,11 @@ class WorldDisplay extends StatelessWidget {
                 runSpacing: 8,
                 alignment: WrapAlignment.center,
                 children: [
-                  // Keep all eleven options in one control. It scrolls on narrow screens.
                   ConstrainedBox(
                     constraints: BoxConstraints(maxWidth: constraints.maxWidth),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: _PropertySelector(
-                        selected: selectedProperty,
-                        onChanged: onPropertyChanged,
-                      ),
+                    child: _PropertySelector(
+                      selected: selectedProperty,
+                      onChanged: onPropertyChanged,
                     ),
                   ),
                   Row(
@@ -158,64 +154,103 @@ class _PropertySelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SegmentedButton<ObjectProperty>(
-      showSelectedIcon: false,
-      style: ButtonStyle(
-        padding: const WidgetStatePropertyAll(EdgeInsets.zero),
-        minimumSize: const WidgetStatePropertyAll(Size(28, 36)),
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        side: WidgetStateProperty.resolveWith(
-          (states) => BorderSide(
-            color: states.contains(WidgetState.selected)
-                ? Theme.of(context).colorScheme.onSurface
-                : Theme.of(context).colorScheme.outline,
-            width: states.contains(WidgetState.selected) ? 2 : 1,
-          ),
-        ),
-      ),
-      segments: [
-        for (final property in ObjectProperty.values)
-          ButtonSegment(
-            value: property,
-            tooltip: property.name,
-            label: Semantics(
-              label: property.name,
-              child: Container(
-                width: 28,
-                height: 32,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: switch (property) {
-                    ObjectProperty.red => ObjectPalette.red,
-                    ObjectProperty.blue => ObjectPalette.blue,
-                    ObjectProperty.green => ObjectPalette.green,
-                    ObjectProperty.yellow => ObjectPalette.yellow,
-                    _ => null,
-                  },
-                  border: Border.all(
-                    color: property == selected
-                        ? Theme.of(context).colorScheme.onSurface
-                        : Colors.transparent,
-                    width: 2,
-                  ),
-                ),
-                child: _symbol(context, property),
-              ),
-            ),
+    final colors = Theme.of(context).colorScheme;
+    const groups = [
+      [
+        ObjectProperty.red,
+        ObjectProperty.blue,
+        ObjectProperty.green,
+        ObjectProperty.yellow,
+      ],
+      [ObjectProperty.small, ObjectProperty.medium, ObjectProperty.large],
+      [
+        ObjectProperty.bloom,
+        ObjectProperty.spark,
+        ObjectProperty.drop,
+        ObjectProperty.loop,
+      ],
+    ];
+    return Wrap(
+      spacing: 12,
+      runSpacing: 8,
+      alignment: WrapAlignment.center,
+      children: [
+        for (final group in groups)
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 6,
+            children: [for (final property in group) _button(property, colors)],
           ),
       ],
-      selected: {selected},
-      // Emit taps on the active segment too; the controlled selection remains
-      // exactly one property while allowing placement mode to be cancelled.
-      emptySelectionAllowed: true,
-      onSelectionChanged: onChanged == null
-          ? null
-          : (properties) =>
-                onChanged!(properties.isEmpty ? selected : properties.single),
     );
   }
 
-  Widget? _symbol(BuildContext context, ObjectProperty property) {
+  Widget _button(ObjectProperty property, ColorScheme colors) => Semantics(
+    key: ValueKey('property-${property.name}'),
+    label: property.name,
+    selected: property == selected,
+    child: Tooltip(
+      message: property.name,
+      excludeFromSemantics: true,
+      child: SizedBox.square(
+        dimension: 48,
+        child: FilledButton(
+          onPressed: onChanged == null ? null : () => onChanged!(property),
+          style: FilledButton.styleFrom(
+            padding: EdgeInsets.zero,
+            backgroundColor: property == selected
+                ? colors.primary
+                : colors.surfaceContainerHighest,
+            foregroundColor: property == selected
+                ? colors.onPrimary
+                : colors.onSurface,
+            disabledBackgroundColor: property == selected
+                ? colors.primary.withValues(alpha: 0.5)
+                : colors.surfaceContainerHighest,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Center(
+                child: _symbol(
+                  property,
+                  property == selected ? colors.onPrimary : colors.onSurface,
+                ),
+              ),
+              if (property == selected)
+                const Positioned(
+                  top: 3,
+                  right: 3,
+                  child: Icon(Icons.check, size: 12),
+                ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+
+  Widget _symbol(ObjectProperty property, Color foreground) {
+    final swatch = switch (property) {
+      ObjectProperty.red => ObjectPalette.red,
+      ObjectProperty.blue => ObjectPalette.blue,
+      ObjectProperty.green => ObjectPalette.green,
+      ObjectProperty.yellow => ObjectPalette.yellow,
+      _ => null,
+    };
+    if (swatch != null) {
+      return Container(
+        width: 22,
+        height: 22,
+        decoration: BoxDecoration(
+          color: swatch,
+          borderRadius: BorderRadius.circular(3),
+        ),
+      );
+    }
     final shape = switch (property) {
       ObjectProperty.bloom => ObjectShape.bloom,
       ObjectProperty.spark => ObjectShape.spark,
@@ -226,10 +261,7 @@ class _PropertySelector extends StatelessWidget {
     if (shape != null) {
       return SizedBox.square(
         dimension: 22,
-        child: ShapeGlyph(
-          shape: shape,
-          color: Theme.of(context).colorScheme.onSurface,
-        ),
+        child: ShapeGlyph(shape: shape, color: foreground),
       );
     }
     final diameter = switch (property) {
@@ -238,14 +270,11 @@ class _PropertySelector extends StatelessWidget {
       ObjectProperty.large => 16.0,
       _ => null,
     };
-    if (diameter == null) return null;
+    if (diameter == null) return const SizedBox.shrink();
     return Container(
       width: diameter,
       height: diameter,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Theme.of(context).colorScheme.onSurface,
-      ),
+      decoration: BoxDecoration(shape: BoxShape.circle, color: foreground),
     );
   }
 }

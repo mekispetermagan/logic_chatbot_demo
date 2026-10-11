@@ -31,7 +31,10 @@ including any updates before the pause. Pending choices survive restart. The
 previous local editor controller and fixture remain for existing interaction
 tests and reference.
 
-Select one of eleven properties and tap a square to apply it. Right click or long
+Color, size, and shape buttons wrap as three intact groups.
+Select one of eleven icon buttons and tap a square to apply it.
+The selected button has a teal background and corner checkmark; color swatches
+are inset so the selection stays visible. Right click or long
 press erases. Select an unplaced object, then tap an empty square to place it;
 blocked placement retains the selection. Choosing a property cancels placement.
 Clear and Undo clear placement selection after a successful response.

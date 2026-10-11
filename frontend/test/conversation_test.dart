@@ -193,10 +193,15 @@ void main() {
     await tester.pumpWidget(
       panel(conversation: ConversationState.fromJson(state())),
     );
-    final selector = tester.widget<SegmentedButton<ObjectProperty>>(
-      find.byType(SegmentedButton<ObjectProperty>),
-    );
-    expect(selector.onSelectionChanged, isNull);
+    for (final property in ObjectProperty.values) {
+      final button = tester.widget<FilledButton>(
+        find.descendant(
+          of: find.byKey(ValueKey('property-${property.name}')),
+          matching: find.byType(FilledButton),
+        ),
+      );
+      expect(button.onPressed, isNull);
+    }
     for (final button in tester.widgetList<IconButton>(
       find.byType(IconButton),
     )) {

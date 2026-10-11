@@ -162,11 +162,28 @@ void main() {
             ),
           ),
         );
-        final selector = tester.widget<SegmentedButton<ObjectProperty>>(
-          find.byType(SegmentedButton<ObjectProperty>),
+        for (final property in ObjectProperty.values) {
+          expect(find.byTooltip(property.name), findsOneWidget);
+          final button = tester.widget<Semantics>(
+            find.byKey(ValueKey('property-${property.name}')),
+          );
+          expect(button.properties.selected, property == ObjectProperty.red);
+        }
+        for (final group in [
+          ['red', 'blue', 'green', 'yellow'],
+          ['small', 'medium', 'large'],
+          ['bloom', 'spark', 'drop', 'loop'],
+        ]) {
+          final top = tester.getTopLeft(find.byTooltip(group.first)).dy;
+          for (final name in group) {
+            expect(tester.getTopLeft(find.byTooltip(name)).dy, top);
+          }
+        }
+        expect(find.byIcon(Icons.check), findsOneWidget);
+        expect(
+          tester.getRect(find.byTooltip('loop')).right,
+          lessThanOrEqualTo(width),
         );
-        expect(selector.segments.length, 11);
-        expect(selector.selected, {ObjectProperty.red});
         expect(find.text('Unplaced'), findsOneWidget);
         expect(find.text('#5'), findsOneWidget);
         expect(find.text('#6'), findsOneWidget);
@@ -174,6 +191,24 @@ void main() {
         await tester.tap(find.byTooltip('blue'));
         await tester.pump();
         expect(controller.selectedProperty, ObjectProperty.blue);
+        expect(
+          tester
+              .widget<Semantics>(find.byKey(const ValueKey('property-blue')))
+              .properties
+              .selected,
+          isTrue,
+        );
+        expect(
+          tester
+              .widget<Semantics>(find.byKey(const ValueKey('property-red')))
+              .properties
+              .selected,
+          isFalse,
+        );
+        await tester.tap(find.byTooltip('loop'));
+        await tester.pump();
+        expect(controller.selectedProperty, ObjectProperty.loop);
+        expect(find.byIcon(Icons.check), findsOneWidget);
         expect(tester.takeException(), isNull);
       },
     );

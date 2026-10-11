@@ -118,11 +118,10 @@ void main() {
       expect(controller.selectedUnplacedObjectId, isNull);
       expect(
         tester
-            .widget<SegmentedButton<ObjectProperty>>(
-              find.byType(SegmentedButton<ObjectProperty>),
-            )
+            .widget<Semantics>(find.byKey(const ValueKey('property-red')))
+            .properties
             .selected,
-        {ObjectProperty.red},
+        isTrue,
       );
       await tester.tap(tile);
       await tester.pump();
