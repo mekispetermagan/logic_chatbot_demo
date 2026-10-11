@@ -27,6 +27,128 @@ Map<String, dynamic> state({bool history = false}) => {
 };
 
 void main() {
+  testWidgets('arrows recall user entries and restore the editable draft', (
+    tester,
+  ) async {
+    final messages = <ChatMessage>[
+      const ChatMessage(role: ChatRole.user, text: 'first prompt'),
+      const ChatMessage(role: ChatRole.machine, text: 'first answer'),
+      const ChatMessage(role: ChatRole.user, text: 'typo prompt'),
+      const ChatMessage(
+        role: ChatRole.machine,
+        text: 'parse error',
+        isError: true,
+      ),
+    ];
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: StatefulBuilder(
+            builder: (context, update) => ChatPanel(
+              messages: messages,
+              canSend: true,
+              sending: false,
+              onRefresh: () {},
+              onSend: (text) async {
+                update(
+                  () => messages.add(
+                    ChatMessage(role: ChatRole.user, text: text),
+                  ),
+                );
+                return true;
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+    final field = find.byType(TextField);
+    final composer = tester.widget<TextField>(field).controller!;
+    Future<void> arrow(LogicalKeyboardKey key) async {
+      await tester.pump();
+      await tester.sendKeyEvent(key);
+      await tester.pump();
+    }
+
+    await tester.enterText(field, 'unfinished draft');
+    final draft = composer.value;
+    await arrow(LogicalKeyboardKey.arrowUp);
+    expect(composer.text, 'typo prompt');
+    await tester.enterText(field, 'corrected prompt');
+    await arrow(LogicalKeyboardKey.arrowUp);
+    expect(composer.text, 'first prompt');
+    await arrow(LogicalKeyboardKey.arrowUp);
+    expect(composer.text, 'first prompt');
+    await arrow(LogicalKeyboardKey.arrowDown);
+    expect(composer.text, 'typo prompt');
+    await arrow(LogicalKeyboardKey.arrowDown);
+    expect(composer.value, draft);
+    await tester.enterText(field, '');
+    await arrow(LogicalKeyboardKey.arrowUp);
+    await arrow(LogicalKeyboardKey.arrowDown);
+    expect(composer.text, isEmpty);
+    await arrow(LogicalKeyboardKey.arrowUp);
+    await tester.enterText(field, 'corrected prompt');
+    await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+    await tester.pumpAndSettle();
+    expect(composer.text, isEmpty);
+    expect(messages.last.text, 'corrected prompt');
+    expect(tester.widget<TextField>(field).focusNode!.hasFocus, isTrue);
+    await arrow(LogicalKeyboardKey.arrowUp);
+    expect(composer.text, 'corrected prompt');
+    expect(messages[2].text, 'typo prompt');
+  });
+
+  testWidgets(
+    'history arrows respect multiline cursor movement and modifiers',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ChatPanel(
+              messages: const [
+                ChatMessage(role: ChatRole.user, text: 'previous'),
+              ],
+              canSend: true,
+              sending: false,
+              onRefresh: () {},
+              onSend: (_) async => true,
+            ),
+          ),
+        ),
+      );
+      final field = find.byType(TextField);
+      await tester.enterText(field, 'first line\nsecond line\nthird line');
+      final composer = tester.widget<TextField>(field).controller!;
+      composer.selection = const TextSelection.collapsed(offset: 15);
+      await tester.pump();
+      await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+      await tester.pump();
+      expect(composer.text, 'first line\nsecond line\nthird line');
+      expect(composer.selection.extentOffset, lessThan(15));
+      composer.selection = const TextSelection.collapsed(offset: 4);
+      await tester.pump();
+      await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+      await tester.pump();
+      expect(composer.selection.extentOffset, greaterThan(4));
+      composer.selection = const TextSelection.collapsed(offset: 4);
+      await tester.pump();
+      await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+      await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+      await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+      expect(composer.text, 'first line\nsecond line\nthird line');
+      composer.selection = const TextSelection.collapsed(offset: 4);
+      final draft = composer.value;
+      await tester.pump();
+      await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+      await tester.pump();
+      expect(composer.text, 'previous');
+      await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
+      await tester.pump();
+      expect(composer.value, draft);
+    },
+  );
+
   testWidgets(
     'Enter submits, Shift+Enter inserts a newline, and mobile Send submits',
     (tester) async {
