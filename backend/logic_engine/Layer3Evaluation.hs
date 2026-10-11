@@ -1,5 +1,6 @@
 module Layer3Evaluation where
 
+import Data.List (nub, intercalate)
 import Ontology
 import Layer2Syntax
 import Discourse (holds, descriptorsOf, subjectsOf)
@@ -71,20 +72,11 @@ evaluateDerived world@(World objects) identifiers sentence chosen = case sentenc
           _ -> RemoveAttribute (ById (idOf object)) attribute
     in perform operation
   SpatialQuestion _ relation _ -> case relation of
-    NextTo -> binary $ \object target -> answer (case (positionOf object, positionOf target) of
-      (Just p, Just q) -> adjacent p q
-      _ -> False) ""
-    Same attribute -> binary $ \object target ->
-      let left = attributeValue attribute object
-          right = attributeValue attribute target
-          explanation = if left == Nothing && right == Nothing
-            then " — both lack " ++ (if attribute == PositionAttribute then "a square" else pretty attribute)
-            else ""
-      in answer (left == right) explanation
-    OnBoard -> unary $ \object -> answer (positionOf object /= Nothing) ""
-    Has attribute -> unary $ \object -> answer (attributeValue (storedAttribute attribute) object /= Nothing) ""
-    Edge -> unary $ \object -> answer (atEdge object) ""
-    Corner -> unary $ \object -> answer (inCorner object) ""
+    NextTo -> binary $ \object target -> spatialAnswer object (Just target)
+    Same _ -> binary $ \object target -> spatialAnswer object (Just target)
+    _ -> unary $ \object -> spatialAnswer object Nothing
+    where spatialAnswer object target = let (result, explanation) = spatialTruth relation object target
+                                        in answer result explanation
   CountObjects predicate -> case predicate of
     Neighboring _ -> unary $ \target -> case positionOf target of
       Nothing -> unchanged "Reference object is unplaced"
@@ -94,11 +86,19 @@ evaluateDerived world@(World objects) identifiers sentence chosen = case sentenc
     InCorner -> Just (count (filter inCorner objects))
   CountSquares occupied -> Just (unchanged (show (if occupied then placed else 64 - placed)))
     where placed = length [() | object <- objects, positionOf object /= Nothing]
-  Quantified universal before after ->
+  Quantified universal before predicates ->
     let selected = filter (\object -> all (holds object) before) objects
-        satisfies object = all (holds object) after
+        targetFor subject = lookup subject (zip (subjectsOf sentence) resolved)
+        evaluatePredicate object predicate = case predicate of
+          PropertyPredicate properties -> (all (holds object) properties, "")
+          RelationPredicate relation target -> spatialTruth relation object (target >>= targetFor)
+        results object = map (evaluatePredicate object) predicates
+        satisfies = all fst . results
         result = (if universal then all else any) satisfies selected
-    in Just (answer result (if null selected then " — no matching objects" else ""))
+        nullNotes = nub [note | object <- selected, (_, note) <- results object, not (null note)]
+        explanation = if null selected then " — no matching objects"
+                      else intercalate ";" nullNotes
+    in Just (answer result explanation)
   _ -> Nothing
   where
     resolved = [object | identifier <- identifiers, object <- objects, idOf object == identifier]
@@ -119,6 +119,11 @@ evaluateDerived world@(World objects) identifiers sentence chosen = case sentenc
       CopyAttribute _ attribute _ -> valueProperties (storedAttribute attribute) object
       SpatialQuestion _ (Has attribute) _ -> valueProperties (storedAttribute attribute) object
       SpatialQuestion _ (Same attribute) _ -> valueProperties attribute object
+      Quantified _ _ predicates -> concat
+        [valueProperties attribute object
+        | RelationPredicate (Same attribute) (Just target) <- predicates
+        , (identifier, subject) <- zip identifiers (subjectsOf sentence)
+        , subject == target, identifier == idOf object]
       _ -> []
     positionProperties object = maybe [] ((:[]) . P) (positionOf object)
     valueProperties attribute object = case attributeValue attribute object of
@@ -136,3 +141,23 @@ evaluateDerived world@(World objects) identifiers sentence chosen = case sentenc
       | not (inBounds position) = unchanged "Outside board"
       | otherwise = perform (AP (ById (idOf object)) (P position))
 
+-- Missing values compare equal, while unplaced objects have no spatial relation.
+spatialTruth :: SpatialCheck -> Object -> Maybe Object -> (Bool, String)
+spatialTruth relation object target = case relation of
+  OnBoard -> plain (positionOf object /= Nothing)
+  Has attribute -> plain (attributeValue (storedAttribute attribute) object /= Nothing)
+  Edge -> plain (atEdge object)
+  Corner -> plain (inCorner object)
+  NextTo -> plain $ case (positionOf object, target >>= positionOf) of
+    (Just p, Just q) -> adjacent p q
+    _ -> False
+  Same attribute -> case target of
+    Nothing -> plain False
+    Just other ->
+      let left = attributeValue attribute object
+          right = attributeValue attribute other
+          explanation = if left == Nothing && right == Nothing
+            then " — both lack " ++ (if attribute == PositionAttribute then "a square" else pretty attribute)
+            else ""
+      in (left == right, explanation)
+  where plain result = (result, "")

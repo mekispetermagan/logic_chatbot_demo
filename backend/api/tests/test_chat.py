@@ -292,6 +292,29 @@ class ChatTests(unittest.TestCase):
         for choice in [{}, {"objectId": 0, "position": {"x": 0, "y": 0}}, {"position": {"x": "0", "y": 0}}]:
             self.assertEqual(self.client.post(f"{self.base}/clarify", json=choice).status_code, 422)
 
+    def test_quantified_predicates_persist_clarification_and_undo(self):
+        self.client.post(f"{self.base}/clear")
+        before = self.chat("#0 red bloom on A1. #1 blue spark on B1. #2 blue spark on H8.")
+        count = self.snapshots()
+        paused = self.chat("#0 small. Every red object next to the spark and have a square? #0 large.")
+        self.assertEqual(set(paused["pending"]["candidateIds"]), {1, 2})
+        self.assertEqual(paused["pending"]["resolvedSubjects"], [])
+        with TestClient(create_app(self.settings)) as restarted:
+            loaded = restarted.get(self.base).json()
+            self.assertEqual(loaded["pending"], paused["pending"])
+            reply = restarted.post(f"{self.base}/clarify", json={"objectId": 1})
+        self.assertEqual(reply.status_code, 200, reply.text)
+        result = reply.json()
+        self.assertIsNone(result["pending"])
+        self.assertIn("\n  true", result["feedback"])
+        self.assertEqual(next(o for o in result["world"]["objects"] if o["id"] == 0)["size"], "large")
+        self.assertEqual(self.snapshots(), count + 1)
+        self.assertEqual(self.chat("undo")["world"], before["world"])
+        for text in ["Every red object have the same color?", "Every red object next to a bloom?"]:
+            rejected = self.chat(text)
+            self.assertTrue(rejected["messages"][-1]["isError"])
+            self.assertEqual(rejected["world"], before["world"])
+
     def test_attribute_removal_chat_and_whole_entry_undo(self):
         self.client.post(f"{self.base}/clear")
         before = self.chat("#0 red small bloom on H7.")

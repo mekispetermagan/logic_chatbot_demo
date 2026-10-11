@@ -267,8 +267,9 @@ derivedQuestions words' = quantified ++ relations
       _ -> words'
     quantified = case words' of
       "is":"every":rest -> universalCandidates rest
+      "does":"every":rest -> universalCandidates rest
       "every":rest -> universalCandidates rest
-      _ -> case dropWord "are" words' of
+      _ -> case dropWord "do" (dropWord "are" words') of
         "some":rest -> mapMaybe (quantifiedCandidate False) (splits rest)
         _ -> []
     universalCandidates rest = mapMaybe (quantifiedCandidate True) (splits rest)
@@ -281,27 +282,45 @@ derivedQuestions words' = quantified ++ relations
         word:rest | word == copula -> Just rest
         _ -> Nothing
       first <- description before
-      second <- description (if universal then dropWord "a" following else following)
+      second <- quantifiedPredicates following
       pure (Quantified universal first second)
     relations = mapMaybe relation (splits tokens)
     relation (before, after) = do
       who <- existingSubject before
-      case after of
-        ["on", "board"] -> Just (SpatialQuestion who OnBoard Nothing)
-        ["on", "the", "board"] -> Just (SpatialQuestion who OnBoard Nothing)
-        ["at", "the", "edge"] -> Just (SpatialQuestion who Edge Nothing)
-        ["in", "a", "corner"] -> Just (SpatialQuestion who Corner Nothing)
-        "next":"to":rest -> SpatialQuestion who NextTo . Just <$> existingSubject rest
-        _ -> sameOrHas who after
-    sameOrHas who after = case dropWord "the" (dropWord "have" after) of
+      RelationPredicate relation target <- relationPredicate after
+      pure (SpatialQuestion who relation target)
+
+-- Explicit conjunction boundaries avoid consuming descriptors of a target.
+quantifiedPredicates :: [String] -> Maybe [QuantifiedPredicate]
+quantifiedPredicates tokens = traverse clause (clauses tokens)
+  where
+    clauses words' = case break (== "and") words' of
+      (first, []) -> [first]
+      (first, _:rest) -> first : clauses rest
+    clause words' = (PropertyPredicate <$> description (dropWord "a" words'))
+                    <|> relationPredicate words'
+
+-- Shared by ordinary and quantified questions. Targets must already exist.
+relationPredicate :: [String] -> Maybe QuantifiedPredicate
+relationPredicate tokens = case tokens of
+  ["on", "board"] -> unary OnBoard
+  ["on", "the", "board"] -> unary OnBoard
+  ["at", "the", "edge"] -> unary Edge
+  ["in", "a", "corner"] -> unary Corner
+  "next":"to":rest -> binary NextTo rest
+  _ -> sameOrHas tokens
+  where
+    unary relation = Just (RelationPredicate relation Nothing)
+    binary relation rest = RelationPredicate relation . Just <$> existingSubject rest
+    sameOrHas words' = case dropWord "the" (dropWord "have" words') of
       ["a", name] -> do
         attr <- removable name
-        if take 1 after == ["have"] then Just (SpatialQuestion who (Has attr) Nothing) else Nothing
+        if take 1 words' == ["have"] then unary (Has attr) else Nothing
       "same":name:"as":rest -> do
         attr <- comparisonAttribute name
-        SpatialQuestion who (Same attr) . Just <$> existingSubject rest
-      _ -> case dropWord "the" (dropWord "in" after) of
+        binary (Same attr) rest
+      _ -> case dropWord "the" (dropWord "in" words') of
         "same":name:"as":rest | name `elem` ["square", "row", "column"] -> do
           attr <- comparisonAttribute name
-          SpatialQuestion who (Same attr) . Just <$> existingSubject rest
+          binary (Same attr) rest
         _ -> Nothing

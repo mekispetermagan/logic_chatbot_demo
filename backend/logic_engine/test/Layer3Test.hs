@@ -32,6 +32,15 @@ main = do
          "how many red?", "how many objects are next to it?", "how many at the edge?",
          "how many objects in a corner?", "how many squares are empty?",
          "how many free?", "how many squares occupied?", "how many are taken?",
+         "Is every red object at the edge?", "Is every red object in a corner?",
+         "Is every red object on the board?", "Does every red object have a shape?",
+         "Do some red objects have a square?", "Some red objects have a color?",
+         "Is every red object next to the bloom?",
+         "Is every red object in the same row as #3?",
+         "Does every red object have the same size as #3?",
+         "Every red object small and at the edge?",
+         "Some red objects bloom large and have a square and next to it?",
+         "Every red object same color as A1 and same shape as the small bloom?",
          "Is every red object a bloom?", "every red is bloom?", "Every red object is large?", "EVERY red object bloom?", "some red objects are large bloom?"] $ \input ->
     case parseSentences input of
       Left message -> fail (input ++ ": " ++ message)
@@ -39,6 +48,12 @@ main = do
         (parseSentences (unwords (map pretty sentences)) == Right sentences)
   forM_ ["move a bloom up.", "move #0 up?", "make #0 same color as #1?",
          "make #0 same square as #1.", "#0 next to #1.", "is a bloom on board?",
+         "Every red object has the same color?", "Every red object have the same color?",
+         "Every red object next to a bloom?", "Every red object next to bloom?",
+         "Every red object small and?", "Every red object and small?",
+         "Every red object small and and at the edge?",
+         "Every red object small at the edge?", "Every red object small or large?",
+         "Every red object at the edge.",
          "every red bloom?", "all red objects are bloom?", "Are all red objects bloom?", "every red objects are bloom?", "are every red object bloom?", "some bloom green?", "how many red", "#0 on board",
          "move #0 up move #0 down", "every red object is?", "move #0 above #1 junk"] $ \input ->
     check ("reject " ++ input) (isLeft (parseSentences input))
@@ -75,6 +90,60 @@ main = do
          ("every green is a bloom?","true — no matching objects"),
          ("some green objects bloom?","false — no matching objects")] $ \(text, expected) ->
     let (_,_,_,feedback) = run world text in check text (("\n  " ++ expected) `isInfixOf` feedback)
+  forM_ [("Is every red object at the edge?",True),
+         ("Is every red object in a corner?",True),
+         ("Is every red object on the board?",True),
+         ("Does every red object have a shape?",True),
+         ("Does every red object have a color?",True),
+         ("Does every red object have a size?",True),
+         ("Does every red object have a square?",True),
+         ("Is every red object next to #1?",True),
+         ("Is every red object next to the spark?",True),
+         ("Is every red object in the same row as #1?",False),
+         ("Is every red object in the same column as #1?",True),
+         ("Does every red object have the same color as #1?",False),
+         ("Every red object small bloom and at the edge?",True),
+         ("Every red object small and next to #1 and in a corner?",True),
+         ("Some red objects large and at the edge?",False),
+         ("Every green object at the edge?",True),
+         ("Some green objects at the edge?",False)] $ \(text, expected) ->
+    let (updated,_,pending,feedback) = run cornerWorld text in
+      check text (updated == cornerWorld && pending == Nothing &&
+        (if expected then "\n  true" else "\n  false") `isInfixOf` feedback)
+  let mixedWorld = World [first {positionOf=Just (0,0)},first {idOf=Id 3,positionOf=Nothing},second]
+  forM_ [("Every red object on board?",False), ("Some red objects on board?",True),
+         ("Every red object have a square?",False), ("Some red objects in a corner?",True),
+         ("Every red object next to #2?",False)] $ \(text, expected) ->
+    let (_,_,_,feedback) = run (World (objects mixedWorld ++ [loose])) text in
+      check text ((if expected then "\n  true" else "\n  false") `isInfixOf` feedback)
+  forM_ ["color","size","shape","square","row","column"] $ \attr -> do
+    let nullWorld = World [loose {shapeOf=Just Bloom},emptyObject (Id 5)]
+        (_,_,_,feedback) = run nullWorld ("Every bloom object same " ++ attr ++ " as #5?")
+    check ("quantified null comparison " ++ attr)
+      ((if attr == "shape" then "false" else "true — both lack") `isInfixOf` feedback)
+  let splitWorld = World [first {positionOf=Nothing},first {idOf=Id 3,sizeOf=Just Large}]
+      (_,_,_,splitAnswer) = run splitWorld "Some red objects small and on board?"
+  check "conjunction checks one object, not separate existential witnesses"
+    ("\n  false" `isInfixOf` splitAnswer)
+  let (_,_,_,twoTargets) = run cornerWorld "Every red object same shape as #0 and next to #1?"
+  check "distinct fixed targets stay aligned" ("\n  true" `isInfixOf` twoTargets)
+  let (missingWorld,_,_,missingAnswer) = run cornerWorld "Every red object next to #99?"
+  check "missing target never creates an object" (missingWorld == cornerWorld && "\n  true" `notIn` missingAnswer)
+  let (_,_,_,pronounAnswer) = run cornerWorld "#1 spark? Every red object next to it?"
+  check "quantified target uses discourse" ("\n  false" `notIn` pronounAnswer)
+  let targetWorld = World [first,second,second {idOf=Id 4,positionOf=Just (1,2)}]
+      (_,_,targetPending,_) = run targetWorld "Every red object next to the spark and same shape as the spark?"
+  targetChoice <- maybe (fail "expected quantified target clarification") pure targetPending
+  check "repeated target resolves once" (case remainingSentences targetChoice of
+    sentence:_ -> length (subjectsOf sentence) == 1
+    [] -> False)
+  check "quantified pending pretty round trip"
+    (parseSentences (unwords (map pretty (remainingSentences targetChoice))) == Right (remainingSentences targetChoice))
+  let (targetUpdated,targetRanking,targetDone,targetAnswer) = resumeEntry targetWorld [] targetChoice (Id 4)
+  check "clarified target reused for all clauses"
+    (targetUpdated == targetWorld && targetDone == Nothing && "\n  false" `isInfixOf` targetAnswer &&
+     any (\(_,identifier,_) -> identifier == Id 4) targetRanking &&
+     not (any (\(_,identifier,_) -> identifier == Id 0) targetRanking))
   let (_,_,_,edgeAnswers) = run cornerWorld "#0 next to #1? #0 at the edge? #0 in a corner? how many next to #0?"
   check "orthogonal adjacency and boundaries" ("\n  false" `notIn` edgeAnswers && "\n  1" `isInfixOf` edgeAnswers)
   let diagonal = World [first {positionOf=Just (0,0)},second {positionOf=Just (1,1)}]

@@ -1,5 +1,6 @@
 module Layer2Syntax where
 
+import Data.List (intercalate)
 import Ontology
 import AtomicPerformative
 import AtomicPropertyCheck
@@ -14,6 +15,19 @@ data Subject = Reference ObjectReference | It
 data Direction = Up | Down | Leftward | Rightward deriving (Eq, Show)
 data SpatialCheck = OnBoard | Has RemovableAttribute | NextTo | Same Attribute | Edge | Corner
   deriving (Eq, Show)
+-- A quantified conjunction shares one bound object and fixed reference targets.
+data QuantifiedPredicate = PropertyPredicate [Property]
+                         | RelationPredicate SpatialCheck (Maybe Subject)
+  deriving (Eq, Show)
+
+predicateSubjects :: QuantifiedPredicate -> [Subject]
+predicateSubjects (PropertyPredicate _) = []
+predicateSubjects (RelationPredicate _ target) = maybe [] (:[]) target
+
+instance PrettyShow QuantifiedPredicate where
+  pretty (PropertyPredicate properties) = unwords (map pretty properties)
+  pretty (RelationPredicate relation target) = spatialName relation ++ maybe "" ((" " ++) . pretty) target
+
 data ObjectFilter = Described [Property] | Neighboring Subject | AtEdge | InCorner
   deriving (Eq, Show)
 
@@ -55,7 +69,7 @@ data Sentence = Attribution Subject [Property]
               | SpatialQuestion Subject SpatialCheck (Maybe Subject)
               | CountObjects ObjectFilter
               | CountSquares Bool
-              | Quantified Bool [Property] [Property]
+              | Quantified Bool [Property] [QuantifiedPredicate]
               | Check Subject Property
               | Query Attribute Subject
               deriving (Eq, Show)
@@ -79,7 +93,7 @@ instance PrettyShow Sentence where
   pretty (SpatialQuestion subject relation target) = pretty subject ++ " " ++ spatialName relation ++ maybe "" ((" " ++) . pretty) target ++ "?"
   pretty (CountObjects predicate) = "how many objects are " ++ pretty predicate ++ "?"
   pretty (CountSquares occupied) = "how many squares are " ++ (if occupied then "occupied" else "empty") ++ "?"
-  pretty (Quantified universal before after) = (if universal then "every " else "some ") ++ unwords (map pretty before) ++ (if universal then " object is " else " objects are ") ++ unwords (map pretty after) ++ "?"
+  pretty (Quantified universal before after) = (if universal then "every " else "some ") ++ unwords (map pretty before) ++ (if universal then " object is " else " objects are ") ++ intercalate " and " (map pretty after) ++ "?"
   pretty (Check subject property) = pretty subject ++ " is " ++ pretty property ++ "?"
   pretty (Query attribute subject) = pretty attribute ++ " of " ++ pretty subject ++ "?"
 

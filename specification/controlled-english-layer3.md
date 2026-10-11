@@ -124,14 +124,40 @@ Some red objects are large spark?
 Some bloom objects green?
 ```
 
-For `every`, leading `is` is optional. At least one of `object` and `is` must
-separate the subject description from its predicate. An optional `a` can precede
-the predicate. Both descriptions are nonempty conjunctions of color, size, and
-shape values; order and repetition are allowed. `every red bloom?` is rejected
-because it has no boundary. The former `all` syntax is no longer accepted.
+For `every`, leading `is` or `does` is optional. At least one of `object`
+and `is` must separate the subject description from its predicate. For `some`,
+leading `are` or `do` is optional, and at least one of `objects` and `are` marks
+that boundary. Subject descriptions are nonempty conjunctions of color, size,
+and shape values; order and repetition are allowed. `every red bloom?` has no
+boundary and is rejected. The former `all` syntax is not accepted.
 
-For `some`, leading `are` remains optional, and at least one of `objects` and
-`are` separates the descriptions. Its syntax and evaluation are unchanged.
+Predicates may be property descriptions (with optional `a`), or any existing
+spatial, attribute-presence, or fixed-reference comparison predicate:
+
+```text
+Is every red object at the edge?
+Is every red object in a corner?
+Is every red object on the board?
+Does every red object have a shape?
+Is every red object next to the bloom?
+Is every red object in the same row as #3?
+Does every red object have the same size as #3?
+Some red objects are small and at the edge?
+Every red object is bloom large and have a square and next to #3?
+```
+
+Separate predicate clauses with explicit `and`. All clauses apply to the same
+matching object. There is no `or` or nested quantification. Compound property
+predicates remain supported without `and`. Ordinary single-object property
+checks still accept only one property.
+
+Relational targets may be identifiers, coordinates, `it`, or definite
+descriptions. Resolve each distinct target once before checking the objects;
+ambiguity pauses the question for clarification. Indefinite targets such as
+`next to a bloom` are rejected. Comparisons require `as` and an explicit target;
+`every red object have the same color?` is rejected. Missing attribute values
+compare equal, with feedback explaining when both objects lack the attribute.
+Unplaced objects fail board, edge, corner, and adjacency checks.
 
 `every` checks every matching object; `some` checks whether at least one matching
 object satisfies the predicate. `every` carries no existential commitment. An
@@ -153,4 +179,6 @@ and salience, including when clarification is still pending.
 
 Resolved subjects receive mentions; copying and movement associate their actual
 resulting attributes. False or cleared properties are purged. Aggregate counts
-and quantified questions do not introduce individual-object antecedents.
+and quantified classes do not introduce individual-object antecedents. Explicit
+reference targets within quantified questions do receive mentions; comparisons
+associate their actual attribute values.

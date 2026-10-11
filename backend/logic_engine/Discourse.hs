@@ -73,7 +73,7 @@ subjectsOf (SpatialQuestion subject _ target) = subject : maybe [] (:[]) target
 subjectsOf (CountObjects (Neighboring subject)) = [subject]
 subjectsOf (CountObjects _) = []
 subjectsOf (CountSquares _) = []
-subjectsOf (Quantified _ _ _) = []
+subjectsOf (Quantified _ _ predicates) = nub (concatMap predicateSubjects predicates)
 subjectsOf (Check subject _) = [subject]
 subjectsOf (Query _ subject) = [subject]
 
