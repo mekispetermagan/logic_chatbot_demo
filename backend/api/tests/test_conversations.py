@@ -25,13 +25,14 @@ class ConversationTests(unittest.TestCase):
 
     def test_create_retrieve_and_isolation(self):
         with TestClient(create_app(self.settings)) as client:
-            first = client.post("/conversations")
-            second = client.post("/conversations")
+            first = client.post("/conversations", json={"domain": "objects"})
+            second = client.post("/conversations", json={"domain": "objects"})
             self.assertEqual(first.status_code, 201)
             self.assertEqual(second.status_code, 201)
             state = first.json()
             self.assertNotEqual(state["conversationId"], second.json()["conversationId"])
             self.assertEqual(UUID(state["conversationId"]).version, 4)
+            self.assertEqual(state["domain"], "objects")
             self.assertEqual(state["world"], self.initial_world)
             self.assertFalse(state["canUndo"])
             self.assertEqual(first.headers["Location"], f'/conversations/{state["conversationId"]}')
@@ -50,7 +51,7 @@ class ConversationTests(unittest.TestCase):
 
     def test_state_survives_restart_and_schema_initialization_is_idempotent(self):
         with TestClient(create_app(self.settings)) as client:
-            created = client.post("/conversations")
+            created = client.post("/conversations", json={"domain": "objects"})
         with TestClient(create_app(self.settings)) as client:
             loaded = client.get(created.headers["Location"])
             self.assertEqual(loaded.status_code, 200)
@@ -58,6 +59,13 @@ class ConversationTests(unittest.TestCase):
         with Database(self.path).connection() as connection:
             self.assertEqual(connection.execute("SELECT count(*) FROM conversations").fetchone()[0], 1)
             self.assertEqual(connection.execute("SELECT count(*) FROM world_snapshots").fetchone()[0], 1)
+
+    def test_creation_requires_supported_domain(self):
+        with TestClient(create_app(self.settings)) as client:
+            for body in (None, {}, {"domain": "unsupported"}, {"domain": None}):
+                self.assertEqual(client.post("/conversations", json=body).status_code, 422)
+        with Database(self.path).connection() as connection:
+            self.assertEqual(connection.execute("SELECT count(*) FROM conversations").fetchone()[0], 0)
 
     def test_unknown_and_malformed_ids(self):
         with TestClient(create_app(self.settings)) as client:
@@ -73,7 +81,7 @@ class ConversationTests(unittest.TestCase):
             preflight = client.options("/conversations", headers=headers)
             self.assertEqual(preflight.status_code, 200)
             self.assertEqual(preflight.headers["access-control-allow-origin"], headers["Origin"])
-            created = client.post("/conversations", headers={"Origin": headers["Origin"]})
+            created = client.post("/conversations", json={"domain": "objects"}, headers={"Origin": headers["Origin"]})
             self.assertEqual(created.headers["access-control-allow-origin"], headers["Origin"])
             headers["Origin"] = "http://unlisted.example"
             rejected = client.options("/conversations", headers=headers)
@@ -90,7 +98,7 @@ class ConversationTests(unittest.TestCase):
             """)
         repository = ConversationRepository(database)
         with self.assertRaises(sqlite3.IntegrityError):
-            repository.create(uuid4(), World.model_validate(self.initial_world))
+            repository.create(uuid4(), World.model_validate(self.initial_world), "objects")
         with database.connection() as connection:
             self.assertEqual(connection.execute("SELECT count(*) FROM conversations").fetchone()[0], 0)
 
@@ -98,7 +106,7 @@ class ConversationTests(unittest.TestCase):
         database = Database(self.path)
         database.initialize()
         identifier = uuid4()
-        ConversationRepository(database).create(identifier, World.model_validate(self.initial_world))
+        ConversationRepository(database).create(identifier, World.model_validate(self.initial_world), "objects")
         for target, sequence in [(str(uuid4()), 0), (str(identifier), 0), (str(identifier), -1)]:
             with self.assertRaises(sqlite3.IntegrityError):
                 with database.connection() as connection:
@@ -109,15 +117,15 @@ class ConversationTests(unittest.TestCase):
 
     def test_world_contract_preserves_absent_attributes_and_requires_complete_positions(self):
         world = World.model_validate(self.initial_world)
-        self.assertIsNone(world.objects[2].color)
-        self.assertIsNone(world.objects[3].shape)
-        self.assertIsNone(world.objects[4].size)
+        self.assertIsNone(world.objects[2].attributes.get("color"))
+        self.assertIsNone(world.objects[3].attributes.get("shape"))
+        self.assertIsNone(world.objects[4].attributes.get("size"))
         self.assertIsNone(world.objects[5].position)
         self.assertEqual(World.model_validate_json(world.model_dump_json()), world)
         for invalid in [
             {"width": 8, "height": 8, "objects": [{"id": 0, "position": {"x": 1}}]},
             {"width": 8, "height": 8, "objects": [{"id": "0"}]},
-            {"width": 8, "height": 8, "objects": [{"id": 0, "color": "purple"}]},
+            {"width": 8, "height": 8, "objects": [{'id': 0, 'attributes': {'color': None}}]},
             {"width": 0, "height": 8, "objects": []},
         ]:
             with self.assertRaises(ValidationError):
@@ -143,12 +151,14 @@ class ConversationTests(unittest.TestCase):
         database.initialize()
         repository = ConversationRepository(database)
         state = repository.get(identifier)
+        self.assertEqual(state.domain, "objects")
         self.assertTrue(state.canUndo)
         self.assertIsNone(state.pending)
         with database.connection() as connection:
             rows = connection.execute("SELECT salience_json, pending_json FROM world_snapshots").fetchall()
             self.assertEqual([(row[0], row[1]) for row in rows], [("[]", "null"), ("[]", "null")])
         restored = repository.undo(identifier)
+        self.assertEqual(restored.domain, "objects")
         self.assertFalse(restored.canUndo)
         self.assertEqual(restored.world.model_dump(), self.initial_world)
 

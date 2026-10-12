@@ -1,3 +1,4 @@
+import 'domain.dart';
 import 'world.dart';
 import 'world_object.dart';
 import 'chat_message.dart';
@@ -5,6 +6,7 @@ import 'chat_message.dart';
 class ConversationState {
   const ConversationState({
     required this.id,
+    required this.domain,
     required this.world,
     required this.canUndo,
     this.feedback,
@@ -15,8 +17,10 @@ class ConversationState {
   factory ConversationState.fromJson(Map<String, dynamic> json) {
     final id = json['conversationId'] as String;
     if (id.isEmpty) throw const FormatException('Missing conversation ID');
+    final domain = WorldDomain.values.byName(json['domain'] as String);
     return ConversationState(
       id: id,
+      domain: domain,
       world: World.fromJson(json['world'] as Map<String, dynamic>),
       canUndo: json['canUndo'] as bool,
       feedback: json['feedback'] as String?,
@@ -32,6 +36,7 @@ class ConversationState {
   }
 
   final String id;
+  final WorldDomain domain;
   final World world;
   final bool canUndo;
   final String? feedback;

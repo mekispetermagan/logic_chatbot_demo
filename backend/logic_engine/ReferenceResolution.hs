@@ -1,5 +1,7 @@
 module ReferenceResolution where
 
+import Domain
+import Domains.Objects.Definition (objectsDomain)
 import Ontology
 import Pretty
 import Result
@@ -16,11 +18,11 @@ resolveReference (World objects) reference = case filter matches objects of
       AtSquare position -> positionOf object == Just position
 
 -- Creation is part of performative resolution, before property validation.
-resolvePerformativeReference :: World -> ObjectReference -> Result (World, Object, Bool)
-resolvePerformativeReference world@(World objects) reference =
+resolvePerformativeReferenceWith :: Domain -> World -> ObjectReference -> Result (World, Object, Bool)
+resolvePerformativeReferenceWith domain world@(World objects) reference =
   case filter matches objects of
     [] -> case reference of
-      AtSquare position | not (inBounds position) -> Message "Outside board"
+      AtSquare position | not ((inBoundsWith domain) position) -> Message "Outside board"
       _ -> let object = case reference of
                  ById identifier -> emptyObject identifier
                  AtSquare position -> (emptyObject (nextId world)) { positionOf = Just position }
@@ -32,5 +34,11 @@ resolvePerformativeReference world@(World objects) reference =
       ById identifier -> idOf object == identifier
       AtSquare position -> positionOf object == Just position
 
+inBoundsWith :: Domain -> Position -> Bool
+inBoundsWith domain = inDomainBounds domain
+
+-- Current-domain convenience entry points.
+resolvePerformativeReference :: World -> ObjectReference -> Result (World, Object, Bool)
+resolvePerformativeReference = resolvePerformativeReferenceWith objectsDomain
 inBounds :: Position -> Bool
-inBounds (x, y) = x >= 0 && x < 8 && y >= 0 && y < 8
+inBounds = inBoundsWith objectsDomain

@@ -1,0 +1,21 @@
+{
+  "domain": "network",
+  "world": {
+    "width": 8,
+    "height": 8,
+    "objects": []
+  },
+  "salience": [],
+  "pending": null,
+  "action": {
+    "type": "property",
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "property": {
+      "attribute": "north",
+      "value": "north"
+    }
+  }
+}

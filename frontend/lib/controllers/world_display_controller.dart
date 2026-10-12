@@ -55,13 +55,7 @@ class WorldDisplayController extends ChangeNotifier {
           .toList();
       if (unplaced.length != 1) return;
       final selected = unplaced.single;
-      final placed = WorldObject(
-        id: selected.id,
-        shape: selected.shape,
-        size: selected.size,
-        color: selected.color,
-        position: position,
-      );
+      final placed = selected.withPosition(position);
       _selectedUnplacedObjectId = null;
       _append([
         for (final object in world.objects)

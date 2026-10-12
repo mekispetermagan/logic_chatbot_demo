@@ -1,4 +1,5 @@
 import os
+import json
 import sqlite3
 import subprocess
 import tempfile
@@ -28,7 +29,7 @@ class EditingTests(unittest.TestCase):
         self.client = TestClient(create_app(self.settings))
         self.client.__enter__()
         self.addCleanup(self.client.__exit__, None, None, None)
-        self.initial = self.client.post("/conversations").json()
+        self.initial = self.client.post("/conversations", json={"domain": "objects"}).json()
         self.base = f'/conversations/{self.initial["conversationId"]}'
 
     def edit(self, action, body=None):
@@ -47,28 +48,28 @@ class EditingTests(unittest.TestCase):
     def test_all_four_shape_properties_use_canonical_transport_names(self):
         for index, shape in enumerate(["bloom", "spark", "drop", "loop"]):
             with self.subTest(shape=shape):
-                result = self.edit("property", {"position": {"x": index, "y": 0}, "property": shape})
+                result = self.edit("property", {"position": {"x": index, "y": 0}, "property": {"attribute": "shape", "value": shape}})
                 obj = next(o for o in result["world"]["objects"] if o["position"] == {"x": index, "y": 0})
-                self.assertEqual(obj["shape"], shape)
+                self.assertEqual(obj["attributes"].get("shape"), shape)
         for shape in ["cube", "sphere", "pyramid", "flower", "star", "tear", "ring"]:
-            response = self.client.post(f"{self.base}/property", json={"position": {"x": 0, "y": 0}, "property": shape})
+            response = self.client.post(f"{self.base}/property", json={"position": {"x": 0, "y": 0}, "property": {"attribute": "shape", "value": shape}})
             self.assertEqual(response.status_code, 422)
 
     def test_property_creation_addition_revision_and_no_op(self):
-        action = {"position": {"x": 0, "y": 0}, "property": "red"}
+        action = {"position": {"x": 0, "y": 0}, "property": {"attribute": "color", "value": "red"}}
         created = self.edit("property", action)
         objects = created["world"]["objects"]
         new = next(value for value in objects if value["position"] == action["position"])
-        self.assertEqual(new, {"id": 7, "position": action["position"], "color": "red", "size": None, "shape": None})
+        self.assertEqual(new, {'id': 7, 'position': action['position'], 'attributes': {'color': 'red'}})
         self.assertTrue(created["canUndo"])
         self.assertEqual(self.snapshots(), 2)
         repeated = self.edit("property", action)
         self.assertEqual(repeated["feedback"], "No change")
         self.assertEqual(self.snapshots(), 2)
-        self.edit("property", {**action, "property": "small"})
-        revised = self.edit("property", {**action, "property": "blue"})
+        self.edit("property", {**action, "property": {"attribute": "size", "value": "small"}})
+        revised = self.edit("property", {**action, "property": {"attribute": "color", "value": "blue"}})
         new = next(value for value in revised["world"]["objects"] if value["id"] == 7)
-        self.assertEqual((new["color"], new["size"], new["shape"]), ("blue", "small", None))
+        self.assertEqual((new["attributes"].get("color"), new["attributes"].get("size"), new["attributes"].get("shape")), ("blue", "small", None))
         self.assertEqual(self.snapshots(), 4)
         loaded = self.client.get(self.base).json()
         self.assertEqual(loaded["world"], revised["world"])
@@ -76,10 +77,10 @@ class EditingTests(unittest.TestCase):
     def test_missing_properties_are_added_without_replacing_objects(self):
         for identifier, prop in [(2, "green"), (3, "spark"), (4, "small")]:
             previous = next(value for value in self.initial["world"]["objects"] if value["id"] == identifier)
-            updated = self.edit("property", {"position": previous["position"], "property": prop})
+            updated = self.edit("property", {"position": previous["position"], "property": {"attribute": {2: "color", 3: "shape", 4: "size"}[identifier], "value": prop}})
             value = next(value for value in updated["world"]["objects"] if value["id"] == identifier)
             field = {2: "color", 3: "shape", 4: "size"}[identifier]
-            self.assertEqual(value, {**previous, field: prop})
+            self.assertEqual(value, {**previous, "attributes": {**previous["attributes"], field: prop}})
 
     def test_placement_preserves_object_and_blocked_actions_do_not_add_history(self):
         source = next(value for value in self.initial["world"]["objects"] if value["id"] == 5)
@@ -112,12 +113,12 @@ class EditingTests(unittest.TestCase):
         self.assertFalse(restored["canUndo"])
         self.assertEqual(self.edit("undo")["feedback"], "No change")
         self.assertEqual(self.snapshots(), 1)
-        self.edit("property", {"position": {"x": 0, "y": 0}, "property": "yellow"})
+        self.edit("property", {"position": {"x": 0, "y": 0}, "property": {"attribute": "color", "value": "yellow"}})
         self.assertEqual(self.snapshots(), 2)
 
     def test_bounds_are_checked_by_engine(self):
         for action, body in [
-            ("property", {"position": {"x": -1, "y": 0}, "property": "red"}),
+            ("property", {"position": {"x": -1, "y": 0}, "property": {"attribute": "color", "value": "red"}}),
             ("place", {"objectId": 5, "position": {"x": 8, "y": 0}}),
             ("erase", {"position": {"x": 0, "y": 8}}),
         ]:
@@ -128,21 +129,21 @@ class EditingTests(unittest.TestCase):
 
     def test_structural_validation_and_missing_conversations(self):
         for action, body in [
-            ("property", {"position": {"x": 0, "y": 0}, "property": "purple"}),
-            ("property", {"position": {"x": True, "y": 0}, "property": "red"}),
+            ("property", {"position": {"x": 0, "y": 0}, "property": {"attribute": "color", "value": "purple"}}),
+            ("property", {"position": {"x": True, "y": 0}, "property": {"attribute": "color", "value": "red"}}),
             ("place", {"objectId": -1, "position": {"x": 0, "y": 0}}),
             ("erase", {"position": {"x": 0}}),
         ]:
             self.assertEqual(self.client.post(f"{self.base}/{action}", json=body).status_code, 422)
         for action, body in [
-            ("property", {"position": {"x": 0, "y": 0}, "property": "red"}),
+            ("property", {"position": {"x": 0, "y": 0}, "property": {"attribute": "color", "value": "red"}}),
             ("place", {"objectId": 5, "position": {"x": 0, "y": 0}}),
             ("erase", {"position": {"x": 0, "y": 0}}), ("clear", {}), ("undo", {}),
         ]:
             self.assertEqual(self.client.post(f"/conversations/{uuid4()}/{action}", json=body).status_code, 404)
 
     def test_history_survives_restart_and_other_conversations_are_unchanged(self):
-        other = self.client.post("/conversations").json()
+        other = self.client.post("/conversations", json={"domain": "objects"}).json()
         changed = self.edit("clear")
         with TestClient(create_app(self.settings)) as restarted:
             self.assertEqual(restarted.get(self.base).json()["world"], changed["world"])
@@ -171,13 +172,49 @@ class EditingTests(unittest.TestCase):
 
 
 class EngineTransportTests(unittest.TestCase):
+    def test_bridge_requires_and_echoes_domain(self):
+        executable = ENGINE_PATH
+        request = {"domain": "objects", "world": {"width": 8, "height": 8, "objects": []},
+                   "action": {"type": "clear"}}
+        def run(payload):
+            return subprocess.run([str(executable)], input=json.dumps(payload),
+                                  capture_output=True, text=True)
+        accepted = run(request)
+        self.assertEqual(accepted.returncode, 0, accepted.stderr)
+        self.assertEqual(json.loads(accepted.stdout)["domain"], "objects")
+        for domain in (None, "unsupported"):
+            invalid = dict(request)
+            if domain is None:
+                del invalid["domain"]
+            else:
+                invalid["domain"] = domain
+            rejected = run(invalid)
+            self.assertNotEqual(rejected.returncode, 0)
+            self.assertEqual(rejected.stdout, "")
+
+    def test_transport_sends_domain_and_rejects_mismatched_reply(self):
+        engine = LogicEngine(Path("/unused/engine"))
+        world = World(width=8, height=8, objects=[])
+        for domain in ("objects", "network", None):
+            reply = {"world": world.model_dump(), "feedback": "No change"}
+            if domain is not None:
+                reply["domain"] = domain
+            with patch("app.engine.subprocess.run", return_value=subprocess.CompletedProcess(
+                    [], 0, stdout=json.dumps(reply))) as process:
+                if domain == "objects":
+                    self.assertEqual(engine.edit("objects", world, {"type": "clear"}).domain, domain)
+                else:
+                    with self.assertRaises(EngineUnavailable):
+                        engine.edit("objects", world, {"type": "clear"})
+                self.assertEqual(json.loads(process.call_args.kwargs["input"])["domain"], "objects")
+
     def test_timeout_process_failure_and_invalid_response(self):
         engine = LogicEngine(Path("/unused/engine"))
         world = World(width=8, height=8, objects=[])
         for error in [subprocess.TimeoutExpired("engine", 5), subprocess.CalledProcessError(1, "engine")]:
             with patch("app.engine.subprocess.run", side_effect=error):
                 with self.assertRaises(EngineUnavailable):
-                    engine.edit(world, {"type": "clear"})
+                    engine.edit("objects", world, {"type": "clear"})
         with patch("app.engine.subprocess.run", return_value=subprocess.CompletedProcess([], 0, stdout='{}')):
             with self.assertRaises(EngineUnavailable):
-                engine.edit(world, {"type": "clear"})
+                engine.edit("objects", world, {"type": "clear"})

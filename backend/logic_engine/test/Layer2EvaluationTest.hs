@@ -7,11 +7,12 @@ import Layer2Evaluation
 import Layer2Syntax
 import Layer2Parser
 import Ontology
+import Domains.Objects.Vocabulary
 
 check label condition = unless condition (fail label)
 parse text = either error id (parseSentences text)
 run w r text = evaluateEntry w r (parse text)
-object i color shape = Object (Id i) color Nothing shape Nothing
+object i color shape = objectWith (Id i) color Nothing shape Nothing
 redBloom = object 0 (Just Red) (Just Bloom)
 blueBloom = object 1 (Just Blue) (Just Bloom)
 
@@ -19,7 +20,7 @@ main = do
   let empty = World []
       (w1, r1, p1, _) = run empty [] "A red bloom on A1. It is blue. Is it red?"
   check "indefinite creates and pronoun updates same object"
-    (w1 == World [redBloom {colorOf = Just Blue, positionOf = Just (0,0)}] && p1 == Nothing)
+    (w1 == World [(setAttribute (AttributeId "color") (value <$> (Just Blue)) (redBloom {positionOf = Just (0,0)}))] && p1 == Nothing)
   check "false question and old color are purged"
     (all (\(_, _, properties) -> C Red `notElem` properties) r1)
   let (_, _, _, feedback) = run w1 r1 "The bloom is large. What is the color of it?"
@@ -53,8 +54,8 @@ main = do
   check "pronoun observes the same three-entry window"
     (resolveSubject False two [((3,0),Id 0,[])] It == Resolved two (Id 0) &&
      resolveSubject False two [((4,0),Id 0,[])] It == Unresolved "No antecedent for it")
-  let initial = World [(object 3 (Just Red) (Just Spark))
-                        {sizeOf=Just Small, positionOf=Just (4,2)}]
+  let initial = World [(setAttribute (AttributeId "size") (Just (value Small))
+                        ((object 3 (Just Red) (Just Spark)) {positionOf=Just (4,2)}))]
       (sparkWorld, sparkRanking, _, _) = run initial [] "Spark on A1"
       (redWorld, redRanking, _, _) = run sparkWorld sparkRanking "The spark is red."
       (smallWorld, smallRanking, _, _) = run redWorld redRanking "It is small."
@@ -106,7 +107,7 @@ structuralTests = do
 
 
 attributeRemovalTests = do
-  let initial = World [redBloom {sizeOf=Just Small, positionOf=Just (7,6)}, blueBloom]
+  let initial = World [(setAttribute (AttributeId "size") (value <$> (Just Small)) (redBloom {positionOf=Just (7,6)})), blueBloom]
       (updated, ranking, pending, feedback) = run initial []
         "#0 bloom? #0 red? H7 remove color. It remove size. The bloom remove shape. #0 remove square."
   check "attribute removal resolves squares, pronouns, and anaphoric descriptions"
@@ -123,4 +124,4 @@ attributeRemovalTests = do
   clarification <- maybe (fail "expected attribute removal ambiguity") pure paused
   let (finished, _, done, _) = resumeEntry initial [] clarification (Id 1)
   check "attribute removal resumes after clarification"
-    (done == Nothing && finished == World [redBloom {sizeOf=Just Small, positionOf=Just (7,6)}, blueBloom {colorOf=Just Green}])
+    (done == Nothing && finished == World [(setAttribute (AttributeId "size") (value <$> (Just Small)) (redBloom {positionOf=Just (7,6)})), (setAttribute (AttributeId "color") (value <$> (Just Green)) blueBloom)])

@@ -1,3 +1,4 @@
+import '../models/domain.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class WorldDisplay extends StatelessWidget {
   const WorldDisplay({
     super.key,
     required this.world,
+    this.domain = WorldDomain.objects,
     required this.selectedProperty,
     required this.selectedUnplacedObjectId,
     required this.onUnplacedObjectSelected,
@@ -22,9 +24,11 @@ class WorldDisplay extends StatelessWidget {
     required this.onErase,
     required this.onClear,
     this.interactionHint,
+    this.selector,
   });
 
   final World world;
+  final WorldDomain domain;
   final ObjectProperty selectedProperty;
   final int? selectedUnplacedObjectId;
   final ValueChanged<int>? onUnplacedObjectSelected;
@@ -33,6 +37,7 @@ class WorldDisplay extends StatelessWidget {
   final void Function(int, int)? onErase;
   final VoidCallback? onClear;
   final String? interactionHint;
+  final Widget? selector;
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +49,22 @@ class WorldDisplay extends StatelessWidget {
         return SingleChildScrollView(
           child: SizedBox(
             // Scroll on short screens; otherwise the viewport determines size.
-            height: math.max(constraints.maxHeight, 520),
+            height: math.max(
+              constraints.maxHeight,
+              domain == WorldDomain.network
+                  ? math.min(constraints.maxWidth, 320) +
+                        240 +
+                        (20 / (constraints.maxWidth / 54).floor().clamp(4, 20))
+                                .ceil() *
+                            56
+                  : 520,
+            ),
             child: Column(
               children: [
                 Expanded(
                   child: WorldWidget(
                     world: world,
+                    domain: domain,
                     onPaint: onPaint,
                     onErase: onErase,
                   ),
@@ -107,6 +122,7 @@ class WorldDisplay extends StatelessWidget {
                                             dimension: 56,
                                             child: WorldObjectWidget(
                                               object: object,
+                                              domain: domain,
                                               tooltipTriggerMode:
                                                   TooltipTriggerMode.longPress,
                                             ),
@@ -133,10 +149,12 @@ class WorldDisplay extends StatelessWidget {
                       constraints: BoxConstraints(
                         maxWidth: constraints.maxWidth,
                       ),
-                      child: _PropertySelector(
-                        selected: selectedProperty,
-                        onChanged: onPropertyChanged,
-                      ),
+                      child:
+                          selector ??
+                          _PropertySelector(
+                            selected: selectedProperty,
+                            onChanged: onPropertyChanged,
+                          ),
                     ),
                     Row(
                       mainAxisSize: MainAxisSize.min,

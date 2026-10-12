@@ -8,6 +8,7 @@ import Layer2Syntax
 import Layer2Evaluation
 import Discourse
 import Ontology
+import Domains.Objects.Vocabulary
 import Pretty
 
 check name condition = unless condition (fail name)
@@ -57,8 +58,8 @@ main = do
          "every red bloom?", "all red objects are bloom?", "Are all red objects bloom?", "every red objects are bloom?", "are every red object bloom?", "some bloom green?", "how many red", "#0 on board",
          "move #0 up move #0 down", "every red object is?", "move #0 above #1 junk"] $ \input ->
     check ("reject " ++ input) (isLeft (parseSentences input))
-  let first = Object (Id 0) (Just Red) (Just Small) (Just Bloom) (Just (1,1))
-      second = Object (Id 1) Nothing Nothing (Just Spark) (Just (4,4))
+  let first = objectWith (Id 0) (Just Red) (Just Small) (Just Bloom) (Just (1,1))
+      second = objectWith (Id 1) Nothing Nothing (Just Spark) (Just (4,4))
       loose = emptyObject (Id 2)
       world = World [first, second, loose]
   forM_ [("up",(1,2)),("down",(1,0)),("left",(0,1)),("right",(2,1))] $ \(name, expected) -> do
@@ -72,7 +73,7 @@ main = do
   check "bounds, collisions, unplaced source leave world intact"
     (blocked == cornerWorld && "Outside board" `isInfixOf` blockedFeedback && "occupied" `isInfixOf` blockedFeedback && "unplaced" `isInfixOf` blockedFeedback)
   let (copied,_,_,_) = run world "Make #0 the same color as #1. Make #0 the same size as #1. Make #0 the same shape as #1."
-  check "copy including null" (at 0 copied == first {colorOf=Nothing,sizeOf=Nothing,shapeOf=Just Spark})
+  check "copy including null" (at 0 copied == (setAttribute (AttributeId "shape") (value <$> (Just Spark)) (setAttribute (AttributeId "size") Nothing (setAttribute (AttributeId "color") Nothing first))))
   forM_ [("#0 on board?",True),("#2 on board?",False),("#0 have a color?",True),
          ("#1 have a color?",False),("#0 have a square?",True),
          ("#0 at the edge?",False),("#0 in a corner?",False),
@@ -117,11 +118,11 @@ main = do
     let (_,_,_,feedback) = run (World (objects mixedWorld ++ [loose])) text in
       check text ((if expected then "\n  true" else "\n  false") `isInfixOf` feedback)
   forM_ ["color","size","shape","square","row","column"] $ \attr -> do
-    let nullWorld = World [loose {shapeOf=Just Bloom},emptyObject (Id 5)]
+    let nullWorld = World [(setAttribute (AttributeId "shape") (value <$> (Just Bloom)) loose),emptyObject (Id 5)]
         (_,_,_,feedback) = run nullWorld ("Every bloom object same " ++ attr ++ " as #5?")
     check ("quantified null comparison " ++ attr)
       ((if attr == "shape" then "false" else "true — both lack") `isInfixOf` feedback)
-  let splitWorld = World [first {positionOf=Nothing},first {idOf=Id 3,sizeOf=Just Large}]
+  let splitWorld = World [first {positionOf=Nothing},(setAttribute (AttributeId "size") (value <$> (Just Large)) (first {idOf=Id 3}))]
       (_,_,_,splitAnswer) = run splitWorld "Some red objects small and on board?"
   check "conjunction checks one object, not separate existential witnesses"
     ("\n  false" `isInfixOf` splitAnswer)

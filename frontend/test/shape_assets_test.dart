@@ -49,7 +49,7 @@ void main() {
         home: Center(
           child: RepaintBoundary(
             key: boundaryKey,
-            child: const SizedBox.square(
+            child: SizedBox.square(
               dimension: 100,
               child: WorldObjectWidget(
                 object: WorldObject(

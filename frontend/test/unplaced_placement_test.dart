@@ -7,12 +7,12 @@ import 'package:logic_chatbot/models/world_object.dart';
 import 'package:logic_chatbot/widgets/world_display.dart';
 import 'package:logic_chatbot/widgets/world_widget.dart';
 
-const unplaced = WorldObject(
+final unplaced = WorldObject(
   id: 12,
   shape: ObjectShape.spark,
   color: ObjectColor.blue,
 );
-const occupied = WorldObject(
+final occupied = WorldObject(
   id: 3,
   position: BoardPosition(0, 0),
   color: ObjectColor.green,
@@ -20,7 +20,7 @@ const occupied = WorldObject(
 
 void main() {
   test('placement preserves identity and attributes and is undoable', () {
-    final initial = World(objects: const [occupied, unplaced]);
+    final initial = World(objects: [occupied, unplaced]);
     final controller = WorldDisplayController(initialWorld: initial);
     addTearDown(controller.dispose);
     var notifications = 0;
@@ -53,7 +53,7 @@ void main() {
     'selection toggles and property selection cancels even when unchanged',
     () {
       final controller = WorldDisplayController(
-        initialWorld: World(objects: const [occupied, unplaced]),
+        initialWorld: World(objects: [occupied, unplaced]),
       );
       addTearDown(controller.dispose);
       controller.selectUnplacedObject(3);
@@ -83,7 +83,7 @@ void main() {
     'unplaced selection, same-segment cancellation, and placement work through the display',
     (tester) async {
       final controller = WorldDisplayController(
-        initialWorld: World(objects: const [occupied, unplaced]),
+        initialWorld: World(objects: [occupied, unplaced]),
       );
       addTearDown(controller.dispose);
       await tester.pumpWidget(

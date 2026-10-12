@@ -2,7 +2,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
 
-from .schemas import ClarificationChoice, ChatEntry, ConversationState, EditState, EraseEdit, PlaceEdit, PropertyEdit
+from .schemas import PortsEdit, CreateConversation, ClarificationChoice, ChatEntry, ConversationState, EditState, EraseEdit, PlaceEdit, PropertyEdit
 from .service import ConversationService
 
 router = APIRouter(prefix="/conversations", tags=["conversations"])
@@ -14,9 +14,9 @@ def get_service(request: Request) -> ConversationService:
 
 @router.post("", response_model=ConversationState, status_code=201)
 def create_conversation(
-    response: Response, service: ConversationService = Depends(get_service)
+    entry: CreateConversation, response: Response, service: ConversationService = Depends(get_service)
 ) -> ConversationState:
-    state = service.create()
+    state = service.create(entry.domain)
     response.headers["Location"] = f"/conversations/{state.conversationId}"
     return state
 
@@ -39,6 +39,12 @@ def chat(conversation_id: UUID, entry: ChatEntry,
 def apply_property(conversation_id: UUID, edit: PropertyEdit,
                    service: ConversationService = Depends(get_service)) -> EditState:
     return require_edit(service.edit(conversation_id, {"type": "property", **edit.model_dump()}))
+
+
+@router.post("/{conversation_id}/ports", response_model=EditState)
+def set_ports(conversation_id: UUID, edit: PortsEdit,
+              service: ConversationService = Depends(get_service)) -> EditState:
+    return require_edit(service.edit(conversation_id, {"type": "ports", **edit.model_dump()}))
 
 
 @router.post("/{conversation_id}/place", response_model=EditState)

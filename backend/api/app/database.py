@@ -3,6 +3,8 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Iterator
 
+from .migrations import migrate_attribute_encoding
+
 
 class Database:
     def __init__(self, path: Path):
@@ -26,6 +28,7 @@ class Database:
             connection.executescript("""
                 CREATE TABLE IF NOT EXISTS conversations (
                     id TEXT PRIMARY KEY,
+                    domain TEXT NOT NULL DEFAULT 'objects',
                     created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
                 );
                 CREATE TABLE IF NOT EXISTS world_snapshots (
@@ -45,7 +48,15 @@ class Database:
                 );
             """)
 
+            conversation_columns = {row["name"] for row in connection.execute("PRAGMA table_info(conversations)")}
+            if "domain" not in conversation_columns:
+                connection.execute("ALTER TABLE conversations ADD COLUMN domain TEXT NOT NULL DEFAULT 'objects'")
+
             columns = {row["name"] for row in connection.execute("PRAGMA table_info(world_snapshots)")}
             for name, default in (("salience_json", "[]"), ("pending_json", "null")):
                 if name not in columns:
                     connection.execute(f"ALTER TABLE world_snapshots ADD COLUMN {name} TEXT NOT NULL DEFAULT '{default}'")
+
+            # Commit schema additions before acquiring the migration write lock.
+            connection.commit()
+            migrate_attribute_encoding(connection)

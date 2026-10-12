@@ -4,7 +4,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../models/conversation_state.dart';
-import '../models/object_property.dart';
+import '../models/attribute_property.dart';
+import '../models/domain.dart';
 import '../models/world_object.dart';
 
 class ApiException implements Exception {
@@ -24,20 +25,36 @@ class ConversationApi {
   final http.Client _client;
   final Duration timeout;
 
-  Future<ConversationState> create() => _request('POST');
+  Future<ConversationState> create({
+    WorldDomain domain = WorldDomain.objects,
+  }) => _request('POST', body: {'domain': domain.name}, expectedDomain: domain);
   Future<ConversationState> get(String id) => _request('GET', id: id);
 
   Future<ConversationState> applyProperty(
     String id,
     BoardPosition position,
-    ObjectProperty property,
+    AttributeProperty property,
   ) => _request(
     'POST',
     id: id,
     action: 'property',
     body: {
       'position': {'x': position.x, 'y': position.y},
-      'property': property.name,
+      'property': property.toJson(),
+    },
+  );
+
+  Future<ConversationState> setPorts(
+    String id,
+    BoardPosition position,
+    List<NetworkPort> ports,
+  ) => _request(
+    'POST',
+    id: id,
+    action: 'ports',
+    body: {
+      'position': {'x': position.x, 'y': position.y},
+      'ports': ports.map((port) => port.name).toList(),
     },
   );
 
@@ -91,6 +108,7 @@ class ConversationApi {
     String? id,
     String? action,
     Map<String, dynamic>? body,
+    WorldDomain? expectedDomain,
   }) async {
     final uri = baseUrl.replace(
       pathSegments: [
@@ -132,6 +150,9 @@ class ConversationApi {
       final state = ConversationState.fromJson(
         jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>,
       );
+      if (expectedDomain != null && state.domain != expectedDomain) {
+        throw const FormatException('Unexpected domain');
+      }
       if (id != null && state.id != id) {
         throw const FormatException('Unexpected conversation');
       }

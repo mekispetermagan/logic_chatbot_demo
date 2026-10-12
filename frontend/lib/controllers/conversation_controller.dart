@@ -1,3 +1,6 @@
+import '../models/domain.dart';
+import '../models/network_shape.dart';
+import '../models/attribute_property.dart';
 import 'package:flutter/foundation.dart';
 
 import '../api/conversation_api.dart';
@@ -9,6 +12,35 @@ import '../storage/conversation_id_store.dart';
 /// Keeps local selection state and displays worlds returned by the server.
 class ConversationController extends ChangeNotifier {
   ConversationController({required this.api, required this.store});
+
+  WorldDomain domain = WorldDomain.objects;
+  NetworkShape selectedNetworkShape = NetworkShape.empty;
+  ObjectColor? selectedNetworkColor = ObjectColor.red;
+  bool get canSwitchDomain => !loading && !editing;
+
+  Future<void> switchDomain(WorldDomain next) async {
+    if (!canSwitchDomain || next == domain || _disposed) return;
+    domain = next;
+    conversation = null;
+    _pending = null;
+    selectedUnplacedObjectId = null;
+    await load();
+  }
+
+  void selectNetworkShape(NetworkShape shape) {
+    if (!canEdit || _disposed) return;
+    selectedNetworkShape = shape;
+    selectedNetworkColor = null;
+    selectedUnplacedObjectId = null;
+    notifyListeners();
+  }
+
+  void selectNetworkColor(ObjectColor color) {
+    if (!canEdit || _disposed) return;
+    selectedNetworkColor = color;
+    selectedUnplacedObjectId = null;
+    notifyListeners();
+  }
 
   final ConversationApi api;
   final ConversationIdStore store;
@@ -32,23 +64,26 @@ class ConversationController extends ChangeNotifier {
     notifyListeners();
     try {
       if (_pending == null) {
-        final id = await store.read();
+        final id = await store.read(domain: domain);
         if (_disposed) return;
         if (id == null) {
-          _pending = await api.create();
+          _pending = await api.create(domain: domain);
         } else {
           try {
             _pending = await api.get(id);
           } on ApiException catch (exception) {
             if (exception.statusCode != 404) rethrow;
             if (_disposed) return;
-            _pending = await api.create();
+            _pending = await api.create(domain: domain);
           }
         }
       }
       if (_disposed) return;
+      if (_pending!.domain != domain) {
+        throw const ApiException('The server returned an unexpected domain.');
+      }
       // Keep the response for retry if local persistence fails: never create twice.
-      await store.write(_pending!.id);
+      await store.write(_pending!.id, domain: domain);
       if (_disposed) return;
       conversation = _pending;
       _pending = null;
@@ -84,11 +119,24 @@ class ConversationController extends ChangeNotifier {
 
   Future<void> paint(int x, int y) {
     final selected = selectedUnplacedObjectId;
-    return _edit(
-      (id) => selected == null
-          ? api.applyProperty(id, BoardPosition(x, y), selectedProperty)
-          : api.place(id, selected, BoardPosition(x, y)),
-    );
+    return _edit((id) {
+      if (selected != null) return api.place(id, selected, BoardPosition(x, y));
+      if (domain == WorldDomain.network) {
+        final color = selectedNetworkColor;
+        return color == null
+            ? api.setPorts(id, BoardPosition(x, y), selectedNetworkShape.ports)
+            : api.applyProperty(
+                id,
+                BoardPosition(x, y),
+                AttributeProperty('color', color.name),
+              );
+      }
+      return api.applyProperty(
+        id,
+        BoardPosition(x, y),
+        selectedProperty.property,
+      );
+    });
   }
 
   Future<void> erase(int x, int y) =>
@@ -126,6 +174,9 @@ class ConversationController extends ChangeNotifier {
     try {
       final updated = await request(conversation!.id);
       if (_disposed) return false;
+      if (updated.domain != conversation!.domain) {
+        throw const ApiException('The server returned an unexpected domain.');
+      }
       conversation = updated;
       if (clearSelection) selectedUnplacedObjectId = null;
       _reconcileSelection();

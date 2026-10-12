@@ -4,9 +4,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from .config import Settings, TOY_WORLD_PATH
+from .config import Settings, INITIAL_WORLD_PATHS
 from .database import Database
-from .engine import EngineUnavailable, LogicEngine
+from .engine import EngineUnavailable, EngineInvalidRequest, LogicEngine
 from .repository import ConversationRepository, PendingConflict
 from .routes import router
 from .schemas import World
@@ -20,9 +20,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def lifespan(app: FastAPI):
         database = Database(settings.database_path)
         database.initialize()
-        initial_world = World.model_validate_json(TOY_WORLD_PATH.read_text(encoding="utf-8"))
+        initial_worlds = {domain: World.model_validate_json(path.read_text(encoding="utf-8"))
+                          for domain, path in INITIAL_WORLD_PATHS.items()}
         app.state.conversation_service = ConversationService(
-            ConversationRepository(database), initial_world, LogicEngine(settings.engine_path)
+            ConversationRepository(database), initial_worlds, LogicEngine(settings.engine_path)
         )
         yield
 
@@ -31,6 +32,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.exception_handler(EngineUnavailable)
     async def engine_unavailable(request, exception):
         return JSONResponse(status_code=503, content={"detail": "Logic engine unavailable"})
+
+    @app.exception_handler(EngineInvalidRequest)
+    async def engine_invalid_request(request, exception):
+        return JSONResponse(status_code=422, content={"detail": str(exception)})
 
     @app.exception_handler(PendingConflict)
     async def pending_conflict(request, exception):

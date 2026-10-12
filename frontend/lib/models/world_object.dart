@@ -1,3 +1,5 @@
+import 'attribute_property.dart';
+
 enum ObjectShape { bloom, spark, drop, loop }
 
 enum ObjectSize { small, medium, large }
@@ -33,31 +35,50 @@ class BoardPosition {
 
 /// Missing attributes are absent, rather than unknown.
 class WorldObject {
-  const WorldObject({
+  WorldObject({
     required this.id,
-    this.shape,
-    this.size,
-    this.color,
+    Map<String, String> attributes = const {},
+    ObjectShape? shape,
+    ObjectSize? size,
+    ObjectColor? color,
     this.position,
-  });
+  }) : attributes = Map.unmodifiable({
+         ...attributes,
+         if (shape != null) 'shape': shape.name,
+         if (size != null) 'size': size.name,
+         if (color != null) 'color': color.name,
+       });
+
   factory WorldObject.fromJson(Map<String, dynamic> json) => WorldObject(
     id: json['id'] as int,
-    shape: json['shape'] == null
-        ? null
-        : ObjectShape.values.byName(json['shape'] as String),
-    size: json['size'] == null
-        ? null
-        : ObjectSize.values.byName(json['size'] as String),
-    color: json['color'] == null
-        ? null
-        : ObjectColor.values.byName(json['color'] as String),
+    attributes: Map<String, String>.from(json['attributes'] as Map),
     position: json['position'] == null
         ? null
         : BoardPosition.fromJson(json['position'] as Map<String, dynamic>),
   );
+
   final int id;
-  final ObjectShape? shape;
-  final ObjectSize? size;
-  final ObjectColor? color;
+  final Map<String, String> attributes;
   final BoardPosition? position;
+
+  ObjectShape? get shape => attributes['shape'] == null
+      ? null
+      : ObjectShape.values.byName(attributes['shape']!);
+  ObjectSize? get size => attributes['size'] == null
+      ? null
+      : ObjectSize.values.byName(attributes['size']!);
+  ObjectColor? get color => attributes['color'] == null
+      ? null
+      : ObjectColor.values.byName(attributes['color']!);
+
+  bool hasPort(NetworkPort port) => attributes[port.name] == port.name;
+
+  WorldObject withPosition(BoardPosition? position) =>
+      WorldObject(id: id, attributes: attributes, position: position);
+
+  WorldObject withProperty(AttributeProperty property) => WorldObject(
+    id: id,
+    attributes: {...attributes, property.attribute: property.value},
+    position: position,
+  );
 }

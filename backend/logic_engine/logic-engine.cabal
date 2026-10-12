@@ -4,11 +4,17 @@ version: 0.1.0.0
 build-type: Simple
 
 library
-  exposed-modules: Grammar, Ontology, AtomicPerformative, AtomicPropertyCheck,
-                   AtomicPropertyQuery, AtomicSentence, AtomicParser, AtomicEvaluation, ReferenceResolution,
-                   Pretty, Result, Sandbox, Console, WorldEditor, Layer2Syntax, Layer2Parser, Discourse, Layer2Evaluation, Layer3Evaluation
+  exposed-modules: Ontology, Domain, DomainLibrary,
+                   Domains.Objects.Definition, Domains.Objects.Vocabulary,
+                   Domains.Objects.Parser, Domains.Objects.Evaluation, Domains.Objects.Library,
+                   Domains.Network.Definition, Domains.Network.Library, Domains.Network.Sandbox,
+                   Grammar, Pretty, Result, Sandbox, Console, ReferenceResolution,
+                   AtomicPerformative, AtomicPropertyCheck, AtomicPropertyQuery,
+                   AtomicSentence, AtomicParser, AtomicEvaluation, WorldEditor,
+                   SyntaxVocabulary, Layer2Syntax, Layer2Parser, Discourse,
+                   Layer2Evaluation, Layer3Evaluation
   hs-source-dirs: .
-  build-depends: base >=4.14 && <5, megaparsec >=9 && <10
+  build-depends: base >=4.14 && <5, megaparsec >=9 && <10, containers
   default-language: Haskell2010
   default-extensions: InstanceSigs
 
@@ -16,7 +22,7 @@ executable logic-engine-editor
   main-is: Main.hs
   other-modules: EditorJson
   hs-source-dirs: bridge
-  build-depends: base >=4.14 && <5, logic-engine, aeson >=2 && <3, bytestring
+  build-depends: base >=4.14 && <5, logic-engine, containers, aeson >=2 && <3, bytestring
   default-language: Haskell2010
 
 test-suite atomic-parser-tests
@@ -31,7 +37,7 @@ test-suite world-editor-tests
   main-is: WorldEditorTest.hs
   other-modules: EditorJson
   hs-source-dirs: test, bridge
-  build-depends: base >=4.14 && <5, logic-engine, aeson >=2 && <3
+  build-depends: base >=4.14 && <5, logic-engine, containers, aeson >=2 && <3
   default-language: Haskell2010
 
 test-suite layer2-parser-tests
@@ -51,6 +57,20 @@ test-suite layer2-evaluation-tests
 test-suite layer3-tests
   type: exitcode-stdio-1.0
   main-is: Layer3Test.hs
+  hs-source-dirs: test
+  build-depends: base >=4.14 && <5, logic-engine
+  default-language: Haskell2010
+
+test-suite domain-tests
+  type: exitcode-stdio-1.0
+  main-is: DomainTest.hs
+  hs-source-dirs: test
+  build-depends: base >=4.14 && <5, logic-engine
+  default-language: Haskell2010
+
+test-suite network-tests
+  type: exitcode-stdio-1.0
+  main-is: NetworkTest.hs
   hs-source-dirs: test
   build-depends: base >=4.14 && <5, logic-engine
   default-language: Haskell2010

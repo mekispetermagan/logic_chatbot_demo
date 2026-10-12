@@ -7,6 +7,7 @@ import AtomicSentence
 import Layer2Parser
 import Layer2Syntax
 import Ontology
+import Domains.Objects.Vocabulary
 import Pretty
 
 check :: String -> Bool -> IO ()

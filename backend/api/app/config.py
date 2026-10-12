@@ -4,6 +4,7 @@ from pathlib import Path
 
 API_DIR = Path(__file__).resolve().parents[1]
 TOY_WORLD_PATH = API_DIR.parent / "shared" / "toy_world.json"
+INITIAL_WORLD_PATHS = {"objects": TOY_WORLD_PATH, "network": API_DIR.parent / "shared" / "network_world.json"}
 ENGINE_PATH = API_DIR.parent / "logic_engine" / "bin" / "logic-engine-editor"
 
 

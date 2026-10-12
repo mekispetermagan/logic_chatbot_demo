@@ -83,3 +83,24 @@ share these assets. Pieces and selector swatches use red `#C91A09`, blue `#0055B
 and 20% black at the bottom; colorless
 pieces use neutral grey, and the loop's hole remains transparent. Size scaling,
 unknown-shape question marks, and unknown-size badges remain supported.
+
+The API client creates either `WorldDomain.objects` (the default) or
+`WorldDomain.network`. Conversation state stores that typed domain. Objects
+retain immutable generic attribute maps, with color/size/shape getters for the
+existing display and `NetworkPort` presence checks for network consumers.
+Property edits send canonical `AttributeProperty` pairs. The existing objects
+editor uses this transport; network rendering uses 16 SVG port patterns with the Lego palette. The app-bar
+selector resumes a separate conversation for each domain. Later requests use the conversation ID and inherit
+the server's stored domain. See the
+[JSON contract](../specification/json-contract.md).
+
+## Network editor
+
+The network palette has four color buttons and 16 complete port patterns. Select
+one option and tap a square. Pattern edits replace ports while preserving color;
+the center-dot option clears ports without deleting the object. Erase, unplaced
+placement, and shared Undo retain their usual behavior. Each pattern tap uses one
+`ports` request and one undo step. SVG assets live in
+`assets/images/network_shapes/`, with 20% center dots and center-lit gradients.
+Domain-specific conversation IDs are stored separately per API URL; the original
+objects key is retained for existing installations.

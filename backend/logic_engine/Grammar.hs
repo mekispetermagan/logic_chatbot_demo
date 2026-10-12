@@ -1,6 +1,8 @@
 -- Compatibility facade for existing GHCi sessions and callers.
 module Grammar
-  ( module Ontology
+  ( module Domains.Objects.Vocabulary
+  , module Domains.Objects.Definition
+  , module Ontology
   , module AtomicPerformative
   , module AtomicPropertyCheck
   , module AtomicPropertyQuery
@@ -16,6 +18,8 @@ module Grammar
   , module Layer2Parser
   ) where
 
+import Domains.Objects.Vocabulary
+import Domains.Objects.Definition
 import Ontology
 import AtomicPerformative
 import AtomicPropertyCheck

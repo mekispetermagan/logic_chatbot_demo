@@ -23,36 +23,37 @@ packaging configuration. Interactive API documentation is at `/docs`.
 
 ## Endpoints
 
-- `POST /conversations` (no body): creates a random UUID conversation and its
+- `POST /conversations` with `{"domain":"objects"}` or `{"domain":"network"}`: creates a random UUID conversation and its
   initial toy-world snapshot. Returns HTTP 201 and a `Location` header.
 - `GET /conversations/{id}`: retrieves the latest stored world. Unknown UUIDs
   return 404; malformed IDs return 422.
 
-Both return `conversationId`, `world`, `canUndo`, ordered `messages`, and nullable `pending`. World JSON has `width`,
-`height`, and `objects`; each object has an integer `id`, nullable `shape`,
-`size`, `color`, and nullable `position`. A present position requires integer
-`x` and `y`, zero-based with A1 at the bottom left. Missing attributes mean
-absent. The initial fixture is `backend/shared/toy_world.json`, matching the
-current frontend toy scene; it is data, not Python world-update logic.
+Both return `conversationId`, `domain`, `world`, `canUndo`, ordered `messages`, and nullable `pending`. World JSON has `width`,
+`height`, and `objects`; each object has an integer `id`, a required `attributes`
+map of canonical attribute/value strings, and nullable `position`. A present
+position requires integer `x` and `y`, zero-based with A1 at the bottom left.
+Absent attributes are omitted. Domain initial worlds live in
+`backend/shared/toy_world.json` and `backend/shared/network_world.json`.
 
 ## Editing
 
 All editing endpoints use `POST /conversations/{id}/...` and return
-`conversationId`, `world`, `canUndo`, and concise `feedback`:
+`conversationId`, `domain`, `world`, `canUndo`, messages, pending, and concise `feedback`:
 
 | Endpoint suffix | JSON body | Action |
 | --- | --- | --- |
-| `property` | `{"position":{"x":0,"y":0},"property":"red"}` | Apply one property; create on an empty square |
+| `property` | `{"position":{"x":0,"y":0},"property":{"attribute":"color","value":"red"}}` | Apply one property; create on an empty square |
+| `ports` | `{"position":{"x":0,"y":0},"ports":["north","east"]}` | Replace network ports atomically, preserving color |
 | `place` | `{"objectId":5,"position":{"x":0,"y":0}}` | Place an existing unplaced object |
 | `erase` | `{"position":{"x":0,"y":0}}` | Remove the object on a square |
 | `clear` | No body | Empty the world, including unplaced objects |
 | `undo` | No body | Restore the previous snapshot |
 
-Property options are `red`, `blue`, `green`, `yellow`, `small`, `medium`, `large`,
-`bloom`, `spark`, `drop`, and `loop`. Coordinates are zero-based, A1 = `(0,0)`.
-Shape aliases (`flower`, `star`, `tear`, `ring`) are accepted in chat only; JSON
-uses canonical names. The engine currently supports only 8×8 worlds. Placement preserves identity and
-attributes, never creates, and requires an empty destination.
+Properties are explicit attribute/value pairs validated by Haskell. Objects use
+color, size, and shape; networks use color and unary north/east/south/west ports.
+JSON uses canonical names; aliases belong to chat. Invalid pairs return 422
+without saving history. Coordinates are zero-based; both domains use 8×8 boards.
+Placement preserves identity and attributes and requires an empty destination.
 
 FastAPI sends the stored world and structured action to the Haskell executable.
 Haskell owns world edits and semantic checks. `LOGIC_CHATBOT_ENGINE_PATH`
@@ -127,7 +128,7 @@ Android and Linux native clients do not require CORS configuration.
 `backend/api/data/conversations.sqlite3`, independent of the working directory.
 Parent directories and tables are created during application startup. Each
 conversation and its initial snapshot are inserted in one transaction.
-`conversations` stores IDs and creation times; `world_snapshots` stores ordered
+`conversations` stores IDs, immutable domain identifiers, and creation times; `world_snapshots` stores ordered
 JSON worlds, salience rankings, and nullable pending entries, starting at sequence 0. The latest snapshot is the current state.
 `canUndo` becomes true when that sequence is greater than 0. Keep the database
 file and its SQLite sidecars on persistent storage when deploying.
@@ -149,3 +150,18 @@ initialization, rollback, database constraints, missing IDs, and partial objects
 Editing tests call the real Haskell executable, so build/copy it first using the
 commands above. They cover all editing endpoints, history, blocked actions, and
 engine failures. `LOGIC_CHATBOT_ENGINE_PATH` can select a test binary.
+
+## Domain contract
+
+Creation requires a domain identifier; `objects` and `network` are supported.
+Missing or unsupported identifiers return HTTP 422 without creating a conversation.
+Every conversation response includes `domain`. Editing, chat, clarification, and
+undo inherit it from the conversation; clients cannot change it through those endpoints.
+FastAPI forwards it in each Haskell request and checks the response identifier.
+Startup migrates existing conversations to `objects`, preserving snapshots,
+salience history, pending clarification, and messages. Undo restores state within
+the same domain.
+
+Startup also migrates all legacy world and salience snapshots to generic
+attributes, transactionally and without clearing history. Flutter uses generic property pairs and atomic network port-pattern edits. See the
+[JSON contract](../../specification/json-contract.md) for wire formats and migration details.

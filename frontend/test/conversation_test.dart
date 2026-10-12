@@ -1,3 +1,4 @@
+import 'package:logic_chatbot/models/domain.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -19,9 +20,12 @@ class MemoryStore implements ConversationIdStore {
   String? id;
   bool failWrite = false;
   @override
-  Future<String?> read() async => id;
+  Future<String?> read({WorldDomain domain = WorldDomain.objects}) async => id;
   @override
-  Future<void> write(String value) async {
+  Future<void> write(
+    String value, {
+    WorldDomain domain = WorldDomain.objects,
+  }) async {
     if (failWrite) throw StateError('storage unavailable');
     id = value;
   }
@@ -32,6 +36,7 @@ void main() {
     File('../backend/shared/toy_world.json').readAsStringSync(),
   );
   Map<String, dynamic> state([String id = 'saved']) => {
+    'domain': 'objects',
     'conversationId': id,
     'world': world,
     'canUndo': false,
@@ -67,7 +72,8 @@ void main() {
       expect(requests.map((r) => r.method), ['POST', 'GET']);
       expect(requests.first.url.path, '/api/conversations');
       expect(requests.last.url.path, '/api/conversations/saved');
-      expect(requests.first.body, isEmpty);
+      expect(jsonDecode(requests.first.body), {'domain': 'objects'});
+      expect(subject.conversation!.domain, WorldDomain.objects);
     },
   );
 
@@ -160,6 +166,25 @@ void main() {
       final api = ConversationApi(
         baseUrl: Uri.parse('http://localhost:8000'),
         client: MockClient((_) async => http.Response(payload, 200)),
+      );
+      await expectLater(api.get('saved'), throwsA(isA<ApiException>()));
+      api.close();
+    }
+  });
+
+  test('rejects missing or unsupported conversation domains', () async {
+    for (final domain in [null, 'unsupported']) {
+      final payload = state();
+      if (domain == null) {
+        payload.remove('domain');
+      } else {
+        payload['domain'] = domain;
+      }
+      final api = ConversationApi(
+        baseUrl: Uri.parse('http://localhost:8000'),
+        client: MockClient(
+          (_) async => http.Response(jsonEncode(payload), 200),
+        ),
       );
       await expectLater(api.get('saved'), throwsA(isA<ApiException>()));
       api.close();

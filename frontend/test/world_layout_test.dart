@@ -1,3 +1,4 @@
+import 'package:logic_chatbot/models/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logic_chatbot/models/conversation_state.dart';
@@ -25,6 +26,7 @@ void main() {
           home: Scaffold(
             body: ConversationWorldPanel(
               conversation: ConversationState(
+                domain: WorldDomain.objects,
                 id: 'test',
                 world: World(
                   objects: List.generate(unplaced, (id) => WorldObject(id: id)),

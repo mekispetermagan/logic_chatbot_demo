@@ -5,75 +5,69 @@ import Control.Monad (unless)
 import Data.Aeson hiding (Object)
 import Data.Aeson.Types (Parser, parseEither)
 import Data.List (nub, intercalate)
-import Layer2Parser (parseSentences, isUndoEntry)
+import Layer2Parser (parseSentencesWith, isUndoEntry)
 import Discourse
 import Layer2Evaluation
 import Pretty (pretty)
 import Ontology
-import ReferenceResolution (inBounds)
+import Domain
+import qualified Data.Map.Strict as Map
+import DomainLibrary (DomainLibrary, ontology)
+import Domains.Objects.Library (objectsLibrary)
+import Domains.Network.Library (networkLibrary)
+import ReferenceResolution (inBoundsWith)
 import WorldEditor
 
 parsePosition :: Value -> Parser Position
 parsePosition = withObject "position" $ \value -> (,) <$> value .: "x" <*> value .: "y"
 
-parseColor :: String -> Parser Color
-parseColor value = case value of
-  "red" -> pure Red
-  "blue" -> pure Blue
-  "green" -> pure Green
-  "yellow" -> pure Yellow
-  _ -> fail "Invalid color"
+-- Attribute identifiers and values are canonical transport names, not aliases.
+parseProperty :: Domain -> Value -> Parser Property
+parseProperty domain = withObject "attribute property" $ \value -> do
+  attribute <- AttributeId <$> value .: "attribute"
+  stored <- ValueId <$> value .: "value"
+  let property = AttributeValue attribute stored
+  unless (validProperty domain property) (fail "Invalid attribute/value")
+  pure property
 
-parseSize :: String -> Parser Size
-parseSize value = case value of
-  "small" -> pure Small
-  "medium" -> pure Medium
-  "large" -> pure Large
-  _ -> fail "Invalid size"
-
-parseShape :: String -> Parser Shape
-parseShape value = case value of
-  "bloom" -> pure Bloom
-  "spark" -> pure Spark
-  "drop" -> pure Drop
-  "loop" -> pure Loop
-  _ -> fail "Invalid shape"
-
-parseObject :: Value -> Parser Object
-parseObject = withObject "world object" $ \value -> do
+parseObject :: Domain -> Value -> Parser Object
+parseObject domain = withObject "world object" $ \value -> do
   identifier <- value .: "id"
   unless (identifier >= 0 && identifier < maxBound) (fail "Invalid identifier")
-  color <- value .:? "color" >>= traverse parseColor
-  size <- value .:? "size" >>= traverse parseSize
-  shape <- value .:? "shape" >>= traverse parseShape
+  attributes <- value .: "attributes" :: Parser (Map.Map String String)
+  let stored = Map.fromList [(AttributeId name, ValueId item) | (name,item) <- Map.toList attributes]
+  unless (all (validProperty domain . uncurry AttributeValue) (Map.toList stored))
+    (fail "Invalid object attribute/value")
   position <- value .:? "position" >>= traverse parsePosition
-  pure (Object (Id identifier) color size shape position)
+  pure (Object (Id identifier) stored position)
 
-parseWorld :: Value -> Parser World
-parseWorld = withObject "world" $ \value -> do
+parseWorld :: Domain -> Value -> Parser World
+parseWorld domain = withObject "world" $ \value -> do
   width <- value .: "width" :: Parser Int
   height <- value .: "height" :: Parser Int
-  unless (width == 8 && height == 8) (fail "Only 8x8 worlds supported")
-  objects <- value .: "objects" >>= mapM parseObject
+  unless (width == boardWidth domain && height == boardHeight domain) (fail "Only 8x8 worlds supported")
+  objects <- value .: "objects" >>= mapM (parseObject domain)
   let identifiers = map idOf objects
       positions = [position | Just position <- map positionOf objects]
   unless (length identifiers == length (nub identifiers)) (fail "Duplicate identifiers")
-  unless (all inBounds positions) (fail "Object outside board")
+  unless (all (inBoundsWith domain) positions) (fail "Object outside board")
   unless (length positions == length (nub positions)) (fail "Colliding objects")
   pure (World objects)
 
-parseProperty :: String -> Parser Property
-parseProperty value
-  | value `elem` ["red", "blue", "green", "yellow"] = C <$> parseColor value
-  | value `elem` ["small", "medium", "large"] = S <$> parseSize value
-  | otherwise = Sh <$> parseShape value
-
-parseAction :: Value -> Parser EditorAction
-parseAction = withObject "action" $ \value -> do
+parseAction :: Domain -> Value -> Parser EditorAction
+parseAction domain = withObject "action" $ \value -> do
   kind <- value .: "type" :: Parser String
   case kind of
     "property" -> ApplyProperty <$> (value .: "position" >>= parsePosition)
-                                <*> (value .: "property" >>= parseProperty)
+                                <*> (value .: "property" >>= parseProperty domain)
+    "ports" -> do
+      unless (domainId domain == "network") (fail "Ports require network domain")
+      position <- value .: "position" >>= parsePosition
+      ports <- value .: "ports" :: Parser [String]
+      let names = ["north", "east", "south", "west"]
+      unless (all (`elem` names) ports && length ports == length (nub ports)) (fail "Invalid ports")
+      pure (ReplaceAttributes position (map AttributeId names)
+        [AttributeValue (AttributeId port) (ValueId port) | port <- ports])
     "place" -> PlaceObject <$> (Id <$> value .: "objectId")
                            <*> (value .: "position" >>= parsePosition)
     "erase" -> EraseSquare <$> (value .: "position" >>= parsePosition)
@@ -82,8 +76,8 @@ parseAction = withObject "action" $ \value -> do
 
 data Operation = Chat String | Clarify Identifier | ClarifySquare Position | Edit EditorAction
 
-parseRanking :: Value -> Parser SalienceRanking
-parseRanking = withArray "salience" $ mapM parseMention . foldr (:) []
+parseRanking :: Domain -> Value -> Parser SalienceRanking
+parseRanking domain = withArray "salience" $ mapM parseMention . foldr (:) []
   where
     parseMention = withObject "mention" $ \value -> do
       entry <- value .: "entry"
@@ -95,25 +89,33 @@ parseRanking = withArray "salience" $ mapM parseMention . foldr (:) []
     parseMentionProperty = withObject "property" $ \value -> do
       kind <- value .: "kind" :: Parser String
       if kind == "position" then P <$> (value .: "value" >>= parsePosition)
-      else value .: "value" >>= parseProperty
+      else if kind == "attribute" then parseProperty domain (toJSON value)
+      else fail "Invalid salience property kind"
 
-parsePending :: Value -> Parser Pending
-parsePending = withObject "pending" $ \value -> do
+parsePending :: DomainLibrary -> Value -> Parser Pending
+parsePending library = withObject "pending" $ \value -> do
   text <- value .: "remaining"
-  sentences <- either fail pure (parseSentences text)
+  sentences <- either fail pure (parseSentencesWith library text)
   identifiers <- map Id <$> value .: "candidateIds"
   squares <- value .:? "squareChoices" .!= [] >>= mapM parsePosition
-  unless (not (null sentences) && (not (null identifiers) /= not (null squares)) && all inBounds squares)
+  unless (not (null sentences) && (not (null identifiers) /= not (null squares)) && all (inBoundsWith (ontology library)) squares)
     (fail "Invalid pending entry")
   resolved <- map Id <$> (value .:? "resolvedSubjects" .!= [])
   pure (if null squares then Pending sentences identifiers resolved
         else SquarePending sentences identifiers resolved squares)
 
-parseRequest :: Value -> Parser (World, SalienceRanking, Maybe Pending, Operation)
+parseRequest :: Value -> Parser (DomainLibrary, World, SalienceRanking, Maybe Pending, Operation)
 parseRequest = withObject "request" $ \value -> do
-  world <- value .: "world" >>= parseWorld
-  ranking <- value .:? "salience" .!= Array mempty >>= parseRanking
-  pending <- value .:? "pending" >>= traverse parsePending
+  identifier <- value .: "domain"
+  library <- case identifier :: String of
+    "objects" -> pure objectsLibrary
+    "network" -> pure networkLibrary
+    _ -> fail ("Unsupported domain: " ++ identifier)
+  let domain = ontology library
+  either fail pure (validateDomain domain)
+  world <- value .: "world" >>= parseWorld domain
+  ranking <- value .:? "salience" .!= Array mempty >>= parseRanking domain
+  pending <- value .:? "pending" >>= traverse (parsePending library)
   action <- value .: "action"
   operation <- withObject "action" (\fields -> do
     kind <- fields .: "type" :: Parser String
@@ -126,8 +128,8 @@ parseRequest = withObject "request" $ \value -> do
           (Just i, Nothing) -> pure (Clarify (Id i))
           (Nothing, Just p) -> ClarifySquare <$> parsePosition p
           _ -> fail "Choose an object or a square"
-      _ -> Edit <$> parseAction action) action
-  pure (world, ranking, pending, operation)
+      _ -> Edit <$> parseAction domain action) action
+  pure (library, world, ranking, pending, operation)
 
 positionJson :: Position -> Value
 positionJson (x, y) = object ["x" .= x, "y" .= y]
@@ -135,26 +137,9 @@ positionJson (x, y) = object ["x" .= x, "y" .= y]
 objectJson :: Object -> Value
 objectJson value = object
   [ "id" .= idToInt (idOf value)
-  , "color" .= fmap colorName (colorOf value)
-  , "size" .= fmap sizeName (sizeOf value)
-  , "shape" .= fmap shapeName (shapeOf value)
+  , "attributes" .= Map.fromList [(pretty name, pretty stored) | (name,stored) <- Map.toList (attributesOf value)]
   , "position" .= fmap positionJson (positionOf value)
   ]
-  where
-    colorName :: Color -> String
-    colorName Red = "red"
-    colorName Blue = "blue"
-    colorName Green = "green"
-    colorName Yellow = "yellow"
-    sizeName :: Size -> String
-    sizeName Small = "small"
-    sizeName Medium = "medium"
-    sizeName Large = "large"
-    shapeName :: Shape -> String
-    shapeName Bloom = "bloom"
-    shapeName Spark = "spark"
-    shapeName Drop = "drop"
-    shapeName Loop = "loop"
 
 rankingJson :: SalienceRanking -> Value
 rankingJson ranking = toJSON [object
@@ -163,10 +148,11 @@ rankingJson ranking = toJSON [object
   | ((entry, utterance), identifier, properties) <- ranking]
   where
     propertyJson (P position) = object ["kind" .= ("position" :: String), "value" .= positionJson position]
-    propertyJson property = object ["kind" .= ("descriptor" :: String), "value" .= pretty property]
+    propertyJson (AttributeValue attribute value) = object
+      ["kind" .= ("attribute" :: String), "attribute" .= pretty attribute, "value" .= pretty value]
 
-pendingJson :: World -> Pending -> Value
-pendingJson (World objects) pending = object
+pendingJson :: Domain -> World -> Pending -> Value
+pendingJson domain (World objects) pending = object
   [ "remaining" .= intercalate " " (map pretty (remainingSentences pending))
   , "sentence" .= case remainingSentences pending of sentence:_ -> pretty sentence; [] -> ""
   , "candidateIds" .= map idToInt (candidateIds pending)
@@ -174,35 +160,36 @@ pendingJson (World objects) pending = object
       SquarePending {squareChoices = positions} -> map positionJson positions
       _ -> []
   , "resolvedSubjects" .= map idToInt (resolvedSubjects pending)
-  , "candidates" .= [object ["objectId" .= idToInt identifier, "label" .= pretty value]
+  , "candidates" .= [object ["objectId" .= idToInt identifier, "label" .= prettyObjectIn domain value]
        | identifier <- candidateIds pending, value <- objects, idOf value == identifier]
   ]
 
 processRequest :: Value -> Either String Value
 processRequest input = do
-  (world, ranking, pending, action) <- parseEither parseRequest input
-  let undoRequested = case action of Chat text -> isUndoEntry text; _ -> False
+  (library, world, ranking, pending, action) <- parseEither parseRequest input
+  let domain = ontology library
+      undoRequested = case action of Chat text -> isUndoEntry text; _ -> False
       (updated@(World objects), salience, nextPending, feedback, isError) = case (pending, action) of
         (_, Chat _) | undoRequested -> (world, ranking, pending, "", False)
         (Just paused, Clarify identifier) ->
-          let (w, r, p, message) = resumeEntry world ranking paused identifier
+          let (w, r, p, message) = resumeEntryIn library world ranking paused identifier
           in (w, r, p, message, False)
         (Just paused, ClarifySquare position) ->
-          let (w, r, p, message) = resumeSquareEntry world ranking paused position
+          let (w, r, p, message) = resumeSquareEntryIn library world ranking paused position
           in (w, r, p, message, False)
         (Just _, _) -> (world, ranking, pending, "Choose an object or square, or undo", True)
         (Nothing, Clarify _) -> (world, ranking, Nothing, "No clarification pending", True)
         (Nothing, ClarifySquare _) -> (world, ranking, Nothing, "No clarification pending", True)
-        (Nothing, Chat text) -> case parseSentences text of
+        (Nothing, Chat text) -> case parseSentencesWith library text of
           Left message -> (world, ranking, Nothing, message, True)
-          Right sentences -> let (w, r, p, message) = evaluateEntry world ranking sentences
+          Right sentences -> let (w, r, p, message) = evaluateEntryIn library world ranking sentences
                              in (w, r, p, message, False)
         (Nothing, Edit edit) ->
-          let (w, message) = evaluateEditorAction world edit
+          let (w, message) = evaluateEditorActionWith domain world edit
           in (w, purge w ranking, Nothing, message, False)
-  pure (object (["world" .= object ["width" .= (8 :: Int), "height" .= (8 :: Int),
+  pure (object (["domain" .= domainId domain, "world" .= object ["width" .= boardWidth domain, "height" .= boardHeight domain,
                                   "objects" .= map objectJson objects],
                 "salience" .= rankingJson salience,
-                "pending" .= fmap (pendingJson updated) nextPending,
+                "pending" .= fmap (pendingJson domain updated) nextPending,
                 "feedback" .= feedback, "isError" .= isError] ++
                 ["undoRequested" .= True | undoRequested]))

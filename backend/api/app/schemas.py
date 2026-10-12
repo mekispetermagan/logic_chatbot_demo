@@ -8,6 +8,13 @@ class Schema(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+DomainId = Literal["objects", "network"]
+
+
+class CreateConversation(Schema):
+    domain: DomainId
+
+
 class Position(Schema):
     x: StrictInt
     y: StrictInt
@@ -15,9 +22,7 @@ class Position(Schema):
 
 class WorldObject(Schema):
     id: StrictInt
-    shape: Literal["bloom", "spark", "drop", "loop"] | None = None
-    size: Literal["small", "medium", "large"] | None = None
-    color: Literal["red", "blue", "green", "yellow"] | None = None
+    attributes: dict[str, str]
     position: Position | None = None
 
 
@@ -64,6 +69,7 @@ class PendingEntry(Schema):
 
 class ConversationState(Schema):
     conversationId: UUID
+    domain: DomainId
     world: World
     canUndo: bool
     messages: list[ChatMessage] = Field(default_factory=list)
@@ -74,10 +80,19 @@ class EditState(ConversationState):
     feedback: str
 
 
+class AttributeProperty(Schema):
+    attribute: str = Field(min_length=1)
+    value: str = Field(min_length=1)
+
+
 class PropertyEdit(Schema):
     position: Position
-    property: Literal["red", "blue", "green", "yellow", "small", "medium", "large",
-                      "bloom", "spark", "drop", "loop"]
+    property: AttributeProperty
+
+
+class PortsEdit(Schema):
+    position: Position
+    ports: list[Literal["north", "east", "south", "west"]]
 
 
 class PlaceEdit(Schema):

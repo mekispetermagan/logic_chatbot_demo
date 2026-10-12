@@ -1,3 +1,6 @@
+import '../models/domain.dart';
+import '../models/network_shape.dart';
+import 'network_glyph.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -10,14 +13,36 @@ class WorldObjectWidget extends StatelessWidget {
   const WorldObjectWidget({
     super.key,
     required this.object,
+    this.domain = WorldDomain.objects,
     this.tooltipTriggerMode = TooltipTriggerMode.manual,
   });
 
   final WorldObject object;
+  final WorldDomain domain;
   final TooltipTriggerMode tooltipTriggerMode;
 
   @override
   Widget build(BuildContext context) {
+    if (domain == WorldDomain.network) {
+      final shape = NetworkShape.fromObject(object);
+      final description =
+          '#${object.id}\nColor: ${object.color?.name ?? 'none'}\nPorts: ${shape.label}\nPosition: ${object.position?.square ?? 'none'}';
+      return Tooltip(
+        message: description,
+        triggerMode: tooltipTriggerMode,
+        child: Semantics(
+          label: description,
+          child: Opacity(
+            opacity: object.position == null ? .6 : 1,
+            child: NetworkGlyph(
+              shape: shape,
+              color:
+                  ObjectPalette.forColor(object.color) ?? Colors.grey.shade700,
+            ),
+          ),
+        ),
+      );
+    }
     final description =
         '#${object.id}\n'
         'Color: ${object.color?.name ?? 'none'}\n'

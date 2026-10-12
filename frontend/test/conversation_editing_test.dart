@@ -1,3 +1,4 @@
+import 'package:logic_chatbot/models/domain.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -18,12 +19,17 @@ import 'package:logic_chatbot/widgets/world_widget.dart';
 
 class SavedId implements ConversationIdStore {
   @override
-  Future<String?> read() async => 'saved';
+  Future<String?> read({WorldDomain domain = WorldDomain.objects}) async =>
+      'saved';
   @override
-  Future<void> write(String id) async {}
+  Future<void> write(
+    String id, {
+    WorldDomain domain = WorldDomain.objects,
+  }) async {}
 }
 
 Map<String, dynamic> fixture({String? feedback, bool canUndo = false}) => {
+  'domain': 'objects',
   'conversationId': 'saved',
   'world': jsonDecode(
     File('../backend/shared/toy_world.json').readAsStringSync(),
@@ -60,13 +66,13 @@ void main() {
         (await api.applyProperty(
           'saved',
           const BoardPosition(2, 3),
-          property,
+          property.property,
         )).feedback,
         'No change',
       );
       expect(jsonDecode(requests.last.body), {
         'position': {'x': 2, 'y': 3},
-        'property': property.name,
+        'property': property.property.toJson(),
       });
       expect(requests.last.headers['content-type'], 'application/json');
       expect(requests.last.url.path, '/api/conversations/saved/property');
@@ -114,7 +120,7 @@ void main() {
       await subject.load();
       expect(subject.selectedProperty, ObjectProperty.blue);
       final returned = fixture(feedback: '#0: red -> blue', canUndo: true);
-      returned['world']['objects'][0]['color'] = 'blue';
+      returned['world']['objects'][0]['attributes']['color'] = 'blue';
       pending.complete(reply(returned));
       await editing;
       expect(requests.length, 1);
@@ -280,7 +286,7 @@ void main() {
       await tester.pump();
       expect(jsonDecode(requests.single.body), {
         'position': {'x': 0, 'y': 0},
-        'property': 'blue',
+        'property': {'attribute': 'color', 'value': 'blue'},
       });
       expect(find.byType(LinearProgressIndicator), findsOneWidget);
       expect(

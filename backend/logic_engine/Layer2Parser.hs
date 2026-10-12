@@ -1,16 +1,19 @@
-module Layer2Parser (parseSentence, parseSentences, isUndoEntry) where
+module Layer2Parser (parseSentence, parseSentences, parseSentenceWith, parseSentencesWith, isUndoEntry) where
 
 import Control.Applicative (some, (<|>))
-import Data.Char (isSpace, toLower, ord, isDigit)
+import Data.Char (isSpace, toLower)
 import Data.List (isPrefixOf)
 import Data.Maybe (mapMaybe)
 import Data.Void (Void)
-import Text.Read (readMaybe)
 import Text.Megaparsec (Parsec, parse, eof, errorBundlePretty, takeWhile1P, oneOf)
 import Text.Megaparsec.Char (space)
+import Domain
 import Ontology
 import AtomicPerformative (RemovableAttribute(..))
 import AtomicPropertyQuery
+import SyntaxVocabulary
+import DomainLibrary
+import Domains.Objects.Library (objectsLibrary)
 import Layer2Syntax
 
 -- Undo is an entry-level request: all text following the prefix is ignored.
@@ -30,104 +33,28 @@ entry = space *> some sentenceTokens <* eof
       mark <- (Just <$> oneOf ".?" <* space) <|> (Nothing <$ eof)
       pure (words', mark)
 
-parseSentences :: String -> Either String [Sentence]
-parseSentences input = case parse entry "controlled English" input of
+parseSentencesWith :: DomainLibrary -> String -> Either String [Sentence]
+parseSentencesWith library input = case parse entry "controlled English" input of
   Left message -> Left (errorBundlePretty message)
-  Right chunks -> traverse parseChunk chunks
+  Right chunks -> traverse (parseChunkWith library) chunks
 
-parseSentence :: String -> Either String Sentence
-parseSentence input = do
-  sentences <- parseSentences input
+parseSentenceWith :: DomainLibrary -> String -> Either String Sentence
+parseSentenceWith library input = do
+  sentences <- (parseSentencesWith library) input
   case sentences of
     [sentence] -> Right sentence
     _ -> Left "Expected exactly one sentence"
 
-descriptor :: String -> Maybe Property
-descriptor word = lookup word
-  [("red", C Red), ("blue", C Blue), ("green", C Green), ("yellow", C Yellow),
-   ("small", S Small), ("medium", S Medium), ("large", S Large),
-   ("bloom", Sh Bloom), ("flower", Sh Bloom), ("spark", Sh Spark), ("star", Sh Spark),
-   ("drop", Sh Drop), ("tear", Sh Drop), ("loop", Sh Loop), ("ring", Sh Loop)]
-
-attribute :: String -> Maybe Attribute
-attribute word = lookup word
-  [("color", ColorAttribute), ("size", SizeAttribute), ("shape", ShapeAttribute),
-   ("position", PositionAttribute), ("row", RowAttribute), ("column", ColumnAttribute)]
-
-square :: String -> Maybe Position
-square [column, row] | column >= 'a' && column <= 'h' && row >= '1' && row <= '8' =
-  Just (ord column - ord 'a', ord row - ord '1')
-square _ = Nothing
-
-reference :: String -> Maybe ObjectReference
-reference ('#':digits) | not (null digits) && all isDigit digits = do
-  number <- readMaybe digits :: Maybe Integer
-  if number >= 0 && number <= toInteger (maxBound :: Int)
-    then Just (ById (Id (fromInteger number))) else Nothing
-reference word = AtSquare <$> square word
-
-subject :: [String] -> Maybe Subject
-subject ["it"] = Just It
-subject [word] | Just ref <- reference word = Just (Reference ref)
-subject ("the":words') = Definite <$> description words'
-subject ("a":words') = Indefinite <$> description words'
-subject words' = Indefinite <$> description words'
-
-description :: [String] -> Maybe [Property]
-description words' = case stripOne words' of
-  [] -> Nothing
-  descriptors -> traverse descriptor descriptors
-  where
-    stripOne tokens | not (null tokens) && last tokens == "one" = init tokens
-    stripOne tokens = tokens
-
-dropWord :: String -> [String] -> [String]
-dropWord word (first:rest) | word == first = rest
-dropWord _ words' = words'
-
-destination :: [String] -> Maybe Property
-destination words' = case dropWord "on" (dropWord "to" words') of
-  [position] -> P <$> square position
-  _ -> Nothing
-
--- A destination can occur once, only at the end of a predicate.
-predicate :: [String] -> Maybe [Property]
-predicate words' = let tokens = dropWord "a" (dropWord "to" (dropWord "is" words')) in
-  case destination tokens of
-    Just position -> Just [position]
-    Nothing -> case span (\word -> descriptor word /= Nothing) tokens of
-      ([], _) -> Nothing
-      (descriptors, rest) -> do
-        properties <- traverse descriptor descriptors
-        case rest of
-          [] -> Just properties
-          _ -> (properties ++) . (:[]) <$> destination rest
-
-splits :: [a] -> [([a], [a])]
-splits tokens = [splitAt index tokens | index <- [1 .. length tokens - 1]]
-
-isIndefinite :: Subject -> Bool
-isIndefinite (Indefinite _) = True
-isIndefinite _ = False
-
-hasBoundary :: [String] -> Bool
-hasBoundary (word:_) = word == "is" || word == "to"
-hasBoundary _ = False
-
-isPosition :: Property -> Bool
-isPosition (P _) = True
-isPosition _ = False
-
-attribution :: [String] -> [Sentence]
-attribution words' = mapMaybe candidate (splits tokens)
+attributionWith :: Domain -> [String] -> [Sentence]
+attributionWith domain words' = mapMaybe candidate (splits tokens)
   where
     (verb, tokens) = case words' of
       "move":rest -> ("move", rest)
       "turn":rest -> ("turn", rest)
       _ -> ("", words')
     candidate (before, after) = do
-      who <- subject before
-      properties <- predicate after
+      who <- (subjectWith domain) before
+      properties <- (predicateWith domain) after
       let positional = all isPosition properties
           namedBoundary = case who of
             Definite _ -> positional || hasBoundary after
@@ -139,188 +66,69 @@ attribution words' = mapMaybe candidate (splits tokens)
 
 -- Structural operands must denote existing objects. Description boundaries
 -- are enumerated just like attribution boundaries, with optional 'and'.
-structural :: [String] -> [Sentence]
-structural ("remove":tokens) = unary Removal (stripFromBoard tokens)
+structuralWith :: Domain -> [String] -> [Sentence]
+structuralWith domain ("remove":tokens) = (unaryWith domain) Removal (stripFromBoard tokens)
   where
     stripFromBoard words' = case reverse words' of
       "board":"from":rest -> reverse rest
       _ -> words'
-structural ("erase":tokens) = unary Deletion tokens
-structural ("delete":tokens) = unary Deletion tokens
-structural ("swap":tokens) = mapMaybe candidate (splits tokens)
+structuralWith domain ("erase":tokens) = (unaryWith domain) Deletion tokens
+structuralWith domain ("delete":tokens) = (unaryWith domain) Deletion tokens
+structuralWith domain ("swap":tokens) = mapMaybe candidate (splits tokens)
   where
-    candidate (before, after) = Swapping <$> existingSubject before
-                                          <*> existingSubject (dropWord "and" after)
-structural tokens = mapMaybe candidate (splits tokens)
+    candidate (before, after) = Swapping <$> (existingSubjectWith domain) before
+                                          <*> (existingSubjectWith domain) (dropWord "and" after)
+structuralWith domain tokens = mapMaybe candidate (splits tokens)
   where
     candidate (before, ["remove", name]) = do
-      who <- existingSubject before
-      attr <- lookup name [("color", RemoveColor), ("size", RemoveSize),
-                           ("shape", RemoveShape), ("square", RemoveSquare)]
+      who <- (existingSubjectWith domain) before
+      attr <- (removableWith domain) name
       pure (AttributeRemoval who attr)
     candidate _ = Nothing
 
-existingSubject :: [String] -> Maybe Subject
-existingSubject tokens = do
-  who <- subject tokens
-  if isIndefinite who then Nothing else Just who
-
-unary :: (Subject -> Sentence) -> [String] -> [Sentence]
-unary constructor tokens = maybe [] ((:[]) . constructor) (existingSubject tokens)
-
-questions :: [String] -> [Sentence]
-questions words' = valueQueries ++ checks
+questionsWith :: Domain -> [String] -> [Sentence]
+questionsWith domain words' = valueQueries ++ checks
   where
     valueTokens = case words' of
       "what":"is":rest -> dropWord "the" rest
       _ -> words'
     valueQueries = case valueTokens of
       name:"of":rest -> maybe [] (:[]) $ do
-        attr <- attribute name
-        who <- subject rest
+        attr <- (attributeWith domain) name
+        who <- (subjectWith domain) rest
         if isIndefinite who then Nothing else Just (Query attr who)
       _ -> mapMaybe shorthand (splits words')
     shorthand (before, after) = do
-      who <- subject before
-      attr <- case dropWord "is" after of [name] -> attribute name; _ -> Nothing
+      who <- (subjectWith domain) before
+      -- Unary descriptors are Boolean checks, not shorthand value queries.
+      if any (\word -> descriptorWith domain word /= Nothing) after then Nothing else pure ()
+      attr <- case dropWord "is" after of [name] -> (attributeWith domain) name; _ -> Nothing
       if isIndefinite who then Nothing else Just (Query attr who)
     (inverted, tokens) = case words' of "is":rest -> (True, rest); _ -> (False, words')
     checks = mapMaybe check (splits tokens)
     check (before, after) = do
-      who <- subject before
+      who <- (subjectWith domain) before
       if isIndefinite who then Nothing else pure ()
-      properties <- predicate after
+      properties <- (predicateWith domain) after
       property <- case properties of [value] -> Just value; _ -> Nothing
       -- Preserve the core rule that positional 'to' is performative-only.
       if isPosition property && "to" `elem` after then Nothing else pure ()
       let boundary = case who of Definite _ -> inverted || hasBoundary after; _ -> True
       if boundary then Just (Check who property) else Nothing
 
-parseChunk :: ([String], Maybe Char) -> Either String Sentence
-parseChunk (tokens, mark) = case (if mark == Just '?' then questions tokens ++ derivedQuestions tokens else structural tokens ++ attribution tokens ++ derivedPerformatives tokens) of
+parseChunkWith :: DomainLibrary -> ([String], Maybe Char) -> Either String Sentence
+parseChunkWith library (tokens, mark) = case candidates of
   [sentence] -> Right sentence
   [] -> Left ("Unsupported syntax: " ++ unwords tokens ++ maybe "" (:[]) mark)
   _ -> Left ("Ambiguous subject/predicate boundary: " ++ unwords tokens)
-
--- Layer 3 uses explicit relation words to separate existing-object subjects.
-removable :: String -> Maybe RemovableAttribute
-removable name = lookup name [("color", RemoveColor), ("size", RemoveSize),
-                             ("shape", RemoveShape), ("square", RemoveSquare)]
-
-comparisonAttribute :: String -> Maybe Attribute
-comparisonAttribute "square" = Just PositionAttribute
-comparisonAttribute name = attribute name
-
-direction :: String -> Maybe Direction
-direction name = lookup name [("up", Up), ("down", Down), ("left", Leftward), ("right", Rightward)]
-
-relative :: [String] -> Maybe (Direction, [String])
-relative tokens = case dropWord "just" tokens of
-  "above":rest -> Just (Up, rest)
-  "under":rest -> Just (Down, rest)
-  "right":"of":rest -> Just (Rightward, rest)
-  "left":"of":rest -> Just (Leftward, rest)
-  _ -> Nothing
-
-derivedPerformatives :: [String] -> [Sentence]
-derivedPerformatives ("move":tokens) = mapMaybe candidate (splits tokens)
   where
-    candidate (before, after) = do
-      who <- existingSubject before
-      case after of
-        [name] -> StepMove who <$> direction name
-        "next":"to":rest -> NeighborMove who <$> existingSubject rest
-        _ -> do
-          (whereTo, rest) <- relative after
-          RelativeMove who whereTo <$> existingSubject rest
-derivedPerformatives ("make":tokens) = mapMaybe candidate (splits tokens)
-  where
-    candidate (before, after) = do
-      who <- existingSubject before
-      case dropWord "the" after of
-        "same":name:"as":rest -> do
-          attr <- removable name
-          if attr == RemoveSquare then Nothing else CopyAttribute who attr <$> existingSubject rest
-        _ -> Nothing
-derivedPerformatives _ = []
+    domain = ontology library
+    candidates = if mark == Just '?'
+      then questionsWith domain tokens ++ parseDerivedQuestions library tokens
+      else structuralWith domain tokens ++ attributionWith domain tokens ++ parseDerivedPerformatives library tokens
 
-
-derivedQuestions :: [String] -> [Sentence]
-derivedQuestions ("how":"many":tokens) = squareCounts ++ objectCounts
-  where
-    stripped = dropWord "are" (dropWord "squares" tokens)
-    squareCounts = case stripped of
-      [name] | name `elem` ["empty", "free", "occupied", "taken"] ->
-        [CountSquares (name `elem` ["occupied", "taken"])]
-      _ -> []
-    objectTokens = dropWord "are" (dropWord "objects" tokens)
-    objectCounts = case objectTokens of
-      "next":"to":rest -> maybe [] ((:[]) . CountObjects . Neighboring) (existingSubject rest)
-      ["at", "the", "edge"] -> [CountObjects AtEdge]
-      ["in", "a", "corner"] -> [CountObjects InCorner]
-      _ -> maybe [] ((:[]) . CountObjects . Described) (traverse descriptor objectTokens)
-derivedQuestions words' = quantified ++ relations
-  where
-    tokens = case words' of
-      "is":rest -> rest
-      "does":rest -> rest
-      _ -> words'
-    quantified = case words' of
-      "is":"every":rest -> universalCandidates rest
-      "does":"every":rest -> universalCandidates rest
-      "every":rest -> universalCandidates rest
-      _ -> case dropWord "do" (dropWord "are" words') of
-        "some":rest -> mapMaybe (quantifiedCandidate False) (splits rest)
-        _ -> []
-    universalCandidates rest = mapMaybe (quantifiedCandidate True) (splits rest)
-    quantifiedCandidate universal (before, after) = do
-      -- A noun or copula marks the boundary between the two descriptions.
-      let noun = if universal then "object" else "objects"
-          copula = if universal then "is" else "are"
-      following <- case after of
-        word:rest | word == noun -> Just (dropWord copula rest)
-        word:rest | word == copula -> Just rest
-        _ -> Nothing
-      first <- description before
-      second <- quantifiedPredicates following
-      pure (Quantified universal first second)
-    relations = mapMaybe relation (splits tokens)
-    relation (before, after) = do
-      who <- existingSubject before
-      RelationPredicate relation target <- relationPredicate after
-      pure (SpatialQuestion who relation target)
-
--- Explicit conjunction boundaries avoid consuming descriptors of a target.
-quantifiedPredicates :: [String] -> Maybe [QuantifiedPredicate]
-quantifiedPredicates tokens = traverse clause (clauses tokens)
-  where
-    clauses words' = case break (== "and") words' of
-      (first, []) -> [first]
-      (first, _:rest) -> first : clauses rest
-    clause words' = (PropertyPredicate <$> description (dropWord "a" words'))
-                    <|> relationPredicate words'
-
--- Shared by ordinary and quantified questions. Targets must already exist.
-relationPredicate :: [String] -> Maybe QuantifiedPredicate
-relationPredicate tokens = case tokens of
-  ["on", "board"] -> unary OnBoard
-  ["on", "the", "board"] -> unary OnBoard
-  ["at", "the", "edge"] -> unary Edge
-  ["in", "a", "corner"] -> unary Corner
-  "next":"to":rest -> binary NextTo rest
-  _ -> sameOrHas tokens
-  where
-    unary relation = Just (RelationPredicate relation Nothing)
-    binary relation rest = RelationPredicate relation . Just <$> existingSubject rest
-    sameOrHas words' = case dropWord "the" (dropWord "have" words') of
-      ["a", name] -> do
-        attr <- removable name
-        if take 1 words' == ["have"] then unary (Has attr) else Nothing
-      "same":name:"as":rest -> do
-        attr <- comparisonAttribute name
-        binary (Same attr) rest
-      _ -> case dropWord "the" (dropWord "in" words') of
-        "same":name:"as":rest | name `elem` ["square", "row", "column"] -> do
-          attr <- comparisonAttribute name
-          binary (Same attr) rest
-        _ -> Nothing
+-- Current-domain convenience entry points.
+parseSentences :: String -> Either String [Sentence]
+parseSentences = parseSentencesWith objectsLibrary
+parseSentence :: String -> Either String Sentence
+parseSentence = parseSentenceWith objectsLibrary

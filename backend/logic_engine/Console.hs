@@ -3,6 +3,8 @@ module Console where
 import AtomicEvaluation (evaluateAtomicSentences)
 import AtomicParser (parseAtomicSentences)
 import Ontology (World)
+import Domain (prettyWorldIn)
+import Domains.Objects.Definition (objectsDomain)
 import Pretty (pretty)
 import qualified Sandbox
 import System.IO (hFlush, isEOF, stdout)
@@ -12,7 +14,7 @@ main = chatLoop Sandbox.world
 
 chatLoop :: World -> IO ()
 chatLoop world = do
-  putStrLn (pretty world)
+  putStrLn (prettyWorldIn objectsDomain world)
   putStr "> "
   hFlush stdout
   done <- isEOF

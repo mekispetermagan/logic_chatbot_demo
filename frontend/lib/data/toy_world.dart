@@ -5,7 +5,7 @@ import '../models/world_object.dart';
 final toyWorld = World(
   width: 8,
   height: 8,
-  objects: const [
+  objects: [
     WorldObject(
       id: 0,
       shape: ObjectShape.bloom,

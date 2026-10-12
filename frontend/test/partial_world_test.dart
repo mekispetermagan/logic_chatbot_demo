@@ -33,13 +33,13 @@ void main() {
         expect(controller.world, same(before));
         controller.dispose();
       }
-      const previous = WorldObject(
+      final previous = WorldObject(
         id: 20,
         shape: ObjectShape.bloom,
         size: ObjectSize.small,
         position: BoardPosition(2, 3),
       );
-      final initial = World(objects: const [WorldObject(id: 30), previous]);
+      final initial = World(objects: [WorldObject(id: 30), previous]);
       final controller = WorldDisplayController(initialWorld: initial);
       addTearDown(controller.dispose);
       controller.paint(2, 3);
@@ -73,14 +73,12 @@ void main() {
   );
 
   test('unplaced objects do not collide or count as outside the board', () {
-    final world = World(
-      objects: const [WorldObject(id: 0), WorldObject(id: 1)],
-    );
+    final world = World(objects: [WorldObject(id: 0), WorldObject(id: 1)]);
     expect(world.hasCollisions(), isFalse);
     expect(world.hasOutOfRangeCoordinates(), isFalse);
     expect(
       World(
-        objects: const [
+        objects: [
           WorldObject(id: 0, position: BoardPosition(0, 0)),
           WorldObject(id: 1, position: BoardPosition(0, 0)),
         ],
@@ -89,7 +87,7 @@ void main() {
     );
     expect(
       World(
-        objects: const [WorldObject(id: 0, position: BoardPosition(8, 0))],
+        objects: [WorldObject(id: 0, position: BoardPosition(8, 0))],
       ).hasOutOfRangeCoordinates(),
       isTrue,
     );
@@ -107,9 +105,7 @@ void main() {
             height: 320,
             child: WorldWidget(
               world: World(
-                objects: const [
-                  WorldObject(id: 4, position: BoardPosition(0, 0)),
-                ],
+                objects: [WorldObject(id: 4, position: BoardPosition(0, 0))],
               ),
               onPaint: (_, _) => paints++,
               onErase: (_, _) => erases++,

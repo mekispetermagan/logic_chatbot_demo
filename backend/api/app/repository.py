@@ -4,7 +4,7 @@ from collections.abc import Callable
 
 from .database import Database
 from .engine import EngineReply
-from .schemas import ChatMessage, ConversationState, EditState, World, PendingEntry
+from .schemas import ChatMessage, ConversationState, EditState, World, PendingEntry, DomainId
 
 
 class PendingConflict(Exception):
@@ -24,7 +24,9 @@ class ConversationRepository:
 
     def _latest(self, connection, conversation_id):
         return connection.execute("""
-            SELECT * FROM world_snapshots WHERE conversation_id = ? ORDER BY sequence DESC LIMIT 1
+            SELECT world_snapshots.*, conversations.domain FROM world_snapshots
+            JOIN conversations ON conversations.id = world_snapshots.conversation_id
+            WHERE conversation_id = ? ORDER BY sequence DESC LIMIT 1
         """, (str(conversation_id),)).fetchone()
 
     def _pending(self, row):
@@ -32,19 +34,19 @@ class ConversationRepository:
         return PendingEntry.model_validate(value) if value is not None else None
 
     def _state(self, row, conversation_id, messages, feedback=None):
-        values = dict(conversationId=conversation_id,
+        values = dict(conversationId=conversation_id, domain=row["domain"],
                       world=World.model_validate_json(row["world_json"]),
                       canUndo=row["sequence"] > 0, messages=messages, pending=self._pending(row))
         return ConversationState(**values) if feedback is None else EditState(**values, feedback=feedback)
 
-    def create(self, conversation_id: UUID, world: World) -> ConversationState:
+    def create(self, conversation_id: UUID, world: World, domain: DomainId) -> ConversationState:
         with self.database.connection() as connection:
-            connection.execute("INSERT INTO conversations (id) VALUES (?)", (str(conversation_id),))
+            connection.execute("INSERT INTO conversations (id, domain) VALUES (?, ?)", (str(conversation_id), domain))
             connection.execute(
                 "INSERT INTO world_snapshots (conversation_id, sequence, world_json) VALUES (?, 0, ?)",
                 (str(conversation_id), world.model_dump_json()),
             )
-        return ConversationState(conversationId=conversation_id, world=world, canUndo=False)
+        return ConversationState(conversationId=conversation_id, domain=domain, world=world, canUndo=False)
 
     def get(self, conversation_id: UUID) -> ConversationState | None:
         with self.database.connection() as connection:
@@ -52,7 +54,7 @@ class ConversationRepository:
             return None if row is None else self._state(row, conversation_id, self._messages(connection, conversation_id))
 
     def edit(self, conversation_id: UUID,
-             update: Callable[[World, list[dict], PendingEntry | None], EngineReply],
+             update: Callable[[DomainId, World, list[dict], PendingEntry | None], EngineReply],
              user_text: str | None = None, continuation: bool = False) -> EditState | None:
         with self.database.connection() as connection:
             # The entire engine round trip is serialized with snapshot persistence.
@@ -65,7 +67,7 @@ class ConversationRepository:
                 raise PendingConflict("Choose an object or square, or undo" if pending else "No clarification pending")
             previous = World.model_validate_json(row["world_json"])
             salience = json.loads(row["salience_json"])
-            reply = update(previous, salience, pending)
+            reply = update(row["domain"], previous, salience, pending)
             feedback = reply.feedback
             if reply.undoRequested:
                 row, feedback = self._undo_snapshot(connection, conversation_id, row)

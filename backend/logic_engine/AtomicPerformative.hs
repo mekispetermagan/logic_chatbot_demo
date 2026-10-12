@@ -1,5 +1,7 @@
 module AtomicPerformative where
 
+import Domain
+import Domains.Objects.Definition (objectsDomain)
 import Ontology
 import Pretty
 import ReferenceResolution
@@ -16,13 +18,11 @@ data AtomicPerformative = AP
                         deriving (Eq, Show)
 
 -- Only whole stored attributes can be cleared; row and column are derived.
-data RemovableAttribute = RemoveColor | RemoveSize | RemoveShape | RemoveSquare
+data RemovableAttribute = RemoveStored AttributeId | RemoveSquare
   deriving (Eq, Show)
 
 instance PrettyShow RemovableAttribute where
-  pretty RemoveColor = "color"
-  pretty RemoveSize = "size"
-  pretty RemoveShape = "shape"
+  pretty (RemoveStored attribute) = pretty attribute
   pretty RemoveSquare = "square"
 
 instance PrettyShow AtomicPerformative where
@@ -34,10 +34,8 @@ instance PrettyShow AtomicPerformative where
   pretty (Delete reference) = "delete " ++ pretty reference ++ "."
 
 updateObjectWith :: Object -> Property -> Object
-updateObjectWith (Object i mc ms msh mp) (C c)    = (Object i (Just c) ms msh mp)
-updateObjectWith (Object i mc ms msh mp) (S s)    = (Object i mc (Just s) msh mp)
-updateObjectWith (Object i mc ms msh mp) (Sh sh)  = (Object i mc ms (Just sh) mp)
-updateObjectWith (Object i mc ms msh mp) (P p)    = (Object i mc ms msh (Just p))
+updateObjectWith object (AttributeValue attribute value) = setAttribute attribute (Just value) object
+updateObjectWith object (P position) = object {positionOf = Just position}
 
 data UpdateChange = ObjectCreated Identifier Property
                   | PropertyChanged Identifier (Maybe Property) Property
@@ -61,9 +59,14 @@ instance PrettyShow UpdateChange where
   pretty (UpdateBlocked Nothing message) = message
   pretty (UpdateBlocked (Just identifier) message) = "Created " ++ pretty identifier ++ "; " ++ message
 
-evaluateAtomicPerformative :: World -> AtomicPerformative -> (World, Result UpdateChange)
-evaluateAtomicPerformative world (AP reference property) =
-  case resolvePerformativeReference world reference of
+isPosition :: Property -> Bool
+isPosition (P _) = True
+isPosition _ = False
+
+evaluateAtomicPerformativeWith :: Domain -> World -> AtomicPerformative -> (World, Result UpdateChange)
+evaluateAtomicPerformativeWith domain world (AP reference property)
+  | not (validProperty domain property) && not (isPosition property) = (world, Message "Invalid property")
+  | otherwise = case (resolvePerformativeReferenceWith domain) world reference of
     Message message -> (world, Message message)
     Result (resolved@(World objects), object, created) ->
       let identifier = idOf object
@@ -79,33 +82,32 @@ evaluateAtomicPerformative world (AP reference property) =
             in (updated, Result change)
       in case property of
         P position
-          | not (inBounds position) -> blocked "Outside board"
+          | not ((inBoundsWith domain) position) -> blocked "Outside board"
           | any (\o -> idOf o /= identifier && positionOf o == Just position) objects ->
               blocked (prettyPosition position ++ " occupied")
         _ -> apply
 
 -- Structural operations resolve existing objects only; failure leaves the world intact.
-evaluateAtomicPerformative world (Remove reference) =
-  evaluateAtomicPerformative world (RemoveAttribute reference RemoveSquare)
-evaluateAtomicPerformative world@(World objects) (RemoveAttribute reference attribute) =
-  case resolveReference world reference of
+evaluateAtomicPerformativeWith domain world (Remove reference) =
+  (evaluateAtomicPerformativeWith domain) world (RemoveAttribute reference RemoveSquare)
+evaluateAtomicPerformativeWith domain world@(World objects) (RemoveAttribute reference attribute)
+  | RemoveStored name <- attribute, name `notElem` map attributeId (domainAttributes domain) = (world, Message "Invalid attribute")
+  | otherwise = case resolveReference world reference of
     Message message -> (world, Message message)
     Result object ->
       let (old, updated) = case attribute of
-            RemoveColor -> (C <$> colorOf object, object {colorOf = Nothing})
-            RemoveSize -> (S <$> sizeOf object, object {sizeOf = Nothing})
-            RemoveShape -> (Sh <$> shapeOf object, object {shapeOf = Nothing})
+            RemoveStored attribute -> (AttributeValue attribute <$> attributeOf attribute object, setAttribute attribute Nothing object)
             RemoveSquare -> (P <$> positionOf object, object {positionOf = Nothing})
           change = case old of
             Nothing -> NoChange
             Just (P position) -> ObjectRemoved (idOf object) position
             Just property -> PropertyCleared (idOf object) property
       in (World [if sameId current object then updated else current | current <- objects], Result change)
-evaluateAtomicPerformative world@(World objects) (Delete reference) =
+evaluateAtomicPerformativeWith domain world@(World objects) (Delete reference) =
   case resolveReference world reference of
     Message message -> (world, Message message)
     Result object -> (World (filter (not . sameId object) objects), Result (ObjectDeleted (idOf object)))
-evaluateAtomicPerformative world@(World objects) (Swap first second) =
+evaluateAtomicPerformativeWith domain world@(World objects) (Swap first second) =
   case (resolveReference world first, resolveReference world second) of
     (Message message, _) -> (world, Message message)
     (_, Message message) -> (world, Message message)
@@ -118,11 +120,15 @@ evaluateAtomicPerformative world@(World objects) (Swap first second) =
                 | otherwise = object
           in (World (map exchange objects), Result (ObjectsSwapped (idOf left) (idOf right)))
 
-updateWorldWith :: World -> AtomicPerformative -> World
-updateWorldWith world performative = fst (evaluateAtomicPerformative world performative)
+updateWorldWithWith :: Domain -> World -> AtomicPerformative -> World
+updateWorldWithWith domain world performative = fst ((evaluateAtomicPerformativeWith domain) world performative)
 
 previousProperty :: Object -> Property -> Maybe Property
-previousProperty object (C _)   = C <$> colorOf object
-previousProperty object (S _)   = S <$> sizeOf object
-previousProperty object (Sh _)  = Sh <$> shapeOf object
-previousProperty object (P _)   = P <$> positionOf object
+previousProperty object (AttributeValue attribute _) = AttributeValue attribute <$> attributeOf attribute object
+previousProperty object (P _) = P <$> positionOf object
+
+-- Current-domain convenience entry points.
+evaluateAtomicPerformative :: World -> AtomicPerformative -> (World, Result UpdateChange)
+evaluateAtomicPerformative = evaluateAtomicPerformativeWith objectsDomain
+updateWorldWith :: World -> AtomicPerformative -> World
+updateWorldWith = updateWorldWithWith objectsDomain

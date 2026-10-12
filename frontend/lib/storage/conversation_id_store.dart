@@ -1,8 +1,9 @@
+import '../models/domain.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract interface class ConversationIdStore {
-  Future<String?> read();
-  Future<void> write(String id);
+  Future<String?> read({WorldDomain domain = WorldDomain.objects});
+  Future<void> write(String id, {WorldDomain domain = WorldDomain.objects});
 }
 
 class PreferencesConversationIdStore implements ConversationIdStore {
@@ -16,8 +17,15 @@ class PreferencesConversationIdStore implements ConversationIdStore {
   final SharedPreferencesAsync _preferences;
 
   @override
-  Future<String?> read() => _preferences.getString(_key);
+  Future<String?> read({WorldDomain domain = WorldDomain.objects}) =>
+      _preferences.getString(
+        domain == WorldDomain.objects ? _key : '$_key:${domain.name}',
+      );
 
   @override
-  Future<void> write(String id) => _preferences.setString(_key, id);
+  Future<void> write(String id, {WorldDomain domain = WorldDomain.objects}) =>
+      _preferences.setString(
+        domain == WorldDomain.objects ? _key : '$_key:${domain.name}',
+        id,
+      );
 }

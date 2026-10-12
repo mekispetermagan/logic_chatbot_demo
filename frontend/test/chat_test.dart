@@ -14,6 +14,7 @@ import 'package:logic_chatbot/widgets/chat_panel.dart';
 import 'conversation_editing_test.dart' show SavedId;
 
 Map<String, dynamic> state({bool history = false}) => {
+  'domain': 'objects',
   'conversationId': 'saved',
   'world': {'width': 8, 'height': 8, 'objects': []},
   'canUndo': false,

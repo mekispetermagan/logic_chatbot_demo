@@ -1,3 +1,4 @@
+import 'models/domain.dart';
 import 'package:flutter/material.dart';
 
 import 'api/conversation_api.dart';
@@ -77,6 +78,14 @@ class _DemoScreenState extends State<DemoScreen> {
               error: _controller.error,
               onRetry: _controller.load,
               selectedProperty: _controller.selectedProperty,
+              selectedNetworkShape: _controller.selectedNetworkShape,
+              selectedNetworkColor: _controller.selectedNetworkColor,
+              onNetworkShapeChanged: _controller.canEdit
+                  ? _controller.selectNetworkShape
+                  : null,
+              onNetworkColorChanged: _controller.canEdit
+                  ? _controller.selectNetworkColor
+                  : null,
               selectedUnplacedObjectId: _controller.selectedUnplacedObjectId,
               onPropertyChanged: _controller.canEdit
                   ? _controller.selectProperty
@@ -92,6 +101,7 @@ class _DemoScreenState extends State<DemoScreen> {
 
           final chatPanel = PanelFrame(
             child: ChatPanel(
+              key: ValueKey(_controller.domain),
               messages: _controller.conversation?.messages ?? const [],
               canSend: _controller.canEdit,
               pending: _controller.conversation?.pending,
@@ -110,8 +120,29 @@ class _DemoScreenState extends State<DemoScreen> {
             length: 2,
             child: Scaffold(
               appBar: AppBar(
-                title: const Text('Logic Chatbot Demo'),
+                title: wide ? const Text('Logic Chatbot Demo') : null,
                 actions: [
+                  SegmentedButton<WorldDomain>(
+                    segments: const [
+                      ButtonSegment(
+                        value: WorldDomain.objects,
+                        label: Text('Objects'),
+                      ),
+                      ButtonSegment(
+                        value: WorldDomain.network,
+                        label: Text('Network'),
+                      ),
+                    ],
+                    selected: {_controller.domain},
+                    showSelectedIcon: false,
+                    style: const ButtonStyle(
+                      visualDensity: VisualDensity.compact,
+                    ),
+                    onSelectionChanged: _controller.canSwitchDomain
+                        ? (selection) =>
+                              _controller.switchDomain(selection.single)
+                        : null,
+                  ),
                   IconButton(
                     tooltip: 'Undo',
                     onPressed:

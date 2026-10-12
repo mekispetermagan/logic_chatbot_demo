@@ -1,29 +1,40 @@
 module Ontology where
 
-import Data.Char (chr, ord, toLower)
+import Data.Char (chr, ord)
+import qualified Data.Map.Strict as Map
 import Pretty
 
 newtype Identifier      = Id Int                      deriving (Eq, Show)
-data Color              = Blue | Green | Red | Yellow deriving (Eq, Show)
-data Size               = Small | Medium | Large      deriving (Eq, Show)
-data Shape              = Bloom | Spark | Drop | Loop     deriving (Eq, Show)
+newtype AttributeId = AttributeId String deriving (Eq, Ord, Show)
+newtype ValueId = ValueId String deriving (Eq, Ord, Show)
+
+instance PrettyShow AttributeId where pretty (AttributeId name) = name
+instance PrettyShow ValueId where pretty (ValueId name) = name
+
 type Position           = (Int, Int)
 
 instance Ord Identifier where
   (<=) :: Identifier -> Identifier -> Bool
   (Id n) <= (Id m) = n <= m
 
-data Property           = C Color | S Size | Sh Shape | P Position
-                        deriving (Eq, Show)
+data Property = AttributeValue AttributeId ValueId | P Position deriving (Eq, Show)
 
-data Object             = Object
-                        { idOf        :: Identifier
-                        , colorOf     :: Maybe Color
-                        , sizeOf      :: Maybe Size
-                        , shapeOf     :: Maybe Shape
-                        , positionOf  :: Maybe Position
-                        }
-                        deriving (Eq, Show)
+data Object = Object
+  { idOf :: Identifier
+  , attributesOf :: Map.Map AttributeId ValueId
+  , positionOf :: Maybe Position
+  } deriving (Eq, Show)
+
+attributeOf :: AttributeId -> Object -> Maybe ValueId
+attributeOf attribute = Map.lookup attribute . attributesOf
+
+setAttribute :: AttributeId -> Maybe ValueId -> Object -> Object
+setAttribute attribute value object = object { attributesOf =
+  maybe (Map.delete attribute) (Map.insert attribute) value (attributesOf object) }
+
+holdsProperty :: Object -> Property -> Bool
+holdsProperty object (AttributeValue attribute value) = attributeOf attribute object == Just value
+holdsProperty object (P position) = positionOf object == Just position
 
 data ObjectReference = ById Identifier | AtSquare Position deriving (Eq, Show)
 
@@ -32,7 +43,7 @@ instance PrettyShow Identifier where
 
 prettyPosition :: Position -> String
 prettyPosition (x, y)
-  | x >= 0 && x < 8 && y >= 0 && y < 8 = [chr (ord 'A' + x)] ++ show (y + 1)
+  | x >= 0 && x < 26 && y >= 0 = [chr (ord 'A' + x)] ++ show (toInteger y + 1)
   | otherwise = show (x, y)
 
 instance PrettyShow ObjectReference where
@@ -42,29 +53,13 @@ instance PrettyShow ObjectReference where
 newtype World = World [Object] deriving (Eq, Show)
 
 instance PrettyShow Property where
-  pretty (C color) = map toLower (show color)
-  pretty (S size) = map toLower (show size)
-  pretty (Sh shape) = map toLower (show shape)
-  pretty (P (x, y))
-    | x >= 0 && x < 8 && y >= 0 && y < 8 =
-        "on " ++ [chr (ord 'A' + x)] ++ show (y + 1)
-    | otherwise = "on " ++ show (x, y)
+  pretty (AttributeValue _ value) = pretty value
+  pretty (P position) = "on " ++ prettyPosition position
 
 instance PrettyShow Object where
   pretty object = pretty (idOf object) ++ ": " ++ unwords
-    [ attribute (colorOf object)
-    , attribute (sizeOf object)
-    , attribute (shapeOf object)
-    , "on"
-    , maybe "?" square (positionOf object)
-    ]
-    where
-      attribute :: Show a => Maybe a -> String
-      attribute = maybe "?" (map toLower . show)
-      square (x, y)
-        | x >= 0 && x < 8 && y >= 0 && y < 8 =
-            [chr (ord 'A' + x)] ++ show (y + 1)
-        | otherwise = show (x, y)
+    [pretty attribute ++ "=" ++ pretty value | (attribute,value) <- Map.toAscList (attributesOf object)]
+    ++ " on " ++ maybe "?" prettyPosition (positionOf object)
 
 instance PrettyShow World where
   pretty (World []) = "(empty world)"
@@ -88,4 +83,4 @@ sameId :: Object -> Object -> Bool
 sameId o o' = idOf o == idOf o'
 
 emptyObject :: Identifier -> Object
-emptyObject i = Object i Nothing Nothing Nothing Nothing
+emptyObject i = Object i Map.empty Nothing

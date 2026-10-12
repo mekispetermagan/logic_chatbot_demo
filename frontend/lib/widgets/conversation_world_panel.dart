@@ -1,3 +1,7 @@
+import '../models/domain.dart';
+import '../models/network_shape.dart';
+import '../models/world_object.dart';
+import 'network_selector.dart';
 import 'package:flutter/material.dart';
 
 import '../models/conversation_state.dart';
@@ -12,6 +16,10 @@ class ConversationWorldPanel extends StatelessWidget {
     required this.error,
     required this.onRetry,
     this.editing = false,
+    this.selectedNetworkShape = NetworkShape.empty,
+    this.selectedNetworkColor = ObjectColor.red,
+    this.onNetworkShapeChanged,
+    this.onNetworkColorChanged,
     this.selectedProperty = ObjectProperty.red,
     this.selectedUnplacedObjectId,
     this.onPropertyChanged,
@@ -21,6 +29,10 @@ class ConversationWorldPanel extends StatelessWidget {
     this.onClear,
   });
 
+  final NetworkShape selectedNetworkShape;
+  final ObjectColor? selectedNetworkColor;
+  final ValueChanged<NetworkShape>? onNetworkShapeChanged;
+  final ValueChanged<ObjectColor>? onNetworkColorChanged;
   final ConversationState? conversation;
   final bool loading;
   final bool editing;
@@ -71,6 +83,15 @@ class ConversationWorldPanel extends StatelessWidget {
       children: [
         WorldDisplay(
           world: state.world,
+          domain: state.domain,
+          selector: state.domain == WorldDomain.network
+              ? NetworkSelector(
+                  selectedShape: selectedNetworkShape,
+                  selectedColor: selectedNetworkColor,
+                  onShapeChanged: enabled ? onNetworkShapeChanged : null,
+                  onColorChanged: enabled ? onNetworkColorChanged : null,
+                )
+              : null,
           selectedProperty: selectedProperty,
           selectedUnplacedObjectId: selectedUnplacedObjectId,
           onUnplacedObjectSelected: enabled ? onUnplacedObjectSelected : null,

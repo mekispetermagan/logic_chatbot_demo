@@ -1,3 +1,4 @@
+import '../models/domain.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -9,11 +10,13 @@ class WorldWidget extends StatelessWidget {
   const WorldWidget({
     super.key,
     required this.world,
+    this.domain = WorldDomain.objects,
     this.onPaint,
     this.onErase,
   });
 
   final World world;
+  final WorldDomain domain;
   final void Function(int, int)? onPaint;
   final void Function(int, int)? onErase;
 
@@ -65,7 +68,7 @@ class WorldWidget extends StatelessWidget {
                       top: (world.height - 1 - object.position!.y) * cellHeight,
                       width: cellWidth,
                       height: cellHeight,
-                      child: WorldObjectWidget(object: object),
+                      child: WorldObjectWidget(object: object, domain: domain),
                     ),
                 ],
               ),

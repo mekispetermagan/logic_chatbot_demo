@@ -1,6 +1,8 @@
 module Discourse where
 
 import Data.List (nub, sortOn)
+import Domain
+import Domains.Objects.Definition (objectsDomain)
 import Ontology
 import Layer2Syntax
 import ReferenceResolution
@@ -26,11 +28,7 @@ data Pending = Pending
   deriving (Eq, Show)
 
 holds :: Object -> Property -> Bool
-holds object property = case property of
-  C color -> colorOf object == Just color
-  S size -> sizeOf object == Just size
-  Sh shape -> shapeOf object == Just shape
-  P position -> positionOf object == Just position
+holds = holdsProperty
 
 purge :: World -> SalienceRanking -> SalienceRanking
 purge (World objects) ranking =
@@ -82,10 +80,10 @@ descriptorsOf (Definite properties) = properties
 descriptorsOf (Indefinite properties) = properties
 descriptorsOf _ = []
 
-resolveSubject :: Bool -> World -> SalienceRanking -> Subject -> Resolution
-resolveSubject create world@(World objects) ranking subject = case subject of
+resolveSubjectWith :: Domain -> Bool -> World -> SalienceRanking -> Subject -> Resolution
+resolveSubjectWith domain create world@(World objects) ranking subject = case subject of
   Reference reference -> if create
-    then case resolvePerformativeReference world reference of
+    then case (resolvePerformativeReferenceWith domain) world reference of
       Result (updated, object, _) -> Resolved updated (idOf object)
       Message message -> Unresolved message
     else case resolveReference world reference of
@@ -115,3 +113,7 @@ resolveSubject create world@(World objects) ranking subject = case subject of
       [] -> Unresolved "No matching object"
       [identifier] -> Resolved world identifier
       several -> Ambiguous several
+
+-- Current-domain convenience entry points.
+resolveSubject :: Bool -> World -> SalienceRanking -> Subject -> Resolution
+resolveSubject = resolveSubjectWith objectsDomain

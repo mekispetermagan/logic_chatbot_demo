@@ -1,6 +1,7 @@
 module Sandbox where
 
 import Ontology
+import Domains.Objects.Vocabulary
 import AtomicPerformative
 import AtomicParser (parseAtomicSentences)
 import AtomicSentence (AtomicSentence)
@@ -29,11 +30,11 @@ partialObjectsSentences :: Either String [AtomicSentence]
 partialObjectsSentences = parseAtomicSentences partialObjectsText
 
 obj     :: Object
-obj     = Object (Id 0) (Just Blue) (Just Small) (Just Bloom) (Just (0,0))
+obj     = objectWith (Id 0) (Just Blue) (Just Small) (Just Bloom) (Just (0,0))
 obj'    :: Object
-obj'    = Object (Id 1) (Nothing) (Just Medium) (Just Spark) (Just (2,1))
+obj'    = objectWith (Id 1) (Nothing) (Just Medium) (Just Spark) (Just (2,1))
 obj''   :: Object
-obj''   = Object (Id 2) (Just Red) Nothing Nothing (Just (2,2))
+obj''   = objectWith (Id 2) (Just Red) Nothing Nothing (Just (2,2))
 
 world :: World
 world = World [obj, obj', obj'']

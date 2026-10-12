@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+<defs>
+<linearGradient id="n" x1="0" y1="60" x2="0" y2="0" gradientUnits="userSpaceOnUse"><stop stop-color="#D4483A"/><stop offset="1" stop-color="#A11507"/></linearGradient>
+<linearGradient id="e" x1="60" y1="0" x2="120" y2="0" gradientUnits="userSpaceOnUse"><stop stop-color="#D4483A"/><stop offset="1" stop-color="#A11507"/></linearGradient>
+<linearGradient id="s" x1="0" y1="60" x2="0" y2="120" gradientUnits="userSpaceOnUse"><stop stop-color="#D4483A"/><stop offset="1" stop-color="#A11507"/></linearGradient>
+<linearGradient id="w" x1="60" y1="0" x2="0" y2="0" gradientUnits="userSpaceOnUse"><stop stop-color="#D4483A"/><stop offset="1" stop-color="#A11507"/></linearGradient>
+<radialGradient id="dot"><stop stop-color="#D4483A"/><stop offset="1" stop-color="#A11507"/></radialGradient>
+</defs>
+<rect x="48" y="0" width="24" height="60" fill="url(#n)"/>
+<rect x="60" y="48" width="60" height="24" fill="url(#e)"/>
+<rect x="48" y="60" width="24" height="60" fill="url(#s)"/>
+<circle cx="60" cy="60" r="12" fill="url(#dot)"/>
+</svg>

@@ -1,16 +1,30 @@
 # Logic engine experiments
 
-`Ontology.hs` contains the base types and world helpers. `AtomicPerformative.hs`
-owns atomic updates; `AtomicPropertyCheck.hs` owns check evaluation.
-`AtomicSentence.hs` combines both kinds of sentence. `Pretty.hs` defines the
-pretty-printing class, with instances alongside their types, and `Result.hs`
-defines evaluation results. `Sandbox.hs` holds the experimental examples.
-`Grammar.hs` re-exports these modules for compatibility.
+`Ontology.hs` contains generic entities, optional finite attributes, positions,
+and world helpers. `Domain.hs` defines ontology data and validation;
+`DomainLibrary.hs` supplies pure derived-grammar and evaluation hooks.
+The objects domain lives in `Domains/Objects/`: `Definition.hs` declares its
+attributes and vocabulary, `Parser.hs` and `Evaluation.hs` implement its derived
+language, and `Library.hs` assembles the domain library. `Vocabulary.hs` keeps
+convenient color/size/shape constructors for experiments and regression fixtures.
+
+`AtomicPerformative.hs`, `AtomicPropertyCheck.hs`, and `AtomicPropertyQuery.hs`
+operate on generic attributes. `AtomicSentence.hs` combines the three sentence
+kinds. `SyntaxVocabulary.hs` shares domain-aware description and reference
+parsing. `Pretty.hs` defines formatting; `Result.hs` defines evaluation results.
+`Sandbox.hs` holds examples, and `Grammar.hs` remains the GHCi facade.
+
+Functions ending in `With` take an explicit ontology, except the chat parser's
+`parseSentencesWith` / `parseSentenceWith`, which take a `DomainLibrary`.
+Entry/continuation evaluation functions ending in `In` take a `DomainLibrary`.
+Existing short names select the objects domain for GHCi compatibility. The bridge
+selects a library from the required `domain` identifier; `objects` and `network` are supported.
+See [domain architecture](../../specification/domain-architecture.md).
 
 `AtomicParser.hs` uses Megaparsec to parse controlled-English atomic sentences
 without updating state.
 
-Shapes are `Bloom`, `Spark`, `Drop`, and `Loop`. Both natural-language parsers
+The objects domain declares shapes `bloom`, `spark`, `drop`, and `loop`. Both natural-language parsers
 accept `flower`, `star`, `tear`, and `ring` as aliases; prettyprinting and JSON
 normalize to `bloom`, `spark`, `drop`, and `loop`.
 
@@ -98,13 +112,13 @@ cabal test
 ```
 
 Rebuild and copy after changes to engine code. FastAPI uses the copied executable.
-A request has `world` (the shared JSON representation) and `action`, for example:
+A request has a required `domain` identifier, `world` (the shared JSON representation) and `action`, for example:
 
 ```json
-{"world":{"width":8,"height":8,"objects":[]},"action":{"type":"property","position":{"x":0,"y":0},"property":"red"}}
+{"domain":"objects","world":{"width":8,"height":8,"objects":[]},"action":{"type":"property","position":{"x":0,"y":0},"property":{"attribute":"color","value":"red"}}}
 ```
 
-The response contains the resulting `world` and concise `feedback`. Other action
+The response echoes `domain` and contains the resulting `world` and concise `feedback`. Other action
 types are `place` (with `objectId` and `position`), `erase` (with `position`),
 `clear`, `chat` (with `text`), and `clarify` (with either `objectId` or `position`). Requests also
 carry `salience` and nullable `pending`; both default to empty for older callers.
@@ -169,3 +183,18 @@ for syntax and semantics.
 entry or resolving those IDs again. JSON uses `squareChoices` for these choices;
 object choices retain the existing fields. FastAPI stores both forms, and Flutter
 renders square labels as buttons. All clarification steps share one Undo snapshot.
+
+Missing or unsupported domain identifiers fail on stderr with a exit
+status 2 and no response JSON. See `backend/shared/editor_request.json` (relative
+to the repository root) for a complete minimal request fixture.
+
+## Network core library
+
+`Domains/Network/Definition.hs` declares optional object color and four unary
+ports, including directional aliases. `Library.hs` supplies Layer 1/2 support
+without derived-language callbacks. `Sandbox.hs` supplies `networkWorld` and
+`networkIntroduction` for GHCi. The JSON bridge supports both domains using generic attribute maps.
+See [network core](../../specification/network-core.md) for syntax and commands.
+
+See the [JSON contract](../../specification/json-contract.md) for world, property,
+and salience encodings.

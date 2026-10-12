@@ -5,6 +5,8 @@ import AtomicPerformative
 import AtomicPropertyCheck
 import AtomicPropertyQuery
 import AtomicSentence
+import Domain
+import Domains.Objects.Definition (objectsDomain)
 import Ontology
 import Pretty
 import Result
@@ -30,29 +32,35 @@ instance PrettyShow FeedbackAnswer where
 instance PrettyShow AtomicFeedback where
   pretty (AtomicFeedback sentence answer) = pretty sentence ++ "\n  " ++ pretty answer
 
-evaluateAtomicSentence :: World -> AtomicSentence -> (World, AtomicFeedback)
-evaluateAtomicSentence world sentence = case sentence of
+evaluateAtomicSentenceWith :: Domain -> World -> AtomicSentence -> (World, AtomicFeedback)
+evaluateAtomicSentenceWith domain world sentence = case sentence of
   Performative performative ->
-    let (updated, result) = evaluateAtomicPerformative world performative
+    let (updated, result) = (evaluateAtomicPerformativeWith domain) world performative
         answer = case result of
           Result change -> UpdateAnswer change
           Message message -> FeedbackMessage message
     in (updated, AtomicFeedback sentence answer)
   PropertyCheck question ->
-    (world, AtomicFeedback sentence $ case evaluateAtomicPropertyCheck world question of
+    (world, AtomicFeedback sentence $ case (evaluateAtomicPropertyCheckWith domain) world question of
       Result answer -> CheckAnswer answer
       Message message -> FeedbackMessage message)
   PropertyQuery question ->
-    (world, AtomicFeedback sentence $ case evaluateAtomicPropertyQuery world question of
+    (world, AtomicFeedback sentence $ case (evaluateAtomicPropertyQueryWith domain) world question of
       Result answer -> QueryAnswerValue answer
       Message message -> FeedbackMessage message)
 
 -- Feedback follows input order, and questions see all preceding updates.
-evaluateAtomicSentences :: World -> [AtomicSentence] -> (World, [AtomicFeedback])
-evaluateAtomicSentences initial sentences =
+evaluateAtomicSentencesWith :: Domain -> World -> [AtomicSentence] -> (World, [AtomicFeedback])
+evaluateAtomicSentencesWith domain initial sentences =
   let (finalWorld, reversedFeedback) = foldl' step (initial, []) sentences
   in (finalWorld, reverse reversedFeedback)
   where
     step (world, feedback) sentence =
-      let (updated, answer) = evaluateAtomicSentence world sentence
+      let (updated, answer) = (evaluateAtomicSentenceWith domain) world sentence
       in (updated, answer : feedback)
+
+-- Current-domain convenience entry points.
+evaluateAtomicSentence :: World -> AtomicSentence -> (World, AtomicFeedback)
+evaluateAtomicSentence = evaluateAtomicSentenceWith objectsDomain
+evaluateAtomicSentences :: World -> [AtomicSentence] -> (World, [AtomicFeedback])
+evaluateAtomicSentences = evaluateAtomicSentencesWith objectsDomain

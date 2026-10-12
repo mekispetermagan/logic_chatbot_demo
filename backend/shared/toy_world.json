@@ -4,67 +4,77 @@
   "objects": [
     {
       "id": 0,
-      "shape": "bloom",
-      "size": "medium",
-      "color": "red",
       "position": {
         "x": 1,
         "y": 7
+      },
+      "attributes": {
+        "color": "red",
+        "size": "medium",
+        "shape": "bloom"
       }
     },
     {
       "id": 1,
-      "shape": "spark",
-      "size": "small",
-      "color": "blue",
       "position": {
         "x": 5,
         "y": 6
+      },
+      "attributes": {
+        "color": "blue",
+        "size": "small",
+        "shape": "spark"
       }
     },
     {
       "id": 2,
-      "shape": "drop",
-      "size": "large",
-      "color": null,
       "position": {
         "x": 3,
         "y": 5
+      },
+      "attributes": {
+        "size": "large",
+        "shape": "drop"
       }
     },
     {
       "id": 3,
-      "shape": null,
-      "size": "large",
-      "color": "green",
       "position": {
         "x": 0,
         "y": 3
+      },
+      "attributes": {
+        "color": "green",
+        "size": "large"
       }
     },
     {
       "id": 4,
-      "shape": "bloom",
-      "size": null,
-      "color": "yellow",
       "position": {
         "x": 6,
         "y": 3
+      },
+      "attributes": {
+        "color": "yellow",
+        "shape": "bloom"
       }
     },
     {
       "id": 5,
-      "shape": "loop",
-      "size": "medium",
-      "color": "blue",
-      "position": null
+      "position": null,
+      "attributes": {
+        "color": "blue",
+        "size": "medium",
+        "shape": "loop"
+      }
     },
     {
       "id": 6,
-      "shape": "bloom",
-      "size": "large",
-      "color": null,
-      "position": null
+      "position": null,
+      "attributes": {
+        "size": "large",
+        "shape": "bloom"
+      }
     }
   ]
 }

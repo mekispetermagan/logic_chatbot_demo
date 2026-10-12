@@ -5,6 +5,7 @@ import AtomicEvaluation
 import Control.Monad (forM_, unless)
 import Data.Either (isLeft)
 import Ontology
+import Domains.Objects.Vocabulary
 import AtomicPerformative
 import AtomicPropertyCheck
 import AtomicPropertyQuery
@@ -36,7 +37,7 @@ main = do
       Right [AP (ById (Id 1)) (C Red), AP (ById (Id 1)) (Sh Bloom)])
   check "sequential revision"
     (foldl updateWorldWith (World []) expected == World
-      [Object (Id 1) (Just Red) (Just Medium) (Just Spark) (Just (1, 2))])
+      [objectWith (Id 1) (Just Red) (Just Medium) (Just Spark) (Just (1, 2))])
   forM_ ["", "  ", "o-1 red", "#1red", "#1 on red", "#1 I1", "#1 A0",
          "#1 A9", "#1 A10", "#1 red junk", "#1 red?", "#1 redo2 blue",
          "#1 red #2 purple", "#1 red..", "#999999999999999999999999999 red"] $
@@ -125,7 +126,7 @@ main = do
         PropertyQuery (APQ PositionAttribute (ById (Id 1)))]
   let (evaluatedWorld, feedback) = evaluateAtomicSentences (World []) sequenceInput
   check "final evaluated world" (evaluatedWorld == World
-    [Object (Id 1) (Just Blue) Nothing Nothing (Just (7, 7))])
+    [objectWith (Id 1) (Just Blue) Nothing Nothing (Just (7, 7))])
   check "feedback sentence ordering" (map feedbackSentence feedback == sequenceInput)
   check "evaluation feedback" (case map feedbackAnswer feedback of
     [FeedbackMessage _, UpdateAnswer (ObjectCreated (Id 1) (C Red)),
@@ -176,10 +177,10 @@ squareReferenceTests = do
     check ("reject new syntax " ++ bad) (isLeft (parseAtomicSentences bad))
   let (created, _) = evaluateAtomicSentence empty (perform square (C Red))
   check "empty square creates positioned object" (created == World
-    [Object (Id 0) (Just Red) Nothing Nothing (Just (0, 3))])
+    [objectWith (Id 0) (Just Red) Nothing Nothing (Just (0, 3))])
   let (existing, _) = evaluateAtomicSentence (World [sourceObject]) (perform square (C Blue))
   check "occupied square updates same ID" (existing == World
-    [sourceObject { colorOf = Just Blue }])
+    [(setAttribute (AttributeId "color") (value <$> (Just Blue)) sourceObject)])
   let occupied = World [sourceObject, destinationObject]
       (blocked, blockedFeedback) = evaluateAtomicSentence occupied (perform square (P destination))
   check "occupied source blocked move" (blocked == occupied)
@@ -200,7 +201,7 @@ squareReferenceTests = do
   let (sequential, _) = evaluateAtomicSentences (World [sourceObject])
         [perform square (P destination), perform square (C Red)]
   check "square resolved at each step" (sequential == World
-    [Object (Id 5) (Just Red) Nothing Nothing (Just (0, 3)),
+    [objectWith (Id 5) (Just Red) Nothing Nothing (Just (0, 3)),
      sourceObject { positionOf = Just destination }])
   let questions = [PropertyCheck (APC square (C Red)),
                    PropertyQuery (APQ ColorAttribute square)]
@@ -234,9 +235,9 @@ structuralTests = do
   forM_ ["remove #3?", "swap #3 and #4?", "delete #3?", "remove #3 from.",
          "swap #3", "swap #3 #4 #5", "erase it", "remove #3 delete #4"] $ \text ->
     check ("structural rejection " ++ text) (isLeft (parseAtomicSentences text))
-  let left = Object (Id 0) (Just Red) (Just Small) (Just Bloom) (Just (0,0))
-      right = Object (Id 1) (Just Blue) Nothing (Just Spark) (Just (1,0))
-      loose = Object (Id 2) Nothing (Just Large) Nothing Nothing
+  let left = objectWith (Id 0) (Just Red) (Just Small) (Just Bloom) (Just (0,0))
+      right = objectWith (Id 1) (Just Blue) Nothing (Just Spark) (Just (1,0))
+      loose = objectWith (Id 2) Nothing (Just Large) Nothing Nothing
       world = World [left, right, loose]
       normalized (updated, Result change) = (updated, Just change)
       normalized (updated, Message _) = (updated, Nothing)
@@ -271,12 +272,12 @@ structuralTests = do
 attributeRemovalTests :: IO ()
 attributeRemovalTests = do
   let ref = ById (Id 3)
-      object = Object (Id 3) (Just Red) (Just Small) (Just Bloom) (Just (0,3))
-      other = (emptyObject (Id 4)) {colorOf = Just Blue}
+      object = objectWith (Id 3) (Just Red) (Just Small) (Just Bloom) (Just (0,3))
+      other = (setAttribute (AttributeId "color") (value <$> (Just Blue)) (emptyObject (Id 4)))
       world = World [object, other]
-      cases = [(RemoveColor, object {colorOf = Nothing}),
-               (RemoveSize, object {sizeOf = Nothing}),
-               (RemoveShape, object {shapeOf = Nothing}),
+      cases = [(RemoveColor, (setAttribute (AttributeId "color") Nothing object)),
+               (RemoveSize, (setAttribute (AttributeId "size") Nothing object)),
+               (RemoveShape, (setAttribute (AttributeId "shape") Nothing object)),
                (RemoveSquare, object {positionOf = Nothing})]
   forM_ cases $ \(attribute, expected) -> do
     let operation = RemoveAttribute ref attribute
@@ -308,7 +309,7 @@ attributeRemovalTests = do
       Right (RemoveAttribute (AtSquare (0,3)) RemoveColor))
   check "square subject resolves existing object"
     (fst (evaluateAtomicPerformative world (RemoveAttribute (AtSquare (0,3)) RemoveColor)) ==
-      World [object {colorOf = Nothing}, other])
+      World [(setAttribute (AttributeId "color") Nothing object), other])
   check "square removal agrees with prefix remove"
     (fst (evaluateAtomicPerformative world (RemoveAttribute ref RemoveSquare)) ==
       fst (evaluateAtomicPerformative world (Remove ref)))
@@ -321,7 +322,7 @@ attributeRemovalTests = do
     Right sentences -> do
       let (updated, feedback) = evaluateAtomicSentences world sentences
       check "removal participates in sequential evaluation"
-        (updated == World [object {colorOf = Just Blue}, other])
+        (updated == World [(setAttribute (AttributeId "color") (value <$> (Just Blue)) object), other])
       check "questions see cleared attribute" (case map feedbackAnswer feedback of
         [UpdateAnswer (PropertyCleared (Id 3) (C Red)), CheckAnswer False,
          QueryAnswerValue Absent, UpdateAnswer (PropertyChanged (Id 3) Nothing (C Blue))] -> True
