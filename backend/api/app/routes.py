@@ -32,7 +32,7 @@ def chat(conversation_id: UUID, entry: ChatEntry,
          service: ConversationService = Depends(get_service)) -> EditState:
     if not entry.text.strip():
         raise HTTPException(status_code=422, detail="Message must not be blank")
-    return require_edit(service.chat(conversation_id, entry.text))
+    return require_edit(service.chat(conversation_id, entry.text, entry.useLlm))
 
 
 @router.post("/{conversation_id}/property", response_model=EditState)

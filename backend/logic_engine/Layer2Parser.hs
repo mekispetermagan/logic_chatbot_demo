@@ -92,8 +92,12 @@ structuralWith domain tokens = mapMaybe candidate (splits tokens)
     candidate _ = Nothing
 
 questionsWith :: Domain -> [String] -> [Sentence]
-questionsWith domain words' = valueQueries ++ checks
+questionsWith domain words' = squareQuestions ++ valueQueries ++ checks
   where
+    squareQuestions = case dropWord "the" (dropWord "is" words') of
+      ["square", coordinate, name] | name `elem` ["occupied", "taken"] ->
+        maybe [] (pure . SquareOccupancy) (squareWith domain coordinate)
+      _ -> []
     valueTokens = case words' of
       "what":"is":rest -> dropWord "the" rest
       _ -> words'

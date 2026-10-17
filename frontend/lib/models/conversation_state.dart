@@ -2,6 +2,7 @@ import 'domain.dart';
 import 'world.dart';
 import 'world_object.dart';
 import 'chat_message.dart';
+import 'llm_usage.dart';
 
 class ConversationState {
   const ConversationState({
@@ -12,6 +13,7 @@ class ConversationState {
     this.feedback,
     this.pending,
     this.messages = const [],
+    this.llmBudget,
   });
 
   factory ConversationState.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,9 @@ class ConversationState {
       domain: domain,
       world: World.fromJson(json['world'] as Map<String, dynamic>),
       canUndo: json['canUndo'] as bool,
+      llmBudget: json['llmBudget'] == null
+          ? null
+          : LlmBudget.fromJson(json['llmBudget'] as Map<String, dynamic>),
       feedback: json['feedback'] as String?,
       pending: json['pending'] == null
           ? null
@@ -42,6 +47,7 @@ class ConversationState {
   final String? feedback;
   final PendingEntry? pending;
   final List<ChatMessage> messages;
+  final LlmBudget? llmBudget;
 }
 
 class ClarificationCandidate {

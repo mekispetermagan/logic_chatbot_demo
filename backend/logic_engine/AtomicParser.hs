@@ -24,6 +24,7 @@ import AtomicPerformative
 import AtomicPropertyCheck
 import AtomicPropertyQuery
 import AtomicSentence
+import AtomicSquareCheck
 import Text.Megaparsec
   ( Parsec, choice, eof, errorBundlePretty, notFollowedBy, oneOf
   , parse, satisfy, try, (<?>)
@@ -59,7 +60,18 @@ atomicPerformativeWith domain = do
     _ -> fail "expected a performative, not a question"
 
 atomicSentenceWith :: Domain -> Parser AtomicSentence
-atomicSentenceWith domain = (structuralPerformativeWith domain) <|> (PropertyQuery <$> (atomicPropertyQueryWith domain)) <|> (atomicAssertionOrCheckWith domain)
+atomicSentenceWith domain = (SquareCheck <$> try (atomicSquareCheckWith domain))
+  <|> (structuralPerformativeWith domain) <|> (PropertyQuery <$> (atomicPropertyQueryWith domain)) <|> (atomicAssertionOrCheckWith domain)
+
+atomicSquareCheckWith :: Domain -> Parser AtomicSquareCheck
+atomicSquareCheckWith domain = do
+  void (optional (keyword "is" *> space1))
+  void (optional (keyword "the" *> space1))
+  keyword "square" *> space1
+  position <- positionParserWith domain
+  space1 *> (keyword "occupied" <|> keyword "taken")
+  questionEnd
+  pure (ASC position)
 
 structuralPerformativeWith :: Domain -> Parser AtomicSentence
 structuralPerformativeWith domain = do

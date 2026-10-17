@@ -103,6 +103,7 @@ class _DemoScreenState extends State<DemoScreen> {
             child: ChatPanel(
               key: ValueKey(_controller.domain),
               messages: _controller.conversation?.messages ?? const [],
+              llmBudget: _controller.conversation?.llmBudget,
               canSend: _controller.canEdit,
               pending: _controller.conversation?.pending,
               onChoose: _controller.canRequest ? _controller.clarify : null,
@@ -122,26 +123,50 @@ class _DemoScreenState extends State<DemoScreen> {
               appBar: AppBar(
                 title: wide ? const Text('Logic Chatbot Demo') : null,
                 actions: [
-                  SegmentedButton<WorldDomain>(
-                    segments: const [
-                      ButtonSegment(
-                        value: WorldDomain.objects,
-                        label: Text('Objects'),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 9),
+                    child: SegmentedButton<WorldDomain>(
+                      segments: const [
+                        ButtonSegment(
+                          value: WorldDomain.objects,
+                          label: Text('Objects'),
+                        ),
+                        ButtonSegment(
+                          value: WorldDomain.network,
+                          label: Text('Network'),
+                        ),
+                      ],
+                      selected: {_controller.domain},
+                      showSelectedIcon: false,
+                      style: const ButtonStyle(
+                        visualDensity: VisualDensity.compact,
+                        padding: WidgetStatePropertyAll(
+                          EdgeInsets.symmetric(horizontal: 4),
+                        ),
+                        minimumSize: WidgetStatePropertyAll(Size(0, 36)),
                       ),
-                      ButtonSegment(
-                        value: WorldDomain.network,
-                        label: Text('Network'),
-                      ),
-                    ],
-                    selected: {_controller.domain},
-                    showSelectedIcon: false,
-                    style: const ButtonStyle(
-                      visualDensity: VisualDensity.compact,
+                      onSelectionChanged: _controller.canSwitchDomain
+                          ? (selection) =>
+                                _controller.switchDomain(selection.single)
+                          : null,
                     ),
-                    onSelectionChanged: _controller.canSwitchDomain
-                        ? (selection) =>
-                              _controller.switchDomain(selection.single)
-                        : null,
+                  ),
+                  Tooltip(
+                    message:
+                        'Activate LLM: use GPT-6 Luna after a syntax error',
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (wide) const Text('LLM'),
+                        Switch(
+                          padding: EdgeInsets.zero,
+                          value: _controller.useLlm,
+                          onChanged: _controller.canSwitchDomain
+                              ? _controller.setUseLlm
+                              : null,
+                        ),
+                      ],
+                    ),
                   ),
                   IconButton(
                     tooltip: 'Undo',

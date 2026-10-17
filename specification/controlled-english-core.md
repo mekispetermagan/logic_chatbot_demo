@@ -56,13 +56,14 @@ an object when resolving a reference that currently has no referent; see Section
 
 ## 3. Sentence categories and punctuation
 
-There are three distinct atomic sentence categories:
+There are four distinct atomic sentence categories:
 
 | Category | Example | Effect |
 | --- | --- | --- |
 | Performative | `#3 red.`, `remove #3.`, `swap #3 #4.`, `delete #3.` | Attribute an object, unplace it, exchange positions, or delete it |
 | Property check | `#3 red?` | Return whether the object has that property |
 | Attribute-value question | `color of #3?` | Return the value of an attribute |
+| Square occupancy check | `Is the square D4 occupied?` | Return whether an object occupies that square |
 
 **Every question requires `?`. Performatives have no question mark.** A
 performative's period is optional only at the end of the user entry. Thus `#3 red` updates the world;
@@ -151,6 +152,29 @@ A4 on B3?
 The last example asks whether the object occupying A4 is on B3. In a valid world
 it is false when A4 is occupied, and reports a missing referent when A4 is empty.
 
+### Square occupancy questions
+
+`[is] [the] square COORD occupied?` checks whether an object is placed on that
+square. `taken` is an alias for `occupied`. These core forms work in both domains:
+
+```text
+Is the square D4 occupied?
+Is square D4 taken?
+square D4 occupied?
+```
+
+The word `square` and the final `?` are required; `is` and `the` are optional.
+Coordinates must be inside the selected domain's board. Pretty-printing uses
+`is the square D4 occupied?` for either spelling. Evaluation returns `true` when
+any object occupies D4, including a partial or no-port object, and `false` when
+none does. Unplaced objects occupy no square. These questions do not resolve or
+create object references and add no object mentions; normal discourse aging
+still applies. In sequences they inspect the world after earlier updates.
+
+`empty` and `free` are not aliases for this question. In the network domain,
+`D4 empty?` retains its existing meaning: does the node at D4 have no ports?
+There is no single-square vacancy question or negated occupancy form.
+
 ### Attribute-value questions
 
 Supported attributes are `color`, `size`, `shape`, `position`, `row`, and `column`.
@@ -194,6 +218,8 @@ check        = subject [is] base-value ?
 
 value-query  = attribute of subject ?
              | subject [is] attribute ?
+
+square-check = [is] [the] square COORD (occupied | taken) ?
 ```
 
 ## 4. Multiple sentences in one entry
@@ -375,6 +401,7 @@ to retrieve committed state rather than automatically repeating the submission.
 | [ReferenceResolution.hs](../backend/logic_engine/ReferenceResolution.hs) | Resolve references; create performative subjects |
 | [AtomicPerformative.hs](../backend/logic_engine/AtomicPerformative.hs) | Attribute, unplace, swap, or delete objects and report changes |
 | [AtomicPropertyCheck.hs](../backend/logic_engine/AtomicPropertyCheck.hs) | Evaluate Boolean checks |
+| [AtomicSquareCheck.hs](../backend/logic_engine/AtomicSquareCheck.hs) | Check square occupancy without object reference resolution |
 | [AtomicPropertyQuery.hs](../backend/logic_engine/AtomicPropertyQuery.hs) | Evaluate attribute-value questions |
 | [AtomicEvaluation.hs](../backend/logic_engine/AtomicEvaluation.hs) | Evaluate sequences and format feedback |
 

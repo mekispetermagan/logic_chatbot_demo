@@ -218,7 +218,10 @@ void main() {
       await subject.clear();
       await Future<void>.delayed(Duration.zero);
       expect(requests.single.url.path, '/conversations/saved/chat');
-      expect(jsonDecode(requests.single.body), {'text': '#0 red?'});
+      expect(jsonDecode(requests.single.body), {
+        'text': '#0 red?',
+        'useLlm': false,
+      });
       pending.complete(http.Response(jsonEncode(state(history: true)), 200));
       expect(await sending, isTrue);
       expect(subject.conversation!.messages.length, 2);

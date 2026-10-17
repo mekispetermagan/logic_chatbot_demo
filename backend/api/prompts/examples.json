@@ -1,0 +1,1338 @@
+{
+  "objects": [
+    {
+      "input": "Paint A1 red",
+      "translation": "A1 red."
+    },
+    {
+      "input": "Is it red",
+      "translation": "It red?"
+    },
+    {
+      "input": "What colour is the red one?",
+      "translation": "Color of the red?"
+    },
+    {
+      "input": "Make number 0 red",
+      "translation": "#0 red."
+    },
+    {
+      "input": "Put a red one on A1",
+      "translation": "A red on A1."
+    },
+    {
+      "input": "How many red things are there?",
+      "translation": "How many red?"
+    },
+    {
+      "input": "Paint B2 blue",
+      "translation": "B2 blue."
+    },
+    {
+      "input": "Is it blue",
+      "translation": "It blue?"
+    },
+    {
+      "input": "What colour is the blue one?",
+      "translation": "Color of the blue?"
+    },
+    {
+      "input": "Make number 1 blue",
+      "translation": "#1 blue."
+    },
+    {
+      "input": "Put a blue one on B2",
+      "translation": "A blue on B2."
+    },
+    {
+      "input": "How many blue things are there?",
+      "translation": "How many blue?"
+    },
+    {
+      "input": "Paint C3 green",
+      "translation": "C3 green."
+    },
+    {
+      "input": "Is it green",
+      "translation": "It green?"
+    },
+    {
+      "input": "What colour is the green one?",
+      "translation": "Color of the green?"
+    },
+    {
+      "input": "Make number 2 green",
+      "translation": "#2 green."
+    },
+    {
+      "input": "Put a green one on C3",
+      "translation": "A green on C3."
+    },
+    {
+      "input": "How many green things are there?",
+      "translation": "How many green?"
+    },
+    {
+      "input": "Paint D4 yellow",
+      "translation": "D4 yellow."
+    },
+    {
+      "input": "Is it yellow",
+      "translation": "It yellow?"
+    },
+    {
+      "input": "What colour is the yellow one?",
+      "translation": "Color of the yellow?"
+    },
+    {
+      "input": "Make number 3 yellow",
+      "translation": "#3 yellow."
+    },
+    {
+      "input": "Put a yellow one on D4",
+      "translation": "A yellow on D4."
+    },
+    {
+      "input": "How many yellow things are there?",
+      "translation": "How many yellow?"
+    },
+    {
+      "input": "Move it onto H8",
+      "translation": "Move it to H8."
+    },
+    {
+      "input": "Switch the objects on A1 and H8",
+      "translation": "Swap A1 and H8."
+    },
+    {
+      "input": "Take the object at A1 off the board",
+      "translation": "Remove A1."
+    },
+    {
+      "input": "Delete the object at A1",
+      "translation": "Delete A1."
+    },
+    {
+      "input": "Place it next to the red one",
+      "translation": "Move it next to the red."
+    },
+    {
+      "input": "Move it onto C4",
+      "translation": "Move it to C4."
+    },
+    {
+      "input": "Switch the objects on B3 and C4",
+      "translation": "Swap B3 and C4."
+    },
+    {
+      "input": "Take the object at B3 off the board",
+      "translation": "Remove B3."
+    },
+    {
+      "input": "Delete the object at B3",
+      "translation": "Delete B3."
+    },
+    {
+      "input": "Place it next to the red one",
+      "translation": "Move it next to the red."
+    },
+    {
+      "input": "Move it onto C3",
+      "translation": "Move it to C3."
+    },
+    {
+      "input": "Switch the objects on H1 and C3",
+      "translation": "Swap H1 and C3."
+    },
+    {
+      "input": "Take the object at H1 off the board",
+      "translation": "Remove H1."
+    },
+    {
+      "input": "Delete the object at H1",
+      "translation": "Delete H1."
+    },
+    {
+      "input": "Place it next to the red one",
+      "translation": "Move it next to the red."
+    },
+    {
+      "input": "Move it onto F5",
+      "translation": "Move it to F5."
+    },
+    {
+      "input": "Switch the objects on D2 and F5",
+      "translation": "Swap D2 and F5."
+    },
+    {
+      "input": "Take the object at D2 off the board",
+      "translation": "Remove D2."
+    },
+    {
+      "input": "Delete the object at D2",
+      "translation": "Delete D2."
+    },
+    {
+      "input": "Place it next to the red one",
+      "translation": "Move it next to the red."
+    },
+    {
+      "input": "Move it one square up",
+      "translation": "Move it up."
+    },
+    {
+      "input": "Move it one square right",
+      "translation": "Move it right."
+    },
+    {
+      "input": "Move it one square down",
+      "translation": "Move it down."
+    },
+    {
+      "input": "Move it one square left",
+      "translation": "Move it left."
+    },
+    {
+      "input": "Delete everything",
+      "translation": "Clear the world."
+    },
+    {
+      "input": "Wipe the whole world",
+      "translation": "Clear everything."
+    },
+    {
+      "input": "Clear all objects",
+      "translation": "Clear all."
+    },
+    {
+      "input": "How many empty squares are there",
+      "translation": "How many squares are empty?"
+    },
+    {
+      "input": "Are there any red objects on the board",
+      "translation": "Some red objects are on the board?"
+    },
+    {
+      "input": "Is every blue object on the board",
+      "translation": "Every blue object is on the board?"
+    },
+    {
+      "input": "Put a small red bloom on A4",
+      "translation": "A small red bloom on A4."
+    },
+    {
+      "input": "Put a medium red bloom on A4",
+      "translation": "A medium red bloom on A4."
+    },
+    {
+      "input": "Put a large red bloom on A4",
+      "translation": "A large red bloom on A4."
+    },
+    {
+      "input": "Change the red bloom to blue",
+      "translation": "The red bloom is blue."
+    },
+    {
+      "input": "Is the red bloom small",
+      "translation": "Is the red bloom small?"
+    },
+    {
+      "input": "Put a small red spark on A4",
+      "translation": "A small red spark on A4."
+    },
+    {
+      "input": "Put a medium red spark on A4",
+      "translation": "A medium red spark on A4."
+    },
+    {
+      "input": "Put a large red spark on A4",
+      "translation": "A large red spark on A4."
+    },
+    {
+      "input": "Change the red spark to blue",
+      "translation": "The red spark is blue."
+    },
+    {
+      "input": "Is the red spark small",
+      "translation": "Is the red spark small?"
+    },
+    {
+      "input": "Put a small red drop on A4",
+      "translation": "A small red drop on A4."
+    },
+    {
+      "input": "Put a medium red drop on A4",
+      "translation": "A medium red drop on A4."
+    },
+    {
+      "input": "Put a large red drop on A4",
+      "translation": "A large red drop on A4."
+    },
+    {
+      "input": "Change the red drop to blue",
+      "translation": "The red drop is blue."
+    },
+    {
+      "input": "Is the red drop small",
+      "translation": "Is the red drop small?"
+    },
+    {
+      "input": "Put a small red loop on A4",
+      "translation": "A small red loop on A4."
+    },
+    {
+      "input": "Put a medium red loop on A4",
+      "translation": "A medium red loop on A4."
+    },
+    {
+      "input": "Put a large red loop on A4",
+      "translation": "A large red loop on A4."
+    },
+    {
+      "input": "Change the red loop to blue",
+      "translation": "The red loop is blue."
+    },
+    {
+      "input": "Is the red loop small",
+      "translation": "Is the red loop small?"
+    },
+    {
+      "input": "Put a small blue bloom on A4",
+      "translation": "A small blue bloom on A4."
+    },
+    {
+      "input": "Put a medium blue bloom on A4",
+      "translation": "A medium blue bloom on A4."
+    },
+    {
+      "input": "Put a large blue bloom on A4",
+      "translation": "A large blue bloom on A4."
+    },
+    {
+      "input": "Change the blue bloom to blue",
+      "translation": "The blue bloom is blue."
+    },
+    {
+      "input": "Is the blue bloom small",
+      "translation": "Is the blue bloom small?"
+    },
+    {
+      "input": "Put a small blue spark on A4",
+      "translation": "A small blue spark on A4."
+    },
+    {
+      "input": "Put a medium blue spark on A4",
+      "translation": "A medium blue spark on A4."
+    },
+    {
+      "input": "Put a large blue spark on A4",
+      "translation": "A large blue spark on A4."
+    },
+    {
+      "input": "Change the blue spark to blue",
+      "translation": "The blue spark is blue."
+    },
+    {
+      "input": "Is the blue spark small",
+      "translation": "Is the blue spark small?"
+    },
+    {
+      "input": "Put a small blue drop on A4",
+      "translation": "A small blue drop on A4."
+    },
+    {
+      "input": "Put a medium blue drop on A4",
+      "translation": "A medium blue drop on A4."
+    },
+    {
+      "input": "Put a large blue drop on A4",
+      "translation": "A large blue drop on A4."
+    },
+    {
+      "input": "Change the blue drop to blue",
+      "translation": "The blue drop is blue."
+    },
+    {
+      "input": "Is the blue drop small",
+      "translation": "Is the blue drop small?"
+    },
+    {
+      "input": "Put a small blue loop on A4",
+      "translation": "A small blue loop on A4."
+    },
+    {
+      "input": "Put a medium blue loop on A4",
+      "translation": "A medium blue loop on A4."
+    },
+    {
+      "input": "Put a large blue loop on A4",
+      "translation": "A large blue loop on A4."
+    },
+    {
+      "input": "Change the blue loop to blue",
+      "translation": "The blue loop is blue."
+    },
+    {
+      "input": "Is the blue loop small",
+      "translation": "Is the blue loop small?"
+    },
+    {
+      "input": "Put a small green bloom on A4",
+      "translation": "A small green bloom on A4."
+    },
+    {
+      "input": "Put a medium green bloom on A4",
+      "translation": "A medium green bloom on A4."
+    },
+    {
+      "input": "Put a large green bloom on A4",
+      "translation": "A large green bloom on A4."
+    },
+    {
+      "input": "Change the green bloom to blue",
+      "translation": "The green bloom is blue."
+    },
+    {
+      "input": "Is the green bloom small",
+      "translation": "Is the green bloom small?"
+    },
+    {
+      "input": "Put a small green spark on A4",
+      "translation": "A small green spark on A4."
+    },
+    {
+      "input": "Put a medium green spark on A4",
+      "translation": "A medium green spark on A4."
+    },
+    {
+      "input": "Put a large green spark on A4",
+      "translation": "A large green spark on A4."
+    },
+    {
+      "input": "Change the green spark to blue",
+      "translation": "The green spark is blue."
+    },
+    {
+      "input": "Is the green spark small",
+      "translation": "Is the green spark small?"
+    },
+    {
+      "input": "Put a small green drop on A4",
+      "translation": "A small green drop on A4."
+    },
+    {
+      "input": "Put a medium green drop on A4",
+      "translation": "A medium green drop on A4."
+    },
+    {
+      "input": "Put a large green drop on A4",
+      "translation": "A large green drop on A4."
+    },
+    {
+      "input": "Change the green drop to blue",
+      "translation": "The green drop is blue."
+    },
+    {
+      "input": "Is the green drop small",
+      "translation": "Is the green drop small?"
+    },
+    {
+      "input": "Put a small green loop on A4",
+      "translation": "A small green loop on A4."
+    },
+    {
+      "input": "Put a medium green loop on A4",
+      "translation": "A medium green loop on A4."
+    },
+    {
+      "input": "Put a large green loop on A4",
+      "translation": "A large green loop on A4."
+    },
+    {
+      "input": "Change the green loop to blue",
+      "translation": "The green loop is blue."
+    },
+    {
+      "input": "Is the green loop small",
+      "translation": "Is the green loop small?"
+    },
+    {
+      "input": "Put a small yellow bloom on A4",
+      "translation": "A small yellow bloom on A4."
+    },
+    {
+      "input": "Put a medium yellow bloom on A4",
+      "translation": "A medium yellow bloom on A4."
+    },
+    {
+      "input": "Put a large yellow bloom on A4",
+      "translation": "A large yellow bloom on A4."
+    },
+    {
+      "input": "Change the yellow bloom to blue",
+      "translation": "The yellow bloom is blue."
+    },
+    {
+      "input": "Is the yellow bloom small",
+      "translation": "Is the yellow bloom small?"
+    },
+    {
+      "input": "Put a small yellow spark on A4",
+      "translation": "A small yellow spark on A4."
+    },
+    {
+      "input": "Put a medium yellow spark on A4",
+      "translation": "A medium yellow spark on A4."
+    },
+    {
+      "input": "Put a large yellow spark on A4",
+      "translation": "A large yellow spark on A4."
+    },
+    {
+      "input": "Change the yellow spark to blue",
+      "translation": "The yellow spark is blue."
+    },
+    {
+      "input": "Is the yellow spark small",
+      "translation": "Is the yellow spark small?"
+    },
+    {
+      "input": "Put a small yellow drop on A4",
+      "translation": "A small yellow drop on A4."
+    },
+    {
+      "input": "Put a medium yellow drop on A4",
+      "translation": "A medium yellow drop on A4."
+    },
+    {
+      "input": "Put a large yellow drop on A4",
+      "translation": "A large yellow drop on A4."
+    },
+    {
+      "input": "Change the yellow drop to blue",
+      "translation": "The yellow drop is blue."
+    },
+    {
+      "input": "Is the yellow drop small",
+      "translation": "Is the yellow drop small?"
+    },
+    {
+      "input": "Put a small yellow loop on A4",
+      "translation": "A small yellow loop on A4."
+    },
+    {
+      "input": "Put a medium yellow loop on A4",
+      "translation": "A medium yellow loop on A4."
+    },
+    {
+      "input": "Put a large yellow loop on A4",
+      "translation": "A large yellow loop on A4."
+    },
+    {
+      "input": "Change the yellow loop to blue",
+      "translation": "The yellow loop is blue."
+    },
+    {
+      "input": "Is the yellow loop small",
+      "translation": "Is the yellow loop small?"
+    },
+    {
+      "input": "Make it a flower",
+      "translation": "It bloom."
+    },
+    {
+      "input": "What shape is the flower",
+      "translation": "Shape of the bloom?"
+    },
+    {
+      "input": "Make it a star",
+      "translation": "It spark."
+    },
+    {
+      "input": "What shape is the star",
+      "translation": "Shape of the spark?"
+    },
+    {
+      "input": "Make it a tear",
+      "translation": "It drop."
+    },
+    {
+      "input": "What shape is the tear",
+      "translation": "Shape of the drop?"
+    },
+    {
+      "input": "Make it a ring",
+      "translation": "It loop."
+    },
+    {
+      "input": "What shape is the ring",
+      "translation": "Shape of the loop?"
+    }
+  ],
+  "network": [
+    {
+      "input": "Paint A1 red",
+      "translation": "A1 red."
+    },
+    {
+      "input": "Is it red",
+      "translation": "It red?"
+    },
+    {
+      "input": "What colour is the red one?",
+      "translation": "Color of the red?"
+    },
+    {
+      "input": "Make number 0 red",
+      "translation": "#0 red."
+    },
+    {
+      "input": "Put a red one on A1",
+      "translation": "A red on A1."
+    },
+    {
+      "input": "How many red things are there?",
+      "translation": "How many red?"
+    },
+    {
+      "input": "Paint B2 blue",
+      "translation": "B2 blue."
+    },
+    {
+      "input": "Is it blue",
+      "translation": "It blue?"
+    },
+    {
+      "input": "What colour is the blue one?",
+      "translation": "Color of the blue?"
+    },
+    {
+      "input": "Make number 1 blue",
+      "translation": "#1 blue."
+    },
+    {
+      "input": "Put a blue one on B2",
+      "translation": "A blue on B2."
+    },
+    {
+      "input": "How many blue things are there?",
+      "translation": "How many blue?"
+    },
+    {
+      "input": "Paint C3 green",
+      "translation": "C3 green."
+    },
+    {
+      "input": "Is it green",
+      "translation": "It green?"
+    },
+    {
+      "input": "What colour is the green one?",
+      "translation": "Color of the green?"
+    },
+    {
+      "input": "Make number 2 green",
+      "translation": "#2 green."
+    },
+    {
+      "input": "Put a green one on C3",
+      "translation": "A green on C3."
+    },
+    {
+      "input": "How many green things are there?",
+      "translation": "How many green?"
+    },
+    {
+      "input": "Paint D4 yellow",
+      "translation": "D4 yellow."
+    },
+    {
+      "input": "Is it yellow",
+      "translation": "It yellow?"
+    },
+    {
+      "input": "What colour is the yellow one?",
+      "translation": "Color of the yellow?"
+    },
+    {
+      "input": "Make number 3 yellow",
+      "translation": "#3 yellow."
+    },
+    {
+      "input": "Put a yellow one on D4",
+      "translation": "A yellow on D4."
+    },
+    {
+      "input": "How many yellow things are there?",
+      "translation": "How many yellow?"
+    },
+    {
+      "input": "Move it onto H8",
+      "translation": "Move it to H8."
+    },
+    {
+      "input": "Switch the objects on A1 and H8",
+      "translation": "Swap A1 and H8."
+    },
+    {
+      "input": "Take the object at A1 off the board",
+      "translation": "Remove A1."
+    },
+    {
+      "input": "Delete the object at A1",
+      "translation": "Delete A1."
+    },
+    {
+      "input": "Place it next to the red one",
+      "translation": "Move it next to the red."
+    },
+    {
+      "input": "Move it onto C4",
+      "translation": "Move it to C4."
+    },
+    {
+      "input": "Switch the objects on B3 and C4",
+      "translation": "Swap B3 and C4."
+    },
+    {
+      "input": "Take the object at B3 off the board",
+      "translation": "Remove B3."
+    },
+    {
+      "input": "Delete the object at B3",
+      "translation": "Delete B3."
+    },
+    {
+      "input": "Place it next to the red one",
+      "translation": "Move it next to the red."
+    },
+    {
+      "input": "Move it onto C3",
+      "translation": "Move it to C3."
+    },
+    {
+      "input": "Switch the objects on H1 and C3",
+      "translation": "Swap H1 and C3."
+    },
+    {
+      "input": "Take the object at H1 off the board",
+      "translation": "Remove H1."
+    },
+    {
+      "input": "Delete the object at H1",
+      "translation": "Delete H1."
+    },
+    {
+      "input": "Place it next to the red one",
+      "translation": "Move it next to the red."
+    },
+    {
+      "input": "Move it onto F5",
+      "translation": "Move it to F5."
+    },
+    {
+      "input": "Switch the objects on D2 and F5",
+      "translation": "Swap D2 and F5."
+    },
+    {
+      "input": "Take the object at D2 off the board",
+      "translation": "Remove D2."
+    },
+    {
+      "input": "Delete the object at D2",
+      "translation": "Delete D2."
+    },
+    {
+      "input": "Place it next to the red one",
+      "translation": "Move it next to the red."
+    },
+    {
+      "input": "Move it one square up",
+      "translation": "Move it up."
+    },
+    {
+      "input": "Move it one square right",
+      "translation": "Move it right."
+    },
+    {
+      "input": "Move it one square down",
+      "translation": "Move it down."
+    },
+    {
+      "input": "Move it one square left",
+      "translation": "Move it left."
+    },
+    {
+      "input": "Delete everything",
+      "translation": "Clear the world."
+    },
+    {
+      "input": "Wipe the whole world",
+      "translation": "Clear everything."
+    },
+    {
+      "input": "Clear all objects",
+      "translation": "Clear all."
+    },
+    {
+      "input": "How many empty squares are there",
+      "translation": "How many squares are empty?"
+    },
+    {
+      "input": "Are there any red objects on the board",
+      "translation": "Some red objects are on the board?"
+    },
+    {
+      "input": "Is every blue object on the board",
+      "translation": "Every blue object is on the board?"
+    },
+    {
+      "input": "Put a red ---- node on B3",
+      "translation": "A red ---- on B3."
+    },
+    {
+      "input": "Put a red n--- node on B3",
+      "translation": "A red n--- on B3."
+    },
+    {
+      "input": "Put a red -e-- node on B3",
+      "translation": "A red -e-- on B3."
+    },
+    {
+      "input": "Put a red --s- node on B3",
+      "translation": "A red --s- on B3."
+    },
+    {
+      "input": "Put a red ---w node on B3",
+      "translation": "A red ---w on B3."
+    },
+    {
+      "input": "Put a red ne-- node on B3",
+      "translation": "A red ne-- on B3."
+    },
+    {
+      "input": "Put a red n-s- node on B3",
+      "translation": "A red n-s- on B3."
+    },
+    {
+      "input": "Put a red n--w node on B3",
+      "translation": "A red n--w on B3."
+    },
+    {
+      "input": "Put a red -es- node on B3",
+      "translation": "A red -es- on B3."
+    },
+    {
+      "input": "Put a red -e-w node on B3",
+      "translation": "A red -e-w on B3."
+    },
+    {
+      "input": "Put a red --sw node on B3",
+      "translation": "A red --sw on B3."
+    },
+    {
+      "input": "Put a red nes- node on B3",
+      "translation": "A red nes- on B3."
+    },
+    {
+      "input": "Put a red ne-w node on B3",
+      "translation": "A red ne-w on B3."
+    },
+    {
+      "input": "Put a red n-sw node on B3",
+      "translation": "A red n-sw on B3."
+    },
+    {
+      "input": "Put a red -esw node on B3",
+      "translation": "A red -esw on B3."
+    },
+    {
+      "input": "Put a red nesw node on B3",
+      "translation": "A red nesw on B3."
+    },
+    {
+      "input": "Put a blue ---- node on B3",
+      "translation": "A blue ---- on B3."
+    },
+    {
+      "input": "Put a blue n--- node on B3",
+      "translation": "A blue n--- on B3."
+    },
+    {
+      "input": "Put a blue -e-- node on B3",
+      "translation": "A blue -e-- on B3."
+    },
+    {
+      "input": "Put a blue --s- node on B3",
+      "translation": "A blue --s- on B3."
+    },
+    {
+      "input": "Put a blue ---w node on B3",
+      "translation": "A blue ---w on B3."
+    },
+    {
+      "input": "Put a blue ne-- node on B3",
+      "translation": "A blue ne-- on B3."
+    },
+    {
+      "input": "Put a blue n-s- node on B3",
+      "translation": "A blue n-s- on B3."
+    },
+    {
+      "input": "Put a blue n--w node on B3",
+      "translation": "A blue n--w on B3."
+    },
+    {
+      "input": "Put a blue -es- node on B3",
+      "translation": "A blue -es- on B3."
+    },
+    {
+      "input": "Put a blue -e-w node on B3",
+      "translation": "A blue -e-w on B3."
+    },
+    {
+      "input": "Put a blue --sw node on B3",
+      "translation": "A blue --sw on B3."
+    },
+    {
+      "input": "Put a blue nes- node on B3",
+      "translation": "A blue nes- on B3."
+    },
+    {
+      "input": "Put a blue ne-w node on B3",
+      "translation": "A blue ne-w on B3."
+    },
+    {
+      "input": "Put a blue n-sw node on B3",
+      "translation": "A blue n-sw on B3."
+    },
+    {
+      "input": "Put a blue -esw node on B3",
+      "translation": "A blue -esw on B3."
+    },
+    {
+      "input": "Put a blue nesw node on B3",
+      "translation": "A blue nesw on B3."
+    },
+    {
+      "input": "Put a green ---- node on B3",
+      "translation": "A green ---- on B3."
+    },
+    {
+      "input": "Put a green n--- node on B3",
+      "translation": "A green n--- on B3."
+    },
+    {
+      "input": "Put a green -e-- node on B3",
+      "translation": "A green -e-- on B3."
+    },
+    {
+      "input": "Put a green --s- node on B3",
+      "translation": "A green --s- on B3."
+    },
+    {
+      "input": "Put a green ---w node on B3",
+      "translation": "A green ---w on B3."
+    },
+    {
+      "input": "Put a green ne-- node on B3",
+      "translation": "A green ne-- on B3."
+    },
+    {
+      "input": "Put a green n-s- node on B3",
+      "translation": "A green n-s- on B3."
+    },
+    {
+      "input": "Put a green n--w node on B3",
+      "translation": "A green n--w on B3."
+    },
+    {
+      "input": "Put a green -es- node on B3",
+      "translation": "A green -es- on B3."
+    },
+    {
+      "input": "Put a green -e-w node on B3",
+      "translation": "A green -e-w on B3."
+    },
+    {
+      "input": "Put a green --sw node on B3",
+      "translation": "A green --sw on B3."
+    },
+    {
+      "input": "Put a green nes- node on B3",
+      "translation": "A green nes- on B3."
+    },
+    {
+      "input": "Put a green ne-w node on B3",
+      "translation": "A green ne-w on B3."
+    },
+    {
+      "input": "Put a green n-sw node on B3",
+      "translation": "A green n-sw on B3."
+    },
+    {
+      "input": "Put a green -esw node on B3",
+      "translation": "A green -esw on B3."
+    },
+    {
+      "input": "Put a green nesw node on B3",
+      "translation": "A green nesw on B3."
+    },
+    {
+      "input": "Put a yellow ---- node on B3",
+      "translation": "A yellow ---- on B3."
+    },
+    {
+      "input": "Put a yellow n--- node on B3",
+      "translation": "A yellow n--- on B3."
+    },
+    {
+      "input": "Put a yellow -e-- node on B3",
+      "translation": "A yellow -e-- on B3."
+    },
+    {
+      "input": "Put a yellow --s- node on B3",
+      "translation": "A yellow --s- on B3."
+    },
+    {
+      "input": "Put a yellow ---w node on B3",
+      "translation": "A yellow ---w on B3."
+    },
+    {
+      "input": "Put a yellow ne-- node on B3",
+      "translation": "A yellow ne-- on B3."
+    },
+    {
+      "input": "Put a yellow n-s- node on B3",
+      "translation": "A yellow n-s- on B3."
+    },
+    {
+      "input": "Put a yellow n--w node on B3",
+      "translation": "A yellow n--w on B3."
+    },
+    {
+      "input": "Put a yellow -es- node on B3",
+      "translation": "A yellow -es- on B3."
+    },
+    {
+      "input": "Put a yellow -e-w node on B3",
+      "translation": "A yellow -e-w on B3."
+    },
+    {
+      "input": "Put a yellow --sw node on B3",
+      "translation": "A yellow --sw on B3."
+    },
+    {
+      "input": "Put a yellow nes- node on B3",
+      "translation": "A yellow nes- on B3."
+    },
+    {
+      "input": "Put a yellow ne-w node on B3",
+      "translation": "A yellow ne-w on B3."
+    },
+    {
+      "input": "Put a yellow n-sw node on B3",
+      "translation": "A yellow n-sw on B3."
+    },
+    {
+      "input": "Put a yellow -esw node on B3",
+      "translation": "A yellow -esw on B3."
+    },
+    {
+      "input": "Put a yellow nesw node on B3",
+      "translation": "A yellow nesw on B3."
+    },
+    {
+      "input": "Open its north port",
+      "translation": "It north."
+    },
+    {
+      "input": "Close its north port",
+      "translation": "It remove north."
+    },
+    {
+      "input": "Extend it towards the north",
+      "translation": "Extend it north."
+    },
+    {
+      "input": "Disconnect its neighbor to the north",
+      "translation": "Disconnect it north."
+    },
+    {
+      "input": "Open its east port",
+      "translation": "It east."
+    },
+    {
+      "input": "Close its east port",
+      "translation": "It remove east."
+    },
+    {
+      "input": "Extend it towards the east",
+      "translation": "Extend it east."
+    },
+    {
+      "input": "Disconnect its neighbor to the east",
+      "translation": "Disconnect it east."
+    },
+    {
+      "input": "Open its south port",
+      "translation": "It south."
+    },
+    {
+      "input": "Close its south port",
+      "translation": "It remove south."
+    },
+    {
+      "input": "Extend it towards the south",
+      "translation": "Extend it south."
+    },
+    {
+      "input": "Disconnect its neighbor to the south",
+      "translation": "Disconnect it south."
+    },
+    {
+      "input": "Open its west port",
+      "translation": "It west."
+    },
+    {
+      "input": "Close its west port",
+      "translation": "It remove west."
+    },
+    {
+      "input": "Extend it towards the west",
+      "translation": "Extend it west."
+    },
+    {
+      "input": "Disconnect its neighbor to the west",
+      "translation": "Disconnect it west."
+    },
+    {
+      "input": "Join A1 and H8",
+      "translation": "Connect A1 to H8."
+    },
+    {
+      "input": "Build a blue path from B2 to F4",
+      "translation": "Connect B2 to F4 with blue."
+    },
+    {
+      "input": "Make a connection between H1 and C3 in green",
+      "translation": "Connect H1 to C3 with green."
+    },
+    {
+      "input": "Join the red tip to H4 using yellow",
+      "translation": "Connect the red tip to H4 with yellow."
+    },
+    {
+      "input": "Build a path from C5 to G1",
+      "translation": "Connect C5 to G1."
+    },
+    {
+      "input": "How far is A1 from H8 along existing connections",
+      "translation": "Distance A1 to H8?"
+    },
+    {
+      "input": "Connect A1 to H8 in red",
+      "translation": "Connect A1 to H8 with red."
+    },
+    {
+      "input": "Connect A1 to H8 in blue",
+      "translation": "Connect A1 to H8 with blue."
+    },
+    {
+      "input": "Connect A1 to H8 in green",
+      "translation": "Connect A1 to H8 with green."
+    },
+    {
+      "input": "Connect A1 to H8 in yellow",
+      "translation": "Connect A1 to H8 with yellow."
+    },
+    {
+      "input": "Join H1 and C3",
+      "translation": "Connect H1 to C3."
+    },
+    {
+      "input": "How far is H1 from C3 along existing connections",
+      "translation": "Distance H1 to C3?"
+    },
+    {
+      "input": "Connect H1 to C3 in red",
+      "translation": "Connect H1 to C3 with red."
+    },
+    {
+      "input": "Connect H1 to C3 in blue",
+      "translation": "Connect H1 to C3 with blue."
+    },
+    {
+      "input": "Connect H1 to C3 in green",
+      "translation": "Connect H1 to C3 with green."
+    },
+    {
+      "input": "Connect H1 to C3 in yellow",
+      "translation": "Connect H1 to C3 with yellow."
+    },
+    {
+      "input": "Join B2 and F4",
+      "translation": "Connect B2 to F4."
+    },
+    {
+      "input": "How far is B2 from F4 along existing connections",
+      "translation": "Distance B2 to F4?"
+    },
+    {
+      "input": "Connect B2 to F4 in red",
+      "translation": "Connect B2 to F4 with red."
+    },
+    {
+      "input": "Connect B2 to F4 in blue",
+      "translation": "Connect B2 to F4 with blue."
+    },
+    {
+      "input": "Connect B2 to F4 in green",
+      "translation": "Connect B2 to F4 with green."
+    },
+    {
+      "input": "Connect B2 to F4 in yellow",
+      "translation": "Connect B2 to F4 with yellow."
+    },
+    {
+      "input": "Join C5 and G1",
+      "translation": "Connect C5 to G1."
+    },
+    {
+      "input": "How far is C5 from G1 along existing connections",
+      "translation": "Distance C5 to G1?"
+    },
+    {
+      "input": "Connect C5 to G1 in red",
+      "translation": "Connect C5 to G1 with red."
+    },
+    {
+      "input": "Connect C5 to G1 in blue",
+      "translation": "Connect C5 to G1 with blue."
+    },
+    {
+      "input": "Connect C5 to G1 in green",
+      "translation": "Connect C5 to G1 with green."
+    },
+    {
+      "input": "Connect C5 to G1 in yellow",
+      "translation": "Connect C5 to G1 with yellow."
+    },
+    {
+      "input": "Is it a dot",
+      "translation": "It dot?"
+    },
+    {
+      "input": "How many dot nodes are there",
+      "translation": "How many dot?"
+    },
+    {
+      "input": "Is it a tip",
+      "translation": "It tip?"
+    },
+    {
+      "input": "How many tip nodes are there",
+      "translation": "How many tip?"
+    },
+    {
+      "input": "Is it a straight",
+      "translation": "It straight?"
+    },
+    {
+      "input": "How many straight nodes are there",
+      "translation": "How many straight?"
+    },
+    {
+      "input": "Is it a bend",
+      "translation": "It bend?"
+    },
+    {
+      "input": "How many bend nodes are there",
+      "translation": "How many bend?"
+    },
+    {
+      "input": "Is it a tee",
+      "translation": "It tee?"
+    },
+    {
+      "input": "How many tee nodes are there",
+      "translation": "How many tee?"
+    },
+    {
+      "input": "Is it a cross",
+      "translation": "It cross?"
+    },
+    {
+      "input": "How many cross nodes are there",
+      "translation": "How many cross?"
+    },
+    {
+      "input": "Is it a isolated",
+      "translation": "It isolated?"
+    },
+    {
+      "input": "How many isolated nodes are there",
+      "translation": "How many isolated?"
+    },
+    {
+      "input": "Is it a endpoint",
+      "translation": "It endpoint?"
+    },
+    {
+      "input": "How many endpoint nodes are there",
+      "translation": "How many endpoint?"
+    },
+    {
+      "input": "Is it a junction",
+      "translation": "It junction?"
+    },
+    {
+      "input": "How many junction nodes are there",
+      "translation": "How many junction?"
+    },
+    {
+      "input": "Is it a unmatched",
+      "translation": "It unmatched?"
+    },
+    {
+      "input": "How many unmatched nodes are there",
+      "translation": "How many unmatched?"
+    },
+    {
+      "input": "Turn it a quarter turn clockwise",
+      "translation": "Rotate it clockwise."
+    },
+    {
+      "input": "Rotate it ninety degrees anticlockwise",
+      "translation": "Rotate it counterclockwise."
+    },
+    {
+      "input": "Mirror it from left to right",
+      "translation": "Flip it horizontally."
+    },
+    {
+      "input": "Copy the port pattern of the red node onto it",
+      "translation": "Make it the same pattern as the red."
+    },
+    {
+      "input": "Colour its whole connected component blue",
+      "translation": "Color the component of it blue."
+    },
+    {
+      "input": "Create an empty node at H1",
+      "translation": "H1 ----."
+    },
+    {
+      "input": "How many separate networks are there",
+      "translation": "How many components?"
+    },
+    {
+      "input": "Are A1 and H8 connected through red nodes",
+      "translation": "A1 connected to H8 by a red path?"
+    },
+    {
+      "input": "Trim its dangling ports",
+      "translation": "Remove unmatched ports from it."
+    }
+  ]
+}

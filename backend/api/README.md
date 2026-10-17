@@ -117,6 +117,87 @@ progress. Retrieval restores pending state and choices after restart.
 Startup migrates old snapshots with empty salience and no pending entry; it
 preserves existing world history and does not reinterpret old messages.
 
+## Optional LLM translation
+
+The Flutter app-bar switch opts individual chat requests into syntax correction:
+`{"text":"paint A1 red","useLlm":true}`. It defaults to false. Haskell checks
+syntax first; valid controlled English and semantic failures never invoke Luna.
+One proposed translation is checked by Haskell before evaluation and displayed
+with `Interpreted as: ...`. Failed translation preserves the original syntax
+error. Object/square clarification and whole-entry Undo retain their behavior.
+The prompt allows general knowledge, coordinate calculations and planning a
+sequence of supported commands. Haskell validates and evaluates the complete
+entry. The current world is included for selecting targets and planning around
+existing objects; chat history, salience and web lookup tools are not supplied.
+The complete world is included in input-token counting. If the conversation
+changes during translation, application is refused with HTTP 409; retry manually.
+An unsupported interpretation now includes the model's brief reason, labelled
+`LLM explanation: ...`, in the saved feedback. This text is bounded and redacted.
+
+With normal Uvicorn INFO logging, look for `GPT reply` in the backend terminal:
+it shows status, translation, explanation, response ID, token counts and cost.
+`GPT parser rejection` adds Haskell's feedback when a proposed translation fails
+syntax checking. Invalid model JSON and incomplete replies are logged separately.
+Logs are bounded, escape control characters and redact keys. The prompt, world,
+HTTP headers and hidden reasoning are excluded. No extra logging switch is needed.
+
+Full API exchanges are also appended to `logs/gpt-conversation.jsonl`, created
+automatically at startup and ignored by Git. Each JSON line has a UTC timestamp
+and event; request/response pairs include conversation and attempt IDs. It
+records complete prompts, examples, world snapshots, entries, response bodies,
+usage, provider errors, transport errors and parser-rejection feedback without
+the console's length limit. Credential headers/fields, the configured key and
+OpenAI-style keys in text are redacted. Returned metadata is retained exactly
+apart from redaction; hidden reasoning unavailable from the API cannot be logged.
+Logging starts with future calls and appends across reloads/restarts.
+`LOGIC_CHATBOT_LLM_LOG_PATH` overrides the default file location. From `backend/api/`:
+
+```sh
+tail -f logs/gpt-conversation.jsonl
+```
+
+Create a **secret API key** at https://platform.openai.com/api-keys, then paste
+that generated key at the terminal prompt below; do not choose a password.
+Configure it in the same terminal that runs the backend. From
+`backend/api/`, after activating the virtual environment:
+
+```sh
+read -rs -p 'Paste your OpenAI API key: ' OPENAI_API_KEY
+echo
+export OPENAI_API_KEY
+uvicorn app.main:app --reload
+```
+
+The hidden prompt keeps the key itself out of shell history. Do not paste the
+key into chat or Flutter configuration. `.env` files are ignored by Git; this
+app reads environment variables and does not automatically load `.env` files.
+No additional Python dependency is needed. Without a key, the rest of the demo
+works and a requested correction reports that LLM is not configured.
+
+Translation failures report the stage (token counting, generation, usage or
+translation validation), HTTP status and recognized provider error code/parameter.
+The backend also logs the provider's `x-request-id` when available. For example,
+`generation request: HTTP 429; code=insufficient_quota` identifies a quota issue.
+Keys, raw responses, provider messages and exception text are never included in
+these diagnostics. Unknown provider codes are omitted. Retry the entry manually
+after addressing the reported issue; there are no automatic retries.
+
+The hardcoded experiment budget is **$1 total**, shared across all domains and
+conversations and preserved across restarts. `llm_requests` stores maximum
+reservations and settled token costs independently of world snapshots. Input
+is capped at 20,000 tokens and output at 2,000 including reasoning. Every
+generation reserves $0.0035 first; uncertain attempts keep that reservation.
+There are no automatic retries and Undo/Clear cannot refund or reset spending.
+Do not delete or change the database to restart experiments unintentionally.
+
+Responses include `llmBudget` with `limitUsd`, `spentUsd`, `reservedUsd`,
+`remainingUsd`, and `requestCount`. A machine message from an LLM attempt also
+has `llm` metadata: status, model, translation, token counts, calculated
+`costUsd`, and any `reservedUsd`. Token cost is a local estimate at the pinned
+rates; compare it with the provider's usage dashboard. Mocked HTTP tests incur
+no API charges. See [LLM translation](../../specification/llm-translation.md)
+for the prompt files, budget assumptions, and limitations.
+
 ## Persistence
 
 Flutter web development uses port 8080. CORS allows `http://localhost:8080` and

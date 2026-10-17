@@ -49,6 +49,14 @@ class ConversationController extends ChangeNotifier {
   bool loading = false;
   bool editing = false;
   bool sendingChat = false;
+  bool useLlm = false;
+
+  void setUseLlm(bool value) {
+    if (_disposed || loading || editing || useLlm == value) return;
+    useLlm = value;
+    notifyListeners();
+  }
+
   String? error;
   ObjectProperty selectedProperty = ObjectProperty.red;
   int? selectedUnplacedObjectId;
@@ -149,7 +157,7 @@ class ConversationController extends ChangeNotifier {
 
   Future<bool> sendChat(String text) async {
     if (text.trim().isEmpty) return false;
-    return _edit((id) => api.chat(id, text), chat: true);
+    return _edit((id) => api.chat(id, text, useLlm: useLlm), chat: true);
   }
 
   Future<bool> clarifySquare(BoardPosition position) => _edit(

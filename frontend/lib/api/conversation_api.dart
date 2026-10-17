@@ -87,8 +87,17 @@ class ConversationApi {
   Future<ConversationState> undo(String id) =>
       _request('POST', id: id, action: 'undo');
 
-  Future<ConversationState> chat(String id, String text) =>
-      _request('POST', id: id, action: 'chat', body: {'text': text});
+  Future<ConversationState> chat(
+    String id,
+    String text, {
+    bool useLlm = false,
+  }) => _request(
+    'POST',
+    id: id,
+    action: 'chat',
+    body: {'text': text, 'useLlm': useLlm},
+    requestTimeout: useLlm ? const Duration(seconds: 90) : null,
+  );
 
   Future<ConversationState> clarifySquare(String id, BoardPosition position) =>
       _request(
@@ -109,6 +118,7 @@ class ConversationApi {
     String? action,
     Map<String, dynamic>? body,
     WorldDomain? expectedDomain,
+    Duration? requestTimeout,
   }) async {
     final uri = baseUrl.replace(
       pathSegments: [
@@ -131,7 +141,7 @@ class ConversationApi {
                       body: body == null ? null : jsonEncode(body),
                     )
                   : _client.get(uri, headers: {'Accept': 'application/json'}))
-              .timeout(timeout);
+              .timeout(requestTimeout ?? timeout);
     } on TimeoutException {
       throw const ApiException('The server took too long to respond.');
     } on http.ClientException {

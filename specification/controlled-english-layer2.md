@@ -137,6 +137,15 @@ normal entry punctuation, require no subject, and cannot end in `?`. Evaluation
 continues with any following utterances. One Undo restores the complete
 pre-entry world and salience. The visual Clear button has the same world effect.
 
+## Square occupancy questions
+
+Layer 1's `[is] [the] square COORD occupied/taken?` is also accepted in the
+shared parser for both domains. For example, `Is the square D4 taken?` returns
+whether an object occupies D4. It has no object subject to resolve and adds no
+salience mention; entry and utterance ages advance normally. `square` and `?`
+are required. Only the positive `occupied`/`taken` check is supported; `empty`
+and `free` are not aliases. See the core documentation for evaluation details.
+
 ## Property checks
 
 A check tests **exactly one value**: color, size, shape, or position. Indefinite

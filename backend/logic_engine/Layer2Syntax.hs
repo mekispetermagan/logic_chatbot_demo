@@ -7,6 +7,7 @@ import AtomicPerformative
 import AtomicPropertyCheck
 import AtomicPropertyQuery
 import AtomicSentence
+import AtomicSquareCheck
 import Pretty
 
 data Subject = Reference ObjectReference | It
@@ -81,6 +82,7 @@ data Sentence = Attribution Subject [Property]
               | Quantified Bool [Property] [QuantifiedPredicate]
               | Check Subject Property
               | Query Attribute Subject
+              | SquareOccupancy Position
               deriving (Eq, Show)
 
 instance PrettyShow Subject where
@@ -110,6 +112,7 @@ instance PrettyShow Sentence where
   pretty (Quantified universal before after) = (if universal then "every " else "some ") ++ unwords (map pretty before) ++ (if universal then " object is " else " objects are ") ++ intercalate " and " (map pretty after) ++ "?"
   pretty (Check subject property) = pretty subject ++ " is " ++ pretty property ++ "?"
   pretty (Query attribute subject) = pretty attribute ++ " of " ++ pretty subject ++ "?"
+  pretty (SquareOccupancy position) = pretty (ASC position)
 
 -- Compatibility conversion only: no description/pronoun resolution or compound
 -- evaluation is attempted here. All descriptors and their order remain intact.
@@ -121,4 +124,5 @@ toAtomicSentence (Swapping (Reference first) (Reference second)) = Just (Perform
 toAtomicSentence (Deletion (Reference reference)) = Just (Performative (Delete reference))
 toAtomicSentence (Check (Reference reference) property) = Just (PropertyCheck (APC reference property))
 toAtomicSentence (Query attribute (Reference reference)) = Just (PropertyQuery (APQ attribute reference))
+toAtomicSentence (SquareOccupancy position) = Just (SquareCheck (ASC position))
 toAtomicSentence _ = Nothing

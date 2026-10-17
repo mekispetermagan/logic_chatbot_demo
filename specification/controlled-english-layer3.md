@@ -292,6 +292,15 @@ excluded. `has`, `at an edge`, and `at edge` are not accepted spellings.
 Conjunctions of these relations are supported under quantifiers, not in ordinary
 single-object questions.
 
+### Square occupancy questions
+
+| Form | Example | Meaning |
+|---|---|---|
+| `[is] [the] square COORD {occupied\|taken}?` | `Is the square D4 occupied?` | True if an object occupies the cell; false otherwise |
+
+This inherited core question requires `square` and `?`. It adds no object
+mention, and does not accept `empty` or `free` as aliases.
+
 ### Counting questions
 
 | What is counted | Form | Example |

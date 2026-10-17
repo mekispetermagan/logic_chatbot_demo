@@ -243,6 +243,7 @@ period in an entry is optional. Parsing is case insensitive.
 | `remove unmatched ports from S.` | Source only |
 | `color the component of S red.` | Any supported color |
 | `[is] S endpoint?` | Also intrinsic categories, unary graph roles and patterns |
+| `[is] [the] square COORD {occupied\|taken}?` | Core square occupancy check, including no-port nodes |
 | `[is] S linked to T?` / `[is] S connected to T?` | Existing explicit target |
 | `[is] S connected to T by a red path?` | Any supported color |
 | `[does] S have an unmatched port?` | Equivalent to unmatched check |

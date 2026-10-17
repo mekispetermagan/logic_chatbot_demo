@@ -7,10 +7,13 @@ from fastapi.responses import JSONResponse
 from .config import Settings, INITIAL_WORLD_PATHS
 from .database import Database
 from .engine import EngineUnavailable, EngineInvalidRequest, LogicEngine
-from .repository import ConversationRepository, PendingConflict
+from .repository import ConversationRepository, PendingConflict, SnapshotConflict
 from .routes import router
 from .schemas import World
 from .service import ConversationService
+from .llm import LlmTranslator
+from .llm_budget import LlmBudgetLedger
+from .llm_transcript import LlmTranscript
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -23,7 +26,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         initial_worlds = {domain: World.model_validate_json(path.read_text(encoding="utf-8"))
                           for domain, path in INITIAL_WORLD_PATHS.items()}
         app.state.conversation_service = ConversationService(
-            ConversationRepository(database), initial_worlds, LogicEngine(settings.engine_path)
+            ConversationRepository(database), initial_worlds, LogicEngine(settings.engine_path),
+            LlmTranslator(settings.openai_api_key, LlmBudgetLedger(database),
+                          LlmTranscript(settings.llm_log_path, settings.openai_api_key)
+                          if settings.llm_log_path is not None else None)
         )
         yield
 
@@ -39,6 +45,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.exception_handler(PendingConflict)
     async def pending_conflict(request, exception):
+        return JSONResponse(status_code=409, content={"detail": str(exception)})
+
+    @app.exception_handler(SnapshotConflict)
+    async def snapshot_conflict(request, exception):
         return JSONResponse(status_code=409, content={"detail": str(exception)})
 
     app.add_middleware(CORSMiddleware, allow_origins=list(settings.cors_origins),

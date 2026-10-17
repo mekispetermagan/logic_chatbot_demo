@@ -48,6 +48,14 @@ A unary word after a subject is a Boolean check rather than a shorthand value
 query. Explicit generic forms such as `north of A4?` remain accepted by the
 shared grammar, but are unnecessary; use `A4 north?`.
 
+## Square occupancy questions
+
+The shared core also accepts `Is the square A4 occupied?` and
+`Is square A4 taken?`. Both return true if any object occupies A4, including a
+dot, and false when the square is unoccupied. They add no object reference or
+salience mention. The `square` keyword and question mark are required.
+`empty` retains its no-port node meaning; it is not a vacancy-check alias.
+
 ## Modules and GHCi
 
 `Domains.Network.Definition` declares the ontology; `Domains.Network.Library`

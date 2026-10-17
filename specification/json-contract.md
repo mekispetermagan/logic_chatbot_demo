@@ -96,3 +96,31 @@ support both domains, and the existing objects editor sends generic property
 edits. The app bar switches domains, retaining one conversation per domain on the
 device. Network controls offer four colors and all 16 port patterns.
 Older Flutter clients cannot consume these worlds or send property edits.
+
+
+## Optional LLM translation and accounting
+
+Flutter sends optional `useLlm` (strict Boolean, default false) with chat `text`.
+For translation, FastAPI supplies the current world and entry to the model;
+Flutter does not need to send an additional world payload. Applying the proposal
+checks that the conversation revision is unchanged. HTTP 409 means the entry
+must be retried against the new state; a completed model call remains charged.
+The flag is per request. FastAPI may translate only after Haskell reports a syntax
+failure, and Haskell validates the proposed entry before evaluation.
+
+The Haskell bridge accepts `{"type":"checkSyntax","text":"..."}`: it returns
+canonical sentence text in `feedback`, without changing world, salience or
+pending state. A syntax failure in `chat` or `checkSyntax` adds `syntaxError: true`
+to the engine response. Other failures do not set it. These fields are internal
+to the FastAPI/Haskell boundary; Python does not parse controlled English.
+
+Public conversation responses add `llmBudget`: `limitUsd`, `spentUsd`,
+`reservedUsd`, `remainingUsd`, and `requestCount`, shared globally. Machine
+messages from translation attempts add nullable `llm` metadata containing status,
+model, requestId, translation, inputTokens, cachedTokens, cacheWriteTokens,
+outputTokens (including reasoning), reasoningTokens, costUsd, and reservedUsd.
+Messages without an attempt omit `llm`. An unknown charge has null costUsd and
+retains its maximum reservedUsd. API keys never appear in either contract.
+
+Spending is not part of undoable world/discourse snapshots. See
+[LLM translation](llm-translation.md) for the persistent $1 budget and failure rules.

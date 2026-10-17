@@ -21,6 +21,7 @@ class EngineReply(Schema):
     feedback: str
     isError: bool = False
     undoRequested: bool = False
+    syntaxError: bool = False
     salience: list[dict] = Field(default_factory=list)
     pending: PendingEntry | None = None
 

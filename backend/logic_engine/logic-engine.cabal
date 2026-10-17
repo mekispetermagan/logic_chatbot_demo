@@ -12,7 +12,7 @@ library
                    Domains.Network.Syntax, Domains.Network.Patterns, Domains.Network.Graph,
                    Domains.Network.Parser, Domains.Network.Evaluation,
                    Grammar, Pretty, Result, Sandbox, Console, ReferenceResolution,
-                   AtomicPerformative, AtomicPropertyCheck, AtomicPropertyQuery,
+                   AtomicPerformative, AtomicPropertyCheck, AtomicPropertyQuery, AtomicSquareCheck,
                    AtomicSentence, AtomicParser, AtomicEvaluation, WorldEditor,
                    SyntaxVocabulary, Layer2Syntax, Layer2Parser, Discourse,
                    Layer2Evaluation, Layer3Evaluation
@@ -31,6 +31,13 @@ executable logic-engine-editor
 test-suite atomic-parser-tests
   type: exitcode-stdio-1.0
   main-is: AtomicParserTest.hs
+  hs-source-dirs: test
+  build-depends: base >=4.14 && <5, logic-engine
+  default-language: Haskell2010
+
+test-suite square-occupancy-tests
+  type: exitcode-stdio-1.0
+  main-is: SquareOccupancyTest.hs
   hs-source-dirs: test
   build-depends: base >=4.14 && <5, logic-engine
   default-language: Haskell2010

@@ -35,6 +35,27 @@ class ChatTests(unittest.TestCase):
         with Database(self.path).connection() as connection:
             return connection.execute("SELECT count(*) FROM world_snapshots").fetchone()[0]
 
+    def test_square_occupancy_questions_in_both_domains(self):
+        for domain in ('objects', 'network'):
+            with self.subTest(domain=domain):
+                state = self.client.post('/conversations', json={'domain': domain}).json()
+                base = '/conversations/' + state['conversationId']
+                self.client.post(base + '/clear')
+                for text, answer in [('Is the square D4 occupied?', 'false'),
+                                     ('D4 red. Is square D4 taken?', 'true')]:
+                    response = self.client.post(base + '/chat', json={'text': text})
+                    self.assertEqual(response.status_code, 200, response.text)
+                    result = response.json()
+                    self.assertFalse(result['messages'][-1]['isError'])
+                    self.assertTrue(result['feedback'].endswith('\n  ' + answer))
+                before = result['world']
+                result = self.client.post(base + '/chat', json={'text': 'Is the square A1 taken?'}).json()
+                self.assertEqual(result['world'], before)
+                self.assertTrue(result['feedback'].endswith('\n  false'))
+                result = self.client.post(base + '/chat', json={'text': 'Is the square D4 free?'}).json()
+                self.assertTrue(result['messages'][-1]['isError'])
+                self.assertEqual(result['world'], before)
+
     def test_sequence_one_snapshot_and_undo_keeps_messages(self):
         text = "#0 blue. #0 small. #0 blue? color of #0?"
         result = self.chat(text)

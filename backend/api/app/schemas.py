@@ -1,7 +1,7 @@
 from typing import Literal
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, model_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, model_validator, model_serializer
 
 
 class Schema(BaseModel):
@@ -32,14 +32,45 @@ class World(Schema):
     objects: list[WorldObject]
 
 
+class LlmUsage(Schema):
+    status: str
+    model: str = "gpt-6-luna"
+    requestId: str | None = None
+    translation: str | None = None
+    inputTokens: int | None = None
+    cachedTokens: int | None = None
+    cacheWriteTokens: int | None = None
+    outputTokens: int | None = None
+    reasoningTokens: int | None = None
+    costUsd: float | None = None
+    reservedUsd: float = 0
+
+
+class LlmBudget(Schema):
+    limitUsd: float = 1
+    spentUsd: float = 0
+    reservedUsd: float = 0
+    remainingUsd: float = 1
+    requestCount: int = 0
+
+
 class ChatMessage(Schema):
     role: Literal["user", "machine"]
     text: str
     isError: bool = False
+    llm: LlmUsage | None = None
+
+    @model_serializer(mode="wrap")
+    def serialize_message(self, handler):
+        value = handler(self)
+        if self.llm is None:
+            value.pop("llm", None)
+        return value
 
 
 class ChatEntry(Schema):
     text: str = Field(min_length=1)
+    useLlm: StrictBool = False
 
 
 class ClarificationChoice(Schema):
@@ -74,6 +105,7 @@ class ConversationState(Schema):
     canUndo: bool
     messages: list[ChatMessage] = Field(default_factory=list)
     pending: PendingEntry | None = None
+    llmBudget: LlmBudget | None = None
 
 
 class EditState(ConversationState):

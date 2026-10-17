@@ -81,6 +81,7 @@ subjectsOf (CountMatching _ predicates) = nub (concatMap predicateSubjects predi
 subjectsOf (CountObjects (Neighboring subject)) = [subject]
 subjectsOf (CountObjects _) = []
 subjectsOf (CountSquares _) = []
+subjectsOf (SquareOccupancy _) = []
 subjectsOf (Quantified _ _ predicates) = nub (concatMap predicateSubjects predicates)
 subjectsOf (Check subject _) = [subject]
 subjectsOf (Query _ subject) = [subject]

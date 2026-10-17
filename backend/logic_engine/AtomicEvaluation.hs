@@ -4,6 +4,7 @@ import Data.List (foldl')
 import AtomicPerformative
 import AtomicPropertyCheck
 import AtomicPropertyQuery
+import AtomicSquareCheck
 import AtomicSentence
 import Domain
 import Domains.Objects.Definition (objectsDomain)
@@ -47,6 +48,10 @@ evaluateAtomicSentenceWith domain world sentence = case sentence of
   PropertyQuery question ->
     (world, AtomicFeedback sentence $ case (evaluateAtomicPropertyQueryWith domain) world question of
       Result answer -> QueryAnswerValue answer
+      Message message -> FeedbackMessage message)
+  SquareCheck question ->
+    (world, AtomicFeedback sentence $ case evaluateAtomicSquareCheckWith domain world question of
+      Result answer -> CheckAnswer answer
       Message message -> FeedbackMessage message)
 
 -- Feedback follows input order, and questions see all preceding updates.

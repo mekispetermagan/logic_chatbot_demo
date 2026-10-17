@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import '../models/chat_message.dart';
 import '../models/world_object.dart';
 import '../models/conversation_state.dart';
+import '../models/llm_usage.dart';
 
 /// Owns composer text and recall state; conversation requests stay in the controller.
 class ChatPanel extends StatefulWidget {
@@ -18,6 +19,7 @@ class ChatPanel extends StatefulWidget {
     this.pending,
     this.onChoose,
     this.onChooseSquare,
+    this.llmBudget,
   });
 
   final List<ChatMessage> messages;
@@ -29,6 +31,7 @@ class ChatPanel extends StatefulWidget {
   final ValueChanged<BoardPosition>? onChooseSquare;
   final Future<bool> Function(String) onSend;
   final VoidCallback onRefresh;
+  final LlmBudget? llmBudget;
 
   @override
   State<ChatPanel> createState() => _ChatPanelState();
@@ -214,6 +217,21 @@ class _ChatPanelState extends State<ChatPanel> {
           const LinearProgressIndicator(),
           const SizedBox(height: 8),
         ],
+        if (widget.llmBudget case final budget?) ...[
+          Tooltip(
+            message:
+                'Estimated spend shared across all conversations and domains. '
+                'Remaining: \$${budget.remainingUsd.toStringAsFixed(6)}. '
+                'Uncertain requests retain their maximum reservation.',
+            child: Text(
+              'LLM: \$${budget.spentUsd.toStringAsFixed(6)} / '
+              '\$${budget.limitUsd.toStringAsFixed(2)}'
+              '${budget.reservedUsd > 0 ? ' · \$${budget.reservedUsd.toStringAsFixed(6)} reserved' : ''}',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -324,6 +342,24 @@ class ChatBubble extends StatelessWidget {
                   fontFamily: user ? null : 'monospace',
                 ),
               ),
+              if (message.llm case final usage?) ...[
+                const SizedBox(height: 8),
+                Tooltip(
+                  message:
+                      'Estimated token cost at configured Standard rates.\n'
+                      '${usage.model} · ${usage.status}\n'
+                      'Input: ${usage.inputTokens ?? 'unknown'} tokens; '
+                      'output including reasoning: ${usage.outputTokens ?? 'unknown'} tokens.',
+                  child: Text(
+                    usage.costUsd != null
+                        ? 'LLM cost: \$${usage.costUsd!.toStringAsFixed(6)}'
+                        : usage.reservedUsd > 0
+                        ? 'LLM cost unknown · \$${usage.reservedUsd.toStringAsFixed(6)} reserved'
+                        : 'LLM cost: \$0.000000',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
+              ],
             ],
           ),
         ),

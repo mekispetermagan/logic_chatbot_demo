@@ -8,6 +8,7 @@ import AtomicSentence
 import AtomicPerformative
 import AtomicPropertyCheck
 import AtomicPropertyQuery
+import AtomicSquareCheck
 import AtomicEvaluation
 import DomainLibrary
 import Domains.Objects.Library (objectsLibrary)
@@ -73,6 +74,9 @@ evaluateRemainingWithIn library square world ranking supplied sentences@(sentenc
 evaluateResolvedIn :: DomainLibrary -> World -> [Identifier] -> Sentence -> (World, [String], [[Property]])
 evaluateResolvedIn _ world [] ClearingWorld =
   (World [], [if world == World [] then "No change" else "World cleared"], [])
+evaluateResolvedIn library world [] (SquareOccupancy position) =
+  let (_, feedback) = evaluateAtomicSentenceWith (ontology library) world (SquareCheck (ASC position))
+  in (world, [pretty (feedbackAnswer feedback)], [])
 evaluateResolvedIn library world [first, second] (Swapping left right) =
   let (updated, feedback) = evaluateAtomicSentenceWith (ontology library) world
         (Performative (Swap (ById first) (ById second)))

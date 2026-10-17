@@ -6,6 +6,7 @@ module Grammar
   , module AtomicPerformative
   , module AtomicPropertyCheck
   , module AtomicPropertyQuery
+  , module AtomicSquareCheck
   , module AtomicSentence
   , module ReferenceResolution
   , module AtomicEvaluation
@@ -24,6 +25,7 @@ import Ontology
 import AtomicPerformative
 import AtomicPropertyCheck
 import AtomicPropertyQuery
+import AtomicSquareCheck
 import AtomicSentence
 import ReferenceResolution
 import AtomicEvaluation

@@ -74,7 +74,7 @@ parseAction domain = withObject "action" $ \value -> do
     "clear" -> pure ClearWorld
     _ -> fail "Invalid editor action"
 
-data Operation = Chat String | Clarify Identifier | ClarifySquare Position | Edit EditorAction
+data Operation = Chat String | CheckSyntax String | Clarify Identifier | ClarifySquare Position | Edit EditorAction
 
 parseRanking :: Domain -> Value -> Parser SalienceRanking
 parseRanking domain = withArray "salience" $ mapM parseMention . foldr (:) []
@@ -125,6 +125,7 @@ parseRequest = withObject "request" $ \value -> do
     kind <- fields .: "type" :: Parser String
     case kind of
       "chat" -> Chat <$> fields .: "text"
+      "checkSyntax" -> CheckSyntax <$> fields .: "text"
       "clarify" -> do
         identifier <- fields .:? "objectId"
         position <- fields .:? "position"
@@ -174,6 +175,10 @@ processRequest input = do
   (library, world, ranking, pending, action) <- parseEither parseRequest input
   let domain = ontology library
       undoRequested = case action of Chat text -> isUndoEntry text; _ -> False
+      syntaxError = case (pending, action) of
+        (Nothing, Chat text) | not (isUndoEntry text) -> either (const True) (const False) (parseSentencesWith library text)
+        (Nothing, CheckSyntax text) | not (isUndoEntry text) -> either (const True) (const False) (parseSentencesWith library text)
+        _ -> False
       (updated@(World objects), salience, nextPending, feedback, isError) = case (pending, action) of
         (_, Chat _) | undoRequested -> (world, ranking, pending, "", False)
         (Just paused, Clarify identifier) ->
@@ -185,6 +190,10 @@ processRequest input = do
         (Just _, _) -> (world, ranking, pending, "Choose an object or square, or undo", True)
         (Nothing, Clarify _) -> (world, ranking, Nothing, "No clarification pending", True)
         (Nothing, ClarifySquare _) -> (world, ranking, Nothing, "No clarification pending", True)
+        (Nothing, CheckSyntax text) | isUndoEntry text -> (world, ranking, Nothing, "undo", False)
+        (Nothing, CheckSyntax text) -> case parseSentencesWith library text of
+          Left message -> (world, ranking, Nothing, message, True)
+          Right sentences -> (world, ranking, Nothing, intercalate " " (map pretty sentences), False)
         (Nothing, Chat text) -> case parseSentencesWith library text of
           Left message -> (world, ranking, Nothing, message, True)
           Right sentences -> let (w, r, p, message) = evaluateEntryIn library world ranking sentences
@@ -197,4 +206,5 @@ processRequest input = do
                 "salience" .= rankingJson salience,
                 "pending" .= fmap (pendingJson domain updated) nextPending,
                 "feedback" .= feedback, "isError" .= isError] ++
-                ["undoRequested" .= True | undoRequested]))
+                ["undoRequested" .= True | undoRequested] ++
+                ["syntaxError" .= True | syntaxError]))
