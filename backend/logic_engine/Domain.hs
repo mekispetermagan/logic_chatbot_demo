@@ -11,9 +11,11 @@ data ValueDefinition = ValueDefinition
 data AttributeDefinition = AttributeDefinition
   { attributeId :: AttributeId, attributeAliases :: [String]
   , attributeValues :: [ValueDefinition] } deriving (Eq, Show)
+data DefinedDescriptor = DefinedDescriptor
+  { definedName :: String, definedAliases :: [String], assignable :: Bool } deriving (Eq, Show)
 data Domain = Domain
   { domainId :: String, boardWidth :: Int, boardHeight :: Int
-  , domainAttributes :: [AttributeDefinition] } deriving (Eq, Show)
+  , domainAttributes :: [AttributeDefinition], domainDefined :: [DefinedDescriptor] } deriving (Eq, Show)
 
 canonical :: String -> String
 canonical = map toLower
@@ -22,7 +24,9 @@ descriptorVocabulary :: Domain -> [(String, Property)]
 descriptorVocabulary domain =
   [(canonical word, AttributeValue (attributeId attribute) (valueId value))
   | attribute <- domainAttributes domain, value <- attributeValues attribute
-  , word <- pretty (valueId value) : valueAliases value]
+  , word <- pretty (valueId value) : valueAliases value] ++
+  [(canonical word, Defined (definedName definition)) | definition <- domainDefined domain,
+    word <- definedName definition : definedAliases definition]
 
 attributeVocabulary :: Domain -> [(String, AttributeId)]
 attributeVocabulary domain =
@@ -33,6 +37,7 @@ validProperty :: Domain -> Property -> Bool
 validProperty domain (AttributeValue attribute value) = any
   (\definition -> attributeId definition == attribute && value `elem` map valueId (attributeValues definition))
   (domainAttributes domain)
+validProperty domain (Defined name) = any ((== name) . definedName) (domainDefined domain)
 validProperty domain (P position) = inDomainBounds domain position
 
 inDomainBounds :: Domain -> Position -> Bool
@@ -69,12 +74,12 @@ validateDomain domain
     incompatibleOverlap (word, AttributeValue attribute _) = case lookup word (attributeVocabulary domain) of
       Nothing -> False
       Just name -> name /= attribute || not (unaryWord word attribute)
-    incompatibleOverlap _ = True
+    incompatibleOverlap (word, _) = word `elem` map fst (attributeVocabulary domain)
     directionalUnary word = word `elem` ["up", "right", "down", "left"] &&
       case lookup word (attributeVocabulary domain) of
         Just attribute -> unaryWord word attribute
         Nothing -> False
-    reserved = words "is to on a the one it of what remove from board erase delete swap and move turn make same have in at edge corner next just above under up down left right how many objects object squares every some are does do undo position row column square"
+    reserved = words "is to on a the one it of what remove from board erase delete swap and move turn make same have in at edge corner next just above under up down left right how many objects object squares every some are does do undo position row column square clear world everything all"
 
 prettyObjectIn :: Domain -> Object -> String
 prettyObjectIn domain object = pretty (idOf object) ++ ": " ++ unwords

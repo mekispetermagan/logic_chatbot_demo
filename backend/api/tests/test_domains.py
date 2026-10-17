@@ -17,6 +17,100 @@ class DomainIntegrationTests(unittest.TestCase):
         self.path = Path(self.temporary.name) / "conversations.sqlite3"
         self.settings = Settings(database_path=self.path)
 
+    def test_clear_chat_aliases_persist_and_undo_world_and_salience_in_both_domains(self):
+        database = Database(self.path)
+        for domain in ('objects', 'network'):
+            for alias in ('clear the world', 'clear everything', 'CLEAR ALL.'):
+                with self.subTest(domain=domain, alias=alias):
+                    with TestClient(create_app(self.settings)) as client:
+                        state = client.post('/conversations', json={'domain': domain}).json()
+                        conversation_id = state['conversationId']
+                        base = '/conversations/' + conversation_id
+                        previous = client.post(base + '/chat', json={'text': '#99 green. #0 red?'}).json()
+                        with database.connection() as connection:
+                            ranking_before = json.loads(connection.execute(
+                                'SELECT salience_json FROM world_snapshots WHERE conversation_id=? ORDER BY sequence DESC LIMIT 1',
+                                (conversation_id,)).fetchone()[0])
+                        response = client.post(base + '/chat', json={'text': alias})
+                        self.assertEqual(response.status_code, 200, response.text)
+                        cleared = response.json()
+                        self.assertEqual(cleared['world']['objects'], [])
+                        self.assertIn('clear the world.\n  World cleared', cleared['feedback'])
+                        self.assertIsNone(cleared['pending'])
+                        self.assertTrue(cleared['canUndo'])
+                        with database.connection() as connection:
+                            ranking_after = json.loads(connection.execute(
+                                'SELECT salience_json FROM world_snapshots WHERE conversation_id=? ORDER BY sequence DESC LIMIT 1',
+                                (conversation_id,)).fetchone()[0])
+                            self.assertEqual(ranking_after, [])
+                    with TestClient(create_app(self.settings)) as client:
+                        self.assertEqual(client.get(base).json()['world'], cleared['world'])
+                        restored = client.post(base + '/undo').json()
+                        self.assertEqual(restored['world'], previous['world'])
+                        with database.connection() as connection:
+                            ranking_restored = json.loads(connection.execute(
+                                'SELECT salience_json FROM world_snapshots WHERE conversation_id=? ORDER BY sequence DESC LIMIT 1',
+                                (conversation_id,)).fetchone()[0])
+                            self.assertEqual(ranking_restored, ranking_before)
+
+    def test_shortest_connection_colors_persists_and_undo_restores_salience(self):
+        database = Database(self.path)
+        with TestClient(create_app(self.settings)) as client:
+            state = client.post('/conversations', json={'domain': 'network'}).json()
+            conversation_id = state['conversationId']
+            base = '/conversations/' + conversation_id
+            client.post(base + '/clear')
+            previous = client.post(base + '/chat', json={'text': 'B1 red ew. #9 green.'}).json()
+            with database.connection() as connection:
+                previous_salience = connection.execute(
+                    'SELECT salience_json FROM world_snapshots WHERE conversation_id=? ORDER BY sequence DESC LIMIT 1',
+                    (conversation_id,)).fetchone()[0]
+            response = client.post(base + '/chat', json={'text': 'Connect A1 to C1 with blue.'})
+            self.assertEqual(response.status_code, 200, response.text)
+            connected = response.json()
+            self.assertIsNone(connected['pending'])
+            placed = {tuple(node['position'].values()): node for node in connected['world']['objects']
+                      if node['position'] is not None}
+            self.assertEqual(set(placed), {(0, 0), (1, 0), (2, 0)})
+            self.assertTrue(all(node['attributes']['color'] == 'blue' for node in placed.values()))
+            self.assertEqual(placed[(1, 0)]['attributes'],
+                             {'color': 'blue', 'east': 'east', 'west': 'west'})
+            self.assertIn('2 steps', connected['feedback'])
+        with TestClient(create_app(self.settings)) as client:
+            self.assertEqual(client.get(base).json()['world'], connected['world'])
+            restored = client.post(base + '/undo').json()
+            self.assertEqual(restored['world'], previous['world'])
+            with database.connection() as connection:
+                restored_salience = connection.execute(
+                    'SELECT salience_json FROM world_snapshots WHERE conversation_id=? ORDER BY sequence DESC LIMIT 1',
+                    (conversation_id,)).fetchone()[0]
+                self.assertEqual(json.loads(restored_salience), json.loads(previous_salience))
+
+    def test_connection_clarification_creates_nothing_until_resumed_after_restart(self):
+        with TestClient(create_app(self.settings)) as client:
+            state = client.post('/conversations', json={'domain': 'network'}).json()
+            base = '/conversations/' + state['conversationId']
+            client.post(base + '/clear')
+            previous = client.post(base + '/chat', json={'text': 'C1 red w. C3 red w.'}).json()
+            response = client.post(base + '/chat', json={
+                'text': 'H8 yellow. Connect A1 to the red with blue.'})
+            self.assertEqual(response.status_code, 200, response.text)
+            paused = response.json()
+            self.assertEqual(set(paused['pending']['candidateIds']), {0, 1})
+            self.assertEqual(len(paused['world']['objects']), 3)
+        with TestClient(create_app(self.settings)) as client:
+            self.assertEqual(client.get(base).json()['pending'], paused['pending'])
+            response = client.post(base + '/clarify', json={'objectId': 0})
+            self.assertEqual(response.status_code, 200, response.text)
+            updated = response.json()
+            self.assertIsNone(updated['pending'])
+            self.assertEqual(len(updated['world']['objects']), 5)
+            self.assertEqual(next(node for node in updated['world']['objects'] if node['id'] == 0)
+                             ['attributes'], {'color': 'blue', 'west': 'west'})
+            self.assertEqual(next(node for node in updated['world']['objects'] if node['id'] == 1)
+                             ['attributes']['color'], 'red')
+            self.assertEqual(client.post(base + '/undo').json()['world'], previous['world'])
+
     def test_network_edit_chat_undo_restart_and_domain_isolation(self):
         with TestClient(create_app(self.settings)) as client:
             network = client.post("/conversations", json={"domain": "network"}).json()
@@ -161,3 +255,60 @@ class DomainIntegrationTests(unittest.TestCase):
             other = client.post('/conversations', json={'domain': 'objects'}).json()
             self.assertEqual(client.post('/conversations/' + other['conversationId'] + '/ports',
                 json={'position': {'x': 0, 'y': 0}, 'ports': []}).status_code, 422)
+
+    def test_network_graph_facts_restart_visual_purge_and_whole_entry_undo(self):
+        with TestClient(create_app(self.settings)) as client:
+            state = client.post('/conversations', json={'domain': 'network'}).json()
+            conversation_id = state['conversationId']
+            base = '/conversations/' + conversation_id
+            empty = client.post(base + '/clear').json()
+            response = client.post(base + '/chat', json={'text':
+                'A1 red. Link A1 right. Is A1 an endpoint? '
+                'Is A1 connected to B1 by a red path? How many components?'})
+            self.assertEqual(response.status_code, 200, response.text)
+            linked = response.json()
+            self.assertIsNone(linked['pending'])
+            self.assertIn('true', linked['feedback'])
+            self.assertEqual(len(linked['world']['objects']), 2)
+        database = Database(self.path)
+        with database.connection() as connection:
+            ranking = json.loads(connection.execute(
+                'SELECT salience_json FROM world_snapshots WHERE conversation_id=? ORDER BY sequence DESC LIMIT 1',
+                (conversation_id,)).fetchone()[0])
+            self.assertTrue(any(p == {'kind': 'defined', 'value': 'endpoint'}
+                                for mention in ranking for p in mention['properties']))
+        with TestClient(create_app(self.settings)) as client:
+            self.assertEqual(client.get(base).json()['world'], linked['world'])
+            response = client.post(base + '/ports', json={'position': {'x': 1, 'y': 0}, 'ports': []})
+            self.assertEqual(response.status_code, 200, response.text)
+            with database.connection() as connection:
+                ranking = json.loads(connection.execute(
+                    'SELECT salience_json FROM world_snapshots WHERE conversation_id=? ORDER BY sequence DESC LIMIT 1',
+                    (conversation_id,)).fetchone()[0])
+                self.assertFalse(any(p.get('value') == 'endpoint'
+                                     for mention in ranking for p in mention['properties']))
+            self.assertEqual(client.post(base + '/undo').json()['world'], linked['world'])
+            self.assertEqual(client.post(base + '/undo').json()['world'], empty['world'])
+
+    def test_network_computed_clarification_restart_and_atomic_component_update(self):
+        with TestClient(create_app(self.settings)) as client:
+            state = client.post('/conversations', json={'domain': 'network'}).json()
+            base = '/conversations/' + state['conversationId']
+            client.post(base + '/clear')
+            previous = client.post(base + '/chat', json={'text': 'A1 n. C1 n.'}).json()
+            response = client.post(base + '/chat', json={'text':
+                'Color the component of the tip red.'})
+            self.assertEqual(response.status_code, 200, response.text)
+            paused = response.json()
+            self.assertEqual(set(paused['pending']['candidateIds']), {0, 1})
+            self.assertEqual(paused['world'], previous['world'])
+        with TestClient(create_app(self.settings)) as client:
+            self.assertEqual(client.get(base).json()['pending'], paused['pending'])
+            response = client.post(base + '/clarify', json={'objectId': 1})
+            self.assertEqual(response.status_code, 200, response.text)
+            updated = response.json()
+            self.assertIsNone(updated['pending'])
+            nodes = {node['id']: node for node in updated['world']['objects']}
+            self.assertNotIn('color', nodes[0]['attributes'])
+            self.assertEqual(nodes[1]['attributes']['color'], 'red')
+            self.assertEqual(client.post(base + '/undo').json()['world'], previous['world'])

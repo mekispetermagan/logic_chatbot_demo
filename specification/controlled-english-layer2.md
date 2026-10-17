@@ -127,6 +127,16 @@ old position; deletion purges every mention of the deleted object. Removing an
 unplaced object, swapping two unplaced objects, and swapping an object with
 itself report `No change` while still registering the resolved mentions.
 
+## Clearing the world
+
+`Clear the world.`, `Clear everything.`, and `Clear all.` are equivalent
+performatives in both domains. They delete every object, including unplaced
+objects, and purge all salience mentions. Pretty-printing uses `clear the world.`;
+feedback is `World cleared`, or `No change` when already empty. These forms obey
+normal entry punctuation, require no subject, and cannot end in `?`. Evaluation
+continues with any following utterances. One Undo restores the complete
+pre-entry world and salience. The visual Clear button has the same world effect.
+
 ## Property checks
 
 A check tests **exactly one value**: color, size, shape, or position. Indefinite

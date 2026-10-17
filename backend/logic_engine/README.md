@@ -191,10 +191,20 @@ to the repository root) for a complete minimal request fixture.
 ## Network core library
 
 `Domains/Network/Definition.hs` declares optional object color and four unary
-ports, including directional aliases. `Library.hs` supplies Layer 1/2 support
-without derived-language callbacks. `Sandbox.hs` supplies `networkWorld` and
+ports, including directional aliases. `Library.hs` supplies all three layers, with graph, pattern and derived-language
+operations in the neighboring Network modules. `Sandbox.hs` supplies `networkWorld` and
 `networkIntroduction` for GHCi. The JSON bridge supports both domains using generic attribute maps.
 See [network core](../../specification/network-core.md) for syntax and commands.
 
 See the [JSON contract](../../specification/json-contract.md) for world, property,
 and salience encodings.
+
+See [network Layer 3](../../specification/controlled-english-network-layer3.md) for rotations, links, components, paths, computed descriptions and aggregate questions.
+
+
+`Domains.Network.Pathfinding.shortestConnectionPath` returns an inclusive route
+through existing ports and virtual empty-square nodes, using N/E/S/W BFS order.
+`createConnection` applies it purely, returning the new world and route. Chat
+accepts `connect A1 to H8.` and `connect the red tip to H8 with blue.`. Existing
+ports stay unchanged; explicit coloring affects all route nodes. See the
+network Layer 3 specification for empty endpoints, clarification and Undo.

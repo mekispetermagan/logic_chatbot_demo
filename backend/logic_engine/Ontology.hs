@@ -17,7 +17,7 @@ instance Ord Identifier where
   (<=) :: Identifier -> Identifier -> Bool
   (Id n) <= (Id m) = n <= m
 
-data Property = AttributeValue AttributeId ValueId | P Position deriving (Eq, Show)
+data Property = AttributeValue AttributeId ValueId | P Position | Defined String deriving (Eq, Show)
 
 data Object = Object
   { idOf :: Identifier
@@ -34,6 +34,7 @@ setAttribute attribute value object = object { attributesOf =
 
 holdsProperty :: Object -> Property -> Bool
 holdsProperty object (AttributeValue attribute value) = attributeOf attribute object == Just value
+holdsProperty _ (Defined _) = False
 holdsProperty object (P position) = positionOf object == Just position
 
 data ObjectReference = ById Identifier | AtSquare Position deriving (Eq, Show)
@@ -54,6 +55,7 @@ newtype World = World [Object] deriving (Eq, Show)
 
 instance PrettyShow Property where
   pretty (AttributeValue _ value) = pretty value
+  pretty (Defined name) = name
   pretty (P position) = "on " ++ prettyPosition position
 
 instance PrettyShow Object where

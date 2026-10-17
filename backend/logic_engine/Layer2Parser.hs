@@ -55,6 +55,10 @@ attributionWith domain words' = mapMaybe candidate (splits tokens)
     candidate (before, after) = do
       who <- (subjectWith domain) before
       properties <- (predicateWith domain) after
+      let canAttribute (Defined name) = any (\definition -> definedName definition == name && assignable definition) (domainDefined domain)
+          canAttribute _ = True
+      if all canAttribute properties && (case who of Indefinite descriptors -> all canAttribute descriptors; _ -> True)
+        then pure () else Nothing
       let positional = all isPosition properties
           namedBoundary = case who of
             Definite _ -> positional || hasBoundary after
@@ -67,6 +71,7 @@ attributionWith domain words' = mapMaybe candidate (splits tokens)
 -- Structural operands must denote existing objects. Description boundaries
 -- are enumerated just like attribution boundaries, with optional 'and'.
 structuralWith :: Domain -> [String] -> [Sentence]
+structuralWith _ tokens | tokens `elem` [["clear","the","world"],["clear","everything"],["clear","all"]] = [ClearingWorld]
 structuralWith domain ("remove":tokens) = (unaryWith domain) Removal (stripFromBoard tokens)
   where
     stripFromBoard words' = case reverse words' of
@@ -117,12 +122,13 @@ questionsWith domain words' = valueQueries ++ checks
       if boundary then Just (Check who property) else Nothing
 
 parseChunkWith :: DomainLibrary -> ([String], Maybe Char) -> Either String Sentence
-parseChunkWith library (tokens, mark) = case candidates of
+parseChunkWith library (rawTokens, mark) = case candidates of
   [sentence] -> Right sentence
   [] -> Left ("Unsupported syntax: " ++ unwords tokens ++ maybe "" (:[]) mark)
   _ -> Left ("Ambiguous subject/predicate boundary: " ++ unwords tokens)
   where
     domain = ontology library
+    tokens = normalizeTokens library rawTokens
     candidates = if mark == Just '?'
       then questionsWith domain tokens ++ parseDerivedQuestions library tokens
       else structuralWith domain tokens ++ attributionWith domain tokens ++ parseDerivedPerformatives library tokens

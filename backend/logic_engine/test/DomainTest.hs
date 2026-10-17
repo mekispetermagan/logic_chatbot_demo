@@ -26,7 +26,7 @@ parsed domain = either error id . parseAtomicSentencesWith domain
 library domain = DomainLibrary domain
   (DerivedParser.derivedPerformativesWith domain)
   (DerivedParser.derivedQuestionsWith domain)
-  (DerivedEvaluation.evaluateDerivedWith domain)
+  (DerivedEvaluation.evaluateDerivedWith domain) (\_ -> holdsProperty) (:[]) id
 
 main = do
   check "existing domain validates" (validateDomain objectsDomain == Right objectsDomain)

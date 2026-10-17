@@ -1,5 +1,6 @@
 module Discourse where
 
+import Data.Foldable (toList)
 import Data.List (nub, sortOn)
 import Domain
 import Domains.Objects.Definition (objectsDomain)
@@ -31,8 +32,11 @@ holds :: Object -> Property -> Bool
 holds = holdsProperty
 
 purge :: World -> SalienceRanking -> SalienceRanking
-purge (World objects) ranking =
-  [(age, identifier, filter (holds object) properties)
+purge = purgeWith (\_ -> holds)
+
+purgeWith :: (World -> Object -> Property -> Bool) -> World -> SalienceRanking -> SalienceRanking
+purgeWith truth world@(World objects) ranking =
+  [(age, identifier, filter (truth world object) properties)
   | (age, identifier, properties) <- ranking
   , object <- objects, idOf object == identifier]
 
@@ -54,7 +58,10 @@ mention world identifier properties = mentionMany world [(identifier, properties
 
 -- All operands of one utterance share recency; do not age once per operand.
 mentionMany :: World -> [(Identifier, [Property])] -> SalienceRanking -> SalienceRanking
-mentionMany world mentions ranking = purge world $
+mentionMany = mentionManyWith (\_ -> holds)
+
+mentionManyWith :: (World -> Object -> Property -> Bool) -> World -> [(Identifier, [Property])] -> SalienceRanking -> SalienceRanking
+mentionManyWith truth world mentions ranking = purgeWith truth world $
   [((0, 0), identifier, nub properties) | (identifier, properties) <- mentions] ++ advanceUtterance ranking
 
 subjectsOf :: Sentence -> [Subject]
@@ -63,11 +70,14 @@ subjectsOf (AttributeRemoval subject _) = [subject]
 subjectsOf (Removal subject) = [subject]
 subjectsOf (Swapping first second) = [first, second]
 subjectsOf (Deletion subject) = [subject]
+subjectsOf ClearingWorld = []
 subjectsOf (StepMove subject _) = [subject]
 subjectsOf (RelativeMove subject _ target) = [subject, target]
 subjectsOf (NeighborMove subject target) = [subject, target]
 subjectsOf (CopyAttribute subject _ target) = [subject, target]
 subjectsOf (SpatialQuestion subject _ target) = subject : maybe [] (:[]) target
+subjectsOf (Network sentence) = toList sentence
+subjectsOf (CountMatching _ predicates) = nub (concatMap predicateSubjects predicates)
 subjectsOf (CountObjects (Neighboring subject)) = [subject]
 subjectsOf (CountObjects _) = []
 subjectsOf (CountSquares _) = []
@@ -81,7 +91,10 @@ descriptorsOf (Indefinite properties) = properties
 descriptorsOf _ = []
 
 resolveSubjectWith :: Domain -> Bool -> World -> SalienceRanking -> Subject -> Resolution
-resolveSubjectWith domain create world@(World objects) ranking subject = case subject of
+resolveSubjectWith = resolveSubjectUsing (\_ -> holds) (:[])
+
+resolveSubjectUsing :: (World -> Object -> Property -> Bool) -> (Property -> [Property]) -> Domain -> Bool -> World -> SalienceRanking -> Subject -> Resolution
+resolveSubjectUsing truth expand domain create world@(World objects) ranking subject = case subject of
   Reference reference -> if create
     then case (resolvePerformativeReferenceWith domain) world reference of
       Result (updated, object, _) -> Resolved updated (idOf object)
@@ -96,19 +109,19 @@ resolveSubjectWith domain create world@(World objects) ranking subject = case su
     [] -> Unresolved "No antecedent for it"
     _ -> choose [identifier | (age, identifier, _) <- clean, age == minimum [a | (a, _, _) <- clean]]
   Definite properties ->
-    let requested = nub properties
+    let requested = nub (concatMap expand properties)
         candidates = [(identifier, sum scores)
-          | object <- objects, all (holds object) requested
+          | object <- objects, all (truth world object) requested
           , let identifier = idOf object
           , let matches property = [10 * entry + utterance
                   | ((entry, utterance), i, mentioned) <- clean, i == identifier, property `elem` mentioned]
           , all (not . null . matches) requested
           , let scores = map (minimum . matches) requested]
     in case sortOn snd candidates of
-      [] -> choose [idOf object | object <- objects, all (holds object) requested]
+      [] -> choose [idOf object | object <- objects, all (truth world object) requested]
       (_, best):_ -> choose [identifier | (identifier, score) <- candidates, score - best < length requested + 1]
   where
-    clean = filter (\((entry, _), _, _) -> entry <= previousEntryLimit) (purge world ranking)
+    clean = filter (\((entry, _), _, _) -> entry <= previousEntryLimit) (purgeWith truth world ranking)
     choose identifiers = case nub identifiers of
       [] -> Unresolved "No matching object"
       [identifier] -> Resolved world identifier

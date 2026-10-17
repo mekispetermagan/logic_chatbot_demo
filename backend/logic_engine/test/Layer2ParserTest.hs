@@ -9,12 +9,19 @@ import Layer2Syntax
 import Ontology
 import Domains.Objects.Vocabulary
 import Pretty
+import Domains.Network.Library (networkLibrary)
 
 check :: String -> Bool -> IO ()
 check name success = unless success (fail name)
 
 main :: IO ()
 main = do
+  forM_ ["clear the world", "clear everything.", "  CLEAR ALL. "] $ \input -> do
+    check ("clear alias: " ++ input) (parseSentence input == Right ClearingWorld)
+    check ("network clear alias: " ++ input) (parseSentenceWith networkLibrary input == Right ClearingWorld)
+  check "canonical clear pretty round trip" (parseSentence (pretty ClearingWorld) == Right ClearingWorld)
+  forM_ ["clear the world?", "clear everything?", "clear all?", "clear all #0 red."] $ \input ->
+    check ("reject clear syntax: " ++ input) (isLeft (parseSentences input))
   forM_ ["undo", "  UnDo #3 red. garbage?", "\n\tUNDOanything"] $ \input ->
     check ("undo prefix: " ++ show input) (isUndoEntry input)
   forM_ ["", "   ", "und", "#3 red. undo", "do undo"] $ \input ->

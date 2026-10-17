@@ -46,19 +46,23 @@ evaluateRemainingWithIn library square world ranking supplied sentences@(sentenc
         Just (ChooseSquares positions) -> (world, ranking,
           Just (SquarePending sentences [] identifiers positions), pretty sentence ++ "\n  Which square?")
         Just (DerivedComplete updated answers associated) -> complete identifiers updated answers associated
+        Just (DerivedCompleteWithMentions updated answers mentions) -> completeMentions updated answers mentions
         Nothing -> let (updated, answers, associated) = (evaluateResolvedIn library) current identifiers sentence
                    in complete identifiers updated answers associated
     resolveOperands current identifiers (identifier:chosen) (_:subjects)
       | hasId current identifier = resolveOperands current (identifiers ++ [identifier]) chosen subjects
       | otherwise = failed "Object no longer exists"
     resolveOperands current identifiers [] (subject:subjects) =
-      case resolveSubjectWith (ontology library) creates current ranking subject of
+      case resolveSubjectUsing (propertyTruth library) (mentionProperties library) (ontology library) creates current ranking subject of
         Ambiguous candidates -> (world, ranking, Just (Pending sentences candidates identifiers),
           pretty sentence ++ "\n  Which object?")
         Unresolved message -> failed message
         Resolved resolvedWorld identifier -> resolveOperands resolvedWorld (identifiers ++ [identifier]) [] subjects
     complete identifiers updated answers associated =
-      let updatedRanking = mentionMany updated (zip identifiers associated) ranking
+      completeMentions updated answers (zip identifiers associated)
+    completeMentions updated answers mentions =
+      let expanded = [(identifier, concatMap (mentionProperties library) properties) | (identifier, properties) <- mentions]
+          updatedRanking = mentionManyWith (propertyTruth library) updated expanded ranking
       in continue updated updatedRanking (pretty sentence ++ "\n  " ++ intercalate "\n  " answers)
     creates = case sentence of Attribution _ _ -> True; _ -> False
     failed message = continue world (advanceUtterance ranking) (pretty sentence ++ "\n  " ++ message)
@@ -67,6 +71,8 @@ evaluateRemainingWithIn library square world ranking supplied sentences@(sentenc
       in (finalWorld, finalRanking, pending, answer ++ if null feedback then "" else "\n" ++ feedback)
 
 evaluateResolvedIn :: DomainLibrary -> World -> [Identifier] -> Sentence -> (World, [String], [[Property]])
+evaluateResolvedIn _ world [] ClearingWorld =
+  (World [], [if world == World [] then "No change" else "World cleared"], [])
 evaluateResolvedIn library world [first, second] (Swapping left right) =
   let (updated, feedback) = evaluateAtomicSentenceWith (ontology library) world
         (Performative (Swap (ById first) (ById second)))

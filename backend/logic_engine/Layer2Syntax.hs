@@ -1,5 +1,6 @@
 module Layer2Syntax where
 
+import qualified Domains.Network.Syntax as Network
 import Data.List (intercalate)
 import Ontology
 import AtomicPerformative
@@ -13,7 +14,7 @@ data Subject = Reference ObjectReference | It
              deriving (Eq, Show)
 
 data Direction = Up | Down | Leftward | Rightward deriving (Eq, Show)
-data SpatialCheck = OnBoard | Has RemovableAttribute | NextTo | Same Attribute | Edge | Corner
+data SpatialCheck = OnBoard | Has RemovableAttribute | NextTo | Same Attribute | Edge | Corner | NetworkRelation Network.GraphRelation
   deriving (Eq, Show)
 -- A quantified conjunction shares one bound object and fixed reference targets.
 data QuantifiedPredicate = PropertyPredicate [Property]
@@ -26,7 +27,7 @@ predicateSubjects (RelationPredicate _ target) = maybe [] (:[]) target
 
 instance PrettyShow QuantifiedPredicate where
   pretty (PropertyPredicate properties) = unwords (map pretty properties)
-  pretty (RelationPredicate relation target) = spatialName relation ++ maybe "" ((" " ++) . pretty) target
+  pretty (RelationPredicate relation target) = spatialName relation ++ maybe "" ((" " ++) . pretty) target ++ relationSuffix relation
 
 data ObjectFilter = Described [Property] | Neighboring Subject | AtEdge | InCorner
   deriving (Eq, Show)
@@ -50,6 +51,7 @@ instance PrettyShow ObjectFilter where
   pretty InCorner = "in a corner"
 
 spatialName :: SpatialCheck -> String
+spatialName (NetworkRelation relation) = pretty relation
 spatialName OnBoard = "on the board"
 spatialName (Has attribute) = "have a " ++ pretty attribute
 spatialName NextTo = "next to"
@@ -57,17 +59,24 @@ spatialName (Same attribute) = "have the same " ++ (if attribute == PositionAttr
 spatialName Edge = "at the edge"
 spatialName Corner = "in a corner"
 
+relationSuffix :: SpatialCheck -> String
+relationSuffix (NetworkRelation (Network.Connected (Just color))) = " by a " ++ pretty color ++ " path"
+relationSuffix _ = ""
+
 data Sentence = Attribution Subject [Property]
               | AttributeRemoval Subject RemovableAttribute
               | Removal Subject
               | Swapping Subject Subject
               | Deletion Subject
+              | ClearingWorld
               | StepMove Subject Direction
               | RelativeMove Subject Direction Subject
               | NeighborMove Subject Subject
               | CopyAttribute Subject RemovableAttribute Subject
               | SpatialQuestion Subject SpatialCheck (Maybe Subject)
               | CountObjects ObjectFilter
+              | CountMatching [Property] [QuantifiedPredicate]
+              | Network (Network.NetworkSentence Subject)
               | CountSquares Bool
               | Quantified Bool [Property] [QuantifiedPredicate]
               | Check Subject Property
@@ -86,11 +95,16 @@ instance PrettyShow Sentence where
   pretty (Removal subject) = "remove " ++ pretty subject ++ "."
   pretty (Swapping first second) = "swap " ++ pretty first ++ " and " ++ pretty second ++ "."
   pretty (Deletion subject) = "delete " ++ pretty subject ++ "."
+  pretty ClearingWorld = "clear the world."
   pretty (StepMove subject direction) = "move " ++ pretty subject ++ " " ++ pretty direction ++ "."
   pretty (RelativeMove subject direction target) = "move " ++ pretty subject ++ " " ++ relativeName direction ++ " " ++ pretty target ++ "."
   pretty (NeighborMove subject target) = "move " ++ pretty subject ++ " next to " ++ pretty target ++ "."
   pretty (CopyAttribute subject attribute target) = "make " ++ pretty subject ++ " the same " ++ pretty attribute ++ " as " ++ pretty target ++ "."
-  pretty (SpatialQuestion subject relation target) = pretty subject ++ " " ++ spatialName relation ++ maybe "" ((" " ++) . pretty) target ++ "?"
+  pretty (SpatialQuestion subject relation target) = pretty subject ++ " " ++ spatialName relation ++ maybe "" ((" " ++) . pretty) target ++ relationSuffix relation ++ "?"
+  pretty (Network sentence) = pretty sentence
+  pretty (CountMatching properties predicates) = "how many " ++ unwords (map pretty properties) ++
+    (if null properties then "objects" else " objects") ++
+    (if null predicates then "" else " are " ++ intercalate " and " (map pretty predicates)) ++ "?"
   pretty (CountObjects predicate) = "how many objects are " ++ pretty predicate ++ "?"
   pretty (CountSquares occupied) = "how many squares are " ++ (if occupied then "occupied" else "empty") ++ "?"
   pretty (Quantified universal before after) = (if universal then "every " else "some ") ++ unwords (map pretty before) ++ (if universal then " object is " else " objects are ") ++ intercalate " and " (map pretty after) ++ "?"

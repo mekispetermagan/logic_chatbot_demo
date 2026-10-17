@@ -2,12 +2,18 @@ module Domains.Network.Library where
 
 import DomainLibrary
 import Domains.Network.Definition
+import Domains.Network.Patterns (expandMention)
+import Domains.Network.Graph
+import Domains.Network.Parser
+import Domains.Network.Evaluation
 
--- Core and anaphoric language only; network-derived algorithms come later.
 networkLibrary :: DomainLibrary
 networkLibrary = DomainLibrary
   { ontology = networkDomain
-  , parseDerivedPerformatives = const []
-  , parseDerivedQuestions = const []
-  , evaluateDerivedSentence = \_ _ _ _ -> Nothing
+  , parseDerivedPerformatives = performatives
+  , parseDerivedQuestions = questions
+  , evaluateDerivedSentence = evaluateNetwork
+  , propertyTruth = networkHolds
+  , mentionProperties = expandMention
+  , normalizeTokens = normalizeNetworkTokens
   }

@@ -56,7 +56,7 @@ destinationWith domain words' = case dropWord "on" (dropWord "to" words') of
 
 -- A destination can occur once, only at the end of a predicate.
 predicateWith :: Domain -> [String] -> Maybe [Property]
-predicateWith domain words' = let tokens = dropWord "a" (dropWord "to" (dropWord "is" words')) in
+predicateWith domain words' = let tokens = dropWord "an" (dropWord "a" (dropWord "to" (dropWord "is" words'))) in
   case (destinationWith domain) tokens of
     Just position -> Just [position]
     Nothing -> case span (\word -> (descriptorWith domain) word /= Nothing) tokens of

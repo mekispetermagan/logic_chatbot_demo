@@ -241,6 +241,7 @@ Quantifier restrictions are descriptions `D`, not subjects `S`.
 | Remove one attribute | `S remove R.` | `The red bloom remove color.` |
 | Remove position | `remove S [from board].` | `Remove #3 from board.` |
 | Delete object | `{erase\|delete} S.` | `Delete A4.` |
+| Delete all objects, including unplaced | `clear {the world\|everything\|all}.` | `Clear everything.` |
 | Swap positions | `swap S [and] S'.` | `Swap the bloom and #4.` |
 | Move one square | `move S {up\|down\|left\|right}.` | `Move it up.` |
 | Move relative to an object | `move S [just] {above\|under\|right of\|left of} S'.` | `Move #3 just above the spark.` |

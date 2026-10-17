@@ -12,7 +12,7 @@ import Pretty (pretty)
 import Ontology
 import Domain
 import qualified Data.Map.Strict as Map
-import DomainLibrary (DomainLibrary, ontology)
+import DomainLibrary (DomainLibrary, ontology, propertyTruth)
 import Domains.Objects.Library (objectsLibrary)
 import Domains.Network.Library (networkLibrary)
 import ReferenceResolution (inBoundsWith)
@@ -89,6 +89,10 @@ parseRanking domain = withArray "salience" $ mapM parseMention . foldr (:) []
     parseMentionProperty = withObject "property" $ \value -> do
       kind <- value .: "kind" :: Parser String
       if kind == "position" then P <$> (value .: "value" >>= parsePosition)
+      else if kind == "defined" then do
+        name <- value .: "value"
+        unless (validProperty domain (Defined name)) (fail "Invalid defined property")
+        pure (Defined name)
       else if kind == "attribute" then parseProperty domain (toJSON value)
       else fail "Invalid salience property kind"
 
@@ -148,6 +152,7 @@ rankingJson ranking = toJSON [object
   | ((entry, utterance), identifier, properties) <- ranking]
   where
     propertyJson (P position) = object ["kind" .= ("position" :: String), "value" .= positionJson position]
+    propertyJson (Defined name) = object ["kind" .= ("defined" :: String), "value" .= name]
     propertyJson (AttributeValue attribute value) = object
       ["kind" .= ("attribute" :: String), "attribute" .= pretty attribute, "value" .= pretty value]
 
@@ -186,7 +191,7 @@ processRequest input = do
                              in (w, r, p, message, False)
         (Nothing, Edit edit) ->
           let (w, message) = evaluateEditorActionWith domain world edit
-          in (w, purge w ranking, Nothing, message, False)
+          in (w, purgeWith (propertyTruth library) w ranking, Nothing, message, False)
   pure (object (["domain" .= domainId domain, "world" .= object ["width" .= boardWidth domain, "height" .= boardHeight domain,
                                   "objects" .= map objectJson objects],
                 "salience" .= rankingJson salience,

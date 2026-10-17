@@ -35,6 +35,7 @@ instance PrettyShow AtomicPerformative where
 
 updateObjectWith :: Object -> Property -> Object
 updateObjectWith object (AttributeValue attribute value) = setAttribute attribute (Just value) object
+updateObjectWith object (Defined _) = object
 updateObjectWith object (P position) = object {positionOf = Just position}
 
 data UpdateChange = ObjectCreated Identifier Property
@@ -65,6 +66,7 @@ isPosition _ = False
 
 evaluateAtomicPerformativeWith :: Domain -> World -> AtomicPerformative -> (World, Result UpdateChange)
 evaluateAtomicPerformativeWith domain world (AP reference property)
+  | Defined _ <- property = (world, Message "Defined attribution requires domain evaluation")
   | not (validProperty domain property) && not (isPosition property) = (world, Message "Invalid property")
   | otherwise = case (resolvePerformativeReferenceWith domain) world reference of
     Message message -> (world, Message message)
@@ -125,6 +127,7 @@ updateWorldWithWith domain world performative = fst ((evaluateAtomicPerformative
 
 previousProperty :: Object -> Property -> Maybe Property
 previousProperty object (AttributeValue attribute _) = AttributeValue attribute <$> attributeOf attribute object
+previousProperty _ (Defined _) = Nothing
 previousProperty object (P _) = P <$> positionOf object
 
 -- Current-domain convenience entry points.

@@ -47,7 +47,12 @@ shift Leftward (x,y) = (x-1,y)
 shift Rightward (x,y) = (x+1,y)
 
 evaluateDerivedWith :: Domain -> World -> [Identifier] -> Sentence -> Maybe Position -> Maybe DerivedResult
-evaluateDerivedWith domain world@(World objects) identifiers sentence chosen = case sentence of
+evaluateDerivedWith domain = evaluateDerivedUsing domain (\_ -> holds) (spatialTruthWith domain)
+
+evaluateDerivedUsing :: Domain -> (World -> Object -> Property -> Bool)
+                    -> (SpatialCheck -> Object -> Maybe Object -> (Bool, String))
+                    -> World -> [Identifier] -> Sentence -> Maybe Position -> Maybe DerivedResult
+evaluateDerivedUsing domain truth spatialTruth world@(World objects) identifiers sentence chosen = case sentence of
   StepMove _ direction -> unary $ \object -> case positionOf object of
     Nothing -> unchanged "Object is unplaced"
     Just position -> move object (shift direction position)
@@ -71,26 +76,32 @@ evaluateDerivedWith domain world@(World objects) identifiers sentence chosen = c
           _ -> RemoveAttribute (ById (idOf object)) attribute
     in perform operation
   SpatialQuestion _ relation _ -> case relation of
+    NetworkRelation _ -> binary $ \object target -> spatialAnswer object (Just target)
     NextTo -> binary $ \object target -> spatialAnswer object (Just target)
     Same _ -> binary $ \object target -> spatialAnswer object (Just target)
     _ -> unary $ \object -> spatialAnswer object Nothing
-    where spatialAnswer object target = let (result, explanation) = (spatialTruthWith domain) relation object target
+    where spatialAnswer object target = let (result, explanation) = spatialTruth relation object target
                                         in answer result explanation
   CountObjects predicate -> case predicate of
     Neighboring _ -> unary $ \target -> case positionOf target of
       Nothing -> unchanged "Reference object is unplaced"
       Just position -> count [object | object <- objects, maybe False (adjacent position) (positionOf object)]
-    Described properties -> Just (count (filter (\object -> all (holds object) properties) objects))
+    Described properties -> Just (count (filter (\object -> all (truth world object) properties) objects))
     AtEdge -> Just (count (filter (atEdgeWith domain) objects))
     InCorner -> Just (count (filter (inCornerWith domain) objects))
+  CountMatching before predicates ->
+    let targetFor subject = lookup subject (zip (subjectsOf sentence) resolved)
+        satisfies object (PropertyPredicate properties) = all (truth world object) properties
+        satisfies object (RelationPredicate relation target) = fst (spatialTruth relation object (target >>= targetFor))
+    in Just (count [object | object <- objects, all (truth world object) before, all (satisfies object) predicates])
   CountSquares occupied -> Just (unchanged (show (if occupied then placed else boardWidth domain * boardHeight domain - placed)))
     where placed = length [() | object <- objects, positionOf object /= Nothing]
   Quantified universal before predicates ->
-    let selected = filter (\object -> all (holds object) before) objects
+    let selected = filter (\object -> all (truth world object) before) objects
         targetFor subject = lookup subject (zip (subjectsOf sentence) resolved)
         evaluatePredicate object predicate = case predicate of
-          PropertyPredicate properties -> (all (holds object) properties, "")
-          RelationPredicate relation target -> (spatialTruthWith domain) relation object (target >>= targetFor)
+          PropertyPredicate properties -> (all (truth world object) properties, "")
+          RelationPredicate relation target -> spatialTruth relation object (target >>= targetFor)
         results object = map (evaluatePredicate object) predicates
         satisfies = all fst . results
         result = (if universal then all else any) satisfies selected
@@ -159,6 +170,7 @@ spatialTruthWith domain relation object target = case relation of
             then " — both lack " ++ (if attribute == PositionAttribute then "a square" else pretty attribute)
             else ""
       in (left == right, explanation)
+  NetworkRelation _ -> plain False
   where plain result = (result, "")
 
 -- Current-domain convenience entry points.

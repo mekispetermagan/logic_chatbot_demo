@@ -1,5 +1,6 @@
 module Domains.Network.Definition where
 
+import Domains.Network.Patterns (patternDefinitions)
 import Domain
 import Ontology
 
@@ -11,7 +12,7 @@ networkDomain = Domain "network" 8 8
   , port "east" "right"
   , port "south" "down"
   , port "west" "left"
-  ]
+  ] patternDefinitions
   where
     port name alias = AttributeDefinition (AttributeId name) [alias]
       [ValueDefinition (ValueId name) [alias]]

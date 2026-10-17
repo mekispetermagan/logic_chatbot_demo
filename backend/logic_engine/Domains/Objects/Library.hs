@@ -1,5 +1,6 @@
 module Domains.Objects.Library where
 
+import Ontology (holdsProperty)
 import DomainLibrary
 import Domains.Objects.Definition
 import qualified Domains.Objects.Parser as Parser
@@ -11,4 +12,7 @@ objectsLibrary = DomainLibrary
   , parseDerivedPerformatives = Parser.derivedPerformativesWith objectsDomain
   , parseDerivedQuestions = Parser.derivedQuestionsWith objectsDomain
   , evaluateDerivedSentence = Evaluation.evaluateDerivedWith objectsDomain
+  , propertyTruth = \_ -> holdsProperty
+  , mentionProperties = (:[])
+  , normalizeTokens = id
   }

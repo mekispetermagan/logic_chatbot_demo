@@ -70,7 +70,7 @@ main = do
   check "board bounds still enforced" (isLeft (parseSentenceWith networkLibrary "I1 north."))
   check "no size or shape vocabulary" (all (isLeft . parseSentenceWith networkLibrary) ["A1 small.","A1 bloom."])
   check "objects domain stays isolated" (isLeft (parseAtomicSentenceWith objectsDomain "A1 north."))
-  check "derived network language deferred" (isLeft (parseSentenceWith networkLibrary "Move #0 up."))
+  check "network derived movement available" (not (isLeft (parseSentenceWith networkLibrary "Move #0 up.")))
   check "network introduction parses" (not (isLeft networkIntroduction))
   check "domain fixture prints" ("north" `isInfixOf` prettyWorldIn networkDomain networkWorld)
   putStrLn "All network core checks passed."

@@ -75,6 +75,10 @@ Position properties retain their representation:
 {"kind":"position","value":{"x":0,"y":3}}
 ```
 
+Network computed facts in salience use `{"kind":"defined","value":"endpoint"}`.
+These are checked against the current world, including after visual edits; they
+are not stored object attributes. World and salience snapshots are restored together by Undo.
+
 Pending entries retain sentence text, remaining text, candidates, resolved
 subjects, and square choices. They are parsed using the conversation's domain.
 

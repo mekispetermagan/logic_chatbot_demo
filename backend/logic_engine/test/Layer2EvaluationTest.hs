@@ -8,6 +8,8 @@ import Layer2Syntax
 import Layer2Parser
 import Ontology
 import Domains.Objects.Vocabulary
+import Domains.Objects.Library (objectsLibrary)
+import Domains.Network.Library (networkLibrary)
 
 check label condition = unless condition (fail label)
 parse text = either error id (parseSentences text)
@@ -72,7 +74,33 @@ main = do
   check "utterance ages" (map (\(age,_,_) -> age) r4 == [(0,0),(0,1),(0,2)])
   structuralTests
   attributeRemovalTests
+  clearingTests
   putStrLn "All layer 2 evaluation checks passed."
+
+clearingTests = mapM_ checkDomain [objectsLibrary,networkLibrary]
+  where
+    original = World [(emptyObject (Id 0)) {positionOf = Just (0,0)}, emptyObject (Id 1)]
+    ranking = [((0,0),Id 0,[P (0,0)]), ((1,0),Id 1,[])]
+    checkDomain library = do
+      let parseWith = either error id . parseSentencesWith library
+          runWith world mentions = evaluateEntryIn library world mentions . parseWith
+      mapM_ (\text -> do
+        let (updated,mentions,pending,feedback) = runWith original ranking text
+        check "clear deletes placed/unplaced objects and salience in both domains"
+          (updated == World [] && null mentions && pending == Nothing && "World cleared" `isInfixOf` feedback))
+        ["clear the world", "clear everything.", "CLEAR ALL."]
+      let (same,mentions,_,feedback) = runWith (World []) [] "clear all."
+      check "clearing empty world reports no change"
+        (same == World [] && null mentions && "No change" `isInfixOf` feedback)
+      let (after,afterRanking,_,_) = runWith original ranking "Clear all. #9 red."
+      check "evaluation continues after clear with only fresh salience"
+        (case after of
+          World [object] -> idOf object == Id 9 &&
+            all (\(_,identifier,_) -> identifier == Id 9) afterRanking
+          _ -> False)
+      let (empty,noRanking,_,answer) = runWith original ranking "Clear everything. It is blue."
+      check "clear removes pronoun antecedents"
+        (empty == World [] && null noRanking && "No antecedent" `isInfixOf` answer)
 
 
 structuralTests = do
