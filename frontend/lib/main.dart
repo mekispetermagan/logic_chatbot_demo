@@ -70,9 +70,11 @@ class _DemoScreenState extends State<DemoScreen> {
       builder: (context, child) => LayoutBuilder(
         builder: (context, constraints) {
           final wide = constraints.maxWidth >= 900;
+          final actionSpacing = constraints.maxWidth < 360 ? 2.0 : 12.0;
           final worldPanel = PanelFrame(
             child: ConversationWorldPanel(
               conversation: _controller.conversation,
+              previewWorld: _controller.preview?.world,
               loading: _controller.loading,
               editing: _controller.editing,
               error: _controller.error,
@@ -106,6 +108,16 @@ class _DemoScreenState extends State<DemoScreen> {
               llmBudget: _controller.conversation?.llmBudget,
               canSend: _controller.canEdit,
               pending: _controller.conversation?.pending,
+              proposal: _controller.conversation?.proposal,
+              preview: _controller.preview,
+              selectedInterpretationRank:
+                  _controller.selectedInterpretationRank,
+              canReview: _controller.canReview,
+              onSelectInterpretation: _controller.selectInterpretation,
+              onPreview: _controller.previewInterpretation,
+              onAccept: _controller.acceptInterpretation,
+              onReject: _controller.rejectInterpretation,
+              onAnswer: _controller.answerInterpretation,
               onChoose: _controller.canRequest ? _controller.clarify : null,
               onChooseSquare: _controller.canRequest
                   ? _controller.clarifySquare
@@ -124,7 +136,7 @@ class _DemoScreenState extends State<DemoScreen> {
                 title: wide ? const Text('Logic Chatbot Demo') : null,
                 actions: [
                   Padding(
-                    padding: const EdgeInsets.only(right: 9),
+                    padding: EdgeInsets.only(right: actionSpacing),
                     child: SegmentedButton<WorldDomain>(
                       segments: const [
                         ButtonSegment(
@@ -151,31 +163,38 @@ class _DemoScreenState extends State<DemoScreen> {
                           : null,
                     ),
                   ),
-                  Tooltip(
-                    message:
-                        'Activate LLM: use GPT-6 Luna after a syntax error',
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (wide) const Text('LLM'),
-                        Switch(
-                          padding: EdgeInsets.zero,
-                          value: _controller.useLlm,
-                          onChanged: _controller.canSwitchDomain
-                              ? _controller.setUseLlm
-                              : null,
-                        ),
-                      ],
+                  Padding(
+                    padding: EdgeInsets.only(right: actionSpacing),
+                    child: Tooltip(
+                      message:
+                          'Activate LLM: propose interpretations after a syntax error',
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (wide) const Text('LLM'),
+                          Switch(
+                            padding: EdgeInsets.zero,
+                            value: _controller.useLlm,
+                            onChanged: _controller.canSwitchDomain
+                                ? _controller.setUseLlm
+                                : null,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  IconButton(
-                    tooltip: 'Undo',
-                    onPressed:
-                        _controller.canRequest &&
-                            _controller.conversation?.canUndo == true
-                        ? _controller.undo
-                        : null,
-                    icon: const Icon(Icons.undo),
+                  Padding(
+                    padding: EdgeInsets.only(right: actionSpacing),
+                    child: IconButton(
+                      tooltip: 'Undo',
+                      onPressed:
+                          _controller.canRequest &&
+                              _controller.conversation?.proposal == null &&
+                              _controller.conversation?.canUndo == true
+                          ? _controller.undo
+                          : null,
+                      icon: const Icon(Icons.undo),
+                    ),
                   ),
                 ],
                 bottom: wide

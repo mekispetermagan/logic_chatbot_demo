@@ -35,7 +35,7 @@ class LlmTranscript:
         if isinstance(value, str):
             if self._api_key:
                 value = value.replace(self._api_key, '[redacted]')
-            value = re.sub(r'sk-[A-Za-z0-9_-]+', '[redacted]', value)
+            value = re.sub(r'(?<![A-Za-z0-9])sk-[A-Za-z0-9_-]+', '[redacted]', value)
             # Messages may themselves contain encoded JSON, including credential fields.
             try:
                 nested = json.loads(value)

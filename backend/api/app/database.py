@@ -54,6 +54,41 @@ class Database:
                     usage_json TEXT,
                     created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
                 );
+                CREATE TABLE IF NOT EXISTS interpretation_proposals (
+                    id TEXT PRIMARY KEY,
+                    conversation_id TEXT NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
+                    proposal_json TEXT NOT NULL,
+                    base_revision_json TEXT NOT NULL,
+                    status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'accepted', 'rejected')),
+                    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+                );
+                CREATE UNIQUE INDEX IF NOT EXISTS one_pending_interpretation
+                    ON interpretation_proposals(conversation_id) WHERE status = 'pending';
+                CREATE TABLE IF NOT EXISTS llm_agents (
+                    domain TEXT PRIMARY KEY,
+                    agent_id TEXT NOT NULL,
+                    config_hash TEXT NOT NULL
+                );
+                CREATE TABLE IF NOT EXISTS llm_sessions (
+                    conversation_id TEXT PRIMARY KEY REFERENCES conversations(id) ON DELETE CASCADE,
+                    session_id TEXT NOT NULL,
+                    agent_id TEXT NOT NULL,
+                    config_hash TEXT NOT NULL,
+                    last_turn_id TEXT,
+                    event_cursor INTEGER NOT NULL DEFAULT 0
+                );
+                CREATE TABLE IF NOT EXISTS llm_session_events (
+                    sequence INTEGER PRIMARY KEY AUTOINCREMENT,
+                    conversation_id TEXT NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
+                    payload_json TEXT NOT NULL
+                );
+                CREATE INDEX IF NOT EXISTS llm_events_by_conversation
+                    ON llm_session_events(conversation_id, sequence);
+                CREATE TABLE IF NOT EXISTS llm_locks (
+                    name TEXT PRIMARY KEY,
+                    token TEXT NOT NULL,
+                    expires_at REAL NOT NULL
+                );
             """)
 
             conversation_columns = {row["name"] for row in connection.execute("PRAGMA table_info(conversations)")}

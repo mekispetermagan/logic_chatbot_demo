@@ -1,8 +1,8 @@
-"""One bounded translation call; Haskell validates and evaluates its result."""
+"""One bounded interpretation call; Haskell validates proposals for user review."""
 import json
 import logging
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from uuid import uuid4
 
@@ -10,7 +10,7 @@ import httpx
 
 from .llm_budget import (MODEL, MAX_INPUT_TOKENS, MAX_OUTPUT_TOKENS, MAX_REQUEST_NANO,
                          NANO_PER_USD, LlmBudgetLedger)
-from .schemas import DomainId, LlmUsage, World
+from .schemas import DomainId, LlmUsage, World, InterpretationCandidate
 from .llm_transcript import LlmTranscript
 
 PROMPTS = Path(__file__).resolve().parents[1] / 'prompts'
@@ -33,11 +33,17 @@ ERROR_PARAMETERS = frozenset({
 RESPONSE_SCHEMA = {
     'type': 'object', 'additionalProperties': False,
     'properties': {
-        'status': {'type': 'string', 'enum': ['translation', 'unsupported']},
-        'translation': {'type': 'string'},
+        'status': {'type': 'string', 'enum': ['proposals', 'clarification', 'unsupported', 'conversation']},
+        'reply': {'type': 'string'},
+        'candidates': {'type': 'array', 'maxItems': 3, 'items': {
+            'type': 'object', 'additionalProperties': False,
+            'properties': {name: {'type': 'string'} for name in ('interpretation', 'translation', 'explanation')},
+            'required': ['interpretation', 'translation', 'explanation'],
+        }},
+        'question': {'type': 'string'},
         'explanation': {'type': 'string'},
     },
-    'required': ['status', 'translation', 'explanation'],
+    'required': ['status', 'reply', 'candidates', 'question', 'explanation'],
 }
 
 
@@ -85,8 +91,11 @@ def create_client():
 @dataclass
 class TranslationAttempt:
     usage: LlmUsage
-    translation: str | None = None
+    candidates: list[InterpretationCandidate] = field(default_factory=list)
+    question: str = ''
+    explanation: str = ''
     note: str = ''
+    reply: str = ''
 
 
 class LlmTranslator:
@@ -98,7 +107,7 @@ class LlmTranslator:
     def safe_text(self, text: str, limit: int = 400) -> str:
         if self._api_key:
             text = text.replace(self._api_key, '[redacted]')
-        text = re.sub(r'sk-[A-Za-z0-9_-]+', '[redacted]', text)
+        text = re.sub(r'(?<![A-Za-z0-9])sk-[A-Za-z0-9_-]+', '[redacted]', text)
         text = ' '.join(''.join(char for char in text if char.isprintable() or char.isspace()).split())
         return text if len(text) <= limit else text[:limit - 3] + '...'
 
@@ -132,7 +141,8 @@ class LlmTranslator:
                                    headers=dict(response.headers), body=content)
         return response
 
-    def translate(self, conversation_id, domain: DomainId, text: str, world: World) -> TranslationAttempt:
+    def translate(self, conversation_id, domain: DomainId, text: str, world: World,
+                  clarification: dict | None = None) -> TranslationAttempt:
         if not self._api_key:
             return TranslationAttempt(LlmUsage(status='not_configured'), note='LLM is not configured on the server.')
         if not self.ledger.can_reserve():
@@ -145,6 +155,7 @@ class LlmTranslator:
             'model': MODEL, 'instructions': prompt_for(domain),
             'input': [{'role': 'user', 'content': json.dumps({
                 'world': world.model_dump(), 'entry': text,
+                **({'clarification': clarification} if clarification is not None else {}),
             }, separators=(',', ':'))}],
             'text': {'format': {'type': 'json_schema', 'name': 'controlled_english_translation',
                                 'strict': True, 'schema': RESPONSE_SCHEMA}},
@@ -204,25 +215,50 @@ class LlmTranslator:
                                       requestId=body.get('id'), feedback=result,
                                       inputTokens=metadata.inputTokens, outputTokens=metadata.outputTokens,
                                       costUsd=metadata.costUsd)
-                    if not isinstance(result, dict) or set(result) != {'status', 'translation', 'explanation'} or \
-                            any(not isinstance(value, str) for value in result.values()):
-                        raise ValueError('Invalid translation response')
-                    if result['status'] == 'unsupported':
-                        metadata.status = 'unsupported'
-                        # This is model-authored feedback, not an engine verdict.
-                        # Bound it and exclude credentials/control characters.
-                        explanation = self.safe_text(result['explanation'])
-                        note = 'LLM found no clear supported interpretation.'
-                        if explanation:
-                            note += '\nLLM explanation: ' + explanation
-                        return TranslationAttempt(metadata, note=note)
-                    if result['status'] != 'translation' or not result['translation'].strip():
-                        raise ValueError('Missing translation')
-                    metadata.status = 'translated'
-                    metadata.translation = result['translation']
-                    return TranslationAttempt(metadata, result['translation'])
+                    return self.parse_result(result, metadata)
                 except (httpx.HTTPError, ValueError, KeyError, TypeError, AttributeError) as error:
                     metadata.status = 'unavailable'
                     return TranslationAttempt(metadata, note=failure_note(stage, error, response))
         except (httpx.HTTPError, ValueError, KeyError, TypeError, AttributeError) as error:
             return TranslationAttempt(LlmUsage(status='unavailable'), note=failure_note(stage, error, response))
+
+    def parse_result(self, result: dict, metadata: LlmUsage) -> TranslationAttempt:
+        if not isinstance(result, dict) or set(result) != {'status', 'reply', 'candidates', 'question', 'explanation'} or \
+                any(not isinstance(result[key], str) for key in ('status', 'reply', 'question', 'explanation')) or \
+                not isinstance(result['candidates'], list) or len(result['candidates']) > 3:
+            raise ValueError('Invalid translation response')
+        candidates = []
+        for rank, candidate in enumerate(result['candidates'], 1):
+            if not isinstance(candidate, dict) or set(candidate) != {'interpretation', 'translation', 'explanation'} or \
+                    any(not isinstance(value, str) for value in candidate.values()) or not candidate['translation'].strip():
+                raise ValueError('Invalid candidate')
+            candidates.append(InterpretationCandidate(
+                rank=rank, interpretation=self.safe_text(candidate['interpretation'], 1000),
+                translation=candidate['translation'].strip(),
+                explanation=self.safe_text(candidate['explanation'], 1000)))
+        question = self.safe_text(result['question'], 1000)
+        explanation = self.safe_text(result['explanation'], 1000)
+        reply = self.safe_text(result['reply'])
+        if result['status'] == 'conversation':
+            if candidates or question or explanation or not reply:
+                raise ValueError('Conversation must contain only a nonempty reply')
+            metadata.status = 'conversation'
+            return TranslationAttempt(metadata, reply=reply)
+        if result['status'] == 'unsupported':
+            if candidates or question:
+                raise ValueError('Unsupported result must not contain proposals')
+            metadata.status = 'unsupported'
+            # This is model-authored feedback, not an engine verdict.
+            # Bound it and exclude credentials/control characters.
+            explanation = self.safe_text(result['explanation'])
+            note = 'LLM found no clear supported interpretation.'
+            if explanation:
+                note += '\nLLM explanation: ' + explanation
+            return TranslationAttempt(metadata, note=note, reply=reply)
+        if result['status'] not in ('proposals', 'clarification') or \
+                (result['status'] == 'proposals' and not candidates) or \
+                (result['status'] == 'clarification' and not question) or \
+                (len(candidates) > 1 and not question):
+            raise ValueError('Missing proposals or clarification question')
+        metadata.status = 'proposed' if candidates else 'clarification'
+        return TranslationAttempt(metadata, candidates, question, explanation, reply=reply)

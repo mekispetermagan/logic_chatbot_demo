@@ -176,7 +176,7 @@ class DomainIntegrationTests(unittest.TestCase):
             connection.execute('PRAGMA user_version=0')
         with TestClient(create_app(self.settings)) as client:
             loaded = client.get(base).json()
-            self.assertEqual(loaded, {k: v for k, v in paused.items() if k != 'feedback'})
+            self.assertEqual(loaded, {k: v for k, v in paused.items() if k not in ('feedback', 'preview')})
             continued = client.post(base + '/clarify', json={"objectId": 1})
             self.assertEqual(continued.status_code, 200, continued.text)
             self.assertIsNone(continued.json()['pending'])

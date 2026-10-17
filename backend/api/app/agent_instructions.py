@@ -1,0 +1,30 @@
+"""Assemble exactly the reviewed common and active-domain instructions."""
+import json
+from pathlib import Path
+
+from .llm import PROMPTS, RESPONSE_SCHEMA
+from .llm_budget import MODEL
+
+INSTRUCTIONS_PATH = Path(__file__).resolve().parents[3] / 'specification' / 'agent-instructions-draft.md'
+
+
+def configuration_for(domain: str) -> dict:
+    source = INSTRUCTIONS_PATH.read_text(encoding='utf-8')
+    common = source.split('## Common instructions\n', 1)[1].split('## Objects agent:', 1)[0]
+    if domain == 'objects':
+        domain_text = source.split('## Objects agent: domain instructions\n', 1)[1].split('## Network agent:', 1)[0]
+    elif domain == 'network':
+        domain_text = source.split('## Network agent: domain instructions\n', 1)[1]
+    else:
+        raise ValueError('Unknown domain')
+    examples = json.loads((PROMPTS / 'examples.json').read_text(encoding='utf-8'))[domain]
+    instructions = ('# Gridworld Interpreter\n\n## Common instructions\n' + common +
+                    f'\n## Active domain: {domain}\n' + domain_text +
+                    '\n## Additional validated examples (input => translation)\n' + '\n'.join(
+                        f'{example["input"]} => {example["translation"]}' for example in examples))
+    return {
+        'name': f'Logic Chatbot — {domain.title()}', 'model': MODEL,
+        'instructions': instructions, 'reasoning': {'effort': 'low'},
+        'service_tier': 'default', 'tools': [], 'multi_agent': {'enabled': False},
+        'text': {'format': {'type': 'json_schema', 'schema': RESPONSE_SCHEMA}},
+    }

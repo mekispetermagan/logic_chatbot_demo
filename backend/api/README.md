@@ -119,23 +119,61 @@ preserves existing world history and does not reinterpret old messages.
 
 ## Optional LLM translation
 
+The default transport is now **persistent OpenAI Agents sessions**. FastAPI
+creates a saved Objects or Network agent lazily on first use, then stores one
+session ID per conversation in SQLite. The approved instruction source is
+[`agent-instructions-draft.md`](../../specification/agent-instructions-draft.md).
+Editing it updates the same saved agent on next use and starts a fresh LLM
+session while preserving the application's world/chat/Undo history. The key
+must permit Agents read/write operations and model inference. Luna is preserved;
+unsupported model or permission errors are reported without silently switching.
+
+No tools, subagents or hosted environments are enabled. Acceptance/rejection,
+visual edits and Undo are queued for the next requested agent turn, along with
+the current world. No decision or preview triggers an extra GPT call. See
+[Persistent Interpreter Agents](../../specification/agent-sessions.md) for lifecycle
+and accounting details. `LOGIC_CHATBOT_LLM_BACKEND=responses` explicitly restores
+the earlier transport; it is not an automatic fallback.
+
+Agent JSON now includes a separate `reply` field and reply-only `conversation`
+status. Clear greetings, thanks and conventional courtesy receive a short
+ordinary chat reply; unrelated substantive discussion receives a brief neutral
+scope decline. Conversational text never becomes a candidate program. Mixed
+greetings and tasks still require review of the task translation. Reply-only
+exchanges preserve world/salience/Undo state and any pending interpretation
+clarification. They use the existing chat/answer endpoints and normal LLM
+accounting, with no additional frontend fields. The LLM switch must be on for
+ordinary conversational chat; disabled mode remains strict controlled English.
+
 The Flutter app-bar switch opts individual chat requests into syntax correction:
 `{"text":"paint A1 red","useLlm":true}`. It defaults to false. Haskell checks
 syntax first; valid controlled English and semantic failures never invoke Luna.
-One proposed translation is checked by Haskell before evaluation and displayed
-with `Interpreted as: ...`. Failed translation preserves the original syntax
-error. Object/square clarification and whole-entry Undo retain their behavior.
+GPT offers up to three ranked readings with explanations and a targeted question
+when ambiguous. Haskell syntax-checks every candidate; no candidate is executed
+automatically. The original prompt and proposal are persisted for review.
+Flutter offers **Preview**, **Accept**, and **Reject**. Preview shows a temporary
+board and feedback without changing world/salience history. Accept applies the
+selected stored entry as one undoable step. Reject restores the original prompt
+for editing. Even a single reading or translated question requires acceptance.
+Missing information can produce a clarification question without candidates.
+Reply in the existing input and choose **Submit answer**: GPT receives the
+original request, its question and all previous answers, and offers a fresh
+proposal. Rejected programs remain visible with Haskell's parser reason,
+separate from clarification questions. Failed validation also allows a
+correction via Submit answer. Object/square clarification still works after acceptance.
 The prompt allows general knowledge, coordinate calculations and planning a
 sequence of supported commands. Haskell validates and evaluates the complete
 entry. The current world is included for selecting targets and planning around
-existing objects; chat history, salience and web lookup tools are not supplied.
+existing objects. Agents retains its conversation; Haskell salience and web
+lookup tools are not supplied.
 The complete world is included in input-token counting. If the conversation
-changes during translation, application is refused with HTTP 409; retry manually.
+changes during translation or review, preview/accept are refused with HTTP 409;
+reject the stale proposal and resend manually.
 An unsupported interpretation now includes the model's brief reason, labelled
 `LLM explanation: ...`, in the saved feedback. This text is bounded and redacted.
 
 With normal Uvicorn INFO logging, look for `GPT reply` in the backend terminal:
-it shows status, translation, explanation, response ID, token counts and cost.
+it shows status, ranked translations, question, explanation, response ID, token counts and cost.
 `GPT parser rejection` adds Haskell's feedback when a proposed translation fails
 syntax checking. Invalid model JSON and incomplete replies are logged separately.
 Logs are bounded, escape control characters and redact keys. The prompt, world,
@@ -182,10 +220,14 @@ Keys, raw responses, provider messages and exception text are never included in
 these diagnostics. Unknown provider codes are omitted. Retry the entry manually
 after addressing the reported issue; there are no automatic retries.
 
-The hardcoded experiment budget is **$1 total**, shared across all domains and
+The experiment admission budget is **$1 total**, shared across all domains and
 conversations and preserved across restarts. `llm_requests` stores maximum
-reservations and settled token costs independently of world snapshots. Input
-is capped at 20,000 tokens and output at 2,000 including reasoning. Every
+reservations and estimated token costs independently of world snapshots. The
+optional Responses transport caps input at 20,000 tokens and output at 2,000
+including reasoning; Agents manages context and output length and limits this
+app's new input to 40,000 bytes. Agent usage is best-effort, without separate
+cache-write counts; estimates charge noncached input at the higher write rate.
+The local guard cannot guarantee a hard cap on an in-flight managed turn. Every
 generation reserves $0.0035 first; uncertain attempts keep that reservation.
 There are no automatic retries and Undo/Clear cannot refund or reset spending.
 Do not delete or change the database to restart experiments unintentionally.
@@ -197,6 +239,28 @@ has `llm` metadata: status, model, translation, token counts, calculated
 rates; compare it with the provider's usage dashboard. Mocked HTTP tests incur
 no API charges. See [LLM translation](../../specification/llm-translation.md)
 for the prompt files, budget assumptions, and limitations.
+
+Review endpoints return normal edit state:
+
+| Endpoint under `/conversations/{id}` | Body | Behavior |
+| --- | --- | --- |
+| `/interpretations/{proposalId}/preview` | `{"rank":1}` | Return temporary world/feedback in `preview`; keep actual state unchanged. |
+| `/interpretations/{proposalId}/accept` | `{"rank":1}` | Evaluate the stored candidate and consume the proposal. |
+| `/interpretations/{proposalId}/reject` | None | Discard the proposal; keep world/history unchanged. |
+| `/interpretations/{proposalId}/answer` | `{"text":"Use isolated nodes."}` | Interpret the answer in context and replace the draft; do not apply it. |
+
+All four use POST. Preview, Accept and Reject make no GPT calls; Submit answer
+makes one new bounded call under the existing $1 budget. Pending proposals and
+accumulated answers survive restart and
+appear as `proposal` in GET responses; previews do not persist. Editing, chat,
+clarification and Undo are blocked while review is pending. Consumed proposals,
+invalid candidate choices and stale preview/accept requests return HTTP 409.
+Accepted/rejected drafts remain in `interpretation_proposals` for auditing,
+separate from `world_snapshots`; neither rejection nor Undo refunds paid usage.
+Submitting an answer retires the previous draft as `rejected` and saves its
+replacement atomically. Provider failures leave a reviewable failure draft,
+without keeping an earlier interpretation executable. No answer or proposal
+changes world/salience history until acceptance.
 
 ## Persistence
 

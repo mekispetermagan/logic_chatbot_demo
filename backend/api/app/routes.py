@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Response
 
 from .schemas import PortsEdit, CreateConversation, ClarificationChoice, ChatEntry, ConversationState, EditState, EraseEdit, PlaceEdit, PropertyEdit
 from .service import ConversationService
+from .schemas import InterpretationChoice, InterpretationAnswer
 
 router = APIRouter(prefix="/conversations", tags=["conversations"])
 
@@ -39,6 +40,32 @@ def chat(conversation_id: UUID, entry: ChatEntry,
 def apply_property(conversation_id: UUID, edit: PropertyEdit,
                    service: ConversationService = Depends(get_service)) -> EditState:
     return require_edit(service.edit(conversation_id, {"type": "property", **edit.model_dump()}))
+
+
+@router.post('/{conversation_id}/interpretations/{proposal_id}/preview', response_model=EditState)
+def preview(conversation_id: UUID, proposal_id: UUID, choice: InterpretationChoice,
+            service: ConversationService = Depends(get_service)) -> EditState:
+    return require_edit(service.preview(conversation_id, proposal_id, choice.rank))
+
+
+@router.post('/{conversation_id}/interpretations/{proposal_id}/accept', response_model=EditState)
+def accept(conversation_id: UUID, proposal_id: UUID, choice: InterpretationChoice,
+           service: ConversationService = Depends(get_service)) -> EditState:
+    return require_edit(service.accept(conversation_id, proposal_id, choice.rank))
+
+
+@router.post('/{conversation_id}/interpretations/{proposal_id}/reject', response_model=EditState)
+def reject(conversation_id: UUID, proposal_id: UUID,
+           service: ConversationService = Depends(get_service)) -> EditState:
+    return require_edit(service.reject(conversation_id, proposal_id))
+
+
+@router.post('/{conversation_id}/interpretations/{proposal_id}/answer', response_model=EditState)
+def answer(conversation_id: UUID, proposal_id: UUID, entry: InterpretationAnswer,
+           service: ConversationService = Depends(get_service)) -> EditState:
+    if not entry.text.strip():
+        raise HTTPException(status_code=422, detail='Answer must not be blank')
+    return require_edit(service.answer(conversation_id, proposal_id, entry.text))
 
 
 @router.post("/{conversation_id}/ports", response_model=EditState)

@@ -49,7 +49,7 @@ class LlmBudgetLedger:
             ).fetchone()[0]
             return used + MAX_REQUEST_NANO <= BUDGET_NANO
 
-    def settle(self, identifier: str, response: dict) -> LlmUsage:
+    def settle(self, identifier: str, response: dict, *, agent: bool = False) -> LlmUsage:
         """Unknown/invalid usage leaves the full reservation in place."""
         usage = response['usage']
         input_tokens, output_tokens = usage['input_tokens'], usage['output_tokens']
@@ -58,10 +58,13 @@ class LlmBudgetLedger:
         reasoning = (usage.get('output_tokens_details') or {}).get('reasoning_tokens', 0)
         values = [input_tokens, output_tokens, cached, written, reasoning]
         if any(type(value) is not int or value < 0 for value in values) or \
-                input_tokens > MAX_INPUT_TOKENS or output_tokens > MAX_OUTPUT_TOKENS or \
+                (not agent and (input_tokens > MAX_INPUT_TOKENS or output_tokens > MAX_OUTPUT_TOKENS)) or \
                 cached + written > input_tokens or reasoning > output_tokens:
             raise ValueError('Invalid token usage')
-        cost = ((input_tokens - cached - written) * INPUT_RATE + cached * CACHE_RATE +
+        # Agents reports best-effort usage without separate cache writes. Use the
+        # higher cache-write rate for noncached input rather than undercounting it.
+        input_rate = WRITE_RATE if agent else INPUT_RATE
+        cost = ((input_tokens - cached - written) * input_rate + cached * CACHE_RATE +
                 written * WRITE_RATE + output_tokens * OUTPUT_RATE)
         reported_model = response.get('model', MODEL)
         if reported_model != MODEL and not reported_model.startswith(MODEL + '-'):
@@ -70,7 +73,7 @@ class LlmBudgetLedger:
         if tier not in ('default', 'standard'):
             raise ValueError('Unexpected service tier')
         metadata = LlmUsage(status='attempted', requestId=response.get('id'),
-                            inputTokens=input_tokens, cachedTokens=cached, cacheWriteTokens=written,
+                            inputTokens=input_tokens, cachedTokens=cached, cacheWriteTokens=None if agent else written,
                             outputTokens=output_tokens, reasoningTokens=reasoning,
                             costUsd=cost / NANO_PER_USD)
         with self.database.connection() as connection:

@@ -14,6 +14,7 @@ from .service import ConversationService
 from .llm import LlmTranslator
 from .llm_budget import LlmBudgetLedger
 from .llm_transcript import LlmTranscript
+from .agent_llm import AgentTranslator
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -25,9 +26,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         database.initialize()
         initial_worlds = {domain: World.model_validate_json(path.read_text(encoding="utf-8"))
                           for domain, path in INITIAL_WORLD_PATHS.items()}
+        if settings.llm_backend not in ('agents', 'responses'):
+            raise ValueError('LOGIC_CHATBOT_LLM_BACKEND must be agents or responses')
+        translator_class = AgentTranslator if settings.llm_backend == 'agents' else LlmTranslator
         app.state.conversation_service = ConversationService(
             ConversationRepository(database), initial_worlds, LogicEngine(settings.engine_path),
-            LlmTranslator(settings.openai_api_key, LlmBudgetLedger(database),
+            translator_class(settings.openai_api_key, LlmBudgetLedger(database),
                           LlmTranscript(settings.llm_log_path, settings.openai_api_key)
                           if settings.llm_log_path is not None else None)
         )

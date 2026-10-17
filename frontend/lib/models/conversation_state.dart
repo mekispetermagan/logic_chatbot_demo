@@ -3,6 +3,7 @@ import 'world.dart';
 import 'world_object.dart';
 import 'chat_message.dart';
 import 'llm_usage.dart';
+import 'interpretation_proposal.dart';
 
 class ConversationState {
   const ConversationState({
@@ -14,6 +15,8 @@ class ConversationState {
     this.pending,
     this.messages = const [],
     this.llmBudget,
+    this.proposal,
+    this.preview,
   });
 
   factory ConversationState.fromJson(Map<String, dynamic> json) {
@@ -32,6 +35,16 @@ class ConversationState {
       pending: json['pending'] == null
           ? null
           : PendingEntry.fromJson(json['pending'] as Map<String, dynamic>),
+      proposal: json['proposal'] == null
+          ? null
+          : InterpretationProposal.fromJson(
+              json['proposal'] as Map<String, dynamic>,
+            ),
+      preview: json['preview'] == null
+          ? null
+          : InterpretationPreview.fromJson(
+              json['preview'] as Map<String, dynamic>,
+            ),
       messages: List.unmodifiable(
         (json['messages'] as List<dynamic>? ?? []).map(
           (message) => ChatMessage.fromJson(message as Map<String, dynamic>),
@@ -48,6 +61,8 @@ class ConversationState {
   final PendingEntry? pending;
   final List<ChatMessage> messages;
   final LlmBudget? llmBudget;
+  final InterpretationProposal? proposal;
+  final InterpretationPreview? preview;
 }
 
 class ClarificationCandidate {

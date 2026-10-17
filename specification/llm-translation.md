@@ -1,6 +1,11 @@
 # Optional LLM Translation
 
-Status: implemented first stage. The app-bar switch defaults to off on app start.
+Status: implemented with ranked proposals and explicit user acceptance.
+The default interpreter now uses saved agents and persistent sessions; see
+[Persistent Interpreter Agents](agent-sessions.md) for configuration, memory,
+accounting and failure behavior. The earlier Responses transport remains an
+explicit fallback via `LOGIC_CHATBOT_LLM_BACKEND=responses`.
+The app-bar switch defaults to off on app start.
 It sends `useLlm` on each chat entry; it never changes another client's setting.
 
 ## Request flow
@@ -9,26 +14,62 @@ It sends `useLlm` on each chat entry; it never changes another client's setting.
 2. With it on, Haskell checks the entire entry's syntax without evaluation.
    Valid entries, Undo, and semantic failures do not invoke the model.
 3. A syntax failure can invoke GPT-6 Luna with the active domain's grammar,
-   examples and current world. Salience rankings and chat history are not sent.
-4. The model considers alternatives but returns one clearly supported controlled
-   entry, potentially containing several planned commands, or `unsupported`.
-   There are no numeric confidence thresholds.
-5. Haskell validates the complete proposed entry before evaluation. If valid,
-   the original user text and visible `Interpreted as: ...` feedback are saved.
-   Otherwise the original syntax error remains, with a short explanation. For
+   examples and current world. In Agents mode, conversation context persists in
+   the remote session; salience rankings remain local to Haskell.
+4. The model returns up to three distinct readings ranked by plausibility, each
+   with a label, a complete controlled entry and a brief explanation of its
+   assumptions. Multiple readings require a targeted clarification question.
+   Missing essential information can produce a question without candidates.
+   Clear requests can produce one reading; no alternatives are fabricated and
+   there are no numeric confidence thresholds.
+   A separate `reply` field provides brief, unmistakable courtesy or a neutral
+   scope decline. Reply-only `conversation` results appear directly in chat,
+   with no syntax-error feedback, review proposal or symbolic state changes.
+   Mixed entries retain their task in candidates/questions. The agent's reply
+   text is never sent to Haskell for evaluation. With the LLM switch off, strict
+   controlled-English behavior remains.
+5. Haskell syntax-checks every candidate. Invalid candidates and duplicates with
+   identical canonical text are removed, preserving the remaining order.
+   Parser failures remain visible with the rejected program and Haskell's
+   reason. An invalid program is labelled a translation failure, separately
+   from any clarification question. The original prompt, paid-attempt metadata
+   and review proposal are saved, but **no world or salience changes are applied**.
+   If there is no candidate, question or parser failure to review, the original
+   syntax error remains. For
    `unsupported`, the model's reason is shown as `LLM explanation: ...` and
    persisted in the machine message. It is normalized to one line, limited to
    400 characters, and credentials are redacted; it is model-authored feedback.
-6. Before applying a valid translation, the repository checks the world,
-   discourse state and message revision inside its write transaction. A changed
-   conversation returns HTTP 409 with a retry instruction. The model call is not
-   retried automatically, and its charge remains in the independent ledger.
+6. The user selects a ranked reading and chooses Preview, Accept or Reject.
+   Preview runs Haskell on temporary state and shows the trial board and
+   feedback marked “Preview — not applied”. Accept evaluates the stored
+   candidate and commits it. Reject discards the proposal and restores the
+   original prompt in the input field for revision and resubmission.
+   When clarification is needed, the input stays enabled with **Submit answer**.
+   Answers request a fresh proposal using the original entry, previous question,
+   candidates, parser failures and accumulated answers; they never execute a
+   translation. Each submitted answer is a new bounded, budgeted GPT call.
+7. Before saving a proposal, and again before preview/accept, the repository
+   checks the world, discourse state and message revision. Changed state returns
+   HTTP 409; a stale proposal can still be rejected. No model call is retried
+   automatically, and its charge remains in the independent ledger.
 
-The LLM translates; Haskell owns reference resolution, clarification, queries
-and world updates. A valid translation can still misunderstand the user; this
-stage does not present translation alternatives. Existing object/square
-clarification works normally, without another model call. All evaluation from
-one entry shares one Undo snapshot. Undo does not undo API charges.
+The LLM proposes interpretations; Haskell owns reference resolution, queries and
+world updates. A valid translation can still misunderstand the user, so even
+one candidate or a translated question requires acceptance. Existing
+object/square clarification can pause evaluation after acceptance; its preview
+is temporary and reports that clarification will be needed. All evaluation and
+continuations from one accepted entry share one Undo snapshot. Undo restores
+world and salience together and does not undo API charges.
+
+While review is pending, editing, Undo and unrelated chat are blocked for that
+conversation. Answer the question in the composer, or reject to edit the
+original prompt. Failed validation also allows a correction via Submit answer.
+Other conversations remain independent. SQLite stores pending and archived
+proposals separately from world history, so review survives refresh/restart.
+Preview is ephemeral and changes neither snapshots nor chat messages; choosing
+another candidate or refreshing clears it. Acceptance/rejection adds a machine
+message without adding a fake user prompt. Preview, Accept and Reject call only
+the local engine/database and incur no additional GPT charge.
 
 ## Prompt and transport
 
@@ -57,11 +98,20 @@ references remain for Haskell. Coordinate assignment edits an occupied cell;
 indefinite creation always introduces a new object. The complete world payload
 is included in token counting before generation.
 
+Follow-up requests add `clarification`, containing ordered question/answer
+`turns`, `previousCandidates` and `validationFailures`. The original `entry`
+remains unchanged. The same full input is counted before each generation, so
+growing clarification context stays within the existing token and cost caps.
+Context is explicitly supplied with each fresh request, as supported by the
+[official OpenAI conversation-state documentation](https://developers.openai.com/api/docs/guides/conversation-state).
+Provider failures replace the old candidate set with a failure draft, preserving
+the original request and answers; they never apply or silently reuse an old plan.
+
 Questions must retain their meaning. Returning several checks cannot replace
 one question requiring an unsupported logical or arithmetic combination. The
 translator neither answers it itself nor substitutes a weaker intermediate query.
 
-FastAPI uses HTTPX and the OpenAI Responses API with strict structured JSON,
+In the optional `responses` transport, FastAPI uses HTTPX and the OpenAI Responses API with strict structured JSON,
 `gpt-6-luna`, Standard (`default`) service tier, low reasoning, no tools,
 `store: false`, and no automatic retries or previous response IDs. Input is
 counted with `/v1/responses/input_tokens`, including instructions and schema,
@@ -76,7 +126,10 @@ persisted in the application's SQLite database. It does not reset with app/API
 restart, Undo, Clear, or creation of a new conversation. There is no public reset
 endpoint. Deleting/changing the database also changes its accounting history.
 
-The ledger uses integer nanodollars. Rates verified October 17, 2026, per million
+The ledger uses integer nanodollars. The following caps and exact-count settlement
+describe the optional Responses transport; Agents uses the accounting described
+in [Persistent Interpreter Agents](agent-sessions.md).
+Rates verified October 17, 2026, per million
 tokens: uncached input $0.10, cached input $0.01, cache writes $0.125, output $0.50.
 It reserves $0.0035 before each generation: maximum input at the cache-write
 rate plus maximum output. A serialized SQLite transaction prevents concurrent
@@ -107,7 +160,7 @@ responses and do not contact OpenAI or consume paid API tokens.
 ## GPT feedback logs
 
 The Uvicorn terminal shows INFO records from `uvicorn.error.llm` by default:
-`GPT reply` includes the model's structured status, translation, explanation,
+`GPT reply` includes the model's structured status, ranked candidates, question, explanation,
 response ID, token usage and calculated cost. `GPT parser rejection` records the
 rejected translation and Haskell's parser feedback. Invalid model JSON and
 incomplete responses have separate records. These are final model outputs, not
@@ -123,7 +176,7 @@ conversation IDs and attempt IDs. Token-counting and generation requests include
 their complete headers and JSON bodies: instructions, examples, world snapshot,
 entry and parameters. Responses include status, headers and complete bodies,
 including errors and all metadata actually returned by the provider. Transport
-failures and parser feedback are also recorded. The transcript has no console
+failures, parser feedback and proposal/preview/accept/reject events are also recorded. The transcript has no console
 length cap, and is preserved across reloads and restarts.
 
 Authentication/credential fields, the configured API key and OpenAI-style keys

@@ -1,6 +1,7 @@
 import '../models/domain.dart';
 import '../models/network_shape.dart';
 import '../models/world_object.dart';
+import '../models/world.dart';
 import 'network_selector.dart';
 import 'package:flutter/material.dart';
 
@@ -27,6 +28,7 @@ class ConversationWorldPanel extends StatelessWidget {
     this.onPaint,
     this.onErase,
     this.onClear,
+    this.previewWorld,
   });
 
   final NetworkShape selectedNetworkShape;
@@ -45,6 +47,7 @@ class ConversationWorldPanel extends StatelessWidget {
   final void Function(int, int)? onPaint;
   final void Function(int, int)? onErase;
   final VoidCallback? onClear;
+  final World? previewWorld;
 
   @override
   Widget build(BuildContext context) {
@@ -77,12 +80,16 @@ class ConversationWorldPanel extends StatelessWidget {
       );
     }
     final busy = loading || editing;
-    final enabled = !busy && error == null && state.pending == null;
+    final enabled =
+        !busy &&
+        error == null &&
+        state.pending == null &&
+        state.proposal == null;
     return Stack(
       fit: StackFit.expand,
       children: [
         WorldDisplay(
-          world: state.world,
+          world: previewWorld ?? state.world,
           domain: state.domain,
           selector: state.domain == WorldDomain.network
               ? NetworkSelector(
@@ -105,8 +112,16 @@ class ConversationWorldPanel extends StatelessWidget {
               ? 'Refresh the world before editing.'
               : state.pending != null
               ? 'Choose an object in Chat, or undo the entry.'
+              : state.proposal != null
+              ? 'Review the interpretation in Chat.'
               : null,
         ),
+        if (previewWorld != null)
+          const Positioned(
+            top: 8,
+            right: 8,
+            child: Chip(label: Text('Preview — not applied')),
+          ),
         if (busy)
           const Positioned(
             top: 0,

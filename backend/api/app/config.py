@@ -16,6 +16,7 @@ class Settings:
     engine_path: Path = ENGINE_PATH
     openai_api_key: str | None = field(default=None, repr=False)
     llm_log_path: Path | None = None
+    llm_backend: str = 'agents'
 
     @classmethod
     def from_environment(cls) -> "Settings":
@@ -30,4 +31,5 @@ class Settings:
             engine_path=Path(os.environ.get("LOGIC_CHATBOT_ENGINE_PATH", str(ENGINE_PATH))),
             openai_api_key=os.environ.get("OPENAI_API_KEY") or None,
             llm_log_path=Path(os.environ.get('LOGIC_CHATBOT_LLM_LOG_PATH', str(LLM_LOG_PATH))),
+            llm_backend=os.environ.get('LOGIC_CHATBOT_LLM_BACKEND', 'agents'),
         )

@@ -98,6 +98,51 @@ class PendingEntry(Schema):
     squareChoices: list[Position] = Field(default_factory=list)
 
 
+class InterpretationCandidate(Schema):
+    rank: StrictInt = Field(ge=1, le=3)
+    interpretation: str
+    translation: str = Field(min_length=1)
+    explanation: str
+
+
+class InterpretationFailure(Schema):
+    interpretation: str
+    translation: str
+    reason: str
+
+
+class InterpretationTurn(Schema):
+    question: str
+    answer: str
+
+
+class InterpretationAnswer(Schema):
+    text: str = Field(min_length=1)
+
+
+class InterpretationProposal(Schema):
+    id: UUID
+    originalText: str
+    question: str = ''
+    explanation: str = ''
+    candidates: list[InterpretationCandidate] = Field(default_factory=list, max_length=3)
+    validationFailures: list[InterpretationFailure] = Field(default_factory=list)
+    clarifications: list[InterpretationTurn] = Field(default_factory=list)
+    llm: LlmUsage
+
+
+class InterpretationChoice(Schema):
+    rank: StrictInt = Field(ge=1, le=3)
+
+
+class InterpretationPreview(Schema):
+    proposalId: UUID
+    rank: StrictInt
+    world: World
+    feedback: str
+    pending: PendingEntry | None = None
+
+
 class ConversationState(Schema):
     conversationId: UUID
     domain: DomainId
@@ -106,10 +151,12 @@ class ConversationState(Schema):
     messages: list[ChatMessage] = Field(default_factory=list)
     pending: PendingEntry | None = None
     llmBudget: LlmBudget | None = None
+    proposal: InterpretationProposal | None = None
 
 
 class EditState(ConversationState):
     feedback: str
+    preview: InterpretationPreview | None = None
 
 
 class AttributeProperty(Schema):

@@ -5,6 +5,8 @@ import '../models/chat_message.dart';
 import '../models/world_object.dart';
 import '../models/conversation_state.dart';
 import '../models/llm_usage.dart';
+import '../models/interpretation_proposal.dart';
+import 'interpretation_review.dart';
 
 /// Owns composer text and recall state; conversation requests stay in the controller.
 class ChatPanel extends StatefulWidget {
@@ -20,6 +22,15 @@ class ChatPanel extends StatefulWidget {
     this.onChoose,
     this.onChooseSquare,
     this.llmBudget,
+    this.proposal,
+    this.preview,
+    this.selectedInterpretationRank,
+    this.canReview = false,
+    this.onSelectInterpretation,
+    this.onPreview,
+    this.onAccept,
+    this.onReject,
+    this.onAnswer,
   });
 
   final List<ChatMessage> messages;
@@ -32,6 +43,15 @@ class ChatPanel extends StatefulWidget {
   final Future<bool> Function(String) onSend;
   final VoidCallback onRefresh;
   final LlmBudget? llmBudget;
+  final InterpretationProposal? proposal;
+  final InterpretationPreview? preview;
+  final int? selectedInterpretationRank;
+  final bool canReview;
+  final ValueChanged<int>? onSelectInterpretation;
+  final Future<bool> Function()? onPreview;
+  final Future<bool> Function()? onAccept;
+  final Future<bool> Function()? onReject;
+  final Future<bool> Function(String)? onAnswer;
 
   @override
   State<ChatPanel> createState() => _ChatPanelState();
@@ -44,6 +64,10 @@ class _ChatPanelState extends State<ChatPanel> {
   List<String>? _inputHistory;
   int _historyIndex = 0;
   TextEditingValue? _draft;
+  bool get _answering => widget.proposal?.canAnswer == true;
+  bool get _canSubmit => widget.proposal == null
+      ? widget.canSend
+      : _answering && widget.canReview && widget.onAnswer != null;
 
   KeyEventResult _navigateHistory(FocusNode node, KeyEvent event) {
     final keyboard = HardwareKeyboard.instance;
@@ -54,7 +78,8 @@ class _ChatPanelState extends State<ChatPanel> {
         keyboard.isMetaPressed ||
         _submitting ||
         widget.sending ||
-        widget.pending != null) {
+        widget.pending != null ||
+        widget.proposal != null) {
       return KeyEventResult.ignored;
     }
     final up = event.logicalKey == LogicalKeyboardKey.arrowUp;
@@ -125,7 +150,7 @@ class _ChatPanelState extends State<ChatPanel> {
   Future<void> _send() async {
     if (_submitting ||
         widget.sending ||
-        !widget.canSend ||
+        !_canSubmit ||
         _composer.text.trim().isEmpty) {
       return;
     }
@@ -134,17 +159,45 @@ class _ChatPanelState extends State<ChatPanel> {
     _draft = null;
     setState(() => _submitting = true);
     try {
-      final accepted = await widget.onSend(text);
+      final accepted = await (_answering
+          ? widget.onAnswer!(text)
+          : widget.onSend(text));
       if (mounted && accepted && _composer.text == text) _composer.clear();
     } finally {
       if (mounted) {
         setState(() => _submitting = false);
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted && widget.canSend && !widget.sending) {
+          if (mounted && _canSubmit && !widget.sending) {
             _composerFocus.requestFocus();
           }
         });
       }
+    }
+  }
+
+  Future<void> _rejectProposal() async {
+    final original = widget.proposal?.originalText;
+    if (_submitting ||
+        widget.sending ||
+        original == null ||
+        widget.onReject == null) {
+      return;
+    }
+    setState(() => _submitting = true);
+    try {
+      if (await widget.onReject!() && mounted) {
+        _inputHistory = null;
+        _draft = null;
+        _composer.value = TextEditingValue(
+          text: original,
+          selection: TextSelection.collapsed(offset: original.length),
+        );
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) _composerFocus.requestFocus();
+        });
+      }
+    } finally {
+      if (mounted) setState(() => _submitting = false);
     }
   }
 
@@ -161,16 +214,40 @@ class _ChatPanelState extends State<ChatPanel> {
     return Column(
       children: [
         Expanded(
-          child: widget.messages.isEmpty
+          child: widget.messages.isEmpty && widget.proposal == null
               ? const Center(child: Text('Enter a sentence to begin.'))
               : ListView.builder(
                   reverse: true,
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  itemCount: widget.messages.length,
-                  itemBuilder: (context, index) => ChatBubble(
-                    message:
-                        widget.messages[widget.messages.length - 1 - index],
-                  ),
+                  itemCount:
+                      widget.messages.length +
+                      (widget.proposal == null ? 0 : 1),
+                  itemBuilder: (context, index) {
+                    if (widget.proposal case final proposal?) {
+                      if (index == 0) {
+                        return InterpretationReview(
+                          key: ValueKey(proposal.id),
+                          proposal: proposal,
+                          selectedRank: widget.selectedInterpretationRank,
+                          enabled: widget.canReview && !busy,
+                          onSelect: widget.onSelectInterpretation ?? (_) {},
+                          onPreview: () {
+                            widget.onPreview?.call();
+                          },
+                          onAccept: () {
+                            widget.onAccept?.call();
+                          },
+                          onReject: _rejectProposal,
+                          preview: widget.preview,
+                        );
+                      }
+                      index -= 1;
+                    }
+                    return ChatBubble(
+                      message:
+                          widget.messages[widget.messages.length - 1 - index],
+                    );
+                  },
                 ),
         ),
         if (widget.pending case final pending?) ...[
@@ -262,15 +339,20 @@ class _ChatPanelState extends State<ChatPanel> {
                   child: TextField(
                     controller: _composer,
                     focusNode: _composerFocus,
-                    enabled: !busy && widget.pending == null,
+                    enabled:
+                        !busy &&
+                        widget.pending == null &&
+                        (widget.proposal == null || _answering),
                     minLines: 1,
                     maxLines: 4,
                     textInputAction: TextInputAction.send,
                     onSubmitted: (_) => _send(),
                     onEditingComplete: () {},
-                    decoration: const InputDecoration(
-                      hintText: 'Enter a message',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      hintText: _answering
+                          ? 'Clarification or correction'
+                          : 'Enter a message',
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                 ),
@@ -279,14 +361,22 @@ class _ChatPanelState extends State<ChatPanel> {
             const SizedBox(width: 8),
             ValueListenableBuilder<TextEditingValue>(
               valueListenable: _composer,
-              builder: (context, value, child) => IconButton(
-                tooltip: 'Send',
-                onPressed:
-                    widget.canSend && !busy && value.text.trim().isNotEmpty
+              builder: (context, value, child) {
+                final submit =
+                    _canSubmit && !busy && value.text.trim().isNotEmpty
                     ? _send
-                    : null,
-                icon: const Icon(Icons.send),
-              ),
+                    : null;
+                return _answering
+                    ? FilledButton(
+                        onPressed: submit,
+                        child: const Text('Submit answer'),
+                      )
+                    : IconButton(
+                        tooltip: 'Send',
+                        onPressed: submit,
+                        icon: const Icon(Icons.send),
+                      );
+              },
             ),
           ],
         ),
@@ -302,6 +392,7 @@ class ChatBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = message.role == ChatRole.user;
+    final conversational = message.llm?.status == 'conversation';
     final colors = Theme.of(context).colorScheme;
     return LayoutBuilder(
       builder: (context, constraints) => Align(
@@ -324,6 +415,8 @@ class ChatBubble extends StatelessWidget {
                     ? 'Engine · parse error'
                     : user
                     ? 'You'
+                    : conversational
+                    ? 'Assistant'
                     : 'Engine',
                 style: TextStyle(
                   fontSize: 12,
@@ -339,7 +432,7 @@ class ChatBubble extends StatelessWidget {
                   color: user
                       ? colors.onPrimaryContainer
                       : colors.onSecondaryContainer,
-                  fontFamily: user ? null : 'monospace',
+                  fontFamily: user || conversational ? null : 'monospace',
                 ),
               ),
               if (message.llm case final usage?) ...[

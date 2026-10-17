@@ -26,10 +26,14 @@ class LlmTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
         self.settings = Settings(database_path=Path(self.temporary.name) / 'test.sqlite3', openai_api_key='test-key',
+                                 llm_backend='responses',
                                  llm_log_path=Path(self.temporary.name) / 'logs' / 'gpt-conversation.jsonl')
         self.calls = []
         self.translation = 'A1 red.'
-        self.result_status = 'translation'
+        self.result_status = 'proposals'
+        self.candidates = None
+        self.question = ''
+        self.reply = ''
         self.explanation = 'Test interpretation.'
         self.response_status = 'completed'
         self.fail_generation = False
@@ -79,7 +83,10 @@ class LlmTests(unittest.TestCase):
             'id': 'resp_test', 'model': 'gpt-6-luna', 'service_tier': 'default',
             'status': self.response_status,
             'output': [{'type': 'message', 'content': [{'type': 'output_text', 'text': json.dumps({
-                'status': self.result_status, 'translation': self.translation, 'explanation': self.explanation})}]}],
+                'status': self.result_status,
+                'candidates': self.candidates if self.candidates is not None else ([] if self.result_status == 'unsupported' else [{
+                    'interpretation': 'Requested change', 'translation': self.translation, 'explanation': self.explanation}]),
+                'question': self.question, 'reply': self.reply, 'explanation': self.explanation})}]}],
         }
         response['output'].insert(0, {'type': 'reasoning', 'encrypted_content': 'private reasoning sentinel'})
         if not self.usage_missing:
@@ -88,13 +95,323 @@ class LlmTests(unittest.TestCase):
                                 'output_tokens_details': {'reasoning_tokens': 20}}
         return httpx.Response(200, json=response)
 
-    def chat(self, text='put something red on A1', enabled=True):
+    def chat(self, text='put something red on A1', enabled=True, accept=True):
         response = self.client.post(self.base + '/chat', json={'text': text, 'useLlm': enabled})
         self.assertEqual(response.status_code, 200, response.text)
-        return response.json()
+        state = response.json()
+        # Existing evaluation/budget tests explicitly accept the offered first
+        # candidate. Review tests pass accept=False to inspect the proposal.
+        if accept and state.get('proposal') and state['proposal']['candidates']:
+            response = self.client.post(self.base + '/interpretations/' + state['proposal']['id'] + '/accept', json={'rank': 1})
+            self.assertEqual(response.status_code, 200, response.text)
+            state = response.json()
+        return state
+
+    def usage(self, state):
+        return next(message['llm'] for message in reversed(state['messages']) if message.get('llm'))
+
+    def test_responses_fallback_supports_separate_conversational_reply(self):
+        self.result_status, self.candidates, self.explanation = 'conversation', [], ''
+        self.reply = 'Hello!'
+        before = self.stored_world_state()
+        state = self.chat('Hello', accept=False)
+        self.assertEqual(state['feedback'], 'Hello!')
+        self.assertIsNone(state['proposal'])
+        self.assertEqual(self.usage(state)['status'], 'conversation')
+        self.assertEqual(self.stored_world_state(), before)
+        schema = json.loads(self.calls[-1].content)['text']['format']['schema']
+        self.assertIn('reply', schema['required'])
 
     def transcript_records(self):
         return [json.loads(line) for line in self.settings.llm_log_path.read_text().splitlines()]
+
+    def review_url(self, state, action):
+        return self.base + '/interpretations/' + state['proposal']['id'] + '/' + action
+
+    def stored_world_state(self):
+        with Database(self.settings.database_path).connection() as connection:
+            return [tuple(row) for row in connection.execute(
+                'SELECT sequence, world_json, salience_json, pending_json FROM world_snapshots WHERE conversation_id = ? ORDER BY sequence',
+                (self.state['conversationId'],))]
+
+    def test_ranked_readings_are_offered_and_preview_does_not_commit(self):
+        self.result_status = 'clarification'
+        self.question = 'Do you mean red or blue?'
+        self.candidates = [
+            {'interpretation': 'Red', 'translation': 'A1 red.', 'explanation': 'The first reading.'},
+            {'interpretation': 'Blue', 'translation': 'A1 blue.', 'explanation': 'The alternative reading.'},
+        ]
+        before = self.stored_world_state()
+        offered = self.chat('Give A1 a color', accept=False)
+        self.assertEqual(offered['world']['objects'], [])
+        self.assertEqual(self.stored_world_state(), before)
+        self.assertEqual(offered['proposal']['question'], self.question)
+        self.assertEqual([item['rank'] for item in offered['proposal']['candidates']], [1, 2])
+        self.assertEqual(offered['proposal']['originalText'], 'Give A1 a color')
+        preview = self.client.post(self.review_url(offered, 'preview'), json={'rank': 2}).json()
+        self.assertEqual(preview['world'], offered['world'])
+        self.assertEqual(preview['preview']['world']['objects'][0]['attributes'], {'color': 'blue'})
+        self.assertEqual(self.stored_world_state(), before)
+        refreshed = self.client.get(self.base).json()
+        self.assertEqual(refreshed['proposal'], offered['proposal'])
+        self.assertNotIn('preview', refreshed)
+        self.assertEqual(refreshed['messages'], offered['messages'])
+        with TestClient(create_app(self.settings)) as restarted:
+            restored = restarted.get(self.base).json()
+            self.assertEqual(restored['proposal'], offered['proposal'])
+        accepted = self.client.post(self.review_url(offered, 'accept'), json={'rank': 2}).json()
+        self.assertIsNone(accepted['proposal'])
+        self.assertEqual(accepted['world'], preview['preview']['world'])
+        self.assertEqual(accepted['llmBudget'], offered['llmBudget'])
+        self.assertEqual(len(self.stored_world_state()), len(before) + 1)
+        self.assertEqual([message['text'] for message in accepted['messages'] if message['role'] == 'user'], ['Give A1 a color'])
+        self.assertEqual(self.client.post(self.review_url(offered, 'accept'), json={'rank': 2}).status_code, 409)
+        undone = self.client.post(self.base + '/undo').json()
+        self.assertEqual(undone['world'], offered['world'])
+        self.assertEqual(self.stored_world_state(), before)
+        self.assertEqual(len(self.calls), 2)
+
+    def test_reject_discards_proposal_and_preserves_world_history_and_charge(self):
+        before = self.stored_world_state()
+        offered = self.chat('A prompt that I want to refine', accept=False)
+        rejected = self.client.post(self.review_url(offered, 'reject')).json()
+        self.assertIsNone(rejected['proposal'])
+        self.assertEqual(self.stored_world_state(), before)
+        self.assertEqual(rejected['llmBudget'], offered['llmBudget'])
+        self.assertEqual(self.client.post(self.review_url(offered, 'accept'), json={'rank': 1}).status_code, 409)
+        next_offer = self.chat('A prompt that I want to refine, now more specific', accept=False)
+        self.assertNotEqual(next_offer['proposal']['id'], offered['proposal']['id'])
+        self.assertEqual(next_offer['world']['objects'], [])
+        self.assertEqual(len(self.calls), 4)
+
+    def test_clarification_without_candidates_is_saved_and_cannot_be_accepted(self):
+        self.result_status = 'clarification'
+        self.candidates = []
+        self.question = 'Which square should receive the color?'
+        offered = self.chat('Make a cell red', accept=False)
+        self.assertEqual(offered['proposal']['candidates'], [])
+        self.assertEqual(offered['proposal']['question'], self.question)
+        for action in ('preview', 'accept'):
+            self.assertEqual(self.client.post(self.review_url(offered, action), json={'rank': 1}).status_code, 409)
+        self.assertEqual(self.client.get(self.base).json()['world']['objects'], [])
+        self.assertEqual(len(self.calls), 2)
+
+    def test_invalid_and_duplicate_translations_are_filtered_before_review(self):
+        self.result_status = 'clarification'
+        self.question = 'Which wording matches your intent?'
+        self.candidates = [
+            {'interpretation': 'Invalid', 'translation': 'not a sentence.', 'explanation': 'Invalid.'},
+            {'interpretation': 'Red', 'translation': 'A1 red.', 'explanation': 'Red.'},
+            {'interpretation': 'Same red', 'translation': 'A1 is red.', 'explanation': 'Same meaning.'},
+        ]
+        offered = self.chat(accept=False)
+        self.assertEqual(len(offered['proposal']['candidates']), 1)
+        self.assertEqual(offered['proposal']['candidates'][0]['rank'], 1)
+        self.assertEqual(offered['proposal']['candidates'][0]['translation'], 'A1 red.')
+        self.assertEqual(offered['world']['objects'], [])
+
+    def test_invalid_candidate_is_explained_and_can_be_repaired_by_answering(self):
+        self.result_status = 'clarification'
+        self.question = 'Do you mean isolated nodes?'
+        self.translation = 'A1 red -sw.'
+        before = self.stored_world_state()
+        offered = self.chat('Draw an outline with pips', accept=False)
+        self.assertEqual(offered['proposal']['candidates'], [])
+        self.assertIn('Translation failed validation', offered['feedback'])
+        failures = offered['proposal']['validationFailures']
+        self.assertEqual(failures[0]['translation'], self.translation)
+        self.assertIn('Unsupported syntax:', failures[0]['reason'])
+        self.assertEqual(self.stored_world_state(), before)
+        self.result_status, self.question, self.translation = 'proposals', '', 'A1 red --sw.'
+        answer = self.client.post(self.review_url(offered, 'answer'), json={'text': 'Yes, isolated nodes.'})
+        self.assertEqual(answer.status_code, 200, answer.text)
+        refined = answer.json()
+        self.assertEqual(refined['proposal']['originalText'], 'Draw an outline with pips')
+        self.assertEqual(refined['proposal']['validationFailures'], [])
+        self.assertNotEqual(refined['proposal']['id'], offered['proposal']['id'])
+        self.assertEqual(self.stored_world_state(), before)
+        self.assertEqual(refined['world']['objects'], [])
+        for request in self.calls[-2:]:
+            content = json.loads(json.loads(request.content)['input'][0]['content'])
+            self.assertEqual(content['entry'], 'Draw an outline with pips')
+            self.assertEqual(content['clarification']['turns'], [
+                {'question': 'Do you mean isolated nodes?', 'answer': 'Yes, isolated nodes.'}])
+            self.assertEqual(content['clarification']['validationFailures'], failures)
+        self.assertEqual([m['text'] for m in refined['messages'] if m['role'] == 'user'],
+                         ['Draw an outline with pips', 'Yes, isolated nodes.'])
+        self.assertEqual(self.client.post(self.review_url(offered, 'answer'), json={'text': 'again'}).status_code, 409)
+        self.assertEqual(len(self.calls), 4)
+        accepted = self.client.post(self.review_url(refined, 'accept'), json={'rank': 1}).json()
+        self.assertEqual(accepted['world']['objects'][0]['attributes'], {'color': 'red', 'south': 'south', 'west': 'west'})
+        self.assertEqual(len(self.calls), 4)
+        self.client.post(self.base + '/undo')
+        self.assertEqual(self.stored_world_state(), before)
+
+    def test_multiple_answers_survive_restart_and_keep_previous_candidate_context(self):
+        self.result_status, self.question, self.candidates = 'clarification', 'Which square?', []
+        offered = self.chat('Give a cell a warm color', accept=False)
+        self.question = 'Red or yellow?'
+        self.candidates = [
+            {'interpretation': 'Red', 'translation': 'B2 red.', 'explanation': 'Red.'},
+            {'interpretation': 'Yellow', 'translation': 'B2 yellow.', 'explanation': 'Yellow.'},
+        ]
+        refined = self.client.post(self.review_url(offered, 'answer'), json={'text': 'B2'}).json()
+        with TestClient(create_app(self.settings)) as restarted:
+            self.assertEqual(restarted.get(self.base).json()['proposal'], refined['proposal'])
+        self.result_status, self.question, self.candidates = 'proposals', '', None
+        self.translation = 'B2 yellow.'
+        final = self.client.post(self.review_url(refined, 'answer'), json={'text': 'Yellow'}).json()
+        content = json.loads(json.loads(self.calls[-1].content)['input'][0]['content'])
+        self.assertEqual(content['clarification']['turns'], [
+            {'question': 'Which square?', 'answer': 'B2'},
+            {'question': 'Red or yellow?', 'answer': 'Yellow'}])
+        self.assertEqual(content['clarification']['previousCandidates'], refined['proposal']['candidates'])
+        self.assertEqual(final['proposal']['clarifications'], content['clarification']['turns'])
+        self.assertEqual(final['world']['objects'], [])
+        self.assertEqual(final['llmBudget']['requestCount'], 3)
+        self.assertEqual(len(self.calls), 6)
+        self.client.post(self.review_url(final, 'reject'))
+        self.assertEqual(self.client.get(self.base).json()['world']['objects'], [])
+
+    def test_failed_answer_generation_keeps_reviewable_draft_without_applying_old_candidate(self):
+        self.result_status, self.question = 'clarification', 'Red or blue?'
+        offered = self.chat(accept=False)
+        before = self.stored_world_state()
+        self.fail_generation = True
+        failed = self.client.post(self.review_url(offered, 'answer'), json={'text': 'Blue'}).json()
+        self.assertEqual(failed['proposal']['candidates'], [])
+        self.assertIn('timeout', failed['proposal']['explanation'])
+        self.assertEqual(failed['proposal']['clarifications'][-1]['answer'], 'Blue')
+        self.assertEqual(self.stored_world_state(), before)
+        self.assertEqual(failed['llmBudget']['reservedUsd'], .0035)
+        self.assertEqual(self.client.post(self.review_url(failed, 'accept'), json={'rank': 1}).status_code, 409)
+        self.assertEqual(self.client.post(self.review_url(failed, 'reject')).status_code, 200)
+        self.assertEqual(len(self.calls), 4)
+
+    def test_answer_validation_and_stale_drafts_do_not_contact_gpt(self):
+        self.result_status, self.question, self.candidates = 'clarification', 'Which square?', []
+        offered = self.chat(accept=False)
+        for body in ({'text': ''}, {'text': '  '}, {'text': 3}, {}):
+            self.assertEqual(self.client.post(self.review_url(offered, 'answer'), json=body).status_code, 422)
+        with Database(self.settings.database_path).connection() as connection:
+            connection.execute("UPDATE world_snapshots SET salience_json = '[{}]' WHERE conversation_id = ?",
+                               (self.state['conversationId'],))
+        self.assertEqual(self.client.post(self.review_url(offered, 'answer'), json={'text': 'B2'}).status_code, 409)
+        self.assertEqual(len(self.calls), 2)
+
+    def test_answer_replacement_rolls_back_and_stale_inflight_answers_are_rejected(self):
+        self.result_status, self.question, self.candidates = 'clarification', 'Which square?', []
+        offered = self.chat(accept=False)
+        before = self.stored_world_state()
+        self.result_status, self.question, self.candidates = 'proposals', '', None
+        with Database(self.settings.database_path).connection() as connection:
+            connection.execute("CREATE TRIGGER reject_answer BEFORE INSERT ON chat_messages BEGIN SELECT RAISE(ABORT, 'reject'); END;")
+        with self.assertRaises(sqlite3.IntegrityError):
+            self.client.post(self.review_url(offered, 'answer'), json={'text': 'A1'})
+        self.assertEqual(self.client.get(self.base).json()['proposal'], offered['proposal'])
+        self.assertEqual(self.stored_world_state(), before)
+        with Database(self.settings.database_path).connection() as connection:
+            connection.execute('DROP TRIGGER reject_answer')
+        self.before_generation = lambda: self.client.post(self.review_url(offered, 'reject'))
+        response = self.client.post(self.review_url(offered, 'answer'), json={'text': 'A1'})
+        self.assertEqual(response.status_code, 409, response.text)
+        self.assertIsNone(self.client.get(self.base).json()['proposal'])
+        self.assertEqual(self.stored_world_state(), before)
+        self.assertEqual(len(self.calls), 6)
+
+    def test_active_proposal_blocks_edits_undo_and_another_chat_without_charging(self):
+        offered = self.chat(accept=False)
+        requests = [
+            ('/clear', None), ('/undo', None),
+            ('/chat', {'text': 'A1 blue.', 'useLlm': True}),
+            ('/property', {'position': {'x': 0, 'y': 0}, 'property': {'attribute': 'color', 'value': 'blue'}}),
+        ]
+        for path, body in requests:
+            response = self.client.post(self.base + path, json=body)
+            self.assertEqual(response.status_code, 409, response.text)
+        self.assertEqual(self.client.get(self.base).json()['proposal'], offered['proposal'])
+        self.assertEqual(len(self.calls), 2)
+
+    def test_preview_and_accept_reject_a_changed_snapshot_but_rejection_is_still_possible(self):
+        offered = self.chat(accept=False)
+        with Database(self.settings.database_path).connection() as connection:
+            connection.execute("UPDATE world_snapshots SET salience_json = ? WHERE conversation_id = ? AND sequence = ?",
+                               ('[["changed"]]', self.state['conversationId'], self.stored_world_state()[-1][0]))
+        for action in ('preview', 'accept'):
+            response = self.client.post(self.review_url(offered, action), json={'rank': 1})
+            self.assertEqual(response.status_code, 409, response.text)
+        self.assertEqual(self.client.post(self.review_url(offered, 'reject')).status_code, 200)
+        self.assertEqual(len(self.calls), 2)
+
+    def test_preview_of_symbolic_ambiguity_is_temporary_and_accept_keeps_existing_clarification(self):
+        self.chat('#0 red. #1 red.', enabled=False)
+        self.translation = 'The red is blue.'
+        before = self.stored_world_state()
+        offered = self.chat('Recolor the red one', accept=False)
+        trial = self.client.post(self.review_url(offered, 'preview'), json={'rank': 1}).json()
+        self.assertIsNotNone(trial['preview']['pending'])
+        self.assertIsNone(trial['pending'])
+        self.assertEqual(self.stored_world_state(), before)
+        accepted = self.client.post(self.review_url(offered, 'accept'), json={'rank': 1}).json()
+        self.assertIsNotNone(accepted['pending'])
+        resolved = self.client.post(self.base + '/clarify', json={'objectId': 1}).json()
+        self.assertIsNone(resolved['pending'])
+        undone = self.client.post(self.base + '/undo').json()
+        self.assertEqual(undone['world'], offered['world'])
+        self.assertEqual(self.stored_world_state(), before)
+        self.assertEqual(len(self.calls), 2)
+
+    def test_undo_translation_is_previewed_without_undoing_until_acceptance(self):
+        self.chat('A1 red.', enabled=False)
+        self.translation = 'undo'
+        offered = self.chat('Revert the previous entry', accept=False)
+        before = self.stored_world_state()
+        preview = self.client.post(self.review_url(offered, 'preview'), json={'rank': 1}).json()
+        self.assertEqual(preview['preview']['world']['objects'], [])
+        self.assertEqual(self.stored_world_state(), before)
+        accepted = self.client.post(self.review_url(offered, 'accept'), json={'rank': 1}).json()
+        self.assertEqual(accepted['world']['objects'], [])
+        self.assertEqual(accepted['llmBudget'], offered['llmBudget'])
+
+    def test_translated_questions_also_require_acceptance(self):
+        self.translation = 'Is the square A1 occupied?'
+        offered = self.chat('Does A1 have anything in it', accept=False)
+        self.assertNotIn('\n  false', offered['feedback'])
+        before = self.stored_world_state()
+        preview = self.client.post(self.review_url(offered, 'preview'), json={'rank': 1}).json()
+        self.assertTrue(preview['preview']['feedback'].endswith('\n  false'))
+        self.assertEqual(self.stored_world_state(), before)
+        accepted = self.client.post(self.review_url(offered, 'accept'), json={'rank': 1}).json()
+        self.assertTrue(accepted['feedback'].endswith('\n  false'))
+        self.assertIsNone(accepted['proposal'])
+        self.assertEqual(len(self.calls), 2)
+
+    def test_acceptance_rollback_preserves_proposal_and_does_not_recharge_on_retry(self):
+        offered = self.chat(accept=False)
+        before = self.stored_world_state()
+        with Database(self.settings.database_path).connection() as connection:
+            connection.execute("CREATE TRIGGER reject_acceptance BEFORE INSERT ON chat_messages BEGIN SELECT RAISE(ABORT, 'reject'); END;")
+        with self.assertRaises(sqlite3.IntegrityError):
+            self.client.post(self.review_url(offered, 'accept'), json={'rank': 1})
+        self.assertEqual(self.stored_world_state(), before)
+        self.assertEqual(self.client.get(self.base).json()['proposal'], offered['proposal'])
+        with Database(self.settings.database_path).connection() as connection:
+            connection.execute('DROP TRIGGER reject_acceptance')
+        accepted = self.client.post(self.review_url(offered, 'accept'), json={'rank': 1}).json()
+        self.assertEqual(accepted['world']['objects'][0]['attributes'], {'color': 'red'})
+        self.assertEqual(accepted['llmBudget'], offered['llmBudget'])
+        self.assertEqual(len(self.calls), 2)
+
+    def test_proposal_is_scoped_to_its_conversation_and_rank_is_strict(self):
+        offered = self.chat(accept=False)
+        other = self.client.post('/conversations', json={'domain': 'objects'}).json()
+        for action in ('preview', 'accept', 'reject'):
+            url = '/conversations/' + other['conversationId'] + '/interpretations/' + offered['proposal']['id'] + '/' + action
+            response = self.client.post(url, json=None if action == 'reject' else {'rank': 1})
+            self.assertEqual(response.status_code, 409)
+        for rank in (0, 4, True, '1'):
+            self.assertEqual(self.client.post(self.review_url(offered, 'accept'), json={'rank': rank}).status_code, 422)
+        self.assertEqual(len(self.calls), 2)
 
     def test_transcript_contains_full_prompts_world_and_untruncated_responses(self):
         self.explanation = 'Complete explanation: ' + 'z' * 25_000
@@ -248,10 +565,10 @@ class LlmTests(unittest.TestCase):
     def test_translation_is_haskell_validated_applied_reported_and_undoable(self):
         result = self.chat()
         self.assertEqual([request.url.path for request in self.calls], ['/v1/responses/input_tokens', '/v1/responses'])
-        self.assertIn('Interpreted as: A1 red.', result['feedback'])
+        self.assertIn('Accepted interpretation 1: A1 red.', result['feedback'])
         self.assertEqual(result['world']['objects'][0]['attributes'], {'color': 'red'})
-        usage = result['messages'][-1]['llm']
-        self.assertEqual(usage['translation'], 'A1 red.')
+        usage = self.usage(result)
+        self.assertEqual(usage['status'], 'proposed')
         self.assertAlmostEqual(usage['costUsd'], 0.0001095)
         self.assertEqual(usage['reasoningTokens'], 20)
         self.assertEqual(result['llmBudget']['reservedUsd'], 0)
@@ -261,7 +578,7 @@ class LlmTests(unittest.TestCase):
         with TestClient(create_app(self.settings)) as restarted:
             loaded = restarted.get(self.base).json()
             self.assertEqual(loaded['llmBudget'], result['llmBudget'])
-            self.assertEqual(loaded['messages'][-1]['llm'], usage)
+            self.assertEqual(self.usage(loaded), usage)
 
     def test_invalid_translation_preserves_world_and_original_syntax_feedback(self):
         self.translation = 'A1 red. unsupported nonsense.'
@@ -269,7 +586,7 @@ class LlmTests(unittest.TestCase):
             result = self.chat()
         self.assertEqual(result['world']['objects'], [])
         self.assertTrue(result['messages'][-1]['isError'])
-        self.assertEqual(result['messages'][-1]['llm']['status'], 'invalid')
+        self.assertEqual(self.usage(result)['status'], 'invalid')
         self.assertGreater(result['llmBudget']['spentUsd'], 0)
         feedback = '\n'.join(logs.output)
         self.assertIn('GPT parser rejection:', feedback)
@@ -283,7 +600,7 @@ class LlmTests(unittest.TestCase):
         self.explanation = 'The question needs an arithmetic predicate that the grammar does not provide.'
         result = self.chat()
         self.assertEqual(result['world']['objects'], [])
-        self.assertEqual(result['messages'][-1]['llm']['status'], 'unsupported')
+        self.assertEqual(self.usage(result)['status'], 'unsupported')
         self.assertIn('no clear supported interpretation', result['feedback'])
         self.assertIn('LLM explanation: ' + self.explanation, result['feedback'])
         self.assertIn('Unsupported syntax:', result['feedback'])
@@ -316,7 +633,7 @@ class LlmTests(unittest.TestCase):
         self.translation = 'B2 red. B3 yellow. B4 green.'
         result = self.chat('Apply these three colors to the specified cells')
         self.assertEqual(len(result['world']['objects']), 3)
-        self.assertIn('Interpreted as: ' + self.translation, result['feedback'])
+        self.assertIn('Accepted interpretation 1: ' + self.translation, result['feedback'])
         self.assertEqual(len(self.calls), 2)
         self.assertEqual(result['llmBudget']['requestCount'], 1)
         undone = self.client.post(self.base + '/undo').json()
@@ -332,7 +649,7 @@ class LlmTests(unittest.TestCase):
         self.assertEqual(len(self.calls), 2)
         self.assertEqual(result['llmBudget']['spentUsd'], 0)
         self.assertEqual(result['llmBudget']['reservedUsd'], MAX_REQUEST_NANO / 1e9)
-        self.assertIsNone(result['messages'][-1]['llm']['costUsd'])
+        self.assertIsNone(self.usage(result)['costUsd'])
         with TestClient(create_app(self.settings)) as restarted:
             self.assertEqual(restarted.get(self.base).json()['llmBudget'], result['llmBudget'])
 
@@ -411,7 +728,7 @@ class LlmTests(unittest.TestCase):
         self.response_status = 'incomplete'
         result = self.chat()
         self.assertEqual(result['world']['objects'], [])
-        self.assertEqual(result['messages'][-1]['llm']['status'], 'incomplete')
+        self.assertEqual(self.usage(result)['status'], 'incomplete')
         self.assertGreater(result['llmBudget']['spentUsd'], 0)
 
     def test_input_cap_stops_before_generation(self):
@@ -419,14 +736,14 @@ class LlmTests(unittest.TestCase):
         result = self.chat()
         self.assertEqual(len(self.calls), 1)
         self.assertEqual(result['llmBudget']['requestCount'], 0)
-        self.assertEqual(result['messages'][-1]['llm']['status'], 'input_too_long')
+        self.assertEqual(self.usage(result)['status'], 'input_too_long')
 
     def test_exhausted_global_budget_survives_restart_and_domain_switch(self):
         with Database(self.settings.database_path).connection() as connection:
             connection.execute('INSERT INTO llm_requests (id, conversation_id, reserved_nano, cost_nano) VALUES (?, ?, ?, ?)',
                                ('seed', 'previous', BUDGET_NANO, BUDGET_NANO))
         result = self.chat()
-        self.assertEqual(result['messages'][-1]['llm']['status'], 'budget_exhausted')
+        self.assertEqual(self.usage(result)['status'], 'budget_exhausted')
         self.assertEqual(self.calls, [])
         with TestClient(create_app(self.settings)) as restarted:
             other = restarted.post('/conversations', json={'domain': 'objects'}).json()
@@ -437,7 +754,7 @@ class LlmTests(unittest.TestCase):
         settings = Settings(database_path=self.settings.database_path)
         with TestClient(create_app(settings)) as client:
             result = client.post(self.base + '/chat', json={'text': 'paint A1 red', 'useLlm': True}).json()
-            self.assertEqual(result['messages'][-1]['llm']['status'], 'not_configured')
+            self.assertEqual(self.usage(result)['status'], 'not_configured')
         self.assertEqual(self.calls, [])
         self.assertNotIn('test-key', repr(self.settings))
 
@@ -472,7 +789,7 @@ class LlmTests(unittest.TestCase):
         self.translation = 'undo'
         result = self.chat('revert my previous action')
         self.assertEqual(result['world']['objects'], [])
-        self.assertIn('Interpreted as: undo', result['feedback'])
+        self.assertIn('Accepted interpretation 1: undo', result['feedback'])
         self.assertGreater(result['llmBudget']['spentUsd'], 0)
 
     def test_conversation_rollback_does_not_refund_paid_translation(self):
@@ -527,6 +844,16 @@ class BudgetConcurrencyTests(unittest.TestCase):
 
 
 class TranscriptTests(unittest.TestCase):
+    def test_key_redaction_preserves_ordinary_courtesy_instructions(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'transcript.jsonl'
+            transcript = LlmTranscript(path, 'test-key')
+            transcript.record('test', text='A task-focused reply. Secret: sk-proj-hidden; test-key')
+            value = json.loads(path.read_text())['text']
+            self.assertIn('task-focused', value)
+            self.assertNotIn('sk-proj-hidden', value)
+            self.assertNotIn('test-key', value)
+
     def test_nested_json_credentials_are_redacted_and_new_file_is_private(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / 'gpt.jsonl'

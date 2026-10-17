@@ -7,6 +7,7 @@ import '../api/conversation_api.dart';
 import '../models/conversation_state.dart';
 import '../models/object_property.dart';
 import '../models/world_object.dart';
+import '../models/interpretation_proposal.dart';
 import '../storage/conversation_id_store.dart';
 
 /// Keeps local selection state and displays worlds returned by the server.
@@ -22,6 +23,8 @@ class ConversationController extends ChangeNotifier {
     if (!canSwitchDomain || next == domain || _disposed) return;
     domain = next;
     conversation = null;
+    preview = null;
+    selectedInterpretationRank = null;
     _pending = null;
     selectedUnplacedObjectId = null;
     await load();
@@ -50,6 +53,10 @@ class ConversationController extends ChangeNotifier {
   bool editing = false;
   bool sendingChat = false;
   bool useLlm = false;
+  InterpretationPreview? preview;
+  String? _reviewProposalId;
+  int? selectedInterpretationRank;
+  bool get canReview => conversation?.proposal != null && !loading && !editing;
 
   void setUseLlm(bool value) {
     if (_disposed || loading || editing || useLlm == value) return;
@@ -62,7 +69,10 @@ class ConversationController extends ChangeNotifier {
   int? selectedUnplacedObjectId;
   bool get canRequest =>
       conversation != null && !loading && !editing && error == null;
-  bool get canEdit => canRequest && conversation?.pending == null;
+  bool get canEdit =>
+      canRequest &&
+      conversation?.pending == null &&
+      conversation?.proposal == null;
   bool _disposed = false;
 
   Future<void> load() async {
@@ -96,6 +106,7 @@ class ConversationController extends ChangeNotifier {
       conversation = _pending;
       _pending = null;
       _reconcileSelection();
+      _reconcileReview();
     } on ApiException catch (exception) {
       error = exception.message;
     } catch (_) {
@@ -151,7 +162,7 @@ class ConversationController extends ChangeNotifier {
       _edit((id) => api.erase(id, BoardPosition(x, y)));
   Future<void> clear() => _edit(api.clear, clearSelection: true);
   Future<void> undo() async {
-    if (conversation?.canUndo != true) return;
+    if (conversation?.canUndo != true || conversation?.proposal != null) return;
     await _edit(api.undo, clearSelection: true, allowPending: true);
   }
 
@@ -168,6 +179,95 @@ class ConversationController extends ChangeNotifier {
 
   Future<bool> clarify(int objectId) =>
       _edit((id) => api.clarify(id, objectId), chat: true, allowPending: true);
+
+  void selectInterpretation(int rank) {
+    if (!canReview ||
+        !conversation!.proposal!.candidates.any(
+          (candidate) => candidate.rank == rank,
+        )) {
+      return;
+    }
+    selectedInterpretationRank = rank;
+    preview = null;
+    notifyListeners();
+  }
+
+  Future<bool> previewInterpretation() => _review('preview');
+  Future<bool> acceptInterpretation() => _review('accept');
+  Future<bool> rejectInterpretation() => _review('reject');
+
+  Future<bool> answerInterpretation(String text) {
+    if (text.trim().isEmpty || conversation?.proposal?.canAnswer != true) {
+      return Future.value(false);
+    }
+    return _review('answer', answer: text);
+  }
+
+  Future<bool> _review(String action, {String? answer}) async {
+    if (!canReview || _disposed) return false;
+    final proposal = conversation!.proposal!;
+    final rank = selectedInterpretationRank;
+    if ((action == 'preview' || action == 'accept') && rank == null) {
+      return false;
+    }
+    editing = true;
+    sendingChat = true;
+    error = null;
+    notifyListeners();
+    try {
+      final updated = switch (action) {
+        'answer' => await api.answerInterpretation(
+          conversation!.id,
+          proposal.id,
+          answer!,
+        ),
+        'preview' => await api.previewInterpretation(
+          conversation!.id,
+          proposal.id,
+          rank!,
+        ),
+        'accept' => await api.acceptInterpretation(
+          conversation!.id,
+          proposal.id,
+          rank!,
+        ),
+        _ => await api.rejectInterpretation(conversation!.id, proposal.id),
+      };
+      if (_disposed) return false;
+      if (updated.domain != domain) {
+        throw const ApiException('The server returned an unexpected domain.');
+      }
+      conversation = updated;
+      _reconcileReview();
+      preview = updated.preview;
+      _reconcileSelection();
+      return true;
+    } on ApiException catch (exception) {
+      error = exception.message;
+    } catch (_) {
+      error = 'Could not review the interpretation.';
+    } finally {
+      editing = false;
+      sendingChat = false;
+      if (!_disposed) notifyListeners();
+    }
+    return false;
+  }
+
+  void _reconcileReview() {
+    preview = null;
+    final proposal = conversation?.proposal;
+    final candidates = proposal?.candidates;
+    if (proposal?.id != _reviewProposalId) selectedInterpretationRank = null;
+    _reviewProposalId = proposal?.id;
+    if (candidates == null || candidates.isEmpty) {
+      selectedInterpretationRank = null;
+    } else if (!candidates.any(
+      (candidate) => candidate.rank == selectedInterpretationRank,
+    )) {
+      selectedInterpretationRank = candidates.first.rank;
+    }
+  }
 
   Future<bool> _edit(
     Future<ConversationState> Function(String) request, {
@@ -186,6 +286,7 @@ class ConversationController extends ChangeNotifier {
         throw const ApiException('The server returned an unexpected domain.');
       }
       conversation = updated;
+      _reconcileReview();
       if (clearSelection) selectedUnplacedObjectId = null;
       _reconcileSelection();
       return true;

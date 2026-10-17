@@ -112,6 +112,45 @@ class ConversationApi {
   Future<ConversationState> clarify(String id, int objectId) =>
       _request('POST', id: id, action: 'clarify', body: {'objectId': objectId});
 
+  Future<ConversationState> previewInterpretation(
+    String id,
+    String proposalId,
+    int rank,
+  ) => _request(
+    'POST',
+    id: id,
+    action: 'interpretations/$proposalId/preview',
+    body: {'rank': rank},
+  );
+
+  Future<ConversationState> acceptInterpretation(
+    String id,
+    String proposalId,
+    int rank,
+  ) => _request(
+    'POST',
+    id: id,
+    action: 'interpretations/$proposalId/accept',
+    body: {'rank': rank},
+  );
+
+  Future<ConversationState> rejectInterpretation(
+    String id,
+    String proposalId,
+  ) => _request('POST', id: id, action: 'interpretations/$proposalId/reject');
+
+  Future<ConversationState> answerInterpretation(
+    String id,
+    String proposalId,
+    String text,
+  ) => _request(
+    'POST',
+    id: id,
+    action: 'interpretations/$proposalId/answer',
+    body: {'text': text},
+    requestTimeout: const Duration(seconds: 90),
+  );
+
   Future<ConversationState> _request(
     String method, {
     String? id,
@@ -125,7 +164,7 @@ class ConversationApi {
         ...baseUrl.pathSegments.where((segment) => segment.isNotEmpty),
         'conversations',
         ?id,
-        ?action,
+        if (action != null) ...action.split('/'),
       ],
     );
     final http.Response response;
@@ -149,10 +188,18 @@ class ConversationApi {
     }
     if (response.statusCode !=
         (method == 'POST' && action == null ? 201 : 200)) {
+      String? detail;
+      try {
+        final value = jsonDecode(utf8.decode(response.bodyBytes));
+        if (value is Map<String, dynamic> && value['detail'] is String) {
+          detail = value['detail'] as String;
+        }
+      } catch (_) {}
       throw ApiException(
-        response.statusCode == 404
-            ? 'Conversation not found.'
-            : 'Server request failed (${response.statusCode}).',
+        detail ??
+            (response.statusCode == 404
+                ? 'Conversation not found.'
+                : 'Server request failed (${response.statusCode}).'),
         statusCode: response.statusCode,
       );
     }

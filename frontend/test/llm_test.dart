@@ -148,4 +148,61 @@ void main() {
     );
     expect(find.text('LLM cost unknown · \$0.003500 reserved'), findsOneWidget);
   });
+
+  testWidgets('courtesy displays as chat without a proposal or world change', (
+    tester,
+  ) async {
+    final controller = ConversationController(
+      store: SavedConversation(),
+      api: ConversationApi(
+        baseUrl: Uri.parse('http://localhost:8000'),
+        client: MockClient((request) async {
+          final value = state();
+          if (request.url.path.endsWith('/chat')) {
+            expect(jsonDecode(request.body), {'text': 'Hello', 'useLlm': true});
+            value['feedback'] = 'Hello!';
+            value['proposal'] = null;
+            value['messages'] = [
+              {'role': 'user', 'text': 'Hello'},
+              {
+                'role': 'machine',
+                'text': 'Hello!',
+                'llm': {
+                  'status': 'conversation',
+                  'model': 'gpt-6-luna',
+                  'costUsd': .0001,
+                },
+              },
+            ];
+          }
+          return http.Response(jsonEncode(value), 200);
+        }),
+      ),
+    );
+    await tester.pumpWidget(
+      MaterialApp(home: DemoScreen(createController: () => controller)),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(Switch));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Chat'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'Hello');
+    await tester.pump();
+    await tester.tap(find.byTooltip('Send'));
+    await tester.pumpAndSettle();
+    expect(controller.error, isNull);
+    expect(find.text('Hello!'), findsOneWidget);
+    expect(find.text('Assistant'), findsOneWidget);
+    expect(find.text('Review interpretation'), findsNothing);
+    expect(find.text('Accept'), findsNothing);
+    expect(controller.conversation!.world.objects, isEmpty);
+    expect(controller.conversation!.canUndo, isFalse);
+    expect(controller.canEdit, isTrue);
+    expect(
+      tester.widget<TextField>(find.byType(TextField)).controller!.text,
+      isEmpty,
+    );
+    expect(tester.takeException(), isNull);
+  });
 }
