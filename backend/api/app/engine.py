@@ -4,7 +4,7 @@ from pathlib import Path
 
 from pydantic import Field
 
-from .schemas import Schema, World, PendingEntry, DomainId
+from .schemas import Schema, World, PendingEntry, DomainId, WorldChange
 
 
 class EngineInvalidRequest(Exception):
@@ -24,6 +24,9 @@ class EngineReply(Schema):
     syntaxError: bool = False
     salience: list[dict] = Field(default_factory=list)
     pending: PendingEntry | None = None
+    languageVersion: str = 'unknown'
+    nextObjectId: int | None = Field(default=None, ge=0)
+    changes: list[WorldChange] = Field(default_factory=list)
 
 
 class LogicEngine:
@@ -34,19 +37,23 @@ class LogicEngine:
         self.timeout = timeout
 
     def edit(self, domain: DomainId, world: World, action: dict, salience: list[dict] | None = None,
-             pending: PendingEntry | None = None) -> EngineReply:
+             pending: PendingEntry | None = None, next_object_id: int | None = None) -> EngineReply:
         try:
             result = subprocess.run(
                 [str(self.executable)],
                 input=json.dumps({"domain": domain, "world": world.model_dump(), "action": action,
                                   "salience": salience or [],
-                                  "pending": pending.model_dump() if pending else None}),
+                                  "pending": pending.model_dump() if pending else None,
+                                  'languageVersion': domain + '-v2',
+                                  **({'nextObjectId': next_object_id} if next_object_id is not None else {})}),
                 capture_output=True, text=True, encoding="utf-8",
                 timeout=self.timeout, check=True,
             )
             reply = EngineReply.model_validate_json(result.stdout)
             if reply.domain != domain:
                 raise ValueError("Unexpected engine domain")
+            if reply.languageVersion != domain + '-v2' or reply.nextObjectId is None:
+                raise ValueError('Logic engine does not support the v2 language contract')
         except subprocess.CalledProcessError as error:
             if error.returncode == 2:
                 raise EngineInvalidRequest(error.stderr.strip() or "Invalid engine request") from error

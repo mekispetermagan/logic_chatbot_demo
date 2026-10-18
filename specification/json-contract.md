@@ -5,8 +5,8 @@
 Create an anonymous conversation with `POST /conversations` and
 `{"domain":"objects"}` or `{"domain":"network"}`. Each domain starts with its
 own fixed seven-object world. The response includes `conversationId`, `domain`,
-`world`, `canUndo`, `messages`, and nullable `pending` and `proposal`. Editing replies also
-include `feedback` and nullable `preview`. Domain selection is immutable for a conversation; subsequent
+`world`, `canUndo`, `messages`, `languageVersion`, `nextObjectId`, and nullable `pending` and `proposal`. Editing replies also
+include `feedback`, typed `changes`, and nullable `preview`. Domain selection is immutable for a conversation; subsequent
 requests address the conversation ID and inherit its domain.
 
 A world contains integer `width`, `height`, and an `objects` list. Both current
@@ -26,7 +26,65 @@ with no attributed properties. `position` is null for an unplaced object, or a
 complete zero-based coordinate pair (A1 is `(0,0)`). An objects-domain object
 might have `{"color":"blue","size":"small","shape":"bloom"}`. Network ports
 are independent unary attributes: `"north":"north"` means present. Aliases such
-as `up` and `flower` belong to chat syntax, not JSON transport.
+as `up` belong to LLM interpretation only, not either domain grammar or JSON. Object-domain synonyms
+such as `flower` belong to LLM interpretation only; Objects v2 accepts `bloom`.
+
+## V2 execution state
+
+Conversations use `objects-v2` or `network-v2`, with standalone contracts in
+[Objects v2](object-language-v2.md) and [Network v2](network-language-v2.md).
+FastAPI supplies `languageVersion` and `nextObjectId` on every engine request.
+Haskell echoes the version and returns its allocation counter. FastAPI rejects
+outdated executables and backwards counters.
+
+The counter is stored in `conversations.next_object_id`, outside Undo history.
+Delete, Clear and Undo never decrement it. Preview does not persist allocations.
+Aborted staged work can consume identifiers without committing objects. Initial
+allocation starts above the fixed world's greatest identifier.
+
+Pending entries in both domains add `payload` and nullable `stagedWorld`:
+
+- For reference/placement clarification, `payload.version` is the conversation’s `objects-v2` or `network-v2`;
+  the payload contains fully delimited source, the
+  entry's immutable initial world/ranking/counter, accepted clarification choices,
+  and a completed-sentence count. Clients must treat it as opaque server state.
+- Continuation replays from that frozen seed and choice transcript, preserving
+  operand binding and allocated identities without aging the entry twice.
+- `stagedWorld` is present only for a paused atomic batch. The ordinary `world`
+  remains committed state. Flutter labels a displayed staged world provisional.
+- Existing `sentence`, `candidateIds`, `candidates` and `squareChoices` drive the
+  same choice UI. `remaining` stores canonical entry text; `resolvedSubjects` is unused.
+
+For surface grouping clarification, pending state additionally has
+`groupingChoices: [{"groupingId": 1, "label": "does #3 satisfy color is red or (size is large and shape is bloom)?"}, ...]`.
+`candidateIds`, `candidates` and `squareChoices` are empty. The opaque payload
+has `version: "objects-v2-grouping"` or `"network-v2-grouping"` and fully delimited alternative entries.
+No entry sentences, world mutations, salience aging or allocations happen
+before this choice. POST to the existing `/clarify` endpoint with
+`{"groupingId": 1}`; exactly one of `objectId`, `position` or `groupingId` is
+required. A selected grouping can subsequently pause for reference resolution.
+Both steps remain one entry and one Undo unit. Invalid choices retain pending
+state. `checkSyntax` recognizes ambiguous but well-formed input without creating
+pending state or setting `syntaxError`; the subsequent chat call asks the question
+without invoking the LLM. Both domains use these same grouping and continuation
+mechanisms. Replays use the fully delimited canonical parser, retaining the
+chosen scope. Unsupported/missing continuation versions are rejected.
+
+Execution and previews in either domain return `changes`, an ordered list of:
+
+```json
+{"objectId":3,"kind":"position","detail":"#3: on D4 -> on D5"}
+```
+
+Kinds are `created`, `deleted`, `position`, and `appearance`. Details describe
+actual identity-specific effects, independent of rendering. Atomic failure or
+staged work has no committed changes. Preview changes are nested under
+`preview.changes` and never persisted as world edits.
+
+Interpretation proposals include `languageVersion`. Revision checks include
+the active version and allocation counter as well as world/discourse/messages.
+An older proposal cannot be previewed, accepted or answered; it remains
+rejectable so the original prompt can be resent. This rule applies to both domains.
 
 ## Visual editing
 
@@ -57,13 +115,27 @@ domain are rejected. The engine action has `"type":"ports"` with the same fields
 ## Engine requests and discourse storage
 
 Each FastAPI-to-Haskell request contains `domain`, `world`, `action`, `salience`,
-and nullable `pending`. Every successful response echoes `domain`. Invalid engine
+`languageVersion`, `nextObjectId`, and nullable `pending`. Every successful response echoes `domain`. Invalid engine
 requests exit with status 2 and diagnostics on stderr; execution failures are
 reported by FastAPI as HTTP 503. Syntax failures in chat remain normal responses
 with `isError: true` and feedback.
 
-Salience mentions retain `entry`, `utterance`, `objectId`, and `properties`.
-Attribute properties now have explicit identifiers:
+Salience mentions retain `entry`, `utterance`, and `properties`, plus exactly
+one typed reference: `objectId` for an object or `position: {x,y}` for a square.
+Existing object-only records retain their representation and remain readable.
+Square records cannot carry object attributes. Their true predicates use opaque
+`{"kind":"defined","value":"square:..."}` facts, recomputed by Haskell after
+updates. A square mention remains after its occupant is deleted; false occupancy
+facts are removed. Python stores the ranking unchanged and Undo restores both kinds.
+
+Mixed pronoun ties populate both `candidates`/`candidateIds` and `squareChoices`.
+The frontend labels the alternatives Object and Square and submits exactly one
+existing `/clarify` body (`objectId` or `position`). Replay records the typed
+choice. No implicit occupant/position conversion occurs. Square-only ties use
+`squareChoices` just like placement choices; the opaque program identifies the
+semantic purpose. Query/command syntax and punctuation remain v2.
+
+Attribute properties retain explicit identifiers:
 
 ```json
 {"kind":"attribute","attribute":"color","value":"red"}
@@ -75,28 +147,27 @@ Position properties retain their representation:
 {"kind":"position","value":{"x":0,"y":3}}
 ```
 
-Network computed facts in salience use `{"kind":"defined","value":"endpoint"}`.
-These are checked against the current world, including after visual edits; they
+Network computed facts use `{"kind":"defined","value":"v2:..."}`. This opaque
+engine encoding includes a grounded predicate and its graph expression, with
+reference operands bound to identifiers. Facts are rechecked against the current
+world, including changes to remote colors/ports and visual edits; they
 are not stored object attributes. World and salience snapshots are restored together by Undo.
 
 Pending entries retain sentence text, remaining text, candidates, resolved
 subjects, and square choices. They are parsed using the conversation's domain.
 
-## SQLite migration and client compatibility
+## SQLite release policy
 
-On startup, the API migrates every stored world snapshot from nullable
-`color`/`size`/`shape` fields to the attributes map, and every salience snapshot
-from descriptor words to explicit attribute/value properties. The conversion is
-transactional and versioned with SQLite `user_version = 1`. Conversation IDs,
-snapshot ordering, pending entries, and chat messages are preserved. Undo
-restores paired world/discourse snapshots within the same domain.
+Fresh databases use SQLite `user_version = 2`. An existing database with another
+schema version is rejected unchanged. There is no migration or legacy grammar
+continuation. The demo database is reset for this release, including conversation,
+salience, proposal, agent-session and local accounting records. Provider-side
+billing is unaffected.
 
-This is a breaking transport change. Flutter models and API transport now
-support both domains, and the existing objects editor sends generic property
-edits. The app bar switches domains, retaining one conversation per domain on the
-device. Network controls offer four colors and all 16 port patterns.
-Older Flutter clients cannot consume these worlds or send property edits.
-
+Flutter retains one conversation ID per domain. A removed conversation returns
+404 and the client creates a fresh one. Both domains retain seven fixed initial
+objects. The app bar switches domains; network controls offer four colors and
+all sixteen exact patterns. Generic object attributes are unchanged.
 
 ## Optional LLM translation and accounting
 
@@ -117,8 +188,9 @@ The flag is per request. FastAPI may translate only after Haskell reports a synt
 failure, and Haskell validates the proposed entry before evaluation.
 
 The Haskell bridge accepts `{"type":"checkSyntax","text":"..."}`: it returns
-canonical sentence text in `feedback`, without changing world, salience or
-pending state. A syntax failure in `chat` or `checkSyntax` adds `syntaxError: true`
+normalized readable sentence text in `feedback`, or explicitly grouped choices
+for an ambiguous object entry, without changing world, salience or pending
+state. A syntax failure in `chat` or `checkSyntax` adds `syntaxError: true`
 to the engine response. Other failures do not set it. These fields are internal
 to the FastAPI/Haskell boundary; Python does not parse controlled English.
 

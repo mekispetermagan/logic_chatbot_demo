@@ -74,7 +74,15 @@ class _DemoScreenState extends State<DemoScreen> {
           final worldPanel = PanelFrame(
             child: ConversationWorldPanel(
               conversation: _controller.conversation,
-              previewWorld: _controller.preview?.world,
+              previewWorld:
+                  _controller.preview?.pending?.stagedWorld ??
+                  _controller.preview?.world ??
+                  _controller.conversation?.pending?.stagedWorld,
+              previewLabel:
+                  _controller.preview == null &&
+                      _controller.conversation?.pending?.stagedWorld != null
+                  ? 'Provisional batch — not applied'
+                  : 'Preview — not applied',
               loading: _controller.loading,
               editing: _controller.editing,
               error: _controller.error,
@@ -113,12 +121,17 @@ class _DemoScreenState extends State<DemoScreen> {
               selectedInterpretationRank:
                   _controller.selectedInterpretationRank,
               canReview: _controller.canReview,
+              languageVersion:
+                  _controller.conversation?.languageVersion ?? 'unknown',
               onSelectInterpretation: _controller.selectInterpretation,
               onPreview: _controller.previewInterpretation,
               onAccept: _controller.acceptInterpretation,
               onReject: _controller.rejectInterpretation,
               onAnswer: _controller.answerInterpretation,
               onChoose: _controller.canRequest ? _controller.clarify : null,
+              onChooseGrouping: _controller.canRequest
+                  ? _controller.clarifyGrouping
+                  : null,
               onChooseSquare: _controller.canRequest
                   ? _controller.clarifySquare
                   : null,

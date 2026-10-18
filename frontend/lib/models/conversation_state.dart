@@ -17,6 +17,7 @@ class ConversationState {
     this.llmBudget,
     this.proposal,
     this.preview,
+    this.languageVersion = 'unknown',
   });
 
   factory ConversationState.fromJson(Map<String, dynamic> json) {
@@ -26,6 +27,7 @@ class ConversationState {
     return ConversationState(
       id: id,
       domain: domain,
+      languageVersion: json['languageVersion'] as String? ?? 'unknown',
       world: World.fromJson(json['world'] as Map<String, dynamic>),
       canUndo: json['canUndo'] as bool,
       llmBudget: json['llmBudget'] == null
@@ -63,6 +65,7 @@ class ConversationState {
   final LlmBudget? llmBudget;
   final InterpretationProposal? proposal;
   final InterpretationPreview? preview;
+  final String languageVersion;
 }
 
 class ClarificationCandidate {
@@ -76,14 +79,35 @@ class ClarificationCandidate {
   final String label;
 }
 
+class GroupingCandidate {
+  const GroupingCandidate({required this.groupingId, required this.label});
+  factory GroupingCandidate.fromJson(Map<String, dynamic> json) =>
+      GroupingCandidate(
+        groupingId: json['groupingId'] as int,
+        label: json['label'] as String,
+      );
+  final int groupingId;
+  final String label;
+}
+
 class PendingEntry {
   const PendingEntry({
     required this.sentence,
     required this.candidates,
     this.squareChoices = const [],
+    this.groupingChoices = const [],
+    this.stagedWorld,
   });
   factory PendingEntry.fromJson(Map<String, dynamic> json) => PendingEntry(
     sentence: json['sentence'] as String,
+    groupingChoices: List.unmodifiable(
+      (json['groupingChoices'] as List<dynamic>? ?? []).map(
+        (value) => GroupingCandidate.fromJson(value as Map<String, dynamic>),
+      ),
+    ),
+    stagedWorld: json['stagedWorld'] == null
+        ? null
+        : World.fromJson(json['stagedWorld'] as Map<String, dynamic>),
     squareChoices: List.unmodifiable(
       (json['squareChoices'] as List<dynamic>? ?? []).map(
         (value) => BoardPosition.fromJson(value as Map<String, dynamic>),
@@ -99,4 +123,6 @@ class PendingEntry {
   final String sentence;
   final List<ClarificationCandidate> candidates;
   final List<BoardPosition> squareChoices;
+  final List<GroupingCandidate> groupingChoices;
+  final World? stagedWorld;
 }

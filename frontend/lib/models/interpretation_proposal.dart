@@ -50,12 +50,14 @@ class InterpretationProposal {
     this.question = '',
     this.explanation = '',
     this.validationFailures = const [],
+    this.languageVersion = 'unknown',
   });
 
   factory InterpretationProposal.fromJson(Map<String, dynamic> json) =>
       InterpretationProposal(
         id: json['id'] as String,
         originalText: json['originalText'] as String,
+        languageVersion: json['languageVersion'] as String? ?? 'unknown',
         question: json['question'] as String? ?? '',
         explanation: json['explanation'] as String? ?? '',
         validationFailures: List.unmodifiable(
@@ -78,6 +80,7 @@ class InterpretationProposal {
   final String explanation;
   final List<InterpretationCandidate> candidates;
   final List<InterpretationFailure> validationFailures;
+  final String languageVersion;
 
   bool get canAnswer =>
       question.isNotEmpty ||
@@ -92,6 +95,7 @@ class InterpretationPreview {
     required this.world,
     required this.feedback,
     this.pending,
+    this.changes = const [],
   });
 
   factory InterpretationPreview.fromJson(Map<String, dynamic> json) =>
@@ -100,6 +104,11 @@ class InterpretationPreview {
         rank: json['rank'] as int,
         world: World.fromJson(json['world'] as Map<String, dynamic>),
         feedback: json['feedback'] as String,
+        changes: List.unmodifiable(
+          (json['changes'] as List<dynamic>? ?? []).map(
+            (value) => WorldChange.fromJson(value as Map<String, dynamic>),
+          ),
+        ),
         pending: json['pending'] == null
             ? null
             : PendingEntry.fromJson(json['pending'] as Map<String, dynamic>),
@@ -110,4 +119,21 @@ class InterpretationPreview {
   final World world;
   final String feedback;
   final PendingEntry? pending;
+  final List<WorldChange> changes;
+}
+
+class WorldChange {
+  const WorldChange({
+    required this.objectId,
+    required this.kind,
+    required this.detail,
+  });
+  factory WorldChange.fromJson(Map<String, dynamic> json) => WorldChange(
+    objectId: json['objectId'] as int,
+    kind: json['kind'] as String,
+    detail: json['detail'] as String,
+  );
+  final int objectId;
+  final String kind;
+  final String detail;
 }

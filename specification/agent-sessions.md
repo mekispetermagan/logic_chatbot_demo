@@ -8,11 +8,20 @@ stateless transport; there is no automatic provider/model fallback.
 
 ## Instructions and saved agents
 
-[`agent-instructions-draft.md`](agent-instructions-draft.md) is the approved,
-versioned instruction source despite its original draft filename. The assembler
-in `backend/api/app/agent_instructions.py` includes its common section, shared
-language reference, exactly one domain section, and that domain's validated
-examples. Assembly notes for maintainers are excluded.
+Both agents receive their standalone v2 language reference: [Objects v2](object-language-v2.md)
+with 184 validated examples, or [Network v2](network-language-v2.md) with 214.
+Both transports assemble the same reviewed instructions for their active domain.
+Explicit creation, location/occupant distinctions, identity versus appearance,
+and consequential graph-scope alternatives are part of those contracts.
+
+[`agent-instructions-draft.md`](agent-instructions-draft.md) is the approved
+instruction source despite its original filename. `app/agent_instructions.py`
+assembles common policy, one domain section, its standalone grammar and its
+examples. It excludes maintainer assembly notes and the other domain’s language.
+
+The v2 release resets the local database. Previous agent/session metadata,
+conversations and continuation state are discontinued. Agents are configured
+lazily on the next LLM request.
 
 On the first LLM use of each domain, FastAPI creates a saved agent and stores its
 ID and assembled configuration hash in `llm_agents`. The configuration fixes

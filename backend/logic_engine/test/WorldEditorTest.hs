@@ -51,8 +51,12 @@ main = do
       expected = object ["domain" .= ("objects" :: String), "world" .= object ["width" .= (8 :: Int), "height" .= (8 :: Int),
                     "objects" .= [object ["id" .= (0 :: Int), "attributes" .= object ["color" .= ("red" :: String)],
                                           "position" .= object ["x" .= (0 :: Int), "y" .= (0 :: Int)]]]],
-                         "feedback" .= ("Created #0: red" :: String), "salience" .= ([] :: [Value]),
-                         "pending" .= (Nothing :: Maybe Value), "isError" .= False]
+                         "feedback" .= ("Created #0; #0: none -> red" :: String), "salience" .= ([] :: [Value]),
+                         "pending" .= (Nothing :: Maybe Value), "isError" .= False,
+                         "languageVersion" .= ("objects-v2" :: String), "nextObjectId" .= (1 :: Int),
+                         "syntaxError" .= False, "undoRequested" .= False,
+                         "changes" .= [object ["objectId" .= (0 :: Int), "kind" .= ("created" :: String),
+                           "detail" .= ("Created #0: color red, size none, shape none; on A1" :: String)]]]
   check "JSON round trip with generic attributes"
     ((eitherDecode (encode request) >>= processRequest) == Right expected)
   check "JSON requires explicit domain"
@@ -69,11 +73,13 @@ main = do
        "position" .= object ["x" .= (0 :: Int), "y" .= (0 :: Int)]]])))
   let undoRequest = object ["domain" .= ("objects" :: String), "world" .= emptyJson,
                            "action" .= object ["type" .= ("chat" :: String),
-                             "text" .= (" \tUnDo #999 red. invalid suffix" :: String)]]
+                             "text" .= (" \tUnDo." :: String)]]
       undoReply = object ["domain" .= ("objects" :: String), "world" .= emptyJson, "salience" .= ([] :: [Value]),
                           "pending" .= (Nothing :: Maybe Value),
                           "feedback" .= ("" :: String), "isError" .= False,
-                          "undoRequested" .= True]
-  check "undo request precedes grammar parsing without evaluating suffix"
+                          "undoRequested" .= True, "syntaxError" .= False,
+                          "languageVersion" .= ("objects-v2" :: String), "nextObjectId" .= (0 :: Int),
+                          "changes" .= ([] :: [Value])]
+  check "exact undo request uses canonical entry form"
     (processRequest undoRequest == Right undoReply)
   putStrLn "All world editor checks passed."

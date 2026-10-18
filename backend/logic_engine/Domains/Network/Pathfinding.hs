@@ -13,10 +13,17 @@ type PositionIndex = Map.Map Position Object
 -- Empty squares are virtual crosses during search. First discovery fixes the
 -- predecessor, so ordered frontiers preserve north/east/south/west tie-breaking.
 shortestConnectionPath :: World -> Position -> Position -> Maybe [Position]
-shortestConnectionPath world source target
+shortestConnectionPath = shortestConnectionPathWith False
+
+-- Endpoint ports may be opened by the v2 construction macro. Intermediates stay fixed.
+shortestConnectionPathOpeningEndpoints :: World -> Position -> Position -> Maybe [Position]
+shortestConnectionPathOpeningEndpoints = shortestConnectionPathWith True
+
+shortestConnectionPathWith :: Bool -> World -> Position -> Position -> Maybe [Position]
+shortestConnectionPathWith opening world source target
   | not (inDomainBounds networkDomain source && inDomainBounds networkDomain target) = Nothing
   | otherwise = search
-                  (positionIndexOf $ saturate world)
+                  (Map.mapWithKey (\p o -> if opening && p `elem` [source,target] then Pattern.setPorts Pattern.ports o else o) (positionIndexOf $ saturate world))
                   (Set.singleton source)
                   [source]
                   Map.empty

@@ -3,8 +3,6 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Iterator
 
-from .migrations import migrate_attribute_encoding
-
 
 class Database:
     def __init__(self, path: Path):
@@ -25,16 +23,24 @@ class Database:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with self.connection() as connection:
             connection.execute("PRAGMA journal_mode = WAL")
+            version = connection.execute("PRAGMA user_version").fetchone()[0]
+            tables = connection.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()
+            if tables and version != 2:
+                raise RuntimeError("Legacy demo database is unsupported. Delete it to initialize language v2.")
             connection.executescript("""
                 CREATE TABLE IF NOT EXISTS conversations (
                     id TEXT PRIMARY KEY,
-                    domain TEXT NOT NULL DEFAULT 'objects',
+                    domain TEXT NOT NULL,
+                    language_version TEXT NOT NULL,
+                    next_object_id INTEGER NOT NULL CHECK (next_object_id >= 0),
                     created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
                 );
                 CREATE TABLE IF NOT EXISTS world_snapshots (
                     conversation_id TEXT NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
                     sequence INTEGER NOT NULL CHECK (sequence >= 0),
                     world_json TEXT NOT NULL,
+                    salience_json TEXT NOT NULL DEFAULT '[]',
+                    pending_json TEXT NOT NULL DEFAULT 'null',
                     created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
                     PRIMARY KEY (conversation_id, sequence)
                 );
@@ -44,6 +50,7 @@ class Database:
                     role TEXT NOT NULL CHECK (role IN ('user', 'machine')),
                     text TEXT NOT NULL,
                     is_error INTEGER NOT NULL DEFAULT 0,
+                    llm_json TEXT,
                     PRIMARY KEY (conversation_id, sequence)
                 );
                 CREATE TABLE IF NOT EXISTS llm_requests (
@@ -91,18 +98,4 @@ class Database:
                 );
             """)
 
-            conversation_columns = {row["name"] for row in connection.execute("PRAGMA table_info(conversations)")}
-            if "domain" not in conversation_columns:
-                connection.execute("ALTER TABLE conversations ADD COLUMN domain TEXT NOT NULL DEFAULT 'objects'")
-
-            columns = {row["name"] for row in connection.execute("PRAGMA table_info(world_snapshots)")}
-            for name, default in (("salience_json", "[]"), ("pending_json", "null")):
-                if name not in columns:
-                    connection.execute(f"ALTER TABLE world_snapshots ADD COLUMN {name} TEXT NOT NULL DEFAULT '{default}'")
-            message_columns = {row["name"] for row in connection.execute("PRAGMA table_info(chat_messages)")}
-            if "llm_json" not in message_columns:
-                connection.execute("ALTER TABLE chat_messages ADD COLUMN llm_json TEXT")
-
-            # Commit schema additions before acquiring the migration write lock.
-            connection.commit()
-            migrate_attribute_encoding(connection)
+            connection.execute("PRAGMA user_version = 2")

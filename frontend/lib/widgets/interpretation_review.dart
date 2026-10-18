@@ -13,6 +13,7 @@ class InterpretationReview extends StatelessWidget {
     required this.onAccept,
     required this.onReject,
     this.preview,
+    this.languageVersion = 'unknown',
   });
 
   final InterpretationProposal proposal;
@@ -23,10 +24,12 @@ class InterpretationReview extends StatelessWidget {
   final VoidCallback onAccept;
   final VoidCallback onReject;
   final InterpretationPreview? preview;
+  final String languageVersion;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final stale = proposal.languageVersion != languageVersion;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -44,6 +47,10 @@ class InterpretationReview extends StatelessWidget {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
+            if (stale)
+              const Text(
+                'This interpretation uses an older language version. Reject it and resend your prompt.',
+              ),
             if (proposal.question.isNotEmpty) ...[
               SelectableText(
                 proposal.question,
@@ -125,12 +132,16 @@ class InterpretationReview extends StatelessWidget {
               runSpacing: 8,
               children: [
                 OutlinedButton.icon(
-                  onPressed: enabled && selectedRank != null ? onPreview : null,
+                  onPressed: enabled && !stale && selectedRank != null
+                      ? onPreview
+                      : null,
                   icon: const Icon(Icons.visibility_outlined),
                   label: const Text('Preview'),
                 ),
                 FilledButton.icon(
-                  onPressed: enabled && selectedRank != null ? onAccept : null,
+                  onPressed: enabled && !stale && selectedRank != null
+                      ? onAccept
+                      : null,
                   icon: const Icon(Icons.check),
                   label: const Text('Accept'),
                 ),
@@ -155,8 +166,31 @@ class InterpretationReview extends StatelessWidget {
               ),
               if (result.pending != null)
                 const Text(
-                  'The engine will ask for a reference clarification after acceptance.',
+                  'The engine will ask for an object or square clarification after acceptance.',
                 ),
+              if (result.pending?.stagedWorld != null)
+                const Text(
+                  'This board is a provisional atomic-batch preview; none of its changes are committed.',
+                ),
+              if (result.changes.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                const Text(
+                  'Identity and state changes',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                for (final change in result.changes)
+                  ListTile(
+                    dense: true,
+                    contentPadding: EdgeInsets.zero,
+                    leading: Icon(switch (change.kind) {
+                      'position' => Icons.open_with,
+                      'created' => Icons.add_circle_outline,
+                      'deleted' => Icons.remove_circle_outline,
+                      _ => Icons.palette_outlined,
+                    }),
+                    title: Text(change.detail),
+                  ),
+              ],
               SelectableText(
                 result.feedback,
                 style: const TextStyle(fontFamily: 'monospace'),

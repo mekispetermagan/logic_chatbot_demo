@@ -1,4 +1,5 @@
 import os
+import json
 import sqlite3
 import tempfile
 import unittest
@@ -35,388 +36,463 @@ class ChatTests(unittest.TestCase):
         with Database(self.path).connection() as connection:
             return connection.execute("SELECT count(*) FROM world_snapshots").fetchone()[0]
 
+    def clear(self):
+        return self.client.post(self.base + '/clear').json()
+
+    def seed(self, specifications):
+        start = self.client.get(self.base).json()['nextObjectId']
+        result = self.chat(' '.join(f'Create object {spec}.' for spec in specifications))
+        self.assertFalse(result['messages'][-1]['isError'], result['feedback'])
+        return result, list(range(start, start + len(specifications)))
+
+    def obj(self, state, identifier):
+        return next(o for o in state['world']['objects'] if o['id'] == identifier)
+
+    def choose(self, **choice):
+        response = self.client.post(self.base + '/clarify', json=choice)
+        self.assertEqual(response.status_code, 200, response.text)
+        return response.json()
+
+    def ranking(self):
+        with Database(self.path).connection() as connection:
+            return connection.execute('SELECT salience_json FROM world_snapshots ORDER BY sequence DESC LIMIT 1').fetchone()[0]
+
+    def test_surface_normalization_across_descriptions_conditions_and_offsets(self):
+        self.clear()
+        created, (identifier,) = self.seed(['with color red and shape bloom on C4'])
+        result = self.chat(f'Set appearance of #{identifier} to color blue, size none, shape loop. '
+                           f'Shift positions of objects [#{identifier}] by east 1, north 0. '
+                           'Does the object with color blue satisfy on a square matching shading is light?')
+        self.assertIsNone(result['pending'])
+        self.assertFalse(result['messages'][-1]['isError'], result['feedback'])
+        self.assertEqual(self.obj(result, identifier)['position'], {'x': 3, 'y': 3})
+        self.assertEqual(self.obj(result, identifier)['attributes'], {'color':'blue', 'shape':'loop'})
+        self.assertNotIn('with (', created['feedback'])
+        self.assertNotIn('matching (shading', result['feedback'])
+
+    def test_grouping_clarification_survives_restart_and_undo_covers_whole_entry(self):
+        self.clear()
+        before, (identifier,) = self.seed(['with color red and size small and shape loop on A1'])
+        old_ranking, old_snapshots = self.ranking(), self.snapshots()
+        text = f'Create object off the board. Does #{identifier} satisfy color is red or size is large and shape is bloom?'
+        translator = self.client.app.state.conversation_service.translator
+        with patch.object(translator, 'translate', side_effect=AssertionError('Grouping must not call the LLM')):
+            response = self.client.post(self.base + '/chat', json={'text':text, 'useLlm':True})
+        self.assertEqual(response.status_code, 200, response.text)
+        paused = response.json()
+        self.assertEqual(paused['world'], before['world'])
+        self.assertEqual(paused['nextObjectId'], before['nextObjectId'])
+        self.assertEqual(self.ranking(), old_ranking)
+        self.assertFalse(paused['messages'][-1]['isError'])
+        choices = paused['pending']['groupingChoices']
+        self.assertEqual(len(choices), 2)
+        self.assertEqual(paused['pending']['candidateIds'], [])
+        self.assertEqual(paused['pending']['payload']['version'], 'objects-v2-grouping')
+        self.assertEqual(self.snapshots(), old_snapshots + 1)
+        selected = next(c['groupingId'] for c in choices if 'or (size is large and shape is bloom)' in c['label'])
+        with TestClient(create_app(self.settings)) as restarted:
+            self.assertEqual(restarted.get(self.base).json()['pending'], paused['pending'])
+            response = restarted.post(self.base + '/clarify', json={'groupingId':selected})
+            self.assertEqual(response.status_code, 200, response.text)
+            result = response.json()
+        self.assertIsNone(result['pending'])
+        self.assertFalse(result['messages'][-1]['isError'], result['feedback'])
+        self.assertTrue(result['feedback'].endswith('\n  true'), result['feedback'])
+        self.assertEqual(len(result['world']['objects']), 2)
+        self.assertEqual(result['nextObjectId'], before['nextObjectId'] + 1)
+        self.assertEqual(self.snapshots(), old_snapshots + 1)
+        undone = self.chat('Undo.')
+        self.assertEqual(undone['world'], before['world'])
+        self.assertEqual(self.ranking(), old_ranking)
+        self.assertIsNone(undone['pending'])
+
+    def test_grouping_choice_can_lead_to_reference_clarification_without_execution(self):
+        self.clear()
+        before, ids = self.seed(['with color red off the board', 'with color red off the board'])
+        result = self.chat('Does the unique object matching color is red satisfy color is red or size is large and shape is bloom?')
+        self.assertEqual(len(result['pending']['groupingChoices']), 2)
+        result = self.choose(groupingId=1)
+        self.assertCountEqual(result['pending']['candidateIds'], ids)
+        self.assertEqual(result['pending']['groupingChoices'], [])
+        result = self.choose(objectId=ids[0])
+        self.assertIsNone(result['pending'])
+        self.assertEqual(result['world'], before['world'])
+        self.assertFalse(result['messages'][-1]['isError'], result['feedback'])
+
+    def test_grouping_validation_cancel_and_equivalent_associations(self):
+        result = self.chat('Does #0 satisfy color is red or size is large and shape is bloom?')
+        pending = result['pending']
+        for choice in ({}, {'groupingId':0}, {'groupingId':True}, {'groupingId':1,'objectId':0},
+                       {'groupingId':1,'position':{'x':0,'y':0}}):
+            response = self.client.post(self.base + '/clarify', json=choice)
+            self.assertEqual(response.status_code, 422, response.text)
+        invalid = self.choose(groupingId=99)
+        self.assertEqual(invalid['pending'], pending)
+        wrong_kind = self.choose(objectId=0)
+        self.assertEqual(wrong_kind['pending'], pending)
+        self.assertEqual(self.client.post(self.base + '/clear').status_code, 409)
+        undone = self.chat('Undo.')
+        self.assertEqual(undone['world'], self.initial['world'])
+        self.assertIsNone(undone['pending'])
+        result = self.chat('Does #0 satisfy color is red and size is large and shape is bloom?')
+        self.assertIsNone(result['pending'])
+        self.assertFalse(result['messages'][-1]['isError'], result['feedback'])
+
     def test_square_occupancy_questions_in_both_domains(self):
         for domain in ('objects', 'network'):
-            with self.subTest(domain=domain):
-                state = self.client.post('/conversations', json={'domain': domain}).json()
-                base = '/conversations/' + state['conversationId']
-                self.client.post(base + '/clear')
-                for text, answer in [('Is the square D4 occupied?', 'false'),
-                                     ('D4 red. Is square D4 taken?', 'true')]:
-                    response = self.client.post(base + '/chat', json={'text': text})
-                    self.assertEqual(response.status_code, 200, response.text)
-                    result = response.json()
-                    self.assertFalse(result['messages'][-1]['isError'])
-                    self.assertTrue(result['feedback'].endswith('\n  ' + answer))
-                before = result['world']
-                result = self.client.post(base + '/chat', json={'text': 'Is the square A1 taken?'}).json()
-                self.assertEqual(result['world'], before)
-                self.assertTrue(result['feedback'].endswith('\n  false'))
-                result = self.client.post(base + '/chat', json={'text': 'Is the square D4 free?'}).json()
-                self.assertTrue(result['messages'][-1]['isError'])
-                self.assertEqual(result['world'], before)
+            state = self.client.post('/conversations', json={'domain': domain}).json()
+            base = '/conversations/' + state['conversationId']
+            self.client.post(base + '/clear')
+            entries = [('Does D4 satisfy (occupied)?', False),
+                       ('Create object with (color red) on D4. Does D4 satisfy (occupied)?', True),
+                       ('Does A1 satisfy (not occupied)?', True)]
+            for text, answer in entries:
+                result = self.client.post(base + '/chat', json={'text': text}).json()
+                self.assertFalse(result['messages'][-1]['isError'], result['feedback'])
+                self.assertTrue(result['feedback'].endswith('\n  ' + str(answer).lower()))
 
     def test_sequence_one_snapshot_and_undo_keeps_messages(self):
-        text = "#0 blue. #0 small. #0 blue? color of #0?"
+        text = 'Set color of #0 to blue. Set size of #0 to small. Does #0 satisfy (color is blue)? What is the color of #0?'
         result = self.chat(text)
-        obj = next(obj for obj in result["world"]["objects"] if obj["id"] == 0)
-        self.assertEqual((obj["attributes"].get("color"), obj["attributes"].get("size")), ("blue", "small"))
+        self.assertEqual(self.obj(result, 0)['attributes']['color'], 'blue')
+        self.assertEqual(self.obj(result, 0)['attributes']['size'], 'small')
         self.assertEqual(self.snapshots(), 2)
-        self.assertEqual(result["messages"][0]["text"], text)
-        self.assertEqual(result["messages"][1]["text"], result["feedback"])
-        self.assertIn("#0 is blue?\n  true", result["feedback"])
-        self.assertIn("color of #0?\n  blue", result["feedback"])
-        undone = self.client.post(f"{self.base}/undo").json()
-        self.assertEqual(undone["world"], self.initial["world"])
-        self.assertEqual(undone["messages"], result["messages"])
+        self.assertEqual(result['messages'][0]['text'], text)
+        self.assertTrue(result['feedback'].endswith('\n  blue'))
+        undone = self.chat('Undo.')
+        self.assertEqual(undone['world'], self.initial['world'])
         self.assertEqual(self.snapshots(), 1)
+        self.assertEqual(undone['messages'][:2], result['messages'])
 
     def test_questions_create_discourse_snapshot_parse_errors_do_not(self):
-        self.chat("color of #0? #0 red?")
-        result = self.chat("#0 blue. not a sentence")
-        self.assertEqual(result["world"], self.initial["world"])
+        self.chat('What is the color of #0? Does #0 satisfy (color is red)?')
+        result = self.chat('Set color of #0 to blue. not a sentence')
+        self.assertEqual(result['world'], self.initial['world'])
         self.assertEqual(self.snapshots(), 2)
-        self.assertTrue(result["messages"][-1]["isError"])
-        self.assertEqual([m["role"] for m in result["messages"]], ["user", "machine", "user", "machine"])
+        self.assertTrue(result['messages'][-1]['isError'])
 
     def test_revision_returning_to_original_world_has_discourse_undo(self):
-        result = self.chat("#0 blue. #0 red.")
-        self.assertEqual(result["world"], self.initial["world"])
+        old = self.obj(self.initial, 0)['attributes']['color']
+        result = self.chat(f'Set color of #0 to blue. Set color of #0 to {old}.')
+        self.assertEqual(result['world'], self.initial['world'])
         self.assertEqual(self.snapshots(), 2)
-        self.assertTrue(result["canUndo"])
+        self.assertTrue(result['canUndo'])
 
     def test_restart_isolation_and_visual_edits_preserve_chat(self):
-        result = self.chat("#99 green. color of #99?")
-        self.assertIsNone(next(o for o in result["world"]["objects"] if o["id"] == 99)["position"])
-        visual = self.client.post(f"{self.base}/clear").json()
-        self.assertEqual(visual["messages"], result["messages"])
+        result, (n,) = self.seed(['with (color green) off the board'])
+        self.assertIsNone(self.obj(result, n)['position'])
+        visual = self.clear()
+        self.assertEqual(visual['messages'], result['messages'])
         with TestClient(create_app(self.settings)) as restarted:
             loaded = restarted.get(self.base).json()
-            self.assertEqual(loaded["messages"], result["messages"])
-            self.assertEqual(loaded["world"], visual["world"])
-        other = self.client.post("/conversations", json={"domain": "objects"}).json()
-        self.assertEqual(other["messages"], [])
+            self.assertEqual(loaded['messages'], result['messages'])
+            self.assertEqual(loaded['world'], visual['world'])
+            self.assertEqual(loaded['languageVersion'], 'objects-v2')
+            self.assertEqual(loaded['nextObjectId'], n + 1)
+        other = self.client.post('/conversations', json={'domain': 'objects'}).json()
+        self.assertEqual(other['messages'], [])
 
     def test_invalid_request_and_engine_failure_save_nothing(self):
-        for body in [{"text": ""}, {"text": " \n "}, {"text": 3}, {}]:
-            self.assertEqual(self.client.post(f"{self.base}/chat", json=body).status_code, 422)
-        self.assertEqual(self.client.post(f"/conversations/{uuid4()}/chat", json={"text": "#0 red."}).status_code, 404)
-        with patch("app.engine.subprocess.run", side_effect=FileNotFoundError()):
-            self.assertEqual(self.client.post(f"{self.base}/chat", json={"text": "#0 blue."}).status_code, 503)
+        for body in [{'text': ''}, {'text': ' \n '}, {'text': 3}, {}]:
+            self.assertEqual(self.client.post(self.base + '/chat', json=body).status_code, 422)
+        self.assertEqual(self.client.post(f'/conversations/{uuid4()}/chat', json={'text': 'Set color of #0 to red.'}).status_code, 404)
+        with patch('app.engine.subprocess.run', side_effect=FileNotFoundError()):
+            self.assertEqual(self.client.post(self.base + '/chat', json={'text': 'Set color of #0 to blue.'}).status_code, 503)
         self.assertEqual(self.client.get(self.base).json(), self.initial)
 
-    def test_message_insert_failure_rolls_back_world_update(self):
+    def test_message_insert_failure_rolls_back_world_and_allocator(self):
         with Database(self.path).connection() as connection:
-            connection.execute("""CREATE TRIGGER reject_message BEFORE INSERT ON chat_messages
-                BEGIN SELECT RAISE(ABORT, 'message rejected'); END;""")
+            connection.execute("CREATE TRIGGER reject_message BEFORE INSERT ON chat_messages BEGIN SELECT RAISE(ABORT, 'message rejected'); END;")
         with self.assertRaises(sqlite3.IntegrityError):
-            self.client.post(f"{self.base}/chat", json={"text": "#0 blue."})
+            self.client.post(self.base + '/chat', json={'text': 'Create object off the board.'})
         self.assertEqual(self.snapshots(), 1)
         self.assertEqual(self.client.get(self.base).json(), self.initial)
 
-    def test_new_shape_aliases_evaluate_and_return_canonical_names(self):
-        self.client.post(f"{self.base}/clear")
-        result = self.chat("A flower on A1. A star on B1. A tear on C1. A ring on D1. Shape of the ring?")
-        self.assertFalse(result["messages"][-1]["isError"])
-        self.assertIsNone(result["pending"])
-        shapes = {obj["id"]: obj["attributes"].get("shape") for obj in result["world"]["objects"]}
-        self.assertEqual(shapes, {0: "bloom", 1: "spark", 2: "drop", 3: "loop"})
-        self.assertIn("shape of the loop?\n  loop", result["feedback"])
-        for shape in ["cube", "sphere", "pyramid"]:
-            rejected = self.chat(f"#0 {shape}")
-            self.assertTrue(rejected["messages"][-1]["isError"])
-            self.assertEqual(rejected["world"], result["world"])
+    def test_canonical_shapes_and_no_aliases_or_shorthand(self):
+        self.clear()
+        result, ids = self.seed([f'with (shape {shape}) on {column}1' for shape, column in zip(['bloom', 'spark', 'drop', 'loop'], 'ABCD')])
+        self.assertEqual([self.obj(result, n)['attributes']['shape'] for n in ids], ['bloom', 'spark', 'drop', 'loop'])
+        for text in ['Create object with (shape flower) on E1.', 'A1 red.', f'#{ids[0]} red.', 'Set color of it to red', 'undo rest ignored']:
+            rejected = self.chat(text)
+            self.assertTrue(rejected['messages'][-1]['isError'])
+            self.assertEqual(rejected['world'], result['world'])
 
     def test_layer2_evaluation(self):
-        result = self.chat("#99 is a large blue spark. It is red. Color of the spark?")
-        self.assertIn("red", result["feedback"])
-        obj = next(o for o in result["world"]["objects"] if o["id"] == 99)
-        self.assertEqual((obj["attributes"].get("color"), obj["attributes"].get("shape"), obj["attributes"].get("size")), ("red", "spark", "large"))
-        self.assertEqual(self.snapshots(), 2)
+        result, (n,) = self.seed(['with (color blue and size large and shape spark) off the board'])
+        result = self.chat('Set color of it to red. What is the color of the object with (shape spark)?')
+        self.assertEqual(self.obj(result, n)['attributes'], {'color': 'red', 'shape': 'spark', 'size': 'large'})
+        self.assertTrue(result['feedback'].endswith('\n  red'))
 
-    def test_natural_atomic_forms_use_existing_evaluation(self):
-        result = self.chat("#0 is a blue. Is #0 blue? What is the color of #0?")
-        self.assertIn("#0 is blue?\n  true", result["feedback"])
-        self.assertIn("color of #0?\n  blue", result["feedback"])
-        self.assertEqual(self.snapshots(), 2)
-        rejected = self.chat("#0 red #0 green")
-        self.assertTrue(rejected["messages"][-1]["isError"])
-        self.assertEqual(rejected["world"], result["world"])
+    def test_missing_update_does_not_create_and_stops_sequence(self):
+        before = self.client.get(self.base).json()
+        result = self.chat('Set color of #999 to blue. Create object off the board.')
+        self.assertTrue(result['messages'][-1]['isError'])
+        self.assertEqual(result['world'], before['world'])
+        self.assertEqual(result['nextObjectId'], before['nextObjectId'])
+        self.assertIn('Not executed', result['feedback'])
 
     def test_pending_restart_resume_and_whole_entry_undo(self):
-        self.client.post(f"{self.base}/clear")
-        before = self.chat("#0 bloom. #1 bloom.")
-        paused = self.chat("#2 red. The bloom is blue. It is large.")
-        self.assertIsNotNone(paused["pending"])
-        self.assertCountEqual(paused["pending"]["candidateIds"], [0, 1])
-        self.assertIsNone(next(o for o in paused["world"]["objects"] if o["id"] == 0)["attributes"].get("color"))
-        self.assertEqual(self.snapshots(), 4)
-        for action, body in [("clear", None), ("chat", {"text": "#8 red."})]:
-            self.assertEqual(self.client.post(f"{self.base}/{action}", json=body).status_code, 409)
+        self.clear()
+        before, (a,b) = self.seed(['with (shape bloom) off the board'] * 2)
+        n = before['nextObjectId']
+        paused = self.chat('Create object with (color red) off the board. Set color of the object with (shape bloom) to blue. Set size of it to large.')
+        self.assertCountEqual(paused['pending']['candidateIds'], [a,b])
+        count = self.snapshots()
+        self.assertIn(n, [o['id'] for o in paused['world']['objects']])
+        for action, body in [('clear', None), ('chat', {'text': 'Create object off the board.'})]:
+            self.assertEqual(self.client.post(self.base + '/' + action, json=body).status_code, 409)
         with TestClient(create_app(self.settings)) as restarted:
-            self.assertEqual(restarted.get(self.base).json()["pending"], paused["pending"])
-            resumed = restarted.post(f"{self.base}/clarify", json={"objectId": 1}).json()
-        self.assertIsNone(resumed["pending"])
-        obj = next(o for o in resumed["world"]["objects"] if o["id"] == 1)
-        self.assertEqual((obj["attributes"].get("color"), obj["attributes"].get("size")), ("blue", "large"))
-        self.assertEqual(self.snapshots(), 4)
-        undone = self.client.post(f"{self.base}/undo").json()
-        self.assertEqual(undone["world"], before["world"])
-        self.assertIsNone(undone["pending"])
-        # Undo restored the previous entry's most recent referent (#1).
-        result = self.chat("It is green.")
-        self.assertEqual(next(o for o in result["world"]["objects"] if o["id"] == 1)["attributes"].get("color"), "green")
+            self.assertEqual(restarted.get(self.base).json()['pending'], paused['pending'])
+            resumed = restarted.post(self.base + '/clarify', json={'objectId': b}).json()
+        self.assertIsNone(resumed['pending'])
+        self.assertEqual(self.obj(resumed, b)['attributes'], {'shape': 'bloom', 'color': 'blue', 'size': 'large'})
+        self.assertEqual(self.snapshots(), count)
+        undone = self.chat('Undo.')
+        self.assertEqual(undone['world'], before['world'])
+        self.assertGreater(undone['nextObjectId'], n)
+        referenced = self.chat('Set color of it to green.')
+        self.assertEqual(self.obj(referenced, b)['attributes']['color'], 'green')
 
-    def test_undo_pending_and_question_salience(self):
-        self.chat("#0 red?")
-        self.chat("#1 blue?")
-        self.client.post(f"{self.base}/undo")
-        result = self.chat("It is yellow.")
-        self.assertEqual(next(o for o in result["world"]["objects"] if o["id"] == 0)["attributes"].get("color"), "yellow")
+    def test_undo_restores_question_salience(self):
+        self.chat('Does #0 satisfy (color is red)?')
+        self.chat('Does #1 satisfy (color is blue)?')
+        self.chat('Undo.')
+        result = self.chat('Set color of it to yellow.')
+        self.assertEqual(self.obj(result, 0)['attributes']['color'], 'yellow')
 
     def test_invalid_choice_keeps_pending_and_no_new_snapshot(self):
-        self.client.post(f"{self.base}/clear")
-        before = self.chat("#0 bloom. #1 bloom.")
-        paused = self.chat("The bloom is blue.")
+        self.clear()
+        before, ids = self.seed(['with (shape bloom) off the board'] * 2)
+        paused = self.chat('Set color of the object with (shape bloom) to blue.')
         count = self.snapshots()
-        reply = self.client.post(f"{self.base}/clarify", json={"objectId": 99}).json()
-        self.assertEqual(reply["pending"], paused["pending"])
+        invalid = self.choose(objectId=999)
+        self.assertEqual(invalid['pending'], paused['pending'])
         self.assertEqual(self.snapshots(), count)
-        undone = self.client.post(f"{self.base}/undo").json()
-        self.assertEqual(undone["world"], before["world"])
-        self.assertIsNone(undone["pending"])
-        self.assertEqual(self.client.post(f"{self.base}/clarify", json={"objectId": 0}).status_code, 409)
+        self.assertEqual(self.chat('Undo.')['world'], before['world'])
+        self.assertEqual(self.client.post(self.base + '/clarify', json={'objectId': ids[0]}).status_code, 409)
 
     def test_repeated_clarifications_stay_in_one_undo_unit(self):
-        self.client.post(f"{self.base}/clear")
-        before = self.chat("#0 bloom. #1 bloom. #2 spark. #3 spark.")
-        first = self.chat("The bloom is blue. The spark is green.")
+        self.clear()
+        before, (a,b,c,d) = self.seed(['with (shape bloom) off the board']*2 + ['with (shape spark) off the board']*2)
+        first = self.chat('Set color of the object with (shape bloom) to blue. Set color of the object with (shape spark) to green.')
         count = self.snapshots()
-        second = self.client.post(f"{self.base}/clarify", json={"objectId": 0}).json()
-        self.assertIsNotNone(second["pending"])
-        self.assertCountEqual(second["pending"]["candidateIds"], [2, 3])
+        self.assertCountEqual(first['pending']['candidateIds'], [a,b])
+        second = self.choose(objectId=a)
+        self.assertCountEqual(second['pending']['candidateIds'], [c,d])
+        complete = self.choose(objectId=c)
+        self.assertIsNone(complete['pending'])
         self.assertEqual(self.snapshots(), count)
-        complete = self.client.post(f"{self.base}/clarify", json={"objectId": 2}).json()
-        self.assertIsNone(complete["pending"])
-        self.assertEqual(self.snapshots(), count)
-        undone = self.client.post(f"{self.base}/undo").json()
-        self.assertEqual(undone["world"], before["world"])
+        self.assertEqual(self.chat('Undo.')['world'], before['world'])
 
     def test_continuation_failure_rolls_back_world_salience_and_pending(self):
-        self.client.post(f"{self.base}/clear")
-        self.chat("#0 bloom. #1 bloom.")
-        paused = self.chat("The bloom is blue.")
+        self.clear()
+        _, (a,b) = self.seed(['with (shape bloom) off the board'] * 2)
+        paused = self.chat('Set color of the object with (shape bloom) to blue.')
         with Database(self.path).connection() as connection:
-            connection.execute("""CREATE TRIGGER reject_continuation BEFORE UPDATE ON world_snapshots
-                BEGIN SELECT RAISE(ABORT, 'continuation rejected'); END;""")
+            connection.execute("CREATE TRIGGER reject_continuation BEFORE UPDATE ON world_snapshots BEGIN SELECT RAISE(ABORT, 'continuation rejected'); END;")
         with self.assertRaises(sqlite3.IntegrityError):
-            self.client.post(f"{self.base}/clarify", json={"objectId": 0})
+            self.client.post(self.base + '/clarify', json={'objectId': a})
         loaded = self.client.get(self.base).json()
-        for field in ("world", "pending", "messages"):
+        for field in ('world', 'pending', 'messages', 'nextObjectId'):
             self.assertEqual(loaded[field], paused[field])
 
     def test_visual_revision_purges_properties_and_undo_restores_salience(self):
-        self.chat("#0 red?")
-        with Database(self.path).connection() as connection:
-            before = connection.execute("SELECT salience_json FROM world_snapshots ORDER BY sequence DESC LIMIT 1").fetchone()[0]
-        self.client.post(f"{self.base}/property", json={"position": {"x": 1, "y": 7}, "property": {"attribute": "color", "value": "blue"}})
-        with Database(self.path).connection() as connection:
-            updated = connection.execute("SELECT salience_json FROM world_snapshots ORDER BY sequence DESC LIMIT 1").fetchone()[0]
-        self.assertNotEqual(before, updated)
-        self.client.post(f"{self.base}/undo")
-        with Database(self.path).connection() as connection:
-            restored = connection.execute("SELECT salience_json FROM world_snapshots ORDER BY sequence DESC LIMIT 1").fetchone()[0]
-        self.assertEqual(restored, before)
+        self.chat('Does #0 satisfy (color is red)?')
+        before = self.ranking()
+        self.client.post(self.base + '/property', json={'position': self.obj(self.initial, 0)['position'], 'property': {'attribute': 'color', 'value': 'blue'}})
+        self.assertNotEqual(self.ranking(), before)
+        self.chat('Undo.')
+        self.assertEqual(self.ranking(), before)
 
-    def test_chat_undo_prefix_restores_world_and_salience_ignores_suffix(self):
-        before = self.chat("#0 red?")
-        self.chat("#1 green. #1 large.")
-        result = self.chat(" \tUnDo #99 red. ignored garbage?")
-        self.assertEqual(result["world"], before["world"])
-        self.assertEqual(result["feedback"], "Undone")
-        self.assertEqual(result["messages"][-2]["text"], " \tUnDo #99 red. ignored garbage?")
-        self.assertFalse(result["messages"][-1]["isError"])
-        self.assertEqual(self.snapshots(), 2)
-        referenced = self.chat("It is yellow.")
-        self.assertEqual(next(o for o in referenced["world"]["objects"] if o["id"] == 0)["attributes"].get("color"), "yellow")
+    def test_chat_undo_is_exact_and_rejects_suffix(self):
+        before = self.chat('Set color of #0 to blue.')
+        rejected = self.chat('Undo. Set color of #0 to red.')
+        self.assertTrue(rejected['messages'][-1]['isError'])
+        self.assertEqual(rejected['world'], before['world'])
+        self.assertEqual(self.chat('  UnDo.  ')['world'], self.initial['world'])
 
     def test_chat_undo_preserves_initial_snapshot(self):
-        for text in ("undo", "UNDOanything", "\n undo."):
-            result = self.chat(text)
-            self.assertEqual(result["world"], self.initial["world"])
-            self.assertEqual(result["feedback"], "No change")
-            self.assertFalse(result["canUndo"])
-            self.assertEqual(self.snapshots(), 1)
+        result = self.chat('Undo.')
+        self.assertEqual(result['feedback'], 'No change')
+        self.assertEqual(self.snapshots(), 1)
+        self.assertEqual(result['world'], self.initial['world'])
 
     def test_chat_undo_cancels_pending_entry_and_prior_partial_updates(self):
-        self.client.post(f"{self.base}/clear")
-        before = self.chat("#0 bloom. #1 bloom.")
-        paused = self.chat("#2 red. The bloom is blue.")
-        self.assertIsNotNone(paused["pending"])
-        result = self.chat("  UNDO rest ignored")
-        self.assertIsNone(result["pending"])
-        self.assertEqual(result["world"], before["world"])
-        self.assertEqual(result["feedback"], "Undone")
-        self.assertEqual(self.snapshots(), 3)
+        self.clear()
+        before, _ = self.seed(['with (shape bloom) off the board'] * 2)
+        paused = self.chat('Create object with (color red) off the board. Set color of the object with (shape bloom) to blue.')
+        self.assertIsNotNone(paused['pending'])
+        undone = self.chat('Undo.')
+        self.assertIsNone(undone['pending'])
+        self.assertEqual(undone['world'], before['world'])
+        with Database(self.path).connection() as connection:
+            outcome = json.loads(connection.execute('SELECT payload_json FROM llm_session_events ORDER BY sequence DESC LIMIT 1').fetchone()[0])
+            self.assertFalse(outcome['pending'])
 
     def test_chat_undo_rolls_back_if_feedback_cannot_be_saved(self):
-        before = self.chat("#0 blue.")
+        before = self.chat('Set color of #0 to blue.')
         with Database(self.path).connection() as connection:
-            connection.execute("""CREATE TRIGGER reject_undo_message BEFORE INSERT ON chat_messages
-                BEGIN SELECT RAISE(ABORT, 'undo message rejected'); END;""")
+            connection.execute("CREATE TRIGGER reject_undo_message BEFORE INSERT ON chat_messages BEGIN SELECT RAISE(ABORT, 'undo rejected'); END;")
         with self.assertRaises(sqlite3.IntegrityError):
-            self.client.post(f"{self.base}/chat", json={"text": "undo"})
-        loaded = self.client.get(self.base).json()
-        self.assertEqual(loaded["world"], before["world"])
-        self.assertEqual(loaded["messages"], before["messages"])
+            self.client.post(self.base + '/chat', json={'text': 'Undo.'})
+        self.assertEqual(self.client.get(self.base).json()['world'], before['world'])
         self.assertEqual(self.snapshots(), 2)
 
     def test_layer3_square_choices_restart_resume_and_whole_entry_undo(self):
-        self.client.post(f"{self.base}/clear")
-        before = self.chat("#0 red bloom on A1. #1 blue spark on D4.")
+        self.clear()
+        before, (a,b) = self.seed(['with (color red and shape bloom) on A1', 'with (color blue and shape spark) on D4'])
+        paused = self.chat(f'Set color of #{a} to green. Move #{a} next to #{b}. Set size of #{a} to large.')
+        self.assertEqual(len(paused['pending']['squareChoices']), 4)
         count = self.snapshots()
-        paused = self.chat("#0 green. Move #0 next to #1. #0 large.")
-        self.assertEqual(paused["pending"]["candidateIds"], [])
-        self.assertEqual(len(paused["pending"]["squareChoices"]), 4)
-        self.assertEqual(paused["pending"]["resolvedSubjects"], [0, 1])
-        self.assertEqual(self.snapshots(), count + 1)
-        invalid = self.client.post(f"{self.base}/clarify", json={"position": {"x": 7, "y": 7}})
-        self.assertEqual(invalid.status_code, 200)
-        self.assertEqual(invalid.json()["pending"], paused["pending"])
+        invalid = self.choose(position={'x':7,'y':7})
+        self.assertEqual(invalid['pending'], paused['pending'])
         with TestClient(create_app(self.settings)) as restarted:
-            loaded = restarted.get(self.base).json()
-            self.assertEqual(loaded["pending"], paused["pending"])
-            selected = restarted.post(f"{self.base}/clarify", json={"position": {"x": 3, "y": 4}})
-        self.assertEqual(selected.status_code, 200, selected.text)
-        result = selected.json()
-        self.assertIsNone(result["pending"])
-        obj = next(o for o in result["world"]["objects"] if o["id"] == 0)
-        self.assertEqual((obj["position"], obj["attributes"].get("color"), obj["attributes"].get("size")), ({"x": 3, "y": 4}, "green", "large"))
-        self.assertEqual(self.snapshots(), count + 1)
-        restored = self.chat("undo")
-        self.assertEqual(restored["world"], before["world"])
-        referenced = self.chat("It remove color.")
-        self.assertIsNone(next(o for o in referenced["world"]["objects"] if o["id"] == 1)["attributes"].get("color"))
+            result = restarted.post(self.base + '/clarify', json={'position': {'x':3,'y':4}}).json()
+        self.assertIsNone(result['pending'])
+        self.assertEqual(self.obj(result,a)['position'], {'x':3,'y':4})
+        self.assertEqual(self.obj(result,a)['attributes']['size'], 'large')
+        self.assertEqual(self.snapshots(), count)
+        self.assertEqual(self.chat('Undo.')['world'], before['world'])
 
-    def test_layer3_null_and_vacuous_answers_and_choice_validation(self):
-        self.client.post(f"{self.base}/clear")
-        self.chat("#0 bloom. #1 spark.")
-        result = self.chat("#0 same color as #1? Is every red object a bloom? Some red are bloom? How many free?")
-        self.assertFalse(result["messages"][-1]["isError"])
-        self.assertIn("true — both lack color", result["feedback"])
-        self.assertIn("true — no matching objects", result["feedback"])
-        self.assertIn("false — no matching objects", result["feedback"])
-        self.assertIn("\n  64", result["feedback"])
-        rejected = self.chat("All red objects are bloom?")
-        self.assertTrue(rejected["messages"][-1]["isError"])
-        self.assertEqual(rejected["world"], result["world"])
-        for choice in [{}, {"objectId": 0, "position": {"x": 0, "y": 0}}, {"position": {"x": "0", "y": 0}}]:
-            self.assertEqual(self.client.post(f"{self.base}/clarify", json=choice).status_code, 422)
+    def test_layer3_null_vacuity_and_choice_validation(self):
+        self.clear()
+        _, (a,b) = self.seed(['with (shape bloom) off the board', 'with (shape spark) off the board'])
+        result = self.chat(f'Does #{a} satisfy (color equals that of #{b})? Does every object matching (color is red) satisfy (shape is bloom)? Does some object matching (color is red) satisfy (shape is bloom)? How many squares match (not occupied)?')
+        for expected in ('true — both lack color', 'true — no matching objects', 'false — no matching objects', '\n  64'):
+            self.assertIn(expected, result['feedback'])
+        for choice in [{}, {'objectId':a, 'position':{'x':0,'y':0}}, {'position':{'x':'0','y':0}}]:
+            self.assertEqual(self.client.post(self.base + '/clarify', json=choice).status_code, 422)
 
-    def test_quantified_predicates_persist_clarification_and_undo(self):
-        self.client.post(f"{self.base}/clear")
-        before = self.chat("#0 red bloom on A1. #1 blue spark on B1. #2 blue spark on H8.")
+    def test_quantified_targets_are_clarified_once_and_persist(self):
+        self.clear()
+        before, (a,b,c) = self.seed(['with (color red and shape bloom) on A1', 'with (color blue and shape spark) on B1', 'with (color blue and shape spark) on H8'])
+        paused = self.chat(f'Set size of #{a} to small. Does every object matching (color is red) satisfy (next to the object with (shape spark) and position is present)? Set size of #{a} to large.')
+        self.assertCountEqual(paused['pending']['candidateIds'], [b,c])
         count = self.snapshots()
-        paused = self.chat("#0 small. Every red object next to the spark and have a square? #0 large.")
-        self.assertEqual(set(paused["pending"]["candidateIds"]), {1, 2})
-        self.assertEqual(paused["pending"]["resolvedSubjects"], [])
-        with TestClient(create_app(self.settings)) as restarted:
-            loaded = restarted.get(self.base).json()
-            self.assertEqual(loaded["pending"], paused["pending"])
-            reply = restarted.post(f"{self.base}/clarify", json={"objectId": 1})
-        self.assertEqual(reply.status_code, 200, reply.text)
-        result = reply.json()
-        self.assertIsNone(result["pending"])
-        self.assertIn("\n  true", result["feedback"])
-        self.assertEqual(next(o for o in result["world"]["objects"] if o["id"] == 0)["attributes"].get("size"), "large")
-        self.assertEqual(self.snapshots(), count + 1)
-        self.assertEqual(self.chat("undo")["world"], before["world"])
-        for text in ["Every red object have the same color?", "Every red object next to a bloom?"]:
-            rejected = self.chat(text)
-            self.assertTrue(rejected["messages"][-1]["isError"])
-            self.assertEqual(rejected["world"], before["world"])
+        result = self.choose(objectId=b)
+        self.assertIsNone(result['pending'])
+        self.assertIn('\n  true', result['feedback'])
+        self.assertEqual(self.obj(result,a)['attributes']['size'], 'large')
+        self.assertEqual(self.snapshots(), count)
+        self.assertEqual(self.chat('Undo.')['world'], before['world'])
 
-    def test_attribute_removal_chat_and_whole_entry_undo(self):
-        self.client.post(f"{self.base}/clear")
-        before = self.chat("#0 red small bloom on H7.")
-        count = self.snapshots()
-        result = self.chat("H7 remove color. It remove size. The bloom remove shape. #0 remove square.")
-        self.assertFalse(result["messages"][-1]["isError"])
-        self.assertIsNone(result["pending"])
-        self.assertEqual(result["world"]["objects"], [
-            {'id': 0, 'position': None, 'attributes': {}}])
-        self.assertIn("#0: red -> none", result["feedback"])
-        self.assertEqual(self.snapshots(), count + 1)
-        restored = self.chat("undo")
-        self.assertEqual(restored["world"], before["world"])
-        referenced = self.chat("The red bloom remove color.")
-        self.assertIsNone(referenced["pending"])
-        self.assertIsNone(referenced["world"]["objects"][0]["attributes"].get("color"))
+    def test_attribute_removal_and_whole_entry_undo(self):
+        self.clear()
+        before, (n,) = self.seed(['with (color red and size small and shape bloom) on H7'])
+        result = self.chat(f'Clear color of the object at H7. Clear size of it. Clear shape of the object with (shape bloom). Unplace #{n}.')
+        self.assertEqual(result['world']['objects'], [{'id':n,'position':None,'attributes':{}}])
+        self.assertEqual(self.chat('Undo.')['world'], before['world'])
 
     def test_structural_sequence_and_undo_restore_world_and_salience(self):
-        self.client.post(f"{self.base}/clear")
-        before = self.chat("#0 red bloom on A1. #1 blue spark on B1.")
-        count = self.snapshots()
-        result = self.chat("Swap #0 #1. Remove #0 from board. Erase #1. Position of #0?")
-        self.assertIsNone(result["pending"])
-        self.assertEqual(result["world"]["objects"], [
-            {'id': 0, 'position': None, 'attributes': {'color': 'red', 'shape': 'bloom'}}])
-        self.assertIn("Swapped #0 and #1", result["feedback"])
-        self.assertIn("Deleted #1", result["feedback"])
-        self.assertIn("position of #0?\n  none", result["feedback"])
-        self.assertEqual(self.snapshots(), count + 1)
-        with Database(self.path).connection() as connection:
-            import json
-            ranking = json.loads(connection.execute(
-                "SELECT salience_json FROM world_snapshots ORDER BY sequence DESC LIMIT 1").fetchone()[0])
-        self.assertTrue(all(mention["objectId"] != 1 for mention in ranking))
-        self.assertTrue(all(prop["kind"] != "position" for mention in ranking for prop in mention["properties"]))
-        restored = self.chat("undo")
-        self.assertEqual(restored["world"], before["world"])
-        referenced = self.chat("It is green.")
-        self.assertEqual(next(o for o in referenced["world"]["objects"] if o["id"] == 1)["attributes"].get("color"), "green")
+        self.clear()
+        before, (a,b) = self.seed(['with (color red and shape bloom) on A1', 'with (color blue and shape spark) on B1'])
+        result = self.chat(f'Exchange positions of #{a} and #{b}. Unplace #{a}. Delete #{b}. What is the position of #{a}?')
+        self.assertEqual(len(result['world']['objects']), 1)
+        self.assertIsNone(self.obj(result,a)['position'])
+        self.assertTrue(result['feedback'].endswith('\n  none'))
+        self.assertNotIn(f'"objectId": {b}', self.ranking())
+        self.assertEqual(self.chat('Undo.')['world'], before['world'])
 
-    def test_swap_placed_and_unplaced_then_both_unplaced(self):
-        self.client.post(f"{self.base}/clear")
-        self.chat("#0 red on A3. #1 blue.")
-        result = self.chat("swap #0 and #1")
-        objects = {o["id"]: o for o in result["world"]["objects"]}
-        self.assertIsNone(objects[0]["position"])
-        self.assertEqual(objects[1]["position"], {"x": 0, "y": 2})
-        self.assertEqual(objects[0]["attributes"].get("color"), "red")
-        self.assertEqual(objects[1]["attributes"].get("color"), "blue")
-        result = self.chat("Remove #1. Swap #0 #1.")
-        self.assertTrue(all(o["position"] is None for o in result["world"]["objects"]))
-        self.assertIn("No change", result["feedback"])
+    def test_exchange_placed_unplaced_and_same_object(self):
+        self.clear()
+        before, (a,b) = self.seed(['on A1', 'off the board'])
+        result = self.chat(f'Exchange positions of #{a} and #{b}.')
+        self.assertIsNone(self.obj(result,a)['position'])
+        self.assertEqual(self.obj(result,b)['position'], {'x':0,'y':0})
+        self.assertEqual(self.chat(f'Transfer appearance from #{b} to #{b}.')['world'], result['world'])
 
-    def test_swap_resolves_both_ambiguous_operands_across_restarts(self):
-        self.client.post(f"{self.base}/clear")
-        before = self.chat("#0 bloom on A1. #1 bloom on B1. #2 spark on C1. #3 spark on D1.")
-        paused = self.chat("swap the bloom and the spark")
-        self.assertCountEqual(paused["pending"]["candidateIds"], [0, 1])
-        count = self.snapshots()
-        second = self.client.post(f"{self.base}/clarify", json={"objectId": 0}).json()
-        self.assertEqual(second["world"], before["world"])
-        self.assertEqual(second["pending"]["resolvedSubjects"], [0])
-        self.assertCountEqual(second["pending"]["candidateIds"], [2, 3])
-        self.assertEqual(self.snapshots(), count)
+    def test_exchange_resolves_both_ambiguous_operands(self):
+        self.clear()
+        before, (a,b,c,d) = self.seed(['with (shape bloom) on A1','with (shape bloom) on B1','with (shape spark) on C1','with (shape spark) on D1'])
+        paused = self.chat('Exchange positions of the object with (shape bloom) and the object with (shape spark).')
+        self.assertCountEqual(paused['pending']['candidateIds'], [a,b])
+        second = self.choose(objectId=a)
+        self.assertEqual(second['world'], before['world'])
+        self.assertCountEqual(second['pending']['candidateIds'], [c,d])
+        final = self.choose(objectId=c)
+        self.assertEqual(self.obj(final,a)['position'], {'x':2,'y':0})
+        self.assertEqual(self.obj(final,c)['position'], {'x':0,'y':0})
+
+    def test_atomic_failure_restores_world_and_salience(self):
+        before = self.chat('What is the color of #0?')
+        ranking = self.ranking()
+        destination = self.obj(before,1)['position']
+        q = chr(65+destination['x'])+str(destination['y']+1)
+        result = self.chat(f'Atomically {{ Set color of #0 to blue. Move #0 to {q}. }}.')
+        self.assertTrue(result['messages'][-1]['isError'])
+        self.assertEqual(result['world'], before['world'])
+        self.assertEqual(self.ranking(), ranking)
+        self.assertEqual(result['changes'], [])
+
+    def test_atomic_pending_staging_restart_commit_and_undo(self):
+        self.clear()
+        before, (target,) = self.seed(['on D4'])
+        n = before['nextObjectId']
+        paused = self.chat(f'Atomically {{ Create object with (color red) off the board. Move it next to #{target}. Set size of the object with (color red) to large. }}.')
+        self.assertEqual(paused['world'], before['world'])
+        self.assertEqual(len(paused['pending']['stagedWorld']['objects']), 2)
+        self.assertEqual(paused['nextObjectId'], n+1)
         with TestClient(create_app(self.settings)) as restarted:
             loaded = restarted.get(self.base).json()
-            self.assertEqual(loaded["pending"], second["pending"])
-            result = restarted.post(f"{self.base}/clarify", json={"objectId": 2}).json()
-        self.assertIsNone(result["pending"])
-        objects = {o["id"]: o for o in result["world"]["objects"]}
-        self.assertEqual(objects[0]["position"], {"x": 2, "y": 0})
-        self.assertEqual(objects[2]["position"], {"x": 0, "y": 0})
-        self.assertEqual(self.snapshots(), count)
-        restored = self.client.post(f"{self.base}/undo").json()
-        self.assertEqual(restored["world"], before["world"])
+            self.assertEqual(loaded['pending'], paused['pending'])
+            final = restarted.post(self.base + '/clarify', json={'position':{'x':3,'y':4}}).json()
+        self.assertIsNone(final['pending'])
+        self.assertEqual(len(final['world']['objects']), 2)
+        self.assertEqual(self.obj(final,n)['attributes'], {'color':'red','size':'large'})
+        undone = self.chat('Undo.')
+        self.assertEqual(undone['world'], before['world'])
+        new, (fresh,) = self.seed(['off the board'])
+        self.assertGreater(fresh,n)
 
-    def test_structural_failures_do_not_create_objects_or_partially_swap(self):
-        before = self.chat("#99 red on A1.")
-        result = self.chat("Swap #99 #999. Remove H8. Delete #999.")
-        self.assertEqual(result["world"], before["world"])
-        self.assertIn("No object", result["feedback"])
-        rejected = self.chat("Remove #99?")
-        self.assertTrue(rejected["messages"][-1]["isError"])
-        self.assertEqual(rejected["world"], before["world"])
+    def test_creation_and_editor_identifiers_never_reused_after_undo_delete_clear(self):
+        self.clear()
+        first, (a,) = self.seed(['off the board'])
+        self.chat('Undo.')
+        second, (b,) = self.seed(['off the board'])
+        self.assertGreater(b,a)
+        self.chat(f'Delete #{b}.')
+        self.clear()
+        edited = self.client.post(self.base + '/property', json={'position':{'x':0,'y':0},'property':{'attribute':'color','value':'red'}}).json()
+        n = edited['world']['objects'][0]['id']
+        self.assertGreater(n,b)
+        self.chat('Undo.')
+        edited_again = self.client.post(self.base + '/property', json={'position':{'x':0,'y':0},'property':{'attribute':'color','value':'red'}}).json()
+        self.assertGreater(edited_again['world']['objects'][0]['id'],n)
+
+    def test_rotation_and_appearance_rotation_have_identical_pictures_different_identities(self):
+        self.clear()
+        before, ids = self.seed([f'with (color {color} and shape {shape}) on {square}' for color,shape,square in [('blue','bloom','D4'),('yellow','spark','E4'),('red','drop','E5'),('green','loop','D5')]])
+        suffix = ' of objects at [D4, E4, D5, E5] by 90 degrees clockwise about the center of rectangle D4 to E5.'
+        moved = self.chat('Rotate positions'+suffix)
+        self.assertEqual(self.obj(moved,ids[0])['position'], {'x':3,'y':4})
+        self.assertTrue(all(c['kind']=='position' for c in moved['changes']))
+        self.chat('Undo.')
+        colored = self.chat('Rotate appearance'+suffix)
+        self.assertEqual(self.obj(colored,ids[0])['position'], {'x':3,'y':3})
+        self.assertTrue(all(c['kind']=='appearance' for c in colored['changes']))
+        def picture(state):
+            return sorted((o['position']['x'],o['position']['y'],str(sorted(o['attributes'].items()))) for o in state['world']['objects'])
+        self.assertEqual(picture(moved), picture(colored))
+        self.assertNotEqual(moved['world'], colored['world'])
+
+    def test_boolean_scope_eager_missing_targets_and_typed_square_predicates(self):
+        self.clear()
+        _, (n,) = self.seed(['with (color red) on A1'])
+        answer = self.chat(f'Does #{n} satisfy (on a square matching (shading is dark) and (color is red or shape is loop))?')
+        self.assertTrue(answer['feedback'].endswith('\n  true'))
+        failed = self.chat(f'Does #{n} satisfy (true or next to #999)?')
+        self.assertTrue(failed['messages'][-1]['isError'])
+        self.assertEqual(failed['world'], answer['world'])
+
+    def test_legacy_continuation_is_rejected_without_replaying_old_syntax(self):
+        self.clear()
+        before, (a,b) = self.seed(['with (shape bloom) off the board']*2)
+        paused = self.chat('Set color of the object with (shape bloom) to blue.')
+        from app.engine import EngineInvalidRequest
+        from app.schemas import PendingEntry, World
+        legacy = dict(paused['pending'])
+        legacy.update(payload=None, remaining='The bloom is blue.')
+        with self.assertRaises(EngineInvalidRequest):
+            self.client.app.state.conversation_service.engine.edit('objects',
+                World.model_validate(paused['world']), {'type':'clarify','objectId':a},
+                pending=PendingEntry.model_validate(legacy), next_object_id=before['nextObjectId'])

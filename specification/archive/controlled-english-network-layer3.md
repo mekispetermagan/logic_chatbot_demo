@@ -1,11 +1,14 @@
+> Archived pre-v2 language. Current contract: [Network v2](../network-language-v2.md).
+
 # Controlled English: Network Domain, Layer 3
 
 Status: implemented. This document describes the supported network Layer 3 syntax and evaluation.
 
-Reference: the existing domain's "Controlled English: Layer 3" specification,
+Reference: the archived object domain's "Controlled English: Layer 3" specification,
 [controlled-english-layer3.md](controlled-english-layer3.md). Retain its reference resolution,
 movement, clarification, salience, undo, and restricted quantification rules
-except for the explicit extensions below.
+except for the explicit extensions below. The object domain now uses
+[Objects v2](../object-language-v2.md); that revision does not change network syntax.
 
 ## Domain assumptions
 

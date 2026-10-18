@@ -9,6 +9,7 @@ import 'package:logic_chatbot/api/conversation_api.dart';
 import 'package:logic_chatbot/controllers/conversation_controller.dart';
 import 'package:logic_chatbot/main.dart';
 import 'package:logic_chatbot/models/world_object.dart';
+import 'package:logic_chatbot/models/domain.dart';
 import 'package:logic_chatbot/widgets/world_display.dart';
 
 import 'llm_test.dart' show SavedConversation;
@@ -17,11 +18,14 @@ const original = '  Give B2 a warm color, please.  ';
 
 /// A server draft stays separate from the committed world until acceptance.
 class ReviewServer {
+  String domain = 'objects';
   bool offered = false;
   bool accepted = false;
   bool noCandidates = false;
   bool stale = false;
   bool invalid = false;
+  bool legacyLanguage = false;
+  bool stagedBatch = false;
   int proposalNumber = 0;
   final requests = <String>[];
   final prompts = <String>[];
@@ -34,7 +38,11 @@ class ReviewServer {
       if (color != null)
         {
           'id': 0,
-          'attributes': {'color': color},
+          'attributes': {
+            'color': color,
+            if (domain == 'network') 'east': 'east',
+            if (domain == 'network') 'west': 'west',
+          },
           'position': {'x': 1, 'y': 1},
         },
     ],
@@ -42,7 +50,8 @@ class ReviewServer {
 
   Map<String, dynamic> state({int? previewRank}) => {
     'conversationId': 'saved',
-    'domain': 'objects',
+    'domain': domain,
+    'languageVersion': '$domain-v2',
     'canUndo': accepted,
     'feedback': 'Review state updated.',
     'world': world(accepted ? 'yellow' : null),
@@ -52,6 +61,7 @@ class ReviewServer {
     'proposal': offered
         ? {
             'id': 'proposal-$proposalNumber',
+            'languageVersion': legacyLanguage ? '$domain-v1' : '$domain-v2',
             'originalText': prompts.isEmpty ? original : prompts.last,
             'question': noCandidates
                 ? 'Which square should change?'
@@ -81,8 +91,33 @@ class ReviewServer {
       'preview': {
         'proposalId': 'proposal-$proposalNumber',
         'rank': previewRank,
-        'world': world(previewRank == 1 ? 'red' : 'yellow'),
+        'world': world(
+          stagedBatch
+              ? null
+              : previewRank == 1
+              ? 'red'
+              : 'yellow',
+        ),
         'feedback': 'B2 changes only in this preview.',
+        'changes': [
+          if (!stagedBatch)
+            {
+              'objectId': 0,
+              'kind': 'appearance',
+              'detail': domain == 'network'
+                  ? '#0: pattern ---- -> -e-w'
+                  : '#0: color none -> yellow',
+            },
+        ],
+        if (stagedBatch)
+          'pending': {
+            'sentence': 'Move it next to #3.',
+            'candidates': [],
+            'squareChoices': [
+              {'x': 3, 'y': 4},
+            ],
+            'stagedWorld': world('yellow'),
+          },
       },
   };
 
@@ -130,7 +165,7 @@ class ReviewServer {
       baseUrl: Uri.parse('http://localhost:8000'),
       client: MockClient(respond),
     ),
-  );
+  )..domain = WorldDomain.values.byName(domain);
 }
 
 Future<void> tapVisible(WidgetTester tester, Finder finder) async {
@@ -141,6 +176,127 @@ Future<void> tapVisible(WidgetTester tester, Finder finder) async {
 }
 
 void main() {
+  for (final domain in ['objects', 'network']) {
+    testWidgets(
+      '$domain old-language proposals remain rejectable but cannot execute or accept answers',
+      (tester) async {
+        final server = ReviewServer()
+          ..domain = domain
+          ..offered = true
+          ..legacyLanguage = true;
+        final controller = server.controller();
+        await tester.pumpWidget(
+          MaterialApp(home: DemoScreen(createController: () => controller)),
+        );
+        await tester.pumpAndSettle();
+        await tapVisible(tester, find.text('Chat'));
+        expect(find.textContaining('older language version'), findsOneWidget);
+        expect(
+          tester
+              .widget<OutlinedButton>(
+                find.widgetWithText(OutlinedButton, 'Preview'),
+              )
+              .onPressed,
+          isNull,
+        );
+        expect(
+          tester
+              .widget<FilledButton>(find.widgetWithText(FilledButton, 'Accept'))
+              .onPressed,
+          isNull,
+        );
+        expect(
+          tester.widget<TextField>(find.byType(TextField)).enabled,
+          isFalse,
+        );
+        await tapVisible(tester, find.widgetWithText(OutlinedButton, 'Reject'));
+        expect(controller.conversation!.proposal, isNull);
+        expect(
+          tester.widget<TextField>(find.byType(TextField)).controller!.text,
+          original,
+        );
+      },
+    );
+  }
+
+  testWidgets('preview shows explicit identifier and appearance effects', (
+    tester,
+  ) async {
+    final server = ReviewServer();
+    final controller = server.controller();
+    await tester.pumpWidget(
+      MaterialApp(home: DemoScreen(createController: () => controller)),
+    );
+    await tester.pumpAndSettle();
+    await controller.sendChat(original);
+    await tester.pumpAndSettle();
+    await tapVisible(tester, find.text('Chat'));
+    await tapVisible(tester, find.byKey(const ValueKey('interpretation-2')));
+    await tapVisible(tester, find.widgetWithText(OutlinedButton, 'Preview'));
+    expect(find.text('Identity and state changes'), findsOneWidget);
+    expect(find.text('#0: color none -> yellow'), findsOneWidget);
+    expect(controller.conversation!.world.objects, isEmpty);
+    expect(controller.preview!.changes.single.kind, 'appearance');
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('network v2 previews expose port changes without applying', (
+    tester,
+  ) async {
+    final server = ReviewServer()..domain = 'network';
+    final controller = server.controller();
+    await tester.pumpWidget(
+      MaterialApp(home: DemoScreen(createController: () => controller)),
+    );
+    await tester.pumpAndSettle();
+    await controller.sendChat(original);
+    await tester.pumpAndSettle();
+    await tapVisible(tester, find.text('Chat'));
+    await tapVisible(tester, find.byKey(const ValueKey('interpretation-2')));
+    await tapVisible(tester, find.widgetWithText(OutlinedButton, 'Preview'));
+    expect(find.text('#0: pattern ---- -> -e-w'), findsOneWidget);
+    expect(controller.conversation!.languageVersion, 'network-v2');
+    expect(controller.conversation!.world.objects, isEmpty);
+    expect(controller.preview!.world.objects.single.attributes, {
+      'color': 'yellow',
+      'east': 'east',
+      'west': 'west',
+    });
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('atomic preview displays staged world without committing it', (
+    tester,
+  ) async {
+    final server = ReviewServer()..stagedBatch = true;
+    final controller = server.controller();
+    await tester.pumpWidget(
+      MaterialApp(home: DemoScreen(createController: () => controller)),
+    );
+    await tester.pumpAndSettle();
+    await controller.sendChat(original);
+    controller.selectInterpretation(2);
+    await controller.previewInterpretation();
+    await tester.pumpAndSettle();
+    expect(controller.conversation!.world.objects, isEmpty);
+    expect(controller.preview!.world.objects, isEmpty);
+    expect(
+      tester
+          .widget<WorldDisplay>(find.byType(WorldDisplay))
+          .world
+          .objects
+          .single
+          .color,
+      ObjectColor.yellow,
+    );
+    expect(find.widgetWithText(Chip, 'Preview — not applied'), findsOneWidget);
+    await tapVisible(tester, find.text('Chat'));
+    expect(
+      find.textContaining('provisional atomic-batch preview'),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
   test(
     'preview, refresh and acceptance keep draft separate from actual world',
     () async {

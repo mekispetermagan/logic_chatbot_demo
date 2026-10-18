@@ -196,7 +196,7 @@ class EngineTransportTests(unittest.TestCase):
         engine = LogicEngine(Path("/unused/engine"))
         world = World(width=8, height=8, objects=[])
         for domain in ("objects", "network", None):
-            reply = {"world": world.model_dump(), "feedback": "No change"}
+            reply = {"world": world.model_dump(), "feedback": "No change", "languageVersion": "objects-v2", "nextObjectId": 0}
             if domain is not None:
                 reply["domain"] = domain
             with patch("app.engine.subprocess.run", return_value=subprocess.CompletedProcess(

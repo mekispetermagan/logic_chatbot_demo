@@ -1,93 +1,66 @@
 # Domain libraries and the shared grid engine
 
-The engine separates domain declarations from world state. Haskell and FastAPI
-support objects and network domains on 8×8 boards. The network domain currently
-has Layers 1/2 only; see [network core](network-core.md). The generic JSON
-contract identifies the domain explicitly. Flutter transport/models support both
-domains, including domain selection and the network editor.
-There is no runtime ontology loader or metadata endpoint yet.
+## Language boundary
 
-## Generic ontology
+Both served languages use v2: [Objects](object-language-v2.md) and
+[Network](network-language-v2.md). `bridge/EditorJson.hs` selects a domain from
+an explicit request identifier. It never uses the experimental legacy parsers.
+There is no mutable global domain or conversation state in Haskell.
 
-`Ontology.hs` defines identifiers, references, positions, and entities. An entity
-has an identifier, an optional position, and a map from `AttributeId` to
-`ValueId`. Missing map entries mean absent attributes. Each attribute has at
-most one stored value; assignment replaces that value without changing other
-attributes. An attribute with one permitted value represents a unary property:
-assignment adds it, removal clears it, and absence makes its property check
-false. Absence is not an unknown truth value.
+`ControlledLanguage/` implements the shared syntax tree, domain-parameterized
+surface and canonical grammars, readable/canonical formatting, reference
+resolution, typed object/square salience, staged execution, continuation replay and change reporting.
+`Domains.Objects.Language` and `Domains.Network.Language` provide convenient
+pure entry points bound to each immutable domain definition.
 
-Position remains structural. Bounds come from the selected ontology, and the
-engine retains one-object-per-square occupancy. Coordinate syntax supports
-single-letter columns A–Z and positive decimal rows within the declared board.
-The objects domain still permits only A1–H8.
+## Ontology and domain algorithms
 
-`Domain.hs` declares finite attributes, their values and aliases, attribute
-ordering, board dimensions, and the domain identifier. `validateDomain` rejects
-invalid dimensions, empty or duplicate declarations, ambiguous vocabulary,
-reserved words, and vocabulary that conflicts with references. Unary attributes
-use the same representation as other finite attributes; no Boolean type is
-needed. Definitions are ordinary immutable Haskell values, not conversation state.
+`Ontology.hs` defines identifiers, optional positions, generic attribute maps
+and worlds. A missing attribute is absent, not unknown. `Domain.hs` declares
+finite attributes, canonical values, board dimensions and identifiers;
+`Domains/Objects/Definition.hs` and `Domains/Network/Definition.hs` supply the
+two constant ontologies. Executable grammars exclude legacy aliases.
 
-## Domain library
+Objects use color, size and shape. Network uses color and four independent
+unary ports; patterns and appearances are bundles, not stored shape fields.
+Both domains currently use 8×8 boards. The v2 lexical grammar explicitly supports
+A1–H8; changing board dimensions also requires updating that grammar.
 
-`DomainLibrary.hs` combines an ontology with pure callbacks for derived
-performative parsing, derived question parsing, and derived evaluation. The
-shared engine still owns entry boundaries, Layer 1 operations, descriptions,
-reference resolution, salience, clarification, and entry sequencing. The current
-domain's derived evaluator supplies spatial questions, counting, quantification,
-and movement/copying. These algorithms remain ordinary Haskell functions.
+`Domains/Network/Graph.hs`, `Patterns.hs`, `Pathfinding.hs`, and `Analysis.hs`
+provide pure port, reachability, route construction and graph algorithms.
+Components and induced views are transient values, never persistent entities.
+Induction evaluates its selector once in the input graph. Layer 3 distinguishes
+port transforms, identity movement, appearance permutations and drawing transforms.
 
-| Module | Responsibility |
-|---|---|
-| `Domains/Objects/Definition.hs` | Current color, size, shape, vocabulary, and 8×8 dimensions |
-| `Domains/Objects/Parser.hs` | Current derived sentence forms |
-| `Domains/Objects/Evaluation.hs` | Current derived semantics, using generic attributes and supplied dimensions |
-| `Domains/Objects/Library.hs` | Assemble `objectsLibrary` |
-| `Domains/Objects/Vocabulary.hs` | Domain-specific convenience patterns and fixture constructors |
-| `SyntaxVocabulary.hs` | Shared domain-aware lexical and description helpers |
+`DomainLibrary.hs`, atomic modules and old domain parser/evaluator modules remain
+experimental GHCi helpers and regression fixtures. They do not define the public
+v2 grammar or continue old saved conversations.
 
-The domain library is passed explicitly to chat parsing and evaluation. Its
-ontology is passed onward to atomic evaluation and reference creation. No
-mutable global selection or remembered conversation is introduced. Existing
-short function names remain convenience wrappers selecting the objects domain;
-production bridge entry points use explicit selection.
+## State, presentation and verification
 
-## Layer 1
+Every evaluation receives its world, discourse ranking, fresh-ID counter,
+program and clarification transcript as arguments. Results contain updated state,
+feedback, typed changes and an optional pause. Fully delimited replay keeps
+resolved choices deterministic. Object and square mentions share a clock but retain distinct referent types.
+Pronouns use the required type; mixed ties are clarified without conversion.
+Contextual object facts contain their graph
+scope and grounded object operands and are purged when they become false.
 
-Attribute assignment, removal, property checks, and value queries now operate
-on attribute identifiers rather than separate color/size/shape branches.
-Evaluation checks attribute/value membership in the selected domain. Position
-assignment, unplacement, swapping, and deletion retain their structural meaning.
-Questions and structural operations never create referents. Attribution retains
-creation during reference resolution, including preserving a newly created
-source when its subsequent move is blocked.
+FastAPI transports requests and persists world/salience/pending history in
+SQLite. Undo restores the entire entry’s world and discourse; the ID counter
+remains monotonic outside history. Flutter renders committed/provisional/preview
+worlds and changes without implementing semantics. The database starts fresh at
+schema version 2; old continuation versions are rejected. See the
+[JSON contract](json-contract.md).
 
-## Formatting and compatibility boundary
+Both domain language suites cover parsing, round trips, scope clarification,
+reference resolution, failure and atomicity. Network tests additionally cover
+endpoint openings, unchanged intermediate ports, route recoloring, graph laws,
+color-filter construction order and contextual salience. API tests exercise the
+real executable, restart, Undo, proposal preview and acceptance; Flutter tests
+exercise review and editor behavior.
 
-Canonical value identifiers are printable descriptor words; aliases normalize
-to those identifiers. `pretty` for a generic entity prints named stored
-attributes. Use `prettyObjectIn objectsDomain` or `prettyWorldIn objectsDomain`
-for the original ordered display, including question marks for absent values.
-The console and clarification labels use this domain-aware formatting.
-
-`bridge/EditorJson.hs` transports a generic `attributes` map for each object and
-explicit attribute/value properties for edits and salience. It selects and
-validates the domain library from the required `domain` field, before parsing
-state, and echoes that identifier in responses. FastAPI stores the immutable
-domain on each conversation. SQLite startup migration converts all legacy world
-and salience snapshots together, preserving history and pending entries.
-See the [JSON contract](json-contract.md) for details.
-
-A future domain can provide another Haskell library and, later, exported JSON
-metadata. Ontology documents and changing world/discourse documents will remain
-separate. Continuous attributes, stored arbitrary relations, and dynamically
-loaded language extensions are outside this refactor.
-
-## Verification
-
-The existing parser, evaluation, editor, and API regression suites exercise the
-original domain. `test/DomainTest.hs` adds test-only attributes to that same
-definition to check unary semantics, vocabulary isolation, invalid declarations,
-domain bounds, and propagation through descriptions and derived evaluation.
-These fixtures are not additional production domains.
+Future domains may add Haskell libraries and exported ontology metadata. Constant
+ontology documents and changing conversation state remain separate. Runtime
+ontology loading, continuous attributes and arbitrary stored relations are
+outside this demo.

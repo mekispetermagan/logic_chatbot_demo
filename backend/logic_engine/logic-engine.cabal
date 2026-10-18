@@ -4,9 +4,18 @@ version: 0.1.0.0
 build-type: Simple
 
 library
+  other-modules: ControlledLanguage.Grammar, ControlledLanguage.Canonical,
+                 ControlledLanguage.CanonicalPretty
   exposed-modules: Ontology, Domain, DomainLibrary,
+                   ControlledLanguage.Domain, ControlledLanguage.Discourse, ControlledLanguage.Syntax, ControlledLanguage.Parser, ControlledLanguage.Pretty, ControlledLanguage.Evaluation,
+                   Domains.Network.Language, Domains.Network.Language.Parser, Domains.Network.Language.Evaluation,
+                   Domains.Network.Analysis,
                    Domains.Objects.Definition, Domains.Objects.Vocabulary,
                    Domains.Objects.Parser, Domains.Objects.Evaluation, Domains.Objects.Library,
+                   Domains.Objects.Language, Domains.Objects.Language.Syntax, Domains.Objects.Language.Parser,
+                   Domains.Objects.Language.Pretty, Domains.Objects.Language.Evaluation,
+                   Domains.Objects.Language.Grammar, Domains.Objects.Language.Canonical,
+                   Domains.Objects.Language.CanonicalPretty,
                    Domains.Network.Definition, Domains.Network.Library, Domains.Network.Sandbox,
                    Domains.Network.Pathfinding,
                    Domains.Network.Syntax, Domains.Network.Patterns, Domains.Network.Graph,
@@ -17,7 +26,7 @@ library
                    SyntaxVocabulary, Layer2Syntax, Layer2Parser, Discourse,
                    Layer2Evaluation, Layer3Evaluation
   hs-source-dirs: .
-  build-depends: base >=4.14 && <5, megaparsec >=9 && <10, containers
+  build-depends: base >=4.14 && <5, megaparsec >=9 && <10, containers, mtl
   default-language: Haskell2010
   default-extensions: InstanceSigs
 
@@ -33,6 +42,13 @@ test-suite atomic-parser-tests
   main-is: AtomicParserTest.hs
   hs-source-dirs: test
   build-depends: base >=4.14 && <5, logic-engine
+  default-language: Haskell2010
+
+test-suite object-language-tests
+  type: exitcode-stdio-1.0
+  main-is: ObjectLanguageTest.hs
+  hs-source-dirs: test
+  build-depends: base >=4.14 && <5, logic-engine, containers
   default-language: Haskell2010
 
 test-suite square-occupancy-tests
@@ -95,6 +111,20 @@ test-suite network-layer3-tests
 test-suite network-connection-tests
   type: exitcode-stdio-1.0
   main-is: NetworkConnectionTest.hs
+  hs-source-dirs: test
+  build-depends: base >=4.14 && <5, logic-engine, containers
+  default-language: Haskell2010
+
+test-suite network-language-tests
+  type: exitcode-stdio-1.0
+  main-is: NetworkLanguageTest.hs
+  hs-source-dirs: test
+  build-depends: base >=4.14 && <5, logic-engine, containers
+  default-language: Haskell2010
+
+test-suite typed-salience-tests
+  type: exitcode-stdio-1.0
+  main-is: TypedSalienceTest.hs
   hs-source-dirs: test
   build-depends: base >=4.14 && <5, logic-engine, containers
   default-language: Haskell2010

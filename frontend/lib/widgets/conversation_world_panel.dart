@@ -29,6 +29,7 @@ class ConversationWorldPanel extends StatelessWidget {
     this.onErase,
     this.onClear,
     this.previewWorld,
+    this.previewLabel = 'Preview — not applied',
   });
 
   final NetworkShape selectedNetworkShape;
@@ -48,6 +49,7 @@ class ConversationWorldPanel extends StatelessWidget {
   final void Function(int, int)? onErase;
   final VoidCallback? onClear;
   final World? previewWorld;
+  final String previewLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -117,11 +119,7 @@ class ConversationWorldPanel extends StatelessWidget {
               : null,
         ),
         if (previewWorld != null)
-          const Positioned(
-            top: 8,
-            right: 8,
-            child: Chip(label: Text('Preview — not applied')),
-          ),
+          Positioned(top: 8, right: 8, child: Chip(label: Text(previewLabel))),
         if (busy)
           const Positioned(
             top: 0,

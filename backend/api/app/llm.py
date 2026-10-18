@@ -76,11 +76,9 @@ def failure_note(stage: str, error: Exception, response: httpx.Response | None) 
 
 
 def prompt_for(domain: DomainId) -> str:
-    shared = (PROMPTS / 'shared.md').read_text(encoding='utf-8')
-    grammar = (PROMPTS / f'{domain}.md').read_text(encoding='utf-8')
-    examples = json.loads((PROMPTS / 'examples.json').read_text(encoding='utf-8'))[domain]
-    return shared + '\n\n' + grammar + '\n\nExamples (input => translation):\n' + '\n'.join(
-        f'{example["input"]} => {example["translation"]}' for example in examples)
+    # Both transports use the same reviewed instructions and v2 contract.
+    from .agent_instructions import configuration_for
+    return configuration_for(domain)['instructions']
 
 
 def create_client():

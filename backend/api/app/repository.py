@@ -17,7 +17,7 @@ class SnapshotConflict(Exception):
     pass
 
 
-ConversationRevision = tuple[int, str, str, str, int]
+ConversationRevision = tuple[int, str, str, str, int, str, int]
 
 
 def record_outcome(connection, conversation_id, **payload):
@@ -41,7 +41,8 @@ class ConversationRepository:
 
     def _latest(self, connection, conversation_id):
         return connection.execute("""
-            SELECT world_snapshots.*, conversations.domain FROM world_snapshots
+            SELECT world_snapshots.*, conversations.domain, conversations.language_version,
+                   conversations.next_object_id FROM world_snapshots
             JOIN conversations ON conversations.id = world_snapshots.conversation_id
             WHERE conversation_id = ? ORDER BY sequence DESC LIMIT 1
         """, (str(conversation_id),)).fetchone()
@@ -76,12 +77,15 @@ class ConversationRepository:
                       world=World.model_validate_json(row["world_json"]),
                       canUndo=row["sequence"] > 0, messages=messages, pending=self._pending(row),
                       llmBudget=budget_in(connection),
+                      languageVersion=row['language_version'], nextObjectId=row['next_object_id'],
                       proposal=InterpretationProposal.model_validate_json(proposal['proposal_json']) if proposal else None)
         return ConversationState(**values) if feedback is None else EditState(**values, feedback=feedback)
 
     def create(self, conversation_id: UUID, world: World, domain: DomainId) -> ConversationState:
         with self.database.connection() as connection:
-            connection.execute("INSERT INTO conversations (id, domain) VALUES (?, ?)", (str(conversation_id), domain))
+            connection.execute("INSERT INTO conversations (id, domain, language_version, next_object_id) VALUES (?, ?, ?, ?)",
+                               (str(conversation_id), domain, domain + '-v2',
+                                max((o.id for o in world.objects), default=-1)+1))
             connection.execute(
                 "INSERT INTO world_snapshots (conversation_id, sequence, world_json) VALUES (?, 0, ?)",
                 (str(conversation_id), world.model_dump_json()),
@@ -97,7 +101,8 @@ class ConversationRepository:
             'SELECT COALESCE(MAX(sequence), -1) FROM chat_messages WHERE conversation_id = ?',
             (str(conversation_id),),
         ).fetchone()[0]
-        return row['sequence'], row['world_json'], row['salience_json'], row['pending_json'], last_message
+        return (row['sequence'], row['world_json'], row['salience_json'], row['pending_json'], last_message,
+                row['language_version'], row['next_object_id'])
 
     def get_with_revision(self, conversation_id: UUID) -> tuple[ConversationState, ConversationRevision] | None:
         with self.database.connection() as connection:
@@ -111,7 +116,7 @@ class ConversationRepository:
             return state, self._revision(connection, row, conversation_id)
 
     def edit(self, conversation_id: UUID,
-             update: Callable[[DomainId, World, list[dict], PendingEntry | None], EngineReply],
+             update: Callable[[DomainId, World, list[dict], PendingEntry | None, int], EngineReply],
              user_text: str | None = None, continuation: bool = False,
              llm: LlmUsage | None = None,
              expected_revision: ConversationRevision | None = None,
@@ -132,10 +137,15 @@ class ConversationRepository:
                 raise SnapshotConflict('Conversation changed during LLM translation; retry your entry')
             pending = self._pending(row)
             if (continuation and not pending) or (pending and not continuation and user_text is None):
-                raise PendingConflict("Choose an object or square, or undo" if pending else "No clarification pending")
+                raise PendingConflict("Choose an object, square, or grouping, or undo" if pending else "No clarification pending")
             previous = World.model_validate_json(row["world_json"])
             salience = json.loads(row["salience_json"])
-            reply = update(row["domain"], previous, salience, pending)
+            reply = update(row["domain"], previous, salience, pending, row['next_object_id'])
+            if reply.nextObjectId is not None:
+                if reply.nextObjectId < row['next_object_id']:
+                    raise SnapshotConflict('Engine allocation state moved backwards')
+                connection.execute('UPDATE conversations SET next_object_id=? WHERE id=?',
+                                   (reply.nextObjectId, str(conversation_id)))
             feedback = reply.feedback
             if reply.undoRequested:
                 row, feedback = self._undo_snapshot(connection, conversation_id, row)
@@ -143,7 +153,7 @@ class ConversationRepository:
                     feedback = 'Interpreted as: ' + llm.translation + '\n\n' + feedback
             else:
                 if pending and not continuation:
-                    raise PendingConflict("Choose an object or square, or undo")
+                    raise PendingConflict("Choose an object, square, or grouping, or undo")
                 changed = reply.world != previous or reply.salience != salience or reply.pending != pending
                 if changed:
                     values = (reply.world.model_dump_json(), json.dumps(reply.salience),
@@ -167,12 +177,15 @@ class ConversationRepository:
                                    (str(accepting_proposal[0]),))
             if user_text is not None or selected is not None:
                 self._append_messages(connection, conversation_id, feedback, reply.isError, llm, user_text)
+            current = self._latest(connection, conversation_id)
             record_outcome(connection, conversation_id,
                            kind='accepted' if selected else 'undo' if reply.undoRequested else 'engine_result',
                            userText=user_text, translation=selected.translation if selected else None,
-                           feedback=feedback, pending=reply.pending is not None, isError=reply.isError)
-            return self._state(connection, self._latest(connection, conversation_id), conversation_id,
-                               self._messages(connection, conversation_id), feedback)
+                           feedback=feedback, pending=self._pending(current) is not None, isError=reply.isError)
+            result = self._state(connection, current, conversation_id,
+                                 self._messages(connection, conversation_id), feedback)
+            result.changes = reply.changes
+            return result
 
     def _undo_snapshot(self, connection, conversation_id, row):
         if row["sequence"] == 0:
@@ -252,7 +265,10 @@ class ConversationRepository:
             raise PendingConflict('This interpretation is no longer pending; refresh the conversation')
         if tuple(json.loads(active['base_revision_json'])) != self._revision(connection, row, conversation_id):
             raise SnapshotConflict('Conversation changed; reject this interpretation and resend your prompt')
-        return InterpretationProposal.model_validate_json(active['proposal_json'])
+        proposal = InterpretationProposal.model_validate_json(active['proposal_json'])
+        if proposal.languageVersion != row['language_version']:
+            raise SnapshotConflict('Interpretation uses an older language version; reject it and resend your prompt')
+        return proposal
 
     def proposal_with_revision(self, conversation_id: UUID, proposal_id: UUID):
         with self.database.connection() as connection:
@@ -280,7 +296,7 @@ class ConversationRepository:
                 return None
             _, candidate = self._review_candidate(connection, conversation_id, row, proposal_id, rank)
             world = World.model_validate_json(row['world_json'])
-            reply = evaluate(row['domain'], world, json.loads(row['salience_json']), candidate.translation)
+            reply = evaluate(row['domain'], world, json.loads(row['salience_json']), candidate.translation, row['next_object_id'])
             if reply.undoRequested:
                 previous = connection.execute(
                     'SELECT * FROM world_snapshots WHERE conversation_id = ? AND sequence < ? ORDER BY sequence DESC LIMIT 1',
@@ -292,7 +308,7 @@ class ConversationRepository:
             state = self._state(connection, row, conversation_id, self._messages(connection, conversation_id),
                                 'Preview only; nothing was applied.')
             state.preview = InterpretationPreview(proposalId=proposal_id, rank=rank, world=reply.world,
-                                                   feedback=reply.feedback, pending=reply.pending)
+                                                   feedback=reply.feedback, pending=reply.pending, changes=reply.changes)
             return state
 
     def accept(self, conversation_id: UUID, proposal_id: UUID, rank: int, evaluate: Callable) -> EditState | None:
@@ -306,7 +322,7 @@ class ConversationRepository:
         if candidate is None:
             raise PendingConflict('Choose one of the listed interpretations')
         return self.edit(conversation_id,
-                         lambda domain, world, salience, pending: evaluate(domain, world, salience, candidate.translation),
+                         lambda domain, world, salience, pending, next_id: evaluate(domain, world, salience, candidate.translation, next_id),
                          accepting_proposal=(proposal_id, rank))
 
     def reject(self, conversation_id: UUID, proposal_id: UUID) -> EditState | None:

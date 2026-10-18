@@ -51,7 +51,7 @@ All editing endpoints use `POST /conversations/{id}/...` and return
 
 Properties are explicit attribute/value pairs validated by Haskell. Objects use
 color, size, and shape; networks use color and unary north/east/south/west ports.
-JSON uses canonical names; aliases belong to chat. Invalid pairs return 422
+JSON uses canonical names; object synonyms belong to LLM interpretation, while network chat also accepts its documented aliases. Invalid pairs return 422
 without saving history. Coordinates are zero-based; both domains use 8×8 boards.
 Placement preserves identity and attributes and requires an empty destination.
 
@@ -69,53 +69,70 @@ retains the initial snapshot; editing after Undo starts a new history branch.
 
 ## Chat
 
-`POST /conversations/{id}/chat` accepts `{"text":"#0 blue. #0 blue? color of #0?"}`.
-It returns the current conversation state plus `feedback`, like editing calls.
-Haskell parses the entire entry, then evaluates its sentences in order using
-[Layer 2 resolution](../../specification/controlled-english-layer2.md).
-Non-final performatives require periods; questions always require `?`.
-Chat also supports `remove`, `swap`, and `erase`/`delete` with references,
-pronouns, or definite descriptions. Swap clarification may pause once per operand;
-resolved operands are persisted without partial world changes. Layer 3 adds
-relative movement, attribute copying, spatial questions, counts, and quantifiers;
-see [Layer 3](../../specification/controlled-english-layer3.md). No extra editing
-endpoint is needed.
-Feedback includes each prettyprinted sentence and its changes or answer.
-Parse errors preserve world and discourse and are saved as error replies.
-Blank entries and malformed request bodies return 422.
+`POST /conversations/{id}/chat` accepts a `text` entry. Object conversations use
+[Objects v2](../../specification/object-language-v2.md), for example:
 
-An entry beginning with `undo` after optional whitespace, in any case, is checked
-first by Haskell. Everything after the prefix is ignored. The engine returns
-`undoRequested: true`; FastAPI uses the same Undo operation as the button,
-restoring both world and salience and recording the chat reply atomically.
-An Undo entry is also accepted by the API while clarification is pending.
+```json
+{"text":"Set color of #0 to blue. Does #0 satisfy (color is blue)?"}
+```
 
-`messages` contains ordered objects with `role` (`user` or `machine`), `text`,
-and `isError`. Messages remain visible after Undo. Each submission saves a
-user/machine pair and at most one paired world/salience snapshot. Questions can
-create snapshots through salience changes. Engine failures save neither messages
-nor snapshots; refresh after a lost response instead of automatically resending.
+Commands require final periods; questions require question marks. A square is
+always a location; use `the object at A4` for its occupant. Creation is explicit,
+and a failed creation or move never leaves a new fallback object. A normal
+sequence stops on failure and retains completed steps. Every conceptual command
+is atomic. `atomically { Set color of #0 to blue. Move #0 to A4. }.` commits
+both domain and salience changes or neither.
 
-Ambiguity returns `pending` with `sentence`, canonical `remaining` entry text,
-`candidateIds`, `candidates` (`objectId`, printable `label`), and
-`resolvedSubjects` (already resolved operand IDs, defaulting to `[]`). Resume with
-`POST /conversations/{id}/clarify`, body `{"objectId":3}`. Candidate selection
-is evaluated by Haskell. An invalid choice leaves the pending state intact.
-For square clarification, `pending.squareChoices` contains `{x,y}` positions,
-`candidateIds` and `candidates` are empty, and resolved operand IDs are retained.
-Resume with `{"position":{"x":3,"y":4}}` at the same `/clarify` endpoint.
-Exactly one of `objectId` and `position` is required. Existing pending object
-choices default to an empty `squareChoices` list. Haskell validates the selection.
-Further ambiguity can pause again. All continuations replace the same entry
-snapshot, so one Undo restores the complete pre-entry world and salience.
-The choice and feedback are also recorded as chat messages.
+Object commands include nullable-position exchanges, attribute copy/transfer/
+exchange, cloning, frozen bulk selections, explicit rearrangements and verified
+rotation/reflection macros. Position and appearance transformations preserve
+or change different state and are presented distinctly in review. The grammar
+shares typed Boolean predicates across checks, selections, counts and quantifiers.
+Network uses the same explicit execution policy, with graph and port macros.
 
-While pending, ordinary chat/editor requests return 409. Clarification without a
-pending entry also returns 409. Undo cancels the entry, including earlier partial
-progress. Retrieval restores pending state and choices after restart.
+Feedback includes canonical sentences, resolved identifiers and answers or
+identity-specific changes. `changes` contains `objectId`, `kind` and `detail`;
+kinds distinguish creation, deletion, movement and appearance updates. Parse
+errors preserve domain/discourse state. Blank or malformed request bodies return
+422. Engine failures persist neither messages nor snapshots.
 
-Startup migrates old snapshots with empty salience and no pending entry; it
-preserves existing world history and does not reinterpret old messages.
+The complete `Undo.` entry requests the same operation as the Undo
+button, restoring world and salience while retaining chat and allocation history.
+It accepts case-insensitive spelling and surrounding whitespace, but no suffix
+or additional sentence in either domain.
+
+Both domains record object and square antecedents separately, on one recency
+clock. Pronouns use the operand's required type; shared predicates can ask which
+kind is intended. A square mention never implies a mention of its occupant.
+Mixed ties populate both object candidates and square choices. Existing `/clarify`
+bodies select one type explicitly. Typed rankings remain opaque JSON to Python;
+world/salience snapshots, preview, restart and Undo preserve both kinds.
+
+Ambiguity returns `pending` with the affected `sentence`, candidates,
+`squareChoices`, or `groupingChoices`. Resume through
+`POST /conversations/{id}/clarify`, supplying exactly one of `{"objectId":3}`,
+`{"position":{"x":3,"y":4}}`, or `{"groupingId":1}`. Haskell checks
+the offered choices. Invalid choices leave state unchanged. Further ambiguity
+can pause again; all rounds remain one Undo unit and survive restart.
+
+Both v2 languages accept readable syntax without redundant parentheses around
+descriptions, appearance values, offsets or simple conditions. Boolean operators
+have no implicit precedence in surface input. Missing grouping that permits
+different scopes produces explicitly parenthesized choices before the entry
+executes. This clarification is deterministic and does not invoke the LLM.
+
+Pending state in both domains also carries an opaque versioned `payload`: the frozen entry
+seed and accepted choices used for deterministic continuation. A paused atomic
+batch returns its private world as `pending.stagedWorld`; `world` remains committed
+state. The frontend labels provisional display explicitly. Completion commits
+once; failure or Undo discards staged changes. Clients do not construct payloads.
+Legacy continuations are rejected; both domains use v2 only. Ordinary edits/new chat remain blocked while clarification is pending.
+
+Conversation replies include `languageVersion` (`objects-v2`/`network-v2`) and `nextObjectId`. Identity
+allocation is persisted outside Undo snapshots and advances even when reserved
+staged IDs are abandoned. Clear and deletion never reset it. This release starts from a fresh database; allocation starts above each initial world.
+See the [JSON contract](../../specification/json-contract.md) for versioning,
+interpretation version checks, and the exact persistence fields.
 
 ## Optional LLM translation
 
@@ -273,7 +290,7 @@ Android and Linux native clients do not require CORS configuration.
 `backend/api/data/conversations.sqlite3`, independent of the working directory.
 Parent directories and tables are created during application startup. Each
 conversation and its initial snapshot are inserted in one transaction.
-`conversations` stores IDs, immutable domain identifiers, and creation times; `world_snapshots` stores ordered
+`conversations` stores IDs, immutable domains, semantic versions, non-undoable allocation counters, and creation times; `world_snapshots` stores ordered
 JSON worlds, salience rankings, and nullable pending entries, starting at sequence 0. The latest snapshot is the current state.
 `canUndo` becomes true when that sequence is greater than 0. Keep the database
 file and its SQLite sidecars on persistent storage when deploying.
@@ -303,10 +320,13 @@ Missing or unsupported identifiers return HTTP 422 without creating a conversati
 Every conversation response includes `domain`. Editing, chat, clarification, and
 undo inherit it from the conversation; clients cannot change it through those endpoints.
 FastAPI forwards it in each Haskell request and checks the response identifier.
-Startup migrates existing conversations to `objects`, preserving snapshots,
-salience history, pending clarification, and messages. Undo restores state within
-the same domain.
+Both domains use the versioned explicit v2 grammar. SQLite starts fresh at
+`user_version = 2`; older databases are rejected without migration. The release
+reset discards old conversations, pending entries, proposals and local LLM session
+metadata. The client recreates a conversation when its saved ID returns 404.
+Undo restores world and salience together within the same domain.
 
-Startup also migrates all legacy world and salience snapshots to generic
-attributes, transactionally and without clearing history. Flutter uses generic property pairs and atomic network port-pattern edits. See the
-[JSON contract](../../specification/json-contract.md) for wire formats and migration details.
+Flutter uses generic attribute pairs and atomic port-pattern edits. The network
+language includes graph construction, color-scoped questions and distinct port,
+position, appearance and drawing operations. See [Network v2](../../specification/network-language-v2.md)
+and the [JSON contract](../../specification/json-contract.md).

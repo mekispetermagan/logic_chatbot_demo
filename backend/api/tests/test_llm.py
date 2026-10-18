@@ -29,7 +29,7 @@ class LlmTests(unittest.TestCase):
                                  llm_backend='responses',
                                  llm_log_path=Path(self.temporary.name) / 'logs' / 'gpt-conversation.jsonl')
         self.calls = []
-        self.translation = 'A1 red.'
+        self.translation = 'Create object with color red on A1.'
         self.result_status = 'proposals'
         self.candidates = None
         self.question = ''
@@ -138,8 +138,8 @@ class LlmTests(unittest.TestCase):
         self.result_status = 'clarification'
         self.question = 'Do you mean red or blue?'
         self.candidates = [
-            {'interpretation': 'Red', 'translation': 'A1 red.', 'explanation': 'The first reading.'},
-            {'interpretation': 'Blue', 'translation': 'A1 blue.', 'explanation': 'The alternative reading.'},
+            {'interpretation': 'Red', 'translation': 'Create object with color red on A1.', 'explanation': 'The first reading.'},
+            {'interpretation': 'Blue', 'translation': 'Create object with color blue on A1.', 'explanation': 'The alternative reading.'},
         ]
         before = self.stored_world_state()
         offered = self.chat('Give A1 a color', accept=False)
@@ -201,28 +201,28 @@ class LlmTests(unittest.TestCase):
         self.question = 'Which wording matches your intent?'
         self.candidates = [
             {'interpretation': 'Invalid', 'translation': 'not a sentence.', 'explanation': 'Invalid.'},
-            {'interpretation': 'Red', 'translation': 'A1 red.', 'explanation': 'Red.'},
-            {'interpretation': 'Same red', 'translation': 'A1 is red.', 'explanation': 'Same meaning.'},
+            {'interpretation': 'Red', 'translation': 'Create object with color red on A1.', 'explanation': 'Red.'},
+            {'interpretation': 'Same red', 'translation': 'Create object with color red on A1.', 'explanation': 'Same meaning.'},
         ]
         offered = self.chat(accept=False)
         self.assertEqual(len(offered['proposal']['candidates']), 1)
         self.assertEqual(offered['proposal']['candidates'][0]['rank'], 1)
-        self.assertEqual(offered['proposal']['candidates'][0]['translation'], 'A1 red.')
+        self.assertEqual(offered['proposal']['candidates'][0]['translation'], 'Create object with color red on A1.')
         self.assertEqual(offered['world']['objects'], [])
 
     def test_invalid_candidate_is_explained_and_can_be_repaired_by_answering(self):
         self.result_status = 'clarification'
         self.question = 'Do you mean isolated nodes?'
-        self.translation = 'A1 red -sw.'
+        self.translation = 'Create object with color red and pattern -sw on A1.'
         before = self.stored_world_state()
         offered = self.chat('Draw an outline with pips', accept=False)
         self.assertEqual(offered['proposal']['candidates'], [])
         self.assertIn('Translation failed validation', offered['feedback'])
         failures = offered['proposal']['validationFailures']
         self.assertEqual(failures[0]['translation'], self.translation)
-        self.assertIn('Unsupported syntax:', failures[0]['reason'])
+        self.assertIn('network language v2:', failures[0]['reason'])
         self.assertEqual(self.stored_world_state(), before)
-        self.result_status, self.question, self.translation = 'proposals', '', 'A1 red --sw.'
+        self.result_status, self.question, self.translation = 'proposals', '', 'Create object with color red and pattern --sw on A1.'
         answer = self.client.post(self.review_url(offered, 'answer'), json={'text': 'Yes, isolated nodes.'})
         self.assertEqual(answer.status_code, 200, answer.text)
         refined = answer.json()
@@ -252,14 +252,14 @@ class LlmTests(unittest.TestCase):
         offered = self.chat('Give a cell a warm color', accept=False)
         self.question = 'Red or yellow?'
         self.candidates = [
-            {'interpretation': 'Red', 'translation': 'B2 red.', 'explanation': 'Red.'},
-            {'interpretation': 'Yellow', 'translation': 'B2 yellow.', 'explanation': 'Yellow.'},
+            {'interpretation': 'Red', 'translation': 'Create object with color red on B2.', 'explanation': 'Red.'},
+            {'interpretation': 'Yellow', 'translation': 'Create object with color yellow on B2.', 'explanation': 'Yellow.'},
         ]
         refined = self.client.post(self.review_url(offered, 'answer'), json={'text': 'B2'}).json()
         with TestClient(create_app(self.settings)) as restarted:
             self.assertEqual(restarted.get(self.base).json()['proposal'], refined['proposal'])
         self.result_status, self.question, self.candidates = 'proposals', '', None
-        self.translation = 'B2 yellow.'
+        self.translation = 'Create object with color yellow on B2.'
         final = self.client.post(self.review_url(refined, 'answer'), json={'text': 'Yellow'}).json()
         content = json.loads(json.loads(self.calls[-1].content)['input'][0]['content'])
         self.assertEqual(content['clarification']['turns'], [
@@ -323,7 +323,7 @@ class LlmTests(unittest.TestCase):
         offered = self.chat(accept=False)
         requests = [
             ('/clear', None), ('/undo', None),
-            ('/chat', {'text': 'A1 blue.', 'useLlm': True}),
+            ('/chat', {'text': 'Create object with color blue on A1.', 'useLlm': True}),
             ('/property', {'position': {'x': 0, 'y': 0}, 'property': {'attribute': 'color', 'value': 'blue'}}),
         ]
         for path, body in requests:
@@ -344,8 +344,8 @@ class LlmTests(unittest.TestCase):
         self.assertEqual(len(self.calls), 2)
 
     def test_preview_of_symbolic_ambiguity_is_temporary_and_accept_keeps_existing_clarification(self):
-        self.chat('#0 red. #1 red.', enabled=False)
-        self.translation = 'The red is blue.'
+        self.chat('Create object with color red off the board. Create object with color red off the board.', enabled=False)
+        self.translation = 'Set color of the object with color red to blue.'
         before = self.stored_world_state()
         offered = self.chat('Recolor the red one', accept=False)
         trial = self.client.post(self.review_url(offered, 'preview'), json={'rank': 1}).json()
@@ -354,7 +354,7 @@ class LlmTests(unittest.TestCase):
         self.assertEqual(self.stored_world_state(), before)
         accepted = self.client.post(self.review_url(offered, 'accept'), json={'rank': 1}).json()
         self.assertIsNotNone(accepted['pending'])
-        resolved = self.client.post(self.base + '/clarify', json={'objectId': 1}).json()
+        resolved = self.client.post(self.base + '/clarify', json={'objectId': 8}).json()
         self.assertIsNone(resolved['pending'])
         undone = self.client.post(self.base + '/undo').json()
         self.assertEqual(undone['world'], offered['world'])
@@ -362,8 +362,8 @@ class LlmTests(unittest.TestCase):
         self.assertEqual(len(self.calls), 2)
 
     def test_undo_translation_is_previewed_without_undoing_until_acceptance(self):
-        self.chat('A1 red.', enabled=False)
-        self.translation = 'undo'
+        self.chat('Create object with color red on A1.', enabled=False)
+        self.translation = 'Undo.'
         offered = self.chat('Revert the previous entry', accept=False)
         before = self.stored_world_state()
         preview = self.client.post(self.review_url(offered, 'preview'), json={'rank': 1}).json()
@@ -374,7 +374,7 @@ class LlmTests(unittest.TestCase):
         self.assertEqual(accepted['llmBudget'], offered['llmBudget'])
 
     def test_translated_questions_also_require_acceptance(self):
-        self.translation = 'Is the square A1 occupied?'
+        self.translation = 'Does A1 satisfy occupied?'
         offered = self.chat('Does A1 have anything in it', accept=False)
         self.assertNotIn('\n  false', offered['feedback'])
         before = self.stored_world_state()
@@ -463,11 +463,11 @@ class LlmTests(unittest.TestCase):
         self.assertNotIn('test-key', self.settings.llm_log_path.read_text())
 
     def test_transcript_retains_parser_rejection(self):
-        self.translation = 'A1 red. nonsense.'
+        self.translation = 'Create object with color red on A1. nonsense.'
         self.chat()
         rejected = [entry for entry in self.transcript_records() if entry.get('kind') == 'parser rejection'][0]
         self.assertEqual(rejected['translation'], self.translation)
-        self.assertIn('Unsupported syntax:', rejected['parserFeedback'])
+        self.assertIn('network language v2:', rejected['parserFeedback'])
 
     def test_transcript_appends_across_restart(self):
         self.chat()
@@ -489,13 +489,13 @@ class LlmTests(unittest.TestCase):
 
     def test_toggle_off_and_valid_input_never_contact_provider(self):
         self.chat(enabled=False)
-        self.chat('A1 red.')
-        self.chat('A1 blue?')  # False is a valid answer, not a syntax failure.
-        self.chat('Move A1 left.')  # Semantic failure must not trigger correction.
+        self.chat('Create object with color red on A1.')
+        self.chat('Does the object at A1 satisfy color is blue?')  # False is a valid answer, not a syntax failure.
+        self.chat('Step the object at A1 west.')  # Semantic failure must not trigger correction.
         self.assertEqual(self.calls, [])
 
     def test_current_world_is_included_in_counting_and_generation_without_history(self):
-        self.chat('#30 green. B2 blue. H8 north.', enabled=False)
+        self.chat('Create object with color green off the board. Create object with color blue on B2. Create object with pattern n--- on H8.', enabled=False)
         before = self.client.get(self.base).json()
         entry = 'Repaint selected available cells'
         self.chat(entry)
@@ -516,7 +516,7 @@ class LlmTests(unittest.TestCase):
             self.chat()
         feedback = '\n'.join(logs.output)
         self.assertIn('GPT reply:', feedback)
-        self.assertIn('A1 red.', feedback)
+        self.assertIn('Create object with color red on A1.', feedback)
         self.assertIn('explanation', feedback)
         self.assertIn('resp_test', feedback)
         self.assertIn('costUsd', feedback)
@@ -565,7 +565,7 @@ class LlmTests(unittest.TestCase):
     def test_translation_is_haskell_validated_applied_reported_and_undoable(self):
         result = self.chat()
         self.assertEqual([request.url.path for request in self.calls], ['/v1/responses/input_tokens', '/v1/responses'])
-        self.assertIn('Accepted interpretation 1: A1 red.', result['feedback'])
+        self.assertIn('Accepted interpretation 1: Create object with color red on A1.', result['feedback'])
         self.assertEqual(result['world']['objects'][0]['attributes'], {'color': 'red'})
         usage = self.usage(result)
         self.assertEqual(usage['status'], 'proposed')
@@ -581,7 +581,7 @@ class LlmTests(unittest.TestCase):
             self.assertEqual(self.usage(loaded), usage)
 
     def test_invalid_translation_preserves_world_and_original_syntax_feedback(self):
-        self.translation = 'A1 red. unsupported nonsense.'
+        self.translation = 'Create object with color red on A1. unsupported nonsense.'
         with self.assertLogs('uvicorn.error.llm', level='INFO') as logs:
             result = self.chat()
         self.assertEqual(result['world']['objects'], [])
@@ -592,7 +592,7 @@ class LlmTests(unittest.TestCase):
         self.assertIn('GPT parser rejection:', feedback)
         self.assertIn(self.translation, feedback)
         self.assertIn('parserFeedback', feedback)
-        self.assertIn('Unsupported syntax:', feedback)
+        self.assertIn('network language v2:', feedback)
 
     def test_no_clear_interpretation_preserves_original_error(self):
         self.result_status = 'unsupported'
@@ -603,7 +603,7 @@ class LlmTests(unittest.TestCase):
         self.assertEqual(self.usage(result)['status'], 'unsupported')
         self.assertIn('no clear supported interpretation', result['feedback'])
         self.assertIn('LLM explanation: ' + self.explanation, result['feedback'])
-        self.assertIn('Unsupported syntax:', result['feedback'])
+        self.assertIn('network language v2:', result['feedback'])
         self.assertGreater(result['llmBudget']['spentUsd'], 0)
         restored = self.client.get(self.base).json()
         self.assertEqual(restored['messages'][-1]['text'], result['feedback'])
@@ -630,7 +630,7 @@ class LlmTests(unittest.TestCase):
         self.assertTrue(result['feedback'].endswith('LLM found no clear supported interpretation.'))
 
     def test_multi_sentence_translation_is_one_undoable_entry(self):
-        self.translation = 'B2 red. B3 yellow. B4 green.'
+        self.translation = 'Create object with color red on B2. Create object with color yellow on B3. Create object with color green on B4.'
         result = self.chat('Apply these three colors to the specified cells')
         self.assertEqual(len(result['world']['objects']), 3)
         self.assertIn('Accepted interpretation 1: ' + self.translation, result['feedback'])
@@ -759,18 +759,18 @@ class LlmTests(unittest.TestCase):
         self.assertNotIn('test-key', repr(self.settings))
 
     def test_pending_clarification_never_uses_llm(self):
-        self.chat('#0 red. #1 red.', enabled=False)
-        self.chat('The red is blue.', enabled=False)
+        self.chat('Create object with color red off the board. Create object with color red off the board.', enabled=False)
+        self.chat('Set color of the object with color red to blue.', enabled=False)
         response = self.client.post(self.base + '/chat', json={'text': 'paint something blue', 'useLlm': True})
         self.assertEqual(response.status_code, 409)
         self.assertEqual(self.calls, [])
 
     def test_llm_translation_pending_state_resumes_without_another_charge(self):
-        self.chat('#0 red. #1 red.', enabled=False)
-        self.translation = 'The red is blue.'
+        self.chat('Create object with color red off the board. Create object with color red off the board.', enabled=False)
+        self.translation = 'Set color of the object with color red to blue.'
         paused = self.chat('make the red one blue')
         self.assertIsNotNone(paused['pending'])
-        result = self.client.post(self.base + '/clarify', json={'objectId': 1}).json()
+        result = self.client.post(self.base + '/clarify', json={'objectId': 8}).json()
         self.assertIsNone(result['pending'])
         self.assertEqual(len(self.calls), 2)
         self.assertEqual(result['llmBudget'], paused['llmBudget'])
@@ -781,15 +781,15 @@ class LlmTests(unittest.TestCase):
         self.assertEqual(self.calls, [])
 
     def test_boolean_flag_is_strict(self):
-        response = self.client.post(self.base + '/chat', json={'text': 'A1 red.', 'useLlm': 'true'})
+        response = self.client.post(self.base + '/chat', json={'text': 'Create object with color red on A1.', 'useLlm': 'true'})
         self.assertEqual(response.status_code, 422)
 
     def test_undo_translation_reports_interpretation_and_preserves_charge(self):
-        self.chat('A1 red.', enabled=False)
-        self.translation = 'undo'
+        self.chat('Create object with color red on A1.', enabled=False)
+        self.translation = 'Undo.'
         result = self.chat('revert my previous action')
         self.assertEqual(result['world']['objects'], [])
-        self.assertIn('Accepted interpretation 1: undo', result['feedback'])
+        self.assertIn('Accepted interpretation 1: Undo.', result['feedback'])
         self.assertGreater(result['llmBudget']['spentUsd'], 0)
 
     def test_conversation_rollback_does_not_refund_paid_translation(self):
@@ -806,7 +806,8 @@ class LlmTests(unittest.TestCase):
     def test_objects_use_their_own_prompt(self):
         state = self.client.post('/conversations', json={'domain': 'objects'}).json()
         self.base = '/conversations/' + state['conversationId']
-        self.translation = 'A red bloom on A4.'
+        self.client.post(self.base + '/clear')
+        self.translation = 'Create object with (color red and shape bloom) on A4.'
         result = self.chat('put a red flower on A4')
         self.assertFalse(result['messages'][-1]['isError'])
         instructions = json.loads(self.calls[-1].content)['instructions']
@@ -820,10 +821,11 @@ class LlmTests(unittest.TestCase):
         for domain, cases in examples.items():
             self.assertGreater(len(cases), 100)
             self.assertIn('ACTIVE DOMAIN: ' + domain, prompt_for(domain))
-            checked = engine.edit(domain, empty, {'type': 'checkSyntax', 'text': ' '.join(c['translation'] for c in cases)})
-            self.assertFalse(checked.isError, checked.feedback)
-            self.assertEqual(checked.world, empty)
-            self.assertEqual(checked.salience, [])
+            for case in cases:
+                checked = engine.edit(domain, empty, {'type': 'checkSyntax', 'text': case['translation']})
+                self.assertFalse(checked.isError, checked.feedback)
+                self.assertEqual(checked.world, empty)
+                self.assertEqual(checked.salience, [])
 
 
 class BudgetConcurrencyTests(unittest.TestCase):

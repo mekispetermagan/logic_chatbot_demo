@@ -1,5 +1,7 @@
 # Controlled English: Layer 2
 
+> Archived pre-v2 design. Current contracts: [Objects v2](../object-language-v2.md) and [Network v2](../network-language-v2.md).
+
 Status: syntax and demo evaluation implemented October 10, 2026.
 Layer 1 is the atomic core, Layer 2 adds pronouns/descriptions, and Layer 3 will
 add derived terms. See the [core reference](controlled-english-core.md) for the

@@ -1,5 +1,7 @@
 # Controlled English Fragment for the Logic Demo
 
+> Archived pre-v2 design. Current contracts: [Objects v2](../object-language-v2.md) and [Network v2](../network-language-v2.md).
+
 For the implemented atomic language, see the
 [Core Language Reference](controlled-english-core.md). This design note describes
 the broader planned layers. [Layer 2 Syntax](controlled-english-layer2.md) documents

@@ -22,7 +22,7 @@ class ConversationService:
         return self.repository.get(conversation_id)
 
     def edit(self, conversation_id: UUID, action: dict) -> EditState | None:
-        return self.repository.edit(conversation_id, lambda domain, world, salience, pending: self.engine.edit(domain, world, action, salience, pending))
+        return self.repository.edit(conversation_id, lambda domain, world, salience, pending, next_id: self.engine.edit(domain, world, action, salience, pending, next_id))
 
     def undo(self, conversation_id: UUID) -> EditState | None:
         return self.repository.undo(conversation_id)
@@ -46,8 +46,8 @@ class ConversationService:
                     if proposal is not None:
                         return self.repository.propose(conversation_id, proposal, revision,
                                                        self._with_reply(attempt.reply, self._proposal_feedback(proposal)))
-        def update(domain, world, salience, pending):
-            reply = self.engine.edit(domain, world, {'type': 'chat', 'text': text}, salience, pending)
+        def update(domain, world, salience, pending, next_id):
+            reply = self.engine.edit(domain, world, {'type': 'chat', 'text': text}, salience, pending, next_id)
             if attempt is not None and attempt.note:
                 reply.feedback += '\n\n' + attempt.note
             if attempt is not None:
@@ -77,7 +77,7 @@ class ConversationService:
         proposal = InterpretationProposal(id=uuid4(), originalText=text, candidates=valid,
                                           question=attempt.question, explanation=attempt.explanation,
                                           validationFailures=failures, clarifications=clarifications or [],
-                                          llm=attempt.usage)
+                                          llm=attempt.usage, languageVersion=state.languageVersion)
         self.translator.log_feedback('proposal', conversationId=str(conversation_id), proposalId=str(proposal.id),
                                      candidates=[c.model_dump() for c in valid], question=proposal.question,
                                      validationFailures=[failure.model_dump() for failure in failures])
@@ -130,15 +130,16 @@ class ConversationService:
             # never fall back to executing an earlier, now-refined interpretation.
             proposal = InterpretationProposal(id=uuid4(), originalText=previous.originalText,
                                               clarifications=turns, llm=attempt.usage,
-                                              explanation=attempt.note or attempt.explanation)
+                                              explanation=attempt.note or attempt.explanation,
+                                              languageVersion=state.languageVersion)
         self.translator.log_feedback('answer', conversationId=str(conversation_id), proposalId=str(proposal_id),
                                      replacementId=str(proposal.id), question=previous.question, answer=text)
         return self.repository.propose(conversation_id, proposal, revision,
                                        self._with_reply(attempt.reply, self._proposal_feedback(proposal)),
                                        replacing_proposal=proposal_id, answer=text)
 
-    def _evaluate_interpretation(self, domain, world, salience, text):
-        return self.engine.edit(domain, world, {'type': 'chat', 'text': text}, salience)
+    def _evaluate_interpretation(self, domain, world, salience, text, next_id):
+        return self.engine.edit(domain, world, {'type': 'chat', 'text': text}, salience, next_object_id=next_id)
 
     def preview(self, conversation_id: UUID, proposal_id: UUID, rank: int) -> EditState | None:
         state = self.repository.preview(conversation_id, proposal_id, rank, self._evaluate_interpretation)
@@ -164,9 +165,11 @@ class ConversationService:
         action = {"type": "clarify", **choice.model_dump(exclude_none=True)}
         if choice.objectId is not None:
             label = f"#{choice.objectId}"
+        elif choice.groupingId is not None:
+            label = f"Grouping {choice.groupingId}"
         else:
             x, y = choice.position.x, choice.position.y
             label = f"{chr(65 + x)}{y + 1}" if 0 <= x < 8 and 0 <= y < 8 else f"({x}, {y})"
         return self.repository.edit(conversation_id,
-            lambda domain, world, salience, pending: self.engine.edit(domain, world, action, salience, pending),
+            lambda domain, world, salience, pending, next_id: self.engine.edit(domain, world, action, salience, pending, next_id),
             user_text=label, continuation=True)

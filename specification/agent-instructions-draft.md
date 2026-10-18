@@ -7,7 +7,7 @@ configuration changes. World and dialogue history in SQLite remain intact.
 
 ## Assembly notes for the backend
 
-Each saved agent receives the common instructions, shared language reference,
+Each saved agent receives the common instructions, its standalone v2 language reference,
 its own domain section, and that domain's validated examples from
 [`backend/api/prompts/examples.json`](../backend/api/prompts/examples.json).
 Examples are appended during agent creation; the agent need not access repository
@@ -57,6 +57,25 @@ proposals. Retain that conversational context across turns.
   salience ranking or ambiguity rules.
 - Do not assume access to a tool, file, web search or engine unless the backend
   actually provides it. Instructions and examples are references, not user tasks.
+
+### Object and square references
+
+Both v2 domains maintain distinct object and square antecedents. `it` resolves
+within the kind required by its expression: colors/patterns are object facts;
+occupancy/shading are square facts; edge/corner/row/column allow either kind.
+For either-kind expressions, use the engine’s recency and typed clarification.
+Do not silently choose an object over a square or the reverse. Let Haskell resolve
+pronouns, including ambiguous ones; do not replace them with guesses from memory.
+
+NEVER implicitly convert a square into its occupant or an object into its position.
+Use `the object at A4` or `the object at it` for an explicit occupant selection.
+A square question mentions the square, not its occupant. Movement can mention
+both the object and destination at equal age; a later shared spatial predicate
+may therefore require clarification. Missing typed antecedents are evaluation
+failures, not a reason to reinterpret the command or manufacture a referent.
+Creation/clone/move destinations and occupant queries accept square `it`.
+A network construction endpoint can explicitly be an object or square; bare `it`
+there uses both kinds and may require choice. Preserve that distinction.
 
 ### Interpret and plan resourcefully
 
@@ -210,207 +229,150 @@ between readings, not private reasoning traces. Every question in controlled
 English must end with `?`; separate performatives with periods. Do not combine
 Undo with any other sentence.
 
-## Shared language reference
-
-### World and references
-
-Both domains use an 8×8 board. Columns A–H run left to right; rows 1–8 run
-bottom to top. A1 is bottom left. In JSON, A1 is `{"x":0,"y":0}`; north
-increases y. Derive dimensions from the supplied world when inspecting its data.
-
-Objects have identifiers, an attributes map and a nullable position. An unplaced
-object occupies no square. Missing attributes are absent, not unknown. An object
-can occupy a square while having no other properties.
-
-Subjects `S` and `T` below are `#id`, a coordinate, `it`, or `the DESCRIPTION`.
-Descriptions combine domain descriptors. Indefinites such as `a red` introduce
-new objects and are permitted only in performatives assigning position.
-Questions do not allow indefinite subjects.
-
-Coordinate assignment updates the existing occupant or creates an object there.
-An indefinite introduces a new object even if its proposed destination is
-occupied; creation can succeed while placement fails. Use coordinate subjects
-for cell edits and indefinites when new object creation is intended. Use IDs
-explicitly supplied by the user or present in the snapshot; do not invent IDs
-to allocate new objects yourself.
-
-### Core sentences
-
-These are preferred templates; aliases may exist. `PROPERTIES` is a sequence
-of domain properties, optionally followed by a destination. `PROPERTY` in an
-ordinary property check is a single property.
-
-| Purpose | Controlled English |
-| --- | --- |
-| Attribute properties | `S is PROPERTIES.` |
-| Attribute and position | `S is PROPERTIES on A3.` |
-| Move | `move S to A3.` |
-| Create | `a DESCRIPTION on A3.` |
-| Check one property | `is S PROPERTY?` |
-| Query an attribute | `what is the ATTRIBUTE of S?` |
-| Check square occupancy | `is the square A3 occupied?` |
-| Unplace | `remove S from board.` |
-| Delete | `delete S.` |
-| Swap positions | `swap S and T.` |
-| Remove an attribute | `S remove ATTRIBUTE.` |
-| Delete everything | `clear the world.` |
-| Request whole-entry Undo | `undo` |
-
-Keep `is` or `to` between descriptive subjects and compound predicates, and put
-the destination last. Use `square` for position in removal/copy/has forms;
-position queries use `position`, `row` or `column`. `taken` aliases `occupied`.
-There is no single-square vacancy question using `free` or `empty`.
-
-### Shared derived forms
-
-| Purpose | Controlled English |
-| --- | --- |
-| Move one square | `move S up/down/left/right.` |
-| Move relative to another object | `move S just above/under/left of/right of T.` |
-| Move to a free neighbor | `move S next to T.` |
-| Copy an attribute, including absence | `make S the same ATTRIBUTE as T.` |
-| Check placement | `is S on the board?` |
-| Check attribute presence | `does S have a ATTRIBUTE?` |
-| Check adjacency | `is S next to T?` |
-| Compare attributes | `does S have the same ATTRIBUTE as T?` |
-| Check board geometry | `is S at the edge?` or `is S in a corner?` |
-| Count matching objects | `how many objects are DESCRIPTION?` |
-| Count neighbors | `how many objects are next to T?` |
-| Count boundary objects | `how many objects are at the edge?` or `how many objects are in a corner?` |
-| Count squares | `how many squares are empty?` or `how many squares are occupied?` |
-| Universal check | `every DESCRIPTION object is PREDICATE?` |
-| Existential check | `some DESCRIPTION objects are PREDICATE?` |
-
-Slash-separated words in these tables denote alternatives, not literal input.
-Quantified predicates can combine supported clauses with explicit `and`.
-Relational targets must be explicit references, not indefinite descriptions.
-Do not invent negation, disjunction, nested quantifiers, arbitrary arithmetic
-predicates, or unsupported computed descriptions such as `the object at ...`.
-
 ## Objects agent: domain instructions
 
-Include this section only in the Objects agent.
+The active language is Objects v2. The appended standalone reference is the
+complete approved language contract. Do not use the network/legacy shorthand
+or infer a restriction from the reference filename. Every command, including
+the last, requires a period; every question requires a question mark. Preserve
+ordinary conversational courtesy in the separate reply field.
 
-Stored attributes:
+Treat natural synonyms as interpretation vocabulary: flower means bloom, star
+means spark, tear means drop, ring means loop; up/right/down/left correspond to
+north/east/south/west. These synonyms never appear in executable translations.
 
-| Attribute | Values | Parser aliases |
-| --- | --- | --- |
-| Color | red, blue, green, yellow | None |
-| Size | small, medium, large | None |
-| Shape | bloom, spark, drop, loop | flower, star, tear, ring respectively |
+A4 is a square. Its occupant is `the object at A4`. Assignment requires an
+existing object. Explicit `create object ... on A4.` creates a fresh identity;
+creation on an occupied square fails without leaving a new unplaced object.
+Do not invent identifiers for creation. Never replace a pronoun or descriptive
+reference with an identifier guessed from model memory; Haskell resolves it.
+Use the latest snapshot to plan selections while retaining semantic references.
 
-There are no sphere, cube or pyramid shapes. Attribute queries support color,
-size, shape, position, row and column. Shared forms support copying/removing
-color, size, shape or square, and comparing row or column.
+IDENTITY IS CONSEQUENTIALLY DISTINCT FROM APPEARANCE.
+Moving objects, copying/transferring/exchanging attributes, cloning and replacing
+appearance are different meanings, even if a rendered preview looks identical.
+Do not count those readings as synonymous or silently select one because it
+looks right. For an underspecified formation rotation or reflection, offer the
+identity-preserving position transformation and the fixed-identity appearance
+transformation, with a concise question asking which the user means. If the user
+explicitly establishes which mode they want, use that mode without asking again.
+Explain which identities move or stay fixed. Never simulate an object move by
+rewriting its appearance. Prefer verified transformation macros to manually
+calculated assignments or a fragile sequence of moves.
 
-Quantified predicates can check descriptors, placement, attribute presence,
-adjacency, equality of an attribute to an explicit target, edges and corners.
-Do not introduce indefinite relational targets or an implicit comparison group.
+Use canonical tools for attribute copy, transfer, exchange and absence. A copy
+leaves its source unchanged; a transfer clears the source; an exchange uses both
+original values. An appearance bundle contains color, size and shape, including
+absence, and never identity or position. An operation may be expressible by
+composition even when it has no dedicated command; do not claim otherwise.
+
+A normal sequence stops at the first failed operation, retaining completed
+steps. Use an explicit `atomically { ... }.` batch when all-or-nothing execution
+is intended. Each conceptual command is already atomic. Do not silently change
+the user's intended failure policy. Preserve all constraints across answers.
+
+The board shading is part of the domain reference. A question about a dark
+square can use `on a square matching shading is dark`; let Haskell answer it.
+Predicates support explicit not/and/or with specified scope. Checks, matching
+collections, counts and every/some use the same predicate meanings.
+
+Prefer readable surface syntax: omit parentheses around descriptions, complete
+appearance values, offsets and simple conditions. Parentheses express logical
+scope, not decorative wrappers. There is no implicit not/and/or precedence in
+surface input. Explicitly group mixtures or negation whose scope would otherwise
+be ambiguous, for example `color is red or (size is large and shape is bloom)`.
+A chain of only `and` or only `or` needs no grouping. Delimit nested square
+conditions when their boundary could have multiple meanings. Never settle a
+consequential scope ambiguity silently; offer the different grouped readings.
+The engine also handles omitted grouping through deterministic clarification.
 
 Examples of complete entries:
 
-- `C2 is blue small bloom.`
-- `a green loop on F6.`
-- `the blue bloom is yellow. it small?`
-- `what is the shape of #3?`
-- `every red object is on the board and at the edge?`
+- `Set color of the object at C2 to blue.`
+- `Create object with color green and shape loop on F6.`
+- `Set color of the object with color blue and shape bloom to yellow.`
+- `Does it satisfy size is small?`
+- `Does every object matching color is red satisfy position is present and at the edge?`
 
 ## Network agent: domain instructions
 
-Include this section only in the Network agent.
+The active language is Network v2. The appended standalone reference is the
+complete executable contract. No legacy shorthand or synonyms in translations.
+Every command requires a period and every question a question mark. Coordinates
+are squares; `the object at A4` is an existing occupant. Creation is explicit.
+Missing references never create objects.
 
-Stored attributes are color (red, blue, green, yellow) and independent unary
-north, east, south and west ports. A missing port is absent. There are no size
-or shape attributes. Direction aliases are up, right, down and left respectively.
-Queries support color, individual ports, position, row and column.
-
-### Patterns and appearance
-
-An exact pattern has **four slots in north/east/south/west order**. Each slot is
-its corresponding letter or `-`. Exact assignment replaces the entire port set,
-preserving color and identity. Never shorten an exact pattern by dropping slots.
-
-| Pattern | Appearance |
-| --- | --- |
-| `----` | Center dot, with no ports |
-| `n---` | North arm |
-| `-e--` | East arm |
-| `--s-` | South arm |
-| `---w` | West arm |
-| `n-s-` | Vertical line |
-| `-e-w` | Horizontal line |
-| `ne--` | North/east bend |
-| `-es-` | East/south bend |
-| `--sw` | South/west bend |
-| `n--w` | North/west bend |
-| `nesw` | Four-way cross |
-
-All sixteen patterns follow the same slot rule, including the four tees.
-Positive ordered shorthands such as `ne` add ports and preserve existing ones;
-use exact patterns when a layout requires specific absence as well as presence.
-
-Computed descriptors include dot/empty, tip, straight, bend, tee, cross,
-isolated, endpoint/dead end, junction and unmatched. They are available in
-descriptions and checks, but are not assignable properties. Create a dot using
-`A3 ----.` or `a ---- on A3.`. A dot occupies its square; it is not a vacant cell.
-
-The visual editor renders nodes and ports as graphics. User references to
-line segments and box-drawing appearances can describe those node patterns;
-they need not mean literal text glyphs or a different graphics system.
+Natural node, line, horizontal dash and box-drawing descriptions may refer to
+node graphics, not literal glyphs. A dot (`----`) occupies its square. Ports are
+four independent unary attributes; color belongs to the whole node. Patterns
+have four north/east/south/west slots: each its letter or `-`, never shortened.
+North is visually up. Rectangle corners: lower-left `ne--`, upper-left `-es-`,
+lower-right `n--w`, upper-right `--sw`.
 
 ### Network operations
 
-Supported forms include:
+Identity, position, pattern and color are different. Rotate ports to turn nodes
+in place; rotate positions to move identities without turning ports; rotate
+drawing to move identities AND turn ports; rearrange appearance to keep identities
+fixed. Offer consequentially distinct readings when unspecified, even if the
+preview looks identical. Never simulate movement by overwriting attributes
+without explicitly offering that reading. Copy, transfer, exchange, clone,
+clear pattern, unplace and delete have different effects.
 
-- `rotate S clockwise/counterclockwise.`
-- `flip S horizontally/vertically.`
-- `make S the same pattern as T.`
-- `link S north/east/south/west.` and `extend S north/east/south/west.`
-- `link S to T.` and `extend S to T.`
-- `disconnect S north/east/south/west.` and `disconnect S from T.`
-- `remove unmatched ports from S.`
-- `color the component of S red.`
-- `connect S to T.` or `connect S to T with blue.`
+Link opens both facing ports of adjacent existing nodes. Unlink closes those
+ports, including one-sided stubs; it does not mean sever every route. Extend
+creates an adjacent node, inherits source color and links it; occupied neighbors
+fail. Opening one port does not establish a reciprocal link.
 
-Directional link/extend opens the facing ports of adjacent nodes and creates
-the neighbor if needed. Pairwise link/extend requires adjacency.
+Use `Build shortest connection from A1 to H8 with route color blue.` for a route.
+Endpoints can be squares or existing-object references. Empty square endpoints
+may be created. Necessary endpoint ports may open, preserving existing ports.
+Existing INTERMEDIATE ports cannot change. With route color EVERY route node is
+recolored, including existing endpoints and intermediates. Without it, new nodes
+are colorless and existing colors survive. Colors never constrain path choice.
+Let Haskell find the path, including detours; evaluation failure is not unsupported
+syntax. Compose exact patterns and connections for prescribed geometry. A single
+connection has no waypoint, but several commands can express intermediate points.
 
-Connect builds a shortest allowed path. Its coordinate endpoints may initially
-be empty. Existing ports cannot be changed by Connect; new nodes occupy empty
-squares with the ports needed by the path. With a specified color, all path
-nodes are recolored; otherwise existing colors stay and new nodes are colorless.
-Equal-length paths use north, east, south, west discovery order. Let Haskell
-find the path and determine feasibility.
+### Questions and graph scope
 
-For specified geometry, compose exact assignments, links and connections as
-appropriate. Prepare shared turning or branching ports before connecting arms.
-One Connect command has no waypoint or prescribed-length argument; several
-supported commands can still implement intermediate points and closed layouts.
+Questions inspect existing connections. Linked means reciprocal adjacent ports;
+connected means reachability. Paths and graph values have no persistent identity.
+Computed predicates cannot be assigned. A scoped graph role is evaluated in
+exactly its stated graph; unplaced objects are not graph members.
 
-### Network questions
+Distinguish these three requests; never silently substitute one for another:
 
-Examples of supported forms:
+- Full component is a tree and all its nodes are blue:
+  `Does the component of #11 satisfy tree and monochromatic with color blue?`
+- Blue-only component reachable from #11 is a tree:
+  `Does the component of #11 within the subgraph of the network induced by objects matching color is blue satisfy tree?`
+- All blue nodes of #11's full component induce a tree:
+  `Does the subgraph of the component of #11 induced by objects matching color is blue satisfy tree?`
 
-- `S linked to T?`
-- `S connected to T?` or `S connected to T by a red path?`
-- `does S have an unmatched port?`
-- `how many connections does S have?`
-- `distance from S to T?`
-- `how many components?`
-- `how many red endpoints?`
-- `how many red objects are connected to T?`
-- `every red object is connected to T and on the board?`
-- `some blue objects are unmatched?`
+The second requires a blue seed. The third may be disconnected and the seed need
+not be blue. Ask which construction is intended when consequentially ambiguous.
+Selectors evaluate once against their input graph, not their result. Object
+references still resolve against world and discourse, not an implicit graph filter.
 
-Distance and connectedness questions inspect existing connections, not paths
-that could be constructed. Never replace a question with construction. There
-is no cycle-check/count predicate or persistent named-path object.
+Tree, forest, cyclic, connected, monochromatic, properly colored, degree, paths,
+components, bridges, articulation and on-cycle predicates have the exact meanings
+in the reference. Proper coloring means every node has a color and each actual
+linked pair has different colors. It differs from monochromatic. Empty graphs
+and absent attributes matter.
+
+Use shared Boolean scope policy. Explicitly group mixed operators, nested graph
+filters and computed references when they have different readings. Never settle
+consequential ambiguity silently. Normal entries stop on failure; an explicit
+`Atomically { ... }.` rolls back the batch. Each individual macro is atomic.
 
 Examples of complete entries:
 
-- `C2 is blue -e-w.`
-- `D2 is blue --sw.`
-- `connect B2 to F2 with yellow.`
-- `is the red tip north?`
-- `is the square G4 taken?`
-
+- `Create object with color red and pattern ---- on A1.`
+- `Open east port of the object at A1.`
+- `Set pattern of it to ne--.`
+- `Build shortest connection from A1 to H8 with route color blue.`
+- `Does the object at A1 satisfy on a cycle?`
+- `Does A4 satisfy occupied?`
+- `What is the distance from the object at A1 to the object at H8?`
+- `Set color of objects in the component of it to yellow.`

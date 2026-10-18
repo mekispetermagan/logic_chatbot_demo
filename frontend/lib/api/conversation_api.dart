@@ -112,6 +112,14 @@ class ConversationApi {
   Future<ConversationState> clarify(String id, int objectId) =>
       _request('POST', id: id, action: 'clarify', body: {'objectId': objectId});
 
+  Future<ConversationState> clarifyGrouping(String id, int groupingId) =>
+      _request(
+        'POST',
+        id: id,
+        action: 'clarify',
+        body: {'groupingId': groupingId},
+      );
+
   Future<ConversationState> previewInterpretation(
     String id,
     String proposalId,

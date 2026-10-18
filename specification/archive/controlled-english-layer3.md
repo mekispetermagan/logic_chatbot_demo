@@ -1,5 +1,7 @@
 # Controlled English: Layer 3
 
+> Archived pre-v2 design. Current contracts: [Objects v2](../object-language-v2.md) and [Network v2](../network-language-v2.md).
+
 Layer 3 adds relative movement, attribute copying, spatial questions, counting,
 and quantification to the existing core and Layer 2 syntax. Chat uses
 `parseSentences` and `evaluateEntry`; the atomic parser remains Layer 1 only.

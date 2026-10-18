@@ -21,6 +21,7 @@ class ChatPanel extends StatefulWidget {
     this.pending,
     this.onChoose,
     this.onChooseSquare,
+    this.onChooseGrouping,
     this.llmBudget,
     this.proposal,
     this.preview,
@@ -31,6 +32,7 @@ class ChatPanel extends StatefulWidget {
     this.onAccept,
     this.onReject,
     this.onAnswer,
+    this.languageVersion = 'unknown',
   });
 
   final List<ChatMessage> messages;
@@ -40,6 +42,7 @@ class ChatPanel extends StatefulWidget {
   final PendingEntry? pending;
   final ValueChanged<int>? onChoose;
   final ValueChanged<BoardPosition>? onChooseSquare;
+  final ValueChanged<int>? onChooseGrouping;
   final Future<bool> Function(String) onSend;
   final VoidCallback onRefresh;
   final LlmBudget? llmBudget;
@@ -52,6 +55,7 @@ class ChatPanel extends StatefulWidget {
   final Future<bool> Function()? onAccept;
   final Future<bool> Function()? onReject;
   final Future<bool> Function(String)? onAnswer;
+  final String languageVersion;
 
   @override
   State<ChatPanel> createState() => _ChatPanelState();
@@ -65,9 +69,15 @@ class _ChatPanelState extends State<ChatPanel> {
   int _historyIndex = 0;
   TextEditingValue? _draft;
   bool get _answering => widget.proposal?.canAnswer == true;
+  bool get _staleProposal =>
+      widget.proposal != null &&
+      widget.proposal!.languageVersion != widget.languageVersion;
   bool get _canSubmit => widget.proposal == null
       ? widget.canSend
-      : _answering && widget.canReview && widget.onAnswer != null;
+      : _answering &&
+            !_staleProposal &&
+            widget.canReview &&
+            widget.onAnswer != null;
 
   KeyEventResult _navigateHistory(FocusNode node, KeyEvent event) {
     final keyboard = HardwareKeyboard.instance;
@@ -239,6 +249,7 @@ class _ChatPanelState extends State<ChatPanel> {
                           },
                           onReject: _rejectProposal,
                           preview: widget.preview,
+                          languageVersion: widget.languageVersion,
                         );
                       }
                       index -= 1;
@@ -251,8 +262,18 @@ class _ChatPanelState extends State<ChatPanel> {
                 ),
         ),
         if (widget.pending case final pending?) ...[
+          if (pending.stagedWorld != null)
+            const Text(
+              'Atomic batch pending — the displayed staged world is provisional; nothing has been applied.',
+            ),
           Text(
-            '${pending.squareChoices.isEmpty ? 'Which object?' : 'Which square?'} ${pending.sentence}',
+            '${pending.groupingChoices.isNotEmpty
+                ? 'Which grouping?'
+                : pending.squareChoices.isNotEmpty && pending.candidates.isNotEmpty
+                ? 'Which referent: object or square?'
+                : pending.squareChoices.isEmpty
+                ? 'Which object?'
+                : 'Which square?'} ${pending.sentence}',
           ),
           Flexible(
             child: SingleChildScrollView(
@@ -260,19 +281,35 @@ class _ChatPanelState extends State<ChatPanel> {
                 spacing: 8,
                 runSpacing: 4,
                 children: [
+                  for (final candidate in pending.groupingChoices)
+                    OutlinedButton(
+                      onPressed: busy || widget.onChooseGrouping == null
+                          ? null
+                          : () =>
+                                widget.onChooseGrouping!(candidate.groupingId),
+                      child: Text(candidate.label),
+                    ),
                   for (final square in pending.squareChoices)
                     OutlinedButton(
                       onPressed: busy || widget.onChooseSquare == null
                           ? null
                           : () => widget.onChooseSquare!(square),
-                      child: Text(square.square),
+                      child: Text(
+                        pending.candidates.isEmpty
+                            ? square.square
+                            : 'Square ${square.square}',
+                      ),
                     ),
                   for (final candidate in pending.candidates)
                     OutlinedButton(
                       onPressed: busy || widget.onChoose == null
                           ? null
                           : () => widget.onChoose!(candidate.objectId),
-                      child: Text(candidate.label),
+                      child: Text(
+                        pending.squareChoices.isEmpty
+                            ? candidate.label
+                            : 'Object ${candidate.label}',
+                      ),
                     ),
                 ],
               ),
@@ -341,6 +378,7 @@ class _ChatPanelState extends State<ChatPanel> {
                     focusNode: _composerFocus,
                     enabled:
                         !busy &&
+                        !_staleProposal &&
                         widget.pending == null &&
                         (widget.proposal == null || _answering),
                     minLines: 1,

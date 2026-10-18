@@ -1,210 +1,82 @@
-# Logic engine experiments
+# Haskell logic engine
 
-`Ontology.hs` contains generic entities, optional finite attributes, positions,
-and world helpers. `Domain.hs` defines ontology data and validation;
-`DomainLibrary.hs` supplies pure derived-grammar and evaluation hooks.
-The objects domain lives in `Domains/Objects/`: `Definition.hs` declares its
-attributes and vocabulary, `Parser.hs` and `Evaluation.hs` implement its derived
-language, and `Library.hs` assembles the domain library. `Vocabulary.hs` keeps
-convenient color/size/shape constructors for experiments and regression fixtures.
+The served languages are [Objects v2](../../specification/object-language-v2.md)
+and [Network v2](../../specification/network-language-v2.md). Both implement
+three layers: atomic operations, symbolic references, and conceptual macros.
+Commands require a period; questions require `?`. Coordinates denote locations;
+`the object at A4` explicitly denotes an existing occupant. Creation is explicit.
 
-`AtomicPerformative.hs`, `AtomicPropertyCheck.hs`, and `AtomicPropertyQuery.hs`
-operate on generic attributes. `AtomicSentence.hs` combines the three sentence
-kinds. `SyntaxVocabulary.hs` shares domain-aware description and reference
-parsing. `Pretty.hs` defines formatting; `Result.hs` defines evaluation results.
-`Sandbox.hs` holds examples, and `Grammar.hs` remains the GHCi facade.
+## Build and test
 
-Functions ending in `With` take an explicit ontology, except the chat parser's
-`parseSentencesWith` / `parseSentenceWith`, which take a `DomainLibrary`.
-Entry/continuation evaluation functions ending in `In` take a `DomainLibrary`.
-Existing short names select the objects domain for GHCi compatibility. The bridge
-selects a library from the required `domain` identifier; `objects` and `network` are supported.
-See [domain architecture](../../specification/domain-architecture.md).
-
-`AtomicParser.hs` uses Megaparsec to parse controlled-English atomic sentences
-without updating state.
-
-The objects domain declares shapes `bloom`, `spark`, `drop`, and `loop`. Both natural-language parsers
-accept `flower`, `star`, `tear`, and `ring` as aliases; prettyprinting and JSON
-normalize to `bloom`, `spark`, `drop`, and `loop`.
-
-Identifiers use `#3`; square references use A1-H8. The old `o3` spelling is
-not accepted. The parser accepts case-insensitive properties and squares, optional `is`,
-optional `on` for positions, and optional periods only at the end of an entry.
-Adjacent performatives must be separated by a period. Squares A1-H8 map to zero-based
-coordinates with A1 at `(0, 0)`. Empty input and malformed suffixes are rejected.
-
-`parseAtomicPerformative` parses exactly one performative;
-`parseAtomicPerformatives` returns an ordered list. Both return `Either String`
-with a readable parse error on failure.
-
-`parseAtomicSentence` and `parseAtomicSentences` also accept property checks,
-marked with `?`, such as `#1 is red?` or `#1 on B3?`. They return
-`AtomicSentence` values tagged as `Performative` or `PropertyCheck`.
-`evaluateAtomicPropertyCheck` queries a world and returns `Result Bool`:
-absent or different properties are false, and a missing object yields `Message`.
-`pretty` renders a property check as controlled English ending in `?`.
-
-`AtomicPropertyQuery.hs` adds attribute-value questions: `color of #3?`,
-`size of #3?`, `shape of #3?`, `position of #3?`, `row of #3?`, and
-`column of #3?`. Mixed parsers return these as `PropertyQuery` sentences.
-`evaluateAtomicPropertyQuery` returns `Result QueryAnswer`, with `Absent` for
-missing attributes and `Message` for missing objects. Answers support `pretty`:
-positions print as A1-H8, rows as 1-8, columns as A-H, and absence as `none`.
-
-`AtomicEvaluation.hs` provides `evaluateAtomicSentences world sentences`, returning
-the final world and ordered `AtomicFeedback` values. Each feedback includes the
-parsed sentence and an answer or update change, and supports `pretty`. Questions
-see preceding updates; missing referents produce messages without stopping the
-sequence. Repeating a fact reports no change. Parsing remains separate, and
-updates reject out-of-board positions and occupied destinations.
-
-`ReferenceResolution.hs` resolves either `ById` or `AtSquare` subjects.
-Performatives create missing objects during resolution; an empty square gets
-`nextId` and that position. Questions never create, and ambiguous references
-produce a message. A failed movement preserves any object just created at its
-source. For example, `A4 to A5` creates at A4 if needed, then moves if A5 is free.
-`to` is performative-only; `on` supports both updates and property checks.
-Every question requires `?`; performatives do not accept it. Attribute shorthand
-works with both references: `B3 column?` and `#3 column?`.
-
-`Console.hs` provides `chatLoop :: World -> IO ()`. In `cabal repl`, run
-`:module + Console` followed by `Console.main` to start from `Sandbox.world`,
-or `chatLoop world` with another starting world. Each round prints the world,
-reads one line, prints feedback, and repeats with the updated world. Parse errors
-preserve state. Enter `:quit` or send end-of-input to exit the loop.
-
-With Cabal and dependency downloads available, run from this directory:
-
-```sh
-cabal test
-cabal repl
-```
-
-Inside the REPL, use `:module + AtomicParser` to expose the parsing functions.
-If Megaparsec is already available to GHCi, you can instead run:
-
-```sh
-ghci -XInstanceSigs Grammar.hs AtomicParser.hs
-```
-
-`InstanceSigs` is needed for the existing signature in the `Ord Identifier`
-instance. Cabal enables it for this project. Parsing does not perform collision
-checks or apply updates; those belong to the world-update layer.
-
-## Visual editor bridge
-
-`WorldEditor.hs` evaluates property edits, placement, erasure, and clearing as
-pure operations. Property edits reuse atomic performatives; placement requires
-an existing unplaced object. Undo belongs to FastAPI persistence.
-
-`bridge/EditorJson.hs` handles JSON; `bridge/Main.hs` provides a one-request
-executable. Each process reads one JSON document from stdin and writes one
-response to stdout. Invalid protocol input exits unsuccessfully with diagnostics
-on stderr. The bridge validates 8×8 dimensions, unique identifiers, bounds, and
-occupancy of the supplied world before evaluation.
+Run from this directory:
 
 ```sh
 cabal build exe:logic-engine-editor
 mkdir -p bin
 cp "$(cabal list-bin exe:logic-engine-editor)" bin/logic-engine-editor
 cabal test
+cabal repl
 ```
 
-Rebuild and copy after changes to engine code. FastAPI uses the copied executable.
-A request has a required `domain` identifier, `world` (the shared JSON representation) and `action`, for example:
+Rebuild and copy after Haskell changes; FastAPI invokes the installed executable.
+The JSON bridge reads one request from stdin, writes one reply to stdout, and
+exits. Invalid transport/versions exit 2 with a diagnostic on stderr. Language
+syntax/evaluation failures are normal structured responses. No HTTP, database or
+provider access occurs in Haskell. See the [JSON contract](../../specification/json-contract.md).
 
-```json
-{"domain":"objects","world":{"width":8,"height":8,"objects":[]},"action":{"type":"property","position":{"x":0,"y":0},"property":{"attribute":"color","value":"red"}}}
-```
+## Interactive use
 
-The response echoes `domain` and contains the resulting `world` and concise `feedback`. Other action
-types are `place` (with `objectId` and `position`), `erase` (with `position`),
-`clear`, `chat` (with `text`), and `clarify` (with either `objectId` or `position`). Requests also
-carry `salience` and nullable `pending`; both default to empty for older callers.
-Responses return both alongside `world`, `feedback`, and `isError`.
-Chat entries with a case-insensitive `undo` prefix after optional whitespace
-return `undoRequested: true` before grammar parsing or clarification checks.
-All trailing text is ignored; Haskell leaves the state intact for FastAPI to
-restore from history.
-The bridge owns JSON transport; `Discourse.hs` and `Layer2Evaluation.hs` own
-pure reference resolution, salience updates, ordered evaluation, and continuations.
-Haskell contains no HTTP or database handling.
-
-## Layer 2 syntax and evaluation
-
-`Layer2Syntax.hs` records pronouns, definite/indefinite descriptions, compound
-attributions, single-property checks, and attribute questions. `Layer2Parser.hs`
-exports `parseSentence` and `parseSentences`; `Grammar` re-exports both modules.
-The parser retains arbitrary descriptor order and repetition, requires explicit
-boundaries for descriptive property subjects, and requires destinations last.
-See [Layer 2 Syntax](../../specification/controlled-english-layer2.md).
+In `cabal repl`, select one domain façade to avoid conflicting short names:
 
 ```haskell
-:module + Grammar
-either putStrLn (mapM_ (putStrLn . pretty)) $ parseSentences "Turn the bloom large to green. What is the shape of it?"
+:module Domains.Network.Language Ontology
+let Right program = parseEntry "Create object with color red and pattern ---- on A1. Build shortest connection from A1 to H8 with route color blue."
+let result = runEntry (World []) [] 0 program [] 0
+putStrLn (resultFeedback result)
+resultWorld result
 ```
 
-Chat uses this parser and `evaluateEntry world ranking sentences`. Pronouns,
-definite/indefinite descriptions, and compound updates now evaluate. Ambiguity
-returns a `Pending` value containing the paused sentence, remaining sentences,
-and candidate identifiers. `resumeEntry` continues without beginning a new entry.
-See the [Layer 2 reference](../../specification/controlled-english-layer2.md)
-for scoring, salience purging, clarification, and whole-entry Undo rules.
-The console still uses the narrower atomic parser.
+Use `Domains.Objects.Language` similarly. `runEntry` takes the initial world,
+salience, next identifier, parsed entry, clarification choices, and count of
+completed sentences already displayed. Its result includes state, feedback,
+typed changes, and optional reference/placement pause. `parseEntryAlternatives`
+returns meaningful surface-scope readings; `parseEntry` requires a unique one.
 
-## Structural performatives
+## Modules and execution
 
-`AtomicPerformative` includes `Remove reference`, `Swap first second`, and
-`Delete reference`. Parse `remove #3 [from board]`, `swap #3 [and] #4`, or
-`erase/delete #3`; square references work too. These never create missing objects.
-Removal clears position, swap exchanges nullable positions atomically, and deletion
-removes the object. Both unplaced or identical swap operands report no change.
+`ControlledLanguage/` shares domain-parameterized grammar, AST, canonical replay,
+formatting and evaluation. Domain-bound façades live in `Domains/*/Language/`.
+Immutable definitions supply ontology values; network graph algorithms live in
+`Domains/Network/{Graph,Patterns,Pathfinding,Analysis}.hs`.
 
-Layer 2 accepts references, pronouns, and definite descriptions as operands,
-with no indefinites or question forms. Swap resolves both operands before any
-update and records both at the same recency. `Pending.resolvedSubjects` preserves
-a resolved prefix across clarification of the other operand; its JSON field is
-optional for compatibility with existing pending entries. See the core and
-Layer 2 references for syntax, salience purging, and Undo examples.
+Normal sequences stop on failure, retaining completed operations. Every macro is
+atomic; explicit `Atomically { ... }.` batches commit all world/salience changes
+or none. Pending atomic work exposes a separate provisional world. Continuations
+replay their frozen seed and accepted choices through the canonical parser.
+One entry and all its clarifications form one Undo unit in FastAPI.
 
+Both domains return monotonic allocation counters outside Undo history. Preview
+does not persist allocations. Visual editor operations retain explicit
+create-or-update convenience. Ordinary chat never creates a missing referent.
+Graph facts in salience carry explicit context and are rechecked after updates.
 
-## Layer 3
+There is no legacy continuation support or database migration. Older atomic,
+Layer 2, DomainLibrary and Sandbox modules remain available for experiments and
+regression tests; their aliases and convenience semantics are not served grammar.
+See [domain architecture](../../specification/domain-architecture.md).
 
-The shared `Layer2Syntax` and `Layer2Parser` entry points also represent and parse
-Layer 3. `Layer3Evaluation.hs` evaluates relative movement, copying, spatial
-questions, counts, and quantifiers; moves and copies reuse Layer 1 updates.
-`Layer2Evaluation` dispatches these forms while preserving ordered evaluation
-and discourse updates. See [Layer 3](../../specification/controlled-english-layer3.md)
-for syntax and semantics.
+## Object and square antecedents
 
-`SquarePending` retains free square choices and resolved object IDs.
-`resumeSquareEntry world ranking pending position` resumes without aging the
-entry or resolving those IDs again. JSON uses `squareChoices` for these choices;
-object choices retain the existing fields. FastAPI stores both forms, and Flutter
-renders square labels as buttons. All clarification steps share one Undo snapshot.
+`ControlledLanguage.Discourse` keeps typed object identifiers and square
+coordinates on one recency clock. Predicate/operand types restrict eligible
+antecedents; shared spatial predicates use recency across both and clarify ties.
+`Does D1 satisfy not occupied? Does it satisfy occupied?` refers to the same
+square twice, without introducing its occupant. `the object at it` is an explicit
+occupant selection. No object-to-position or square-to-occupant coercion occurs.
 
-Missing or unsupported domain identifiers fail on stderr with a exit
-status 2 and no response JSON. See `backend/shared/editor_request.json` (relative
-to the repository root) for a complete minimal request fixture.
-
-## Network core library
-
-`Domains/Network/Definition.hs` declares optional object color and four unary
-ports, including directional aliases. `Library.hs` supplies all three layers, with graph, pattern and derived-language
-operations in the neighboring Network modules. `Sandbox.hs` supplies `networkWorld` and
-`networkIntroduction` for GHCi. The JSON bridge supports both domains using generic attribute maps.
-See [network core](../../specification/network-core.md) for syntax and commands.
-
-See the [JSON contract](../../specification/json-contract.md) for world, property,
-and salience encodings.
-
-See [network Layer 3](../../specification/controlled-english-network-layer3.md) for rotations, links, components, paths, computed descriptions and aggregate questions.
-
-
-`Domains.Network.Pathfinding.shortestConnectionPath` returns an inclusive route
-through existing ports and virtual empty-square nodes, using N/E/S/W BFS order.
-`createConnection` applies it purely, returning the new world and route. Chat
-accepts `connect A1 to H8.` and `connect the red tip to H8 with blue.`. Existing
-ports stay unchanged; explicit coloring affects all route nodes. See the
-network Layer 3 specification for empty endpoints, clarification and Undo.
+Square mentions and their currently true facts are persisted alongside object
+mentions. False occupancy evidence is purged after updates, while the location
+survives deletion of its occupant. Clarification choices retain their types;
+Undo and atomic rollback restore both kinds together. Old object-only ranking
+records retain their JSON representation. The experimental legacy `Discourse`
+module is separate from the served typed ranking.

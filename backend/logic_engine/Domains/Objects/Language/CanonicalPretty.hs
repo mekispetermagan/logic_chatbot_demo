@@ -1,0 +1,2 @@
+module Domains.Objects.Language.CanonicalPretty (module ControlledLanguage.CanonicalPretty) where
+import ControlledLanguage.CanonicalPretty

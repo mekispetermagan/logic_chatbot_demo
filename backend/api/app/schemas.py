@@ -76,16 +76,22 @@ class ChatEntry(Schema):
 class ClarificationChoice(Schema):
     objectId: StrictInt | None = Field(default=None, ge=0)
     position: Position | None = None
+    groupingId: StrictInt | None = Field(default=None, ge=1)
 
     @model_validator(mode="after")
     def exactly_one_choice(self):
-        if (self.objectId is None) == (self.position is None):
-            raise ValueError("Choose an object or a square")
+        if sum(value is not None for value in (self.objectId, self.position, self.groupingId)) != 1:
+            raise ValueError("Choose an object, square, or grouping")
         return self
 
 
 class Candidate(Schema):
     objectId: StrictInt = Field(ge=0)
+    label: str
+
+
+class GroupingCandidate(Schema):
+    groupingId: StrictInt = Field(ge=1)
     label: str
 
 
@@ -96,6 +102,15 @@ class PendingEntry(Schema):
     candidates: list[Candidate]
     resolvedSubjects: list[StrictInt] = Field(default_factory=list)
     squareChoices: list[Position] = Field(default_factory=list)
+    groupingChoices: list[GroupingCandidate] = Field(default_factory=list)
+    payload: dict | None = None
+    stagedWorld: World | None = None
+
+
+class WorldChange(Schema):
+    objectId: StrictInt = Field(ge=0)
+    kind: Literal['created', 'deleted', 'position', 'appearance']
+    detail: str
 
 
 class InterpretationCandidate(Schema):
@@ -129,6 +144,7 @@ class InterpretationProposal(Schema):
     validationFailures: list[InterpretationFailure] = Field(default_factory=list)
     clarifications: list[InterpretationTurn] = Field(default_factory=list)
     llm: LlmUsage
+    languageVersion: str = 'unknown'
 
 
 class InterpretationChoice(Schema):
@@ -141,6 +157,7 @@ class InterpretationPreview(Schema):
     world: World
     feedback: str
     pending: PendingEntry | None = None
+    changes: list[WorldChange] = Field(default_factory=list)
 
 
 class ConversationState(Schema):
@@ -152,11 +169,14 @@ class ConversationState(Schema):
     pending: PendingEntry | None = None
     llmBudget: LlmBudget | None = None
     proposal: InterpretationProposal | None = None
+    languageVersion: str = 'unknown'
+    nextObjectId: StrictInt = Field(default=0, ge=0)
 
 
 class EditState(ConversationState):
     feedback: str
     preview: InterpretationPreview | None = None
+    changes: list[WorldChange] = Field(default_factory=list)
 
 
 class AttributeProperty(Schema):

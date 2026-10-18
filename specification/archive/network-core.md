@@ -1,8 +1,10 @@
+> Archived pre-v2 language. Current contract: [Network v2](../network-language-v2.md).
+
 # Network domain: ontology and core language
 
 The Haskell domain identifier is `network`. The JSON bridge and FastAPI support this domain using generic attributes and
 its seven-object initial world. Flutter supports domain switching and a network editor with all 16 port patterns.
-See the [JSON contract](json-contract.md).
+See the [JSON contract](../json-contract.md).
 
 ## Ontology
 

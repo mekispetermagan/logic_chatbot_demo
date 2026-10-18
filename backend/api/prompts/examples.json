@@ -1,1338 +1,1598 @@
 {
   "objects": [
     {
-      "input": "Paint A1 red",
-      "translation": "A1 red."
+      "input": "Create a red object on A1",
+      "translation": "create object with color red on A1."
     },
     {
-      "input": "Is it red",
-      "translation": "It red?"
+      "input": "Color the object at A1 red",
+      "translation": "set color of the object at A1 to red."
     },
     {
-      "input": "What colour is the red one?",
-      "translation": "Color of the red?"
+      "input": "Is the object at A1 red?",
+      "translation": "does the object at A1 satisfy color is red?"
     },
     {
-      "input": "Make number 0 red",
-      "translation": "#0 red."
+      "input": "Create a blue object on A1",
+      "translation": "create object with color blue on A1."
     },
     {
-      "input": "Put a red one on A1",
-      "translation": "A red on A1."
+      "input": "Color the object at A1 blue",
+      "translation": "set color of the object at A1 to blue."
     },
     {
-      "input": "How many red things are there?",
-      "translation": "How many red?"
+      "input": "Is the object at A1 blue?",
+      "translation": "does the object at A1 satisfy color is blue?"
     },
     {
-      "input": "Paint B2 blue",
-      "translation": "B2 blue."
+      "input": "Create a green object on A1",
+      "translation": "create object with color green on A1."
     },
     {
-      "input": "Is it blue",
-      "translation": "It blue?"
+      "input": "Color the object at A1 green",
+      "translation": "set color of the object at A1 to green."
     },
     {
-      "input": "What colour is the blue one?",
-      "translation": "Color of the blue?"
+      "input": "Is the object at A1 green?",
+      "translation": "does the object at A1 satisfy color is green?"
     },
     {
-      "input": "Make number 1 blue",
-      "translation": "#1 blue."
+      "input": "Create a yellow object on A1",
+      "translation": "create object with color yellow on A1."
     },
     {
-      "input": "Put a blue one on B2",
-      "translation": "A blue on B2."
+      "input": "Color the object at A1 yellow",
+      "translation": "set color of the object at A1 to yellow."
     },
     {
-      "input": "How many blue things are there?",
-      "translation": "How many blue?"
+      "input": "Is the object at A1 yellow?",
+      "translation": "does the object at A1 satisfy color is yellow?"
     },
     {
-      "input": "Paint C3 green",
-      "translation": "C3 green."
+      "input": "Create a red object on A2",
+      "translation": "create object with color red on A2."
     },
     {
-      "input": "Is it green",
-      "translation": "It green?"
+      "input": "Color the object at A2 red",
+      "translation": "set color of the object at A2 to red."
     },
     {
-      "input": "What colour is the green one?",
-      "translation": "Color of the green?"
+      "input": "Is the object at A2 red?",
+      "translation": "does the object at A2 satisfy color is red?"
     },
     {
-      "input": "Make number 2 green",
-      "translation": "#2 green."
+      "input": "Create a blue object on A2",
+      "translation": "create object with color blue on A2."
     },
     {
-      "input": "Put a green one on C3",
-      "translation": "A green on C3."
+      "input": "Color the object at A2 blue",
+      "translation": "set color of the object at A2 to blue."
     },
     {
-      "input": "How many green things are there?",
-      "translation": "How many green?"
+      "input": "Is the object at A2 blue?",
+      "translation": "does the object at A2 satisfy color is blue?"
     },
     {
-      "input": "Paint D4 yellow",
-      "translation": "D4 yellow."
+      "input": "Create a green object on A2",
+      "translation": "create object with color green on A2."
     },
     {
-      "input": "Is it yellow",
-      "translation": "It yellow?"
+      "input": "Color the object at A2 green",
+      "translation": "set color of the object at A2 to green."
     },
     {
-      "input": "What colour is the yellow one?",
-      "translation": "Color of the yellow?"
+      "input": "Is the object at A2 green?",
+      "translation": "does the object at A2 satisfy color is green?"
     },
     {
-      "input": "Make number 3 yellow",
-      "translation": "#3 yellow."
+      "input": "Create a yellow object on A2",
+      "translation": "create object with color yellow on A2."
     },
     {
-      "input": "Put a yellow one on D4",
-      "translation": "A yellow on D4."
+      "input": "Color the object at A2 yellow",
+      "translation": "set color of the object at A2 to yellow."
     },
     {
-      "input": "How many yellow things are there?",
-      "translation": "How many yellow?"
+      "input": "Is the object at A2 yellow?",
+      "translation": "does the object at A2 satisfy color is yellow?"
     },
     {
-      "input": "Move it onto H8",
-      "translation": "Move it to H8."
+      "input": "Create a red object on A3",
+      "translation": "create object with color red on A3."
     },
     {
-      "input": "Switch the objects on A1 and H8",
-      "translation": "Swap A1 and H8."
+      "input": "Color the object at A3 red",
+      "translation": "set color of the object at A3 to red."
     },
     {
-      "input": "Take the object at A1 off the board",
-      "translation": "Remove A1."
+      "input": "Is the object at A3 red?",
+      "translation": "does the object at A3 satisfy color is red?"
     },
     {
-      "input": "Delete the object at A1",
-      "translation": "Delete A1."
+      "input": "Create a blue object on A3",
+      "translation": "create object with color blue on A3."
     },
     {
-      "input": "Place it next to the red one",
-      "translation": "Move it next to the red."
+      "input": "Color the object at A3 blue",
+      "translation": "set color of the object at A3 to blue."
     },
     {
-      "input": "Move it onto C4",
-      "translation": "Move it to C4."
+      "input": "Is the object at A3 blue?",
+      "translation": "does the object at A3 satisfy color is blue?"
     },
     {
-      "input": "Switch the objects on B3 and C4",
-      "translation": "Swap B3 and C4."
+      "input": "Create a green object on A3",
+      "translation": "create object with color green on A3."
     },
     {
-      "input": "Take the object at B3 off the board",
-      "translation": "Remove B3."
+      "input": "Color the object at A3 green",
+      "translation": "set color of the object at A3 to green."
     },
     {
-      "input": "Delete the object at B3",
-      "translation": "Delete B3."
+      "input": "Is the object at A3 green?",
+      "translation": "does the object at A3 satisfy color is green?"
     },
     {
-      "input": "Place it next to the red one",
-      "translation": "Move it next to the red."
+      "input": "Create a yellow object on A3",
+      "translation": "create object with color yellow on A3."
     },
     {
-      "input": "Move it onto C3",
-      "translation": "Move it to C3."
+      "input": "Color the object at A3 yellow",
+      "translation": "set color of the object at A3 to yellow."
     },
     {
-      "input": "Switch the objects on H1 and C3",
-      "translation": "Swap H1 and C3."
+      "input": "Is the object at A3 yellow?",
+      "translation": "does the object at A3 satisfy color is yellow?"
     },
     {
-      "input": "Take the object at H1 off the board",
-      "translation": "Remove H1."
+      "input": "Create a red object on A4",
+      "translation": "create object with color red on A4."
     },
     {
-      "input": "Delete the object at H1",
-      "translation": "Delete H1."
+      "input": "Color the object at A4 red",
+      "translation": "set color of the object at A4 to red."
     },
     {
-      "input": "Place it next to the red one",
-      "translation": "Move it next to the red."
+      "input": "Is the object at A4 red?",
+      "translation": "does the object at A4 satisfy color is red?"
     },
     {
-      "input": "Move it onto F5",
-      "translation": "Move it to F5."
+      "input": "Create a blue object on A4",
+      "translation": "create object with color blue on A4."
     },
     {
-      "input": "Switch the objects on D2 and F5",
-      "translation": "Swap D2 and F5."
+      "input": "Color the object at A4 blue",
+      "translation": "set color of the object at A4 to blue."
     },
     {
-      "input": "Take the object at D2 off the board",
-      "translation": "Remove D2."
+      "input": "Is the object at A4 blue?",
+      "translation": "does the object at A4 satisfy color is blue?"
     },
     {
-      "input": "Delete the object at D2",
-      "translation": "Delete D2."
+      "input": "Create a green object on A4",
+      "translation": "create object with color green on A4."
     },
     {
-      "input": "Place it next to the red one",
-      "translation": "Move it next to the red."
+      "input": "Color the object at A4 green",
+      "translation": "set color of the object at A4 to green."
     },
     {
-      "input": "Move it one square up",
-      "translation": "Move it up."
+      "input": "Is the object at A4 green?",
+      "translation": "does the object at A4 satisfy color is green?"
     },
     {
-      "input": "Move it one square right",
-      "translation": "Move it right."
+      "input": "Create a yellow object on A4",
+      "translation": "create object with color yellow on A4."
     },
     {
-      "input": "Move it one square down",
-      "translation": "Move it down."
+      "input": "Color the object at A4 yellow",
+      "translation": "set color of the object at A4 to yellow."
     },
     {
-      "input": "Move it one square left",
-      "translation": "Move it left."
+      "input": "Is the object at A4 yellow?",
+      "translation": "does the object at A4 satisfy color is yellow?"
     },
     {
-      "input": "Delete everything",
-      "translation": "Clear the world."
+      "input": "Create a red object on A5",
+      "translation": "create object with color red on A5."
     },
     {
-      "input": "Wipe the whole world",
-      "translation": "Clear everything."
+      "input": "Color the object at A5 red",
+      "translation": "set color of the object at A5 to red."
     },
     {
-      "input": "Clear all objects",
-      "translation": "Clear all."
+      "input": "Is the object at A5 red?",
+      "translation": "does the object at A5 satisfy color is red?"
     },
     {
-      "input": "How many empty squares are there",
-      "translation": "How many squares are empty?"
+      "input": "Create a blue object on A5",
+      "translation": "create object with color blue on A5."
     },
     {
-      "input": "Are there any red objects on the board",
-      "translation": "Some red objects are on the board?"
+      "input": "Color the object at A5 blue",
+      "translation": "set color of the object at A5 to blue."
     },
     {
-      "input": "Is every blue object on the board",
-      "translation": "Every blue object is on the board?"
+      "input": "Is the object at A5 blue?",
+      "translation": "does the object at A5 satisfy color is blue?"
     },
     {
-      "input": "Put a small red bloom on A4",
-      "translation": "A small red bloom on A4."
+      "input": "Create a green object on A5",
+      "translation": "create object with color green on A5."
     },
     {
-      "input": "Put a medium red bloom on A4",
-      "translation": "A medium red bloom on A4."
+      "input": "Color the object at A5 green",
+      "translation": "set color of the object at A5 to green."
     },
     {
-      "input": "Put a large red bloom on A4",
-      "translation": "A large red bloom on A4."
+      "input": "Is the object at A5 green?",
+      "translation": "does the object at A5 satisfy color is green?"
     },
     {
-      "input": "Change the red bloom to blue",
-      "translation": "The red bloom is blue."
+      "input": "Create a yellow object on A5",
+      "translation": "create object with color yellow on A5."
     },
     {
-      "input": "Is the red bloom small",
-      "translation": "Is the red bloom small?"
+      "input": "Color the object at A5 yellow",
+      "translation": "set color of the object at A5 to yellow."
     },
     {
-      "input": "Put a small red spark on A4",
-      "translation": "A small red spark on A4."
+      "input": "Is the object at A5 yellow?",
+      "translation": "does the object at A5 satisfy color is yellow?"
     },
     {
-      "input": "Put a medium red spark on A4",
-      "translation": "A medium red spark on A4."
+      "input": "Create a red object on A6",
+      "translation": "create object with color red on A6."
     },
     {
-      "input": "Put a large red spark on A4",
-      "translation": "A large red spark on A4."
+      "input": "Color the object at A6 red",
+      "translation": "set color of the object at A6 to red."
     },
     {
-      "input": "Change the red spark to blue",
-      "translation": "The red spark is blue."
+      "input": "Is the object at A6 red?",
+      "translation": "does the object at A6 satisfy color is red?"
     },
     {
-      "input": "Is the red spark small",
-      "translation": "Is the red spark small?"
+      "input": "Create a blue object on A6",
+      "translation": "create object with color blue on A6."
     },
     {
-      "input": "Put a small red drop on A4",
-      "translation": "A small red drop on A4."
+      "input": "Color the object at A6 blue",
+      "translation": "set color of the object at A6 to blue."
     },
     {
-      "input": "Put a medium red drop on A4",
-      "translation": "A medium red drop on A4."
+      "input": "Is the object at A6 blue?",
+      "translation": "does the object at A6 satisfy color is blue?"
     },
     {
-      "input": "Put a large red drop on A4",
-      "translation": "A large red drop on A4."
+      "input": "Create a green object on A6",
+      "translation": "create object with color green on A6."
     },
     {
-      "input": "Change the red drop to blue",
-      "translation": "The red drop is blue."
+      "input": "Color the object at A6 green",
+      "translation": "set color of the object at A6 to green."
     },
     {
-      "input": "Is the red drop small",
-      "translation": "Is the red drop small?"
+      "input": "Is the object at A6 green?",
+      "translation": "does the object at A6 satisfy color is green?"
     },
     {
-      "input": "Put a small red loop on A4",
-      "translation": "A small red loop on A4."
+      "input": "Create a yellow object on A6",
+      "translation": "create object with color yellow on A6."
     },
     {
-      "input": "Put a medium red loop on A4",
-      "translation": "A medium red loop on A4."
+      "input": "Color the object at A6 yellow",
+      "translation": "set color of the object at A6 to yellow."
     },
     {
-      "input": "Put a large red loop on A4",
-      "translation": "A large red loop on A4."
+      "input": "Is the object at A6 yellow?",
+      "translation": "does the object at A6 satisfy color is yellow?"
     },
     {
-      "input": "Change the red loop to blue",
-      "translation": "The red loop is blue."
+      "input": "Create a red object on A7",
+      "translation": "create object with color red on A7."
     },
     {
-      "input": "Is the red loop small",
-      "translation": "Is the red loop small?"
+      "input": "Color the object at A7 red",
+      "translation": "set color of the object at A7 to red."
     },
     {
-      "input": "Put a small blue bloom on A4",
-      "translation": "A small blue bloom on A4."
+      "input": "Is the object at A7 red?",
+      "translation": "does the object at A7 satisfy color is red?"
     },
     {
-      "input": "Put a medium blue bloom on A4",
-      "translation": "A medium blue bloom on A4."
+      "input": "Create a blue object on A7",
+      "translation": "create object with color blue on A7."
     },
     {
-      "input": "Put a large blue bloom on A4",
-      "translation": "A large blue bloom on A4."
+      "input": "Color the object at A7 blue",
+      "translation": "set color of the object at A7 to blue."
     },
     {
-      "input": "Change the blue bloom to blue",
-      "translation": "The blue bloom is blue."
+      "input": "Is the object at A7 blue?",
+      "translation": "does the object at A7 satisfy color is blue?"
     },
     {
-      "input": "Is the blue bloom small",
-      "translation": "Is the blue bloom small?"
+      "input": "Create a green object on A7",
+      "translation": "create object with color green on A7."
     },
     {
-      "input": "Put a small blue spark on A4",
-      "translation": "A small blue spark on A4."
+      "input": "Color the object at A7 green",
+      "translation": "set color of the object at A7 to green."
     },
     {
-      "input": "Put a medium blue spark on A4",
-      "translation": "A medium blue spark on A4."
+      "input": "Is the object at A7 green?",
+      "translation": "does the object at A7 satisfy color is green?"
     },
     {
-      "input": "Put a large blue spark on A4",
-      "translation": "A large blue spark on A4."
+      "input": "Create a yellow object on A7",
+      "translation": "create object with color yellow on A7."
     },
     {
-      "input": "Change the blue spark to blue",
-      "translation": "The blue spark is blue."
+      "input": "Color the object at A7 yellow",
+      "translation": "set color of the object at A7 to yellow."
     },
     {
-      "input": "Is the blue spark small",
-      "translation": "Is the blue spark small?"
+      "input": "Is the object at A7 yellow?",
+      "translation": "does the object at A7 satisfy color is yellow?"
     },
     {
-      "input": "Put a small blue drop on A4",
-      "translation": "A small blue drop on A4."
+      "input": "Create a red object on A8",
+      "translation": "create object with color red on A8."
     },
     {
-      "input": "Put a medium blue drop on A4",
-      "translation": "A medium blue drop on A4."
+      "input": "Color the object at A8 red",
+      "translation": "set color of the object at A8 to red."
     },
     {
-      "input": "Put a large blue drop on A4",
-      "translation": "A large blue drop on A4."
+      "input": "Is the object at A8 red?",
+      "translation": "does the object at A8 satisfy color is red?"
     },
     {
-      "input": "Change the blue drop to blue",
-      "translation": "The blue drop is blue."
+      "input": "Create a blue object on A8",
+      "translation": "create object with color blue on A8."
     },
     {
-      "input": "Is the blue drop small",
-      "translation": "Is the blue drop small?"
+      "input": "Color the object at A8 blue",
+      "translation": "set color of the object at A8 to blue."
     },
     {
-      "input": "Put a small blue loop on A4",
-      "translation": "A small blue loop on A4."
+      "input": "Is the object at A8 blue?",
+      "translation": "does the object at A8 satisfy color is blue?"
     },
     {
-      "input": "Put a medium blue loop on A4",
-      "translation": "A medium blue loop on A4."
+      "input": "Create a green object on A8",
+      "translation": "create object with color green on A8."
     },
     {
-      "input": "Put a large blue loop on A4",
-      "translation": "A large blue loop on A4."
+      "input": "Color the object at A8 green",
+      "translation": "set color of the object at A8 to green."
     },
     {
-      "input": "Change the blue loop to blue",
-      "translation": "The blue loop is blue."
+      "input": "Is the object at A8 green?",
+      "translation": "does the object at A8 satisfy color is green?"
     },
     {
-      "input": "Is the blue loop small",
-      "translation": "Is the blue loop small?"
+      "input": "Create a yellow object on A8",
+      "translation": "create object with color yellow on A8."
     },
     {
-      "input": "Put a small green bloom on A4",
-      "translation": "A small green bloom on A4."
+      "input": "Color the object at A8 yellow",
+      "translation": "set color of the object at A8 to yellow."
     },
     {
-      "input": "Put a medium green bloom on A4",
-      "translation": "A medium green bloom on A4."
+      "input": "Is the object at A8 yellow?",
+      "translation": "does the object at A8 satisfy color is yellow?"
     },
     {
-      "input": "Put a large green bloom on A4",
-      "translation": "A large green bloom on A4."
+      "input": "Create a small flower on C3",
+      "translation": "create object with size small and shape bloom on C3."
     },
     {
-      "input": "Change the green bloom to blue",
-      "translation": "The green bloom is blue."
+      "input": "Make it a small flower",
+      "translation": "set size of it to small. set shape of it to bloom."
     },
     {
-      "input": "Is the green bloom small",
-      "translation": "Is the green bloom small?"
+      "input": "Which small flowers are on the board?",
+      "translation": "which objects match size is small and shape is bloom and position is present?"
     },
     {
-      "input": "Put a small green spark on A4",
-      "translation": "A small green spark on A4."
+      "input": "Create a medium flower on C3",
+      "translation": "create object with size medium and shape bloom on C3."
     },
     {
-      "input": "Put a medium green spark on A4",
-      "translation": "A medium green spark on A4."
+      "input": "Make it a medium flower",
+      "translation": "set size of it to medium. set shape of it to bloom."
     },
     {
-      "input": "Put a large green spark on A4",
-      "translation": "A large green spark on A4."
+      "input": "Which medium flowers are on the board?",
+      "translation": "which objects match size is medium and shape is bloom and position is present?"
     },
     {
-      "input": "Change the green spark to blue",
-      "translation": "The green spark is blue."
+      "input": "Create a large flower on C3",
+      "translation": "create object with size large and shape bloom on C3."
     },
     {
-      "input": "Is the green spark small",
-      "translation": "Is the green spark small?"
+      "input": "Make it a large flower",
+      "translation": "set size of it to large. set shape of it to bloom."
     },
     {
-      "input": "Put a small green drop on A4",
-      "translation": "A small green drop on A4."
+      "input": "Which large flowers are on the board?",
+      "translation": "which objects match size is large and shape is bloom and position is present?"
     },
     {
-      "input": "Put a medium green drop on A4",
-      "translation": "A medium green drop on A4."
+      "input": "Create a small star on C3",
+      "translation": "create object with size small and shape spark on C3."
     },
     {
-      "input": "Put a large green drop on A4",
-      "translation": "A large green drop on A4."
+      "input": "Make it a small star",
+      "translation": "set size of it to small. set shape of it to spark."
     },
     {
-      "input": "Change the green drop to blue",
-      "translation": "The green drop is blue."
+      "input": "Which small stars are on the board?",
+      "translation": "which objects match size is small and shape is spark and position is present?"
     },
     {
-      "input": "Is the green drop small",
-      "translation": "Is the green drop small?"
+      "input": "Create a medium star on C3",
+      "translation": "create object with size medium and shape spark on C3."
     },
     {
-      "input": "Put a small green loop on A4",
-      "translation": "A small green loop on A4."
+      "input": "Make it a medium star",
+      "translation": "set size of it to medium. set shape of it to spark."
     },
     {
-      "input": "Put a medium green loop on A4",
-      "translation": "A medium green loop on A4."
+      "input": "Which medium stars are on the board?",
+      "translation": "which objects match size is medium and shape is spark and position is present?"
     },
     {
-      "input": "Put a large green loop on A4",
-      "translation": "A large green loop on A4."
+      "input": "Create a large star on C3",
+      "translation": "create object with size large and shape spark on C3."
     },
     {
-      "input": "Change the green loop to blue",
-      "translation": "The green loop is blue."
+      "input": "Make it a large star",
+      "translation": "set size of it to large. set shape of it to spark."
     },
     {
-      "input": "Is the green loop small",
-      "translation": "Is the green loop small?"
+      "input": "Which large stars are on the board?",
+      "translation": "which objects match size is large and shape is spark and position is present?"
     },
     {
-      "input": "Put a small yellow bloom on A4",
-      "translation": "A small yellow bloom on A4."
+      "input": "Create a small tear on C3",
+      "translation": "create object with size small and shape drop on C3."
     },
     {
-      "input": "Put a medium yellow bloom on A4",
-      "translation": "A medium yellow bloom on A4."
+      "input": "Make it a small tear",
+      "translation": "set size of it to small. set shape of it to drop."
     },
     {
-      "input": "Put a large yellow bloom on A4",
-      "translation": "A large yellow bloom on A4."
+      "input": "Which small tears are on the board?",
+      "translation": "which objects match size is small and shape is drop and position is present?"
     },
     {
-      "input": "Change the yellow bloom to blue",
-      "translation": "The yellow bloom is blue."
+      "input": "Create a medium tear on C3",
+      "translation": "create object with size medium and shape drop on C3."
     },
     {
-      "input": "Is the yellow bloom small",
-      "translation": "Is the yellow bloom small?"
+      "input": "Make it a medium tear",
+      "translation": "set size of it to medium. set shape of it to drop."
     },
     {
-      "input": "Put a small yellow spark on A4",
-      "translation": "A small yellow spark on A4."
+      "input": "Which medium tears are on the board?",
+      "translation": "which objects match size is medium and shape is drop and position is present?"
     },
     {
-      "input": "Put a medium yellow spark on A4",
-      "translation": "A medium yellow spark on A4."
+      "input": "Create a large tear on C3",
+      "translation": "create object with size large and shape drop on C3."
     },
     {
-      "input": "Put a large yellow spark on A4",
-      "translation": "A large yellow spark on A4."
+      "input": "Make it a large tear",
+      "translation": "set size of it to large. set shape of it to drop."
     },
     {
-      "input": "Change the yellow spark to blue",
-      "translation": "The yellow spark is blue."
+      "input": "Which large tears are on the board?",
+      "translation": "which objects match size is large and shape is drop and position is present?"
     },
     {
-      "input": "Is the yellow spark small",
-      "translation": "Is the yellow spark small?"
+      "input": "Create a small ring on C3",
+      "translation": "create object with size small and shape loop on C3."
     },
     {
-      "input": "Put a small yellow drop on A4",
-      "translation": "A small yellow drop on A4."
+      "input": "Make it a small ring",
+      "translation": "set size of it to small. set shape of it to loop."
     },
     {
-      "input": "Put a medium yellow drop on A4",
-      "translation": "A medium yellow drop on A4."
+      "input": "Which small rings are on the board?",
+      "translation": "which objects match size is small and shape is loop and position is present?"
     },
     {
-      "input": "Put a large yellow drop on A4",
-      "translation": "A large yellow drop on A4."
+      "input": "Create a medium ring on C3",
+      "translation": "create object with size medium and shape loop on C3."
     },
     {
-      "input": "Change the yellow drop to blue",
-      "translation": "The yellow drop is blue."
+      "input": "Make it a medium ring",
+      "translation": "set size of it to medium. set shape of it to loop."
     },
     {
-      "input": "Is the yellow drop small",
-      "translation": "Is the yellow drop small?"
+      "input": "Which medium rings are on the board?",
+      "translation": "which objects match size is medium and shape is loop and position is present?"
     },
     {
-      "input": "Put a small yellow loop on A4",
-      "translation": "A small yellow loop on A4."
+      "input": "Create a large ring on C3",
+      "translation": "create object with size large and shape loop on C3."
     },
     {
-      "input": "Put a medium yellow loop on A4",
-      "translation": "A medium yellow loop on A4."
+      "input": "Make it a large ring",
+      "translation": "set size of it to large. set shape of it to loop."
     },
     {
-      "input": "Put a large yellow loop on A4",
-      "translation": "A large yellow loop on A4."
+      "input": "Which large rings are on the board?",
+      "translation": "which objects match size is large and shape is loop and position is present?"
     },
     {
-      "input": "Change the yellow loop to blue",
-      "translation": "The yellow loop is blue."
+      "input": "Move it up",
+      "translation": "step it north."
     },
     {
-      "input": "Is the yellow loop small",
-      "translation": "Is the yellow loop small?"
+      "input": "Move it right",
+      "translation": "step it east."
     },
     {
-      "input": "Make it a flower",
-      "translation": "It bloom."
+      "input": "Move it down",
+      "translation": "step it south."
     },
     {
-      "input": "What shape is the flower",
-      "translation": "Shape of the bloom?"
+      "input": "Move it left",
+      "translation": "step it west."
     },
     {
-      "input": "Make it a star",
-      "translation": "It spark."
+      "input": "Move it to A4",
+      "translation": "move it to A4."
     },
     {
-      "input": "What shape is the star",
-      "translation": "Shape of the spark?"
+      "input": "Move object 3 above object 4",
+      "translation": "move #3 to the square north of #4."
     },
     {
-      "input": "Make it a tear",
-      "translation": "It drop."
+      "input": "Move object 3 beside object 4",
+      "translation": "move #3 next to #4."
     },
     {
-      "input": "What shape is the tear",
-      "translation": "Shape of the drop?"
+      "input": "Swap the positions of objects 3 and 4",
+      "translation": "exchange positions of #3 and #4."
     },
     {
-      "input": "Make it a ring",
-      "translation": "It loop."
+      "input": "Exchange their colors, objects 3 and 4",
+      "translation": "exchange color of #3 and #4."
     },
     {
-      "input": "What shape is the ring",
-      "translation": "Shape of the loop?"
+      "input": "Copy the color from object 3 to object 4",
+      "translation": "copy color from #3 to #4."
+    },
+    {
+      "input": "Transfer the shape from object 3 to object 4, clearing it on 3",
+      "translation": "transfer shape from #3 to #4."
+    },
+    {
+      "input": "Copy all appearance properties from 3 to 4",
+      "translation": "copy appearance from #3 to #4."
+    },
+    {
+      "input": "Duplicate object 3 at B3",
+      "translation": "clone appearance of #3 into a new object on B3."
+    },
+    {
+      "input": "Create an entirely unspecified unplaced object",
+      "translation": "create object off the board."
+    },
+    {
+      "input": "Take object 3 off the board but keep it",
+      "translation": "unplace #3."
+    },
+    {
+      "input": "Delete object 3 entirely",
+      "translation": "delete #3."
+    },
+    {
+      "input": "Clear the whole world",
+      "translation": "delete every object."
+    },
+    {
+      "input": "Remove its color",
+      "translation": "clear color of it."
+    },
+    {
+      "input": "Remove all of its appearance properties",
+      "translation": "set appearance of it to color none, size none, shape none."
+    },
+    {
+      "input": "Undo the last entry",
+      "translation": "undo."
+    },
+    {
+      "input": "Does object 99 exist?",
+      "translation": "does #99 exist?"
+    },
+    {
+      "input": "Is A4 occupied?",
+      "translation": "does A4 satisfy occupied?"
+    },
+    {
+      "input": "Is A4 free?",
+      "translation": "does A4 satisfy not occupied?"
+    },
+    {
+      "input": "Who is on A4?",
+      "translation": "which object occupies A4?"
+    },
+    {
+      "input": "Which object did you mean by it?",
+      "translation": "what is the identifier of it?"
+    },
+    {
+      "input": "Is it on the board?",
+      "translation": "does it satisfy position is present?"
+    },
+    {
+      "input": "Does it have a shape?",
+      "translation": "does it satisfy shape is present?"
+    },
+    {
+      "input": "Are objects 3 and 4 the same object?",
+      "translation": "does #3 satisfy same object as #4?"
+    },
+    {
+      "input": "Compare their color states, including absence",
+      "translation": "does #3 satisfy color equals that of #4?"
+    },
+    {
+      "input": "Do objects 3 and 4 share an actual color?",
+      "translation": "does #3 satisfy color shares a present value with #4?"
+    },
+    {
+      "input": "Is the red object on a dark square?",
+      "translation": "does the object with color red satisfy on a square matching shading is dark?"
+    },
+    {
+      "input": "How many large objects are next to 3?",
+      "translation": "how many objects match size is large and next to #3?"
+    },
+    {
+      "input": "Is every red object at an edge?",
+      "translation": "does every object matching color is red satisfy at the edge?"
+    },
+    {
+      "input": "Are any sparks large and placed?",
+      "translation": "does some object matching shape is spark satisfy size is large and position is present?"
+    },
+    {
+      "input": "List the vacant light squares",
+      "translation": "which squares match (not occupied) and shading is light?"
+    },
+    {
+      "input": "Count vacant squares",
+      "translation": "how many squares match not occupied?"
+    },
+    {
+      "input": "Count all objects",
+      "translation": "how many objects match true?"
+    },
+    {
+      "input": "Color all blooms red",
+      "translation": "set color of objects matching shape is bloom to red."
+    },
+    {
+      "input": "Shift objects 3 and 4 two squares east",
+      "translation": "shift positions of objects [#3, #4] by east 2, north 0."
+    },
+    {
+      "input": "Rotate the four central objects clockwise, moving identities with their appearance",
+      "translation": "rotate positions of objects at [D4, E4, D5, E5] by 90 degrees clockwise about the center of rectangle D4 to E5."
+    },
+    {
+      "input": "Rotate the central appearance bundles clockwise, keeping object identities fixed",
+      "translation": "rotate appearance of objects at [D4, E4, D5, E5] by 90 degrees clockwise about the center of rectangle D4 to E5."
+    },
+    {
+      "input": "Reflect all placed objects left-to-right, moving their identities",
+      "translation": "reflect positions of objects matching position is present across vertical through the center of rectangle A1 to H8."
+    },
+    {
+      "input": "Set object 3 red and move it to A4, applying both or neither",
+      "translation": "atomically { set color of #3 to red. move #3 to A4. }."
+    },
+    {
+      "input": "Give object 3 a red loop appearance with no size",
+      "translation": "set appearance of #3 to color red, size none, shape loop."
+    },
+    {
+      "input": "Ask about a square, then ask about that same square again",
+      "translation": "Does D1 satisfy not occupied? Does it satisfy occupied?"
+    },
+    {
+      "input": "Recall a square and move object 3 there",
+      "translation": "Does D4 satisfy occupied? Move #3 to it."
+    },
+    {
+      "input": "Create a new object on the square just mentioned",
+      "translation": "Does C3 satisfy not occupied? Create object on it."
+    },
+    {
+      "input": "Recolor the occupant of the square just mentioned",
+      "translation": "Does A1 satisfy occupied? Set color of the object at it to green."
+    },
+    {
+      "input": "Find out which object occupies that square",
+      "translation": "Which object occupies it?"
+    },
+    {
+      "input": "Check whether the recently mentioned location or object is in a corner",
+      "translation": "Does it satisfy in a corner?"
+    },
+    {
+      "input": "Remember an object and a different square, then recolor the object",
+      "translation": "Does #3 exist? Does D4 satisfy occupied? Set color of it to blue."
+    },
+    {
+      "input": "Check the shading of that square",
+      "translation": "Does it satisfy shading is dark?"
     }
   ],
   "network": [
     {
-      "input": "Paint A1 red",
-      "translation": "A1 red."
+      "input": "Create a red node with exact ports ---- at A1",
+      "translation": "Create object with color red and pattern ---- on A1."
     },
     {
-      "input": "Is it red",
-      "translation": "It red?"
+      "input": "Create a red node with exact ports n--- at A1",
+      "translation": "Create object with color red and pattern n--- on A1."
     },
     {
-      "input": "What colour is the red one?",
-      "translation": "Color of the red?"
+      "input": "Create a red node with exact ports -e-- at A1",
+      "translation": "Create object with color red and pattern -e-- on A1."
     },
     {
-      "input": "Make number 0 red",
-      "translation": "#0 red."
+      "input": "Create a red node with exact ports --s- at A1",
+      "translation": "Create object with color red and pattern --s- on A1."
     },
     {
-      "input": "Put a red one on A1",
-      "translation": "A red on A1."
+      "input": "Create a red node with exact ports ---w at A1",
+      "translation": "Create object with color red and pattern ---w on A1."
     },
     {
-      "input": "How many red things are there?",
-      "translation": "How many red?"
+      "input": "Create a red node with exact ports ne-- at A1",
+      "translation": "Create object with color red and pattern ne-- on A1."
     },
     {
-      "input": "Paint B2 blue",
-      "translation": "B2 blue."
+      "input": "Create a red node with exact ports n-s- at A1",
+      "translation": "Create object with color red and pattern n-s- on A1."
     },
     {
-      "input": "Is it blue",
-      "translation": "It blue?"
+      "input": "Create a red node with exact ports n--w at A1",
+      "translation": "Create object with color red and pattern n--w on A1."
     },
     {
-      "input": "What colour is the blue one?",
-      "translation": "Color of the blue?"
+      "input": "Create a red node with exact ports -es- at A1",
+      "translation": "Create object with color red and pattern -es- on A1."
     },
     {
-      "input": "Make number 1 blue",
-      "translation": "#1 blue."
+      "input": "Create a red node with exact ports -e-w at A1",
+      "translation": "Create object with color red and pattern -e-w on A1."
     },
     {
-      "input": "Put a blue one on B2",
-      "translation": "A blue on B2."
+      "input": "Create a red node with exact ports --sw at A1",
+      "translation": "Create object with color red and pattern --sw on A1."
     },
     {
-      "input": "How many blue things are there?",
-      "translation": "How many blue?"
+      "input": "Create a red node with exact ports nes- at A1",
+      "translation": "Create object with color red and pattern nes- on A1."
     },
     {
-      "input": "Paint C3 green",
-      "translation": "C3 green."
+      "input": "Create a red node with exact ports ne-w at A1",
+      "translation": "Create object with color red and pattern ne-w on A1."
     },
     {
-      "input": "Is it green",
-      "translation": "It green?"
+      "input": "Create a red node with exact ports n-sw at A1",
+      "translation": "Create object with color red and pattern n-sw on A1."
     },
     {
-      "input": "What colour is the green one?",
-      "translation": "Color of the green?"
+      "input": "Create a red node with exact ports -esw at A1",
+      "translation": "Create object with color red and pattern -esw on A1."
     },
     {
-      "input": "Make number 2 green",
-      "translation": "#2 green."
+      "input": "Create a red node with exact ports nesw at A1",
+      "translation": "Create object with color red and pattern nesw on A1."
     },
     {
-      "input": "Put a green one on C3",
-      "translation": "A green on C3."
+      "input": "Color the node at C4 red",
+      "translation": "Set color of the object at C4 to red."
     },
     {
-      "input": "How many green things are there?",
-      "translation": "How many green?"
+      "input": "Color this component red",
+      "translation": "Set color of objects in the component of it to red."
     },
     {
-      "input": "Paint D4 yellow",
-      "translation": "D4 yellow."
+      "input": "Connect A1 to H8 using red",
+      "translation": "Build shortest connection from A1 to H8 with route color red."
     },
     {
-      "input": "Is it yellow",
-      "translation": "It yellow?"
+      "input": "Create a blue node with exact ports ---- at A1",
+      "translation": "Create object with color blue and pattern ---- on A1."
     },
     {
-      "input": "What colour is the yellow one?",
-      "translation": "Color of the yellow?"
+      "input": "Create a blue node with exact ports n--- at A1",
+      "translation": "Create object with color blue and pattern n--- on A1."
     },
     {
-      "input": "Make number 3 yellow",
-      "translation": "#3 yellow."
+      "input": "Create a blue node with exact ports -e-- at A1",
+      "translation": "Create object with color blue and pattern -e-- on A1."
     },
     {
-      "input": "Put a yellow one on D4",
-      "translation": "A yellow on D4."
+      "input": "Create a blue node with exact ports --s- at A1",
+      "translation": "Create object with color blue and pattern --s- on A1."
     },
     {
-      "input": "How many yellow things are there?",
-      "translation": "How many yellow?"
+      "input": "Create a blue node with exact ports ---w at A1",
+      "translation": "Create object with color blue and pattern ---w on A1."
     },
     {
-      "input": "Move it onto H8",
-      "translation": "Move it to H8."
+      "input": "Create a blue node with exact ports ne-- at A1",
+      "translation": "Create object with color blue and pattern ne-- on A1."
     },
     {
-      "input": "Switch the objects on A1 and H8",
-      "translation": "Swap A1 and H8."
+      "input": "Create a blue node with exact ports n-s- at A1",
+      "translation": "Create object with color blue and pattern n-s- on A1."
     },
     {
-      "input": "Take the object at A1 off the board",
-      "translation": "Remove A1."
+      "input": "Create a blue node with exact ports n--w at A1",
+      "translation": "Create object with color blue and pattern n--w on A1."
     },
     {
-      "input": "Delete the object at A1",
-      "translation": "Delete A1."
+      "input": "Create a blue node with exact ports -es- at A1",
+      "translation": "Create object with color blue and pattern -es- on A1."
     },
     {
-      "input": "Place it next to the red one",
-      "translation": "Move it next to the red."
+      "input": "Create a blue node with exact ports -e-w at A1",
+      "translation": "Create object with color blue and pattern -e-w on A1."
     },
     {
-      "input": "Move it onto C4",
-      "translation": "Move it to C4."
+      "input": "Create a blue node with exact ports --sw at A1",
+      "translation": "Create object with color blue and pattern --sw on A1."
     },
     {
-      "input": "Switch the objects on B3 and C4",
-      "translation": "Swap B3 and C4."
+      "input": "Create a blue node with exact ports nes- at A1",
+      "translation": "Create object with color blue and pattern nes- on A1."
     },
     {
-      "input": "Take the object at B3 off the board",
-      "translation": "Remove B3."
+      "input": "Create a blue node with exact ports ne-w at A1",
+      "translation": "Create object with color blue and pattern ne-w on A1."
     },
     {
-      "input": "Delete the object at B3",
-      "translation": "Delete B3."
+      "input": "Create a blue node with exact ports n-sw at A1",
+      "translation": "Create object with color blue and pattern n-sw on A1."
     },
     {
-      "input": "Place it next to the red one",
-      "translation": "Move it next to the red."
+      "input": "Create a blue node with exact ports -esw at A1",
+      "translation": "Create object with color blue and pattern -esw on A1."
     },
     {
-      "input": "Move it onto C3",
-      "translation": "Move it to C3."
+      "input": "Create a blue node with exact ports nesw at A1",
+      "translation": "Create object with color blue and pattern nesw on A1."
     },
     {
-      "input": "Switch the objects on H1 and C3",
-      "translation": "Swap H1 and C3."
+      "input": "Color the node at C4 blue",
+      "translation": "Set color of the object at C4 to blue."
     },
     {
-      "input": "Take the object at H1 off the board",
-      "translation": "Remove H1."
+      "input": "Color this component blue",
+      "translation": "Set color of objects in the component of it to blue."
     },
     {
-      "input": "Delete the object at H1",
-      "translation": "Delete H1."
+      "input": "Connect A1 to H8 using blue",
+      "translation": "Build shortest connection from A1 to H8 with route color blue."
     },
     {
-      "input": "Place it next to the red one",
-      "translation": "Move it next to the red."
+      "input": "Create a green node with exact ports ---- at A1",
+      "translation": "Create object with color green and pattern ---- on A1."
     },
     {
-      "input": "Move it onto F5",
-      "translation": "Move it to F5."
+      "input": "Create a green node with exact ports n--- at A1",
+      "translation": "Create object with color green and pattern n--- on A1."
     },
     {
-      "input": "Switch the objects on D2 and F5",
-      "translation": "Swap D2 and F5."
+      "input": "Create a green node with exact ports -e-- at A1",
+      "translation": "Create object with color green and pattern -e-- on A1."
     },
     {
-      "input": "Take the object at D2 off the board",
-      "translation": "Remove D2."
+      "input": "Create a green node with exact ports --s- at A1",
+      "translation": "Create object with color green and pattern --s- on A1."
     },
     {
-      "input": "Delete the object at D2",
-      "translation": "Delete D2."
+      "input": "Create a green node with exact ports ---w at A1",
+      "translation": "Create object with color green and pattern ---w on A1."
     },
     {
-      "input": "Place it next to the red one",
-      "translation": "Move it next to the red."
+      "input": "Create a green node with exact ports ne-- at A1",
+      "translation": "Create object with color green and pattern ne-- on A1."
     },
     {
-      "input": "Move it one square up",
-      "translation": "Move it up."
+      "input": "Create a green node with exact ports n-s- at A1",
+      "translation": "Create object with color green and pattern n-s- on A1."
     },
     {
-      "input": "Move it one square right",
-      "translation": "Move it right."
+      "input": "Create a green node with exact ports n--w at A1",
+      "translation": "Create object with color green and pattern n--w on A1."
     },
     {
-      "input": "Move it one square down",
-      "translation": "Move it down."
+      "input": "Create a green node with exact ports -es- at A1",
+      "translation": "Create object with color green and pattern -es- on A1."
     },
     {
-      "input": "Move it one square left",
-      "translation": "Move it left."
+      "input": "Create a green node with exact ports -e-w at A1",
+      "translation": "Create object with color green and pattern -e-w on A1."
     },
     {
-      "input": "Delete everything",
-      "translation": "Clear the world."
+      "input": "Create a green node with exact ports --sw at A1",
+      "translation": "Create object with color green and pattern --sw on A1."
     },
     {
-      "input": "Wipe the whole world",
-      "translation": "Clear everything."
+      "input": "Create a green node with exact ports nes- at A1",
+      "translation": "Create object with color green and pattern nes- on A1."
     },
     {
-      "input": "Clear all objects",
-      "translation": "Clear all."
+      "input": "Create a green node with exact ports ne-w at A1",
+      "translation": "Create object with color green and pattern ne-w on A1."
     },
     {
-      "input": "How many empty squares are there",
-      "translation": "How many squares are empty?"
+      "input": "Create a green node with exact ports n-sw at A1",
+      "translation": "Create object with color green and pattern n-sw on A1."
     },
     {
-      "input": "Are there any red objects on the board",
-      "translation": "Some red objects are on the board?"
+      "input": "Create a green node with exact ports -esw at A1",
+      "translation": "Create object with color green and pattern -esw on A1."
     },
     {
-      "input": "Is every blue object on the board",
-      "translation": "Every blue object is on the board?"
+      "input": "Create a green node with exact ports nesw at A1",
+      "translation": "Create object with color green and pattern nesw on A1."
     },
     {
-      "input": "Put a red ---- node on B3",
-      "translation": "A red ---- on B3."
+      "input": "Color the node at C4 green",
+      "translation": "Set color of the object at C4 to green."
     },
     {
-      "input": "Put a red n--- node on B3",
-      "translation": "A red n--- on B3."
+      "input": "Color this component green",
+      "translation": "Set color of objects in the component of it to green."
     },
     {
-      "input": "Put a red -e-- node on B3",
-      "translation": "A red -e-- on B3."
+      "input": "Connect A1 to H8 using green",
+      "translation": "Build shortest connection from A1 to H8 with route color green."
     },
     {
-      "input": "Put a red --s- node on B3",
-      "translation": "A red --s- on B3."
+      "input": "Create a yellow node with exact ports ---- at A1",
+      "translation": "Create object with color yellow and pattern ---- on A1."
     },
     {
-      "input": "Put a red ---w node on B3",
-      "translation": "A red ---w on B3."
+      "input": "Create a yellow node with exact ports n--- at A1",
+      "translation": "Create object with color yellow and pattern n--- on A1."
     },
     {
-      "input": "Put a red ne-- node on B3",
-      "translation": "A red ne-- on B3."
+      "input": "Create a yellow node with exact ports -e-- at A1",
+      "translation": "Create object with color yellow and pattern -e-- on A1."
     },
     {
-      "input": "Put a red n-s- node on B3",
-      "translation": "A red n-s- on B3."
+      "input": "Create a yellow node with exact ports --s- at A1",
+      "translation": "Create object with color yellow and pattern --s- on A1."
     },
     {
-      "input": "Put a red n--w node on B3",
-      "translation": "A red n--w on B3."
+      "input": "Create a yellow node with exact ports ---w at A1",
+      "translation": "Create object with color yellow and pattern ---w on A1."
     },
     {
-      "input": "Put a red -es- node on B3",
-      "translation": "A red -es- on B3."
+      "input": "Create a yellow node with exact ports ne-- at A1",
+      "translation": "Create object with color yellow and pattern ne-- on A1."
     },
     {
-      "input": "Put a red -e-w node on B3",
-      "translation": "A red -e-w on B3."
+      "input": "Create a yellow node with exact ports n-s- at A1",
+      "translation": "Create object with color yellow and pattern n-s- on A1."
     },
     {
-      "input": "Put a red --sw node on B3",
-      "translation": "A red --sw on B3."
+      "input": "Create a yellow node with exact ports n--w at A1",
+      "translation": "Create object with color yellow and pattern n--w on A1."
     },
     {
-      "input": "Put a red nes- node on B3",
-      "translation": "A red nes- on B3."
+      "input": "Create a yellow node with exact ports -es- at A1",
+      "translation": "Create object with color yellow and pattern -es- on A1."
     },
     {
-      "input": "Put a red ne-w node on B3",
-      "translation": "A red ne-w on B3."
+      "input": "Create a yellow node with exact ports -e-w at A1",
+      "translation": "Create object with color yellow and pattern -e-w on A1."
     },
     {
-      "input": "Put a red n-sw node on B3",
-      "translation": "A red n-sw on B3."
+      "input": "Create a yellow node with exact ports --sw at A1",
+      "translation": "Create object with color yellow and pattern --sw on A1."
     },
     {
-      "input": "Put a red -esw node on B3",
-      "translation": "A red -esw on B3."
+      "input": "Create a yellow node with exact ports nes- at A1",
+      "translation": "Create object with color yellow and pattern nes- on A1."
     },
     {
-      "input": "Put a red nesw node on B3",
-      "translation": "A red nesw on B3."
+      "input": "Create a yellow node with exact ports ne-w at A1",
+      "translation": "Create object with color yellow and pattern ne-w on A1."
     },
     {
-      "input": "Put a blue ---- node on B3",
-      "translation": "A blue ---- on B3."
+      "input": "Create a yellow node with exact ports n-sw at A1",
+      "translation": "Create object with color yellow and pattern n-sw on A1."
     },
     {
-      "input": "Put a blue n--- node on B3",
-      "translation": "A blue n--- on B3."
+      "input": "Create a yellow node with exact ports -esw at A1",
+      "translation": "Create object with color yellow and pattern -esw on A1."
     },
     {
-      "input": "Put a blue -e-- node on B3",
-      "translation": "A blue -e-- on B3."
+      "input": "Create a yellow node with exact ports nesw at A1",
+      "translation": "Create object with color yellow and pattern nesw on A1."
     },
     {
-      "input": "Put a blue --s- node on B3",
-      "translation": "A blue --s- on B3."
+      "input": "Color the node at C4 yellow",
+      "translation": "Set color of the object at C4 to yellow."
     },
     {
-      "input": "Put a blue ---w node on B3",
-      "translation": "A blue ---w on B3."
+      "input": "Color this component yellow",
+      "translation": "Set color of objects in the component of it to yellow."
     },
     {
-      "input": "Put a blue ne-- node on B3",
-      "translation": "A blue ne-- on B3."
+      "input": "Connect A1 to H8 using yellow",
+      "translation": "Build shortest connection from A1 to H8 with route color yellow."
     },
     {
-      "input": "Put a blue n-s- node on B3",
-      "translation": "A blue n-s- on B3."
+      "input": "Replace its ports with ----",
+      "translation": "Set pattern of it to ----."
     },
     {
-      "input": "Put a blue n--w node on B3",
-      "translation": "A blue n--w on B3."
+      "input": "Does the node at B3 have exactly ----?",
+      "translation": "Does the object at B3 satisfy pattern is ----?"
     },
     {
-      "input": "Put a blue -es- node on B3",
-      "translation": "A blue -es- on B3."
+      "input": "Replace its ports with n---",
+      "translation": "Set pattern of it to n---."
     },
     {
-      "input": "Put a blue -e-w node on B3",
-      "translation": "A blue -e-w on B3."
+      "input": "Does the node at B3 have exactly n---?",
+      "translation": "Does the object at B3 satisfy pattern is n---?"
     },
     {
-      "input": "Put a blue --sw node on B3",
-      "translation": "A blue --sw on B3."
+      "input": "Replace its ports with -e--",
+      "translation": "Set pattern of it to -e--."
     },
     {
-      "input": "Put a blue nes- node on B3",
-      "translation": "A blue nes- on B3."
+      "input": "Does the node at B3 have exactly -e--?",
+      "translation": "Does the object at B3 satisfy pattern is -e--?"
     },
     {
-      "input": "Put a blue ne-w node on B3",
-      "translation": "A blue ne-w on B3."
+      "input": "Replace its ports with --s-",
+      "translation": "Set pattern of it to --s-."
     },
     {
-      "input": "Put a blue n-sw node on B3",
-      "translation": "A blue n-sw on B3."
+      "input": "Does the node at B3 have exactly --s-?",
+      "translation": "Does the object at B3 satisfy pattern is --s-?"
     },
     {
-      "input": "Put a blue -esw node on B3",
-      "translation": "A blue -esw on B3."
+      "input": "Replace its ports with ---w",
+      "translation": "Set pattern of it to ---w."
     },
     {
-      "input": "Put a blue nesw node on B3",
-      "translation": "A blue nesw on B3."
+      "input": "Does the node at B3 have exactly ---w?",
+      "translation": "Does the object at B3 satisfy pattern is ---w?"
     },
     {
-      "input": "Put a green ---- node on B3",
-      "translation": "A green ---- on B3."
+      "input": "Replace its ports with ne--",
+      "translation": "Set pattern of it to ne--."
     },
     {
-      "input": "Put a green n--- node on B3",
-      "translation": "A green n--- on B3."
+      "input": "Does the node at B3 have exactly ne--?",
+      "translation": "Does the object at B3 satisfy pattern is ne--?"
     },
     {
-      "input": "Put a green -e-- node on B3",
-      "translation": "A green -e-- on B3."
+      "input": "Replace its ports with n-s-",
+      "translation": "Set pattern of it to n-s-."
     },
     {
-      "input": "Put a green --s- node on B3",
-      "translation": "A green --s- on B3."
+      "input": "Does the node at B3 have exactly n-s-?",
+      "translation": "Does the object at B3 satisfy pattern is n-s-?"
     },
     {
-      "input": "Put a green ---w node on B3",
-      "translation": "A green ---w on B3."
+      "input": "Replace its ports with n--w",
+      "translation": "Set pattern of it to n--w."
     },
     {
-      "input": "Put a green ne-- node on B3",
-      "translation": "A green ne-- on B3."
+      "input": "Does the node at B3 have exactly n--w?",
+      "translation": "Does the object at B3 satisfy pattern is n--w?"
     },
     {
-      "input": "Put a green n-s- node on B3",
-      "translation": "A green n-s- on B3."
+      "input": "Replace its ports with -es-",
+      "translation": "Set pattern of it to -es-."
     },
     {
-      "input": "Put a green n--w node on B3",
-      "translation": "A green n--w on B3."
+      "input": "Does the node at B3 have exactly -es-?",
+      "translation": "Does the object at B3 satisfy pattern is -es-?"
     },
     {
-      "input": "Put a green -es- node on B3",
-      "translation": "A green -es- on B3."
+      "input": "Replace its ports with -e-w",
+      "translation": "Set pattern of it to -e-w."
     },
     {
-      "input": "Put a green -e-w node on B3",
-      "translation": "A green -e-w on B3."
+      "input": "Does the node at B3 have exactly -e-w?",
+      "translation": "Does the object at B3 satisfy pattern is -e-w?"
     },
     {
-      "input": "Put a green --sw node on B3",
-      "translation": "A green --sw on B3."
+      "input": "Replace its ports with --sw",
+      "translation": "Set pattern of it to --sw."
     },
     {
-      "input": "Put a green nes- node on B3",
-      "translation": "A green nes- on B3."
+      "input": "Does the node at B3 have exactly --sw?",
+      "translation": "Does the object at B3 satisfy pattern is --sw?"
     },
     {
-      "input": "Put a green ne-w node on B3",
-      "translation": "A green ne-w on B3."
+      "input": "Replace its ports with nes-",
+      "translation": "Set pattern of it to nes-."
     },
     {
-      "input": "Put a green n-sw node on B3",
-      "translation": "A green n-sw on B3."
+      "input": "Does the node at B3 have exactly nes-?",
+      "translation": "Does the object at B3 satisfy pattern is nes-?"
     },
     {
-      "input": "Put a green -esw node on B3",
-      "translation": "A green -esw on B3."
+      "input": "Replace its ports with ne-w",
+      "translation": "Set pattern of it to ne-w."
     },
     {
-      "input": "Put a green nesw node on B3",
-      "translation": "A green nesw on B3."
+      "input": "Does the node at B3 have exactly ne-w?",
+      "translation": "Does the object at B3 satisfy pattern is ne-w?"
     },
     {
-      "input": "Put a yellow ---- node on B3",
-      "translation": "A yellow ---- on B3."
+      "input": "Replace its ports with n-sw",
+      "translation": "Set pattern of it to n-sw."
     },
     {
-      "input": "Put a yellow n--- node on B3",
-      "translation": "A yellow n--- on B3."
+      "input": "Does the node at B3 have exactly n-sw?",
+      "translation": "Does the object at B3 satisfy pattern is n-sw?"
     },
     {
-      "input": "Put a yellow -e-- node on B3",
-      "translation": "A yellow -e-- on B3."
+      "input": "Replace its ports with -esw",
+      "translation": "Set pattern of it to -esw."
     },
     {
-      "input": "Put a yellow --s- node on B3",
-      "translation": "A yellow --s- on B3."
+      "input": "Does the node at B3 have exactly -esw?",
+      "translation": "Does the object at B3 satisfy pattern is -esw?"
     },
     {
-      "input": "Put a yellow ---w node on B3",
-      "translation": "A yellow ---w on B3."
+      "input": "Replace its ports with nesw",
+      "translation": "Set pattern of it to nesw."
     },
     {
-      "input": "Put a yellow ne-- node on B3",
-      "translation": "A yellow ne-- on B3."
+      "input": "Does the node at B3 have exactly nesw?",
+      "translation": "Does the object at B3 satisfy pattern is nesw?"
     },
     {
-      "input": "Put a yellow n-s- node on B3",
-      "translation": "A yellow n-s- on B3."
+      "input": "Open its north arm",
+      "translation": "Open north port of it."
     },
     {
-      "input": "Put a yellow n--w node on B3",
-      "translation": "A yellow n--w on B3."
+      "input": "Close its north arm",
+      "translation": "Close north port of it."
     },
     {
-      "input": "Put a yellow -es- node on B3",
-      "translation": "A yellow -es- on B3."
-    },
-    {
-      "input": "Put a yellow -e-w node on B3",
-      "translation": "A yellow -e-w on B3."
-    },
-    {
-      "input": "Put a yellow --sw node on B3",
-      "translation": "A yellow --sw on B3."
-    },
-    {
-      "input": "Put a yellow nes- node on B3",
-      "translation": "A yellow nes- on B3."
-    },
-    {
-      "input": "Put a yellow ne-w node on B3",
-      "translation": "A yellow ne-w on B3."
-    },
-    {
-      "input": "Put a yellow n-sw node on B3",
-      "translation": "A yellow n-sw on B3."
-    },
-    {
-      "input": "Put a yellow -esw node on B3",
-      "translation": "A yellow -esw on B3."
-    },
-    {
-      "input": "Put a yellow nesw node on B3",
-      "translation": "A yellow nesw on B3."
-    },
-    {
-      "input": "Open its north port",
-      "translation": "It north."
-    },
-    {
-      "input": "Close its north port",
-      "translation": "It remove north."
-    },
-    {
-      "input": "Extend it towards the north",
+      "input": "Grow one node north of this node",
       "translation": "Extend it north."
     },
     {
-      "input": "Disconnect its neighbor to the north",
-      "translation": "Disconnect it north."
+      "input": "Has it got a north arm?",
+      "translation": "Does it satisfy north port is present?"
     },
     {
-      "input": "Open its east port",
-      "translation": "It east."
+      "input": "Open its east arm",
+      "translation": "Open east port of it."
     },
     {
-      "input": "Close its east port",
-      "translation": "It remove east."
+      "input": "Close its east arm",
+      "translation": "Close east port of it."
     },
     {
-      "input": "Extend it towards the east",
+      "input": "Grow one node east of this node",
       "translation": "Extend it east."
     },
     {
-      "input": "Disconnect its neighbor to the east",
-      "translation": "Disconnect it east."
+      "input": "Has it got a east arm?",
+      "translation": "Does it satisfy east port is present?"
     },
     {
-      "input": "Open its south port",
-      "translation": "It south."
+      "input": "Open its south arm",
+      "translation": "Open south port of it."
     },
     {
-      "input": "Close its south port",
-      "translation": "It remove south."
+      "input": "Close its south arm",
+      "translation": "Close south port of it."
     },
     {
-      "input": "Extend it towards the south",
+      "input": "Grow one node south of this node",
       "translation": "Extend it south."
     },
     {
-      "input": "Disconnect its neighbor to the south",
-      "translation": "Disconnect it south."
+      "input": "Has it got a south arm?",
+      "translation": "Does it satisfy south port is present?"
     },
     {
-      "input": "Open its west port",
-      "translation": "It west."
+      "input": "Open its west arm",
+      "translation": "Open west port of it."
     },
     {
-      "input": "Close its west port",
-      "translation": "It remove west."
+      "input": "Close its west arm",
+      "translation": "Close west port of it."
     },
     {
-      "input": "Extend it towards the west",
+      "input": "Grow one node west of this node",
       "translation": "Extend it west."
     },
     {
-      "input": "Disconnect its neighbor to the west",
-      "translation": "Disconnect it west."
+      "input": "Has it got a west arm?",
+      "translation": "Does it satisfy west port is present?"
     },
     {
-      "input": "Join A1 and H8",
-      "translation": "Connect A1 to H8."
+      "input": "Is this node dot?",
+      "translation": "Does it satisfy dot?"
     },
     {
-      "input": "Build a blue path from B2 to F4",
-      "translation": "Connect B2 to F4 with blue."
+      "input": "Count nodes that are dot",
+      "translation": "How many objects match dot?"
     },
     {
-      "input": "Make a connection between H1 and C3 in green",
-      "translation": "Connect H1 to C3 with green."
+      "input": "Is this node tip?",
+      "translation": "Does it satisfy tip?"
     },
     {
-      "input": "Join the red tip to H4 using yellow",
-      "translation": "Connect the red tip to H4 with yellow."
+      "input": "Count nodes that are tip",
+      "translation": "How many objects match tip?"
     },
     {
-      "input": "Build a path from C5 to G1",
-      "translation": "Connect C5 to G1."
+      "input": "Is this node straight?",
+      "translation": "Does it satisfy straight?"
     },
     {
-      "input": "How far is A1 from H8 along existing connections",
-      "translation": "Distance A1 to H8?"
+      "input": "Count nodes that are straight",
+      "translation": "How many objects match straight?"
     },
     {
-      "input": "Connect A1 to H8 in red",
-      "translation": "Connect A1 to H8 with red."
+      "input": "Is this node bend?",
+      "translation": "Does it satisfy bend?"
     },
     {
-      "input": "Connect A1 to H8 in blue",
-      "translation": "Connect A1 to H8 with blue."
+      "input": "Count nodes that are bend",
+      "translation": "How many objects match bend?"
     },
     {
-      "input": "Connect A1 to H8 in green",
-      "translation": "Connect A1 to H8 with green."
+      "input": "Is this node tee?",
+      "translation": "Does it satisfy tee?"
     },
     {
-      "input": "Connect A1 to H8 in yellow",
-      "translation": "Connect A1 to H8 with yellow."
+      "input": "Count nodes that are tee",
+      "translation": "How many objects match tee?"
     },
     {
-      "input": "Join H1 and C3",
-      "translation": "Connect H1 to C3."
+      "input": "Is this node cross?",
+      "translation": "Does it satisfy cross?"
     },
     {
-      "input": "How far is H1 from C3 along existing connections",
-      "translation": "Distance H1 to C3?"
+      "input": "Count nodes that are cross",
+      "translation": "How many objects match cross?"
     },
     {
-      "input": "Connect H1 to C3 in red",
-      "translation": "Connect H1 to C3 with red."
+      "input": "Is this node isolated?",
+      "translation": "Does it satisfy isolated?"
     },
     {
-      "input": "Connect H1 to C3 in blue",
-      "translation": "Connect H1 to C3 with blue."
+      "input": "Count nodes that are isolated",
+      "translation": "How many objects match isolated?"
     },
     {
-      "input": "Connect H1 to C3 in green",
-      "translation": "Connect H1 to C3 with green."
+      "input": "Is this node endpoint?",
+      "translation": "Does it satisfy endpoint?"
     },
     {
-      "input": "Connect H1 to C3 in yellow",
-      "translation": "Connect H1 to C3 with yellow."
+      "input": "Count nodes that are endpoint",
+      "translation": "How many objects match endpoint?"
     },
     {
-      "input": "Join B2 and F4",
-      "translation": "Connect B2 to F4."
+      "input": "Is this node junction?",
+      "translation": "Does it satisfy junction?"
     },
     {
-      "input": "How far is B2 from F4 along existing connections",
-      "translation": "Distance B2 to F4?"
+      "input": "Count nodes that are junction",
+      "translation": "How many objects match junction?"
     },
     {
-      "input": "Connect B2 to F4 in red",
-      "translation": "Connect B2 to F4 with red."
+      "input": "Is this node unmatched?",
+      "translation": "Does it satisfy unmatched?"
     },
     {
-      "input": "Connect B2 to F4 in blue",
-      "translation": "Connect B2 to F4 with blue."
+      "input": "Count nodes that are unmatched",
+      "translation": "How many objects match unmatched?"
     },
     {
-      "input": "Connect B2 to F4 in green",
-      "translation": "Connect B2 to F4 with green."
+      "input": "Is this node on a cycle?",
+      "translation": "Does it satisfy on a cycle?"
     },
     {
-      "input": "Connect B2 to F4 in yellow",
-      "translation": "Connect B2 to F4 with yellow."
+      "input": "Count nodes that are on a cycle",
+      "translation": "How many objects match on a cycle?"
     },
     {
-      "input": "Join C5 and G1",
-      "translation": "Connect C5 to G1."
+      "input": "Is this node articulation?",
+      "translation": "Does it satisfy articulation?"
     },
     {
-      "input": "How far is C5 from G1 along existing connections",
-      "translation": "Distance C5 to G1?"
+      "input": "Count nodes that are articulation",
+      "translation": "How many objects match articulation?"
     },
     {
-      "input": "Connect C5 to G1 in red",
-      "translation": "Connect C5 to G1 with red."
+      "input": "Is the whole network connected?",
+      "translation": "Does the network satisfy connected?"
     },
     {
-      "input": "Connect C5 to G1 in blue",
-      "translation": "Connect C5 to G1 with blue."
+      "input": "Is this component connected?",
+      "translation": "Does the component of it satisfy connected?"
     },
     {
-      "input": "Connect C5 to G1 in green",
-      "translation": "Connect C5 to G1 with green."
+      "input": "Is the whole network tree?",
+      "translation": "Does the network satisfy tree?"
     },
     {
-      "input": "Connect C5 to G1 in yellow",
-      "translation": "Connect C5 to G1 with yellow."
+      "input": "Is this component tree?",
+      "translation": "Does the component of it satisfy tree?"
     },
     {
-      "input": "Is it a dot",
-      "translation": "It dot?"
+      "input": "Is the whole network forest?",
+      "translation": "Does the network satisfy forest?"
     },
     {
-      "input": "How many dot nodes are there",
-      "translation": "How many dot?"
+      "input": "Is this component forest?",
+      "translation": "Does the component of it satisfy forest?"
     },
     {
-      "input": "Is it a tip",
-      "translation": "It tip?"
+      "input": "Is the whole network cyclic?",
+      "translation": "Does the network satisfy cyclic?"
     },
     {
-      "input": "How many tip nodes are there",
-      "translation": "How many tip?"
+      "input": "Is this component cyclic?",
+      "translation": "Does the component of it satisfy cyclic?"
     },
     {
-      "input": "Is it a straight",
-      "translation": "It straight?"
+      "input": "Is the whole network monochromatic?",
+      "translation": "Does the network satisfy monochromatic?"
     },
     {
-      "input": "How many straight nodes are there",
-      "translation": "How many straight?"
+      "input": "Is this component monochromatic?",
+      "translation": "Does the component of it satisfy monochromatic?"
     },
     {
-      "input": "Is it a bend",
-      "translation": "It bend?"
+      "input": "Is the whole network properly colored?",
+      "translation": "Does the network satisfy properly colored?"
     },
     {
-      "input": "How many bend nodes are there",
-      "translation": "How many bend?"
+      "input": "Is this component properly colored?",
+      "translation": "Does the component of it satisfy properly colored?"
     },
     {
-      "input": "Is it a tee",
-      "translation": "It tee?"
+      "input": "Create an unplaced dot",
+      "translation": "Create object with pattern ---- off the board."
     },
     {
-      "input": "How many tee nodes are there",
-      "translation": "How many tee?"
+      "input": "Create an empty colorless node at C5",
+      "translation": "Create object on C5."
     },
     {
-      "input": "Is it a cross",
-      "translation": "It cross?"
+      "input": "Remove its color",
+      "translation": "Clear color of it."
     },
     {
-      "input": "How many cross nodes are there",
-      "translation": "How many cross?"
+      "input": "Make it a dot",
+      "translation": "Clear pattern of it."
     },
     {
-      "input": "Is it a isolated",
-      "translation": "It isolated?"
+      "input": "Remove its entire appearance",
+      "translation": "Clear appearance of it."
     },
     {
-      "input": "How many isolated nodes are there",
-      "translation": "How many isolated?"
+      "input": "Remove all objects",
+      "translation": "Delete every object."
     },
     {
-      "input": "Is it a endpoint",
-      "translation": "It endpoint?"
+      "input": "Remove it from the board",
+      "translation": "Unplace it."
     },
     {
-      "input": "How many endpoint nodes are there",
-      "translation": "How many endpoint?"
+      "input": "Erase the object at C4",
+      "translation": "Delete the object at C4."
     },
     {
-      "input": "Is it a junction",
-      "translation": "It junction?"
+      "input": "Move it to C4",
+      "translation": "Move it to C4."
     },
     {
-      "input": "How many junction nodes are there",
-      "translation": "How many junction?"
+      "input": "Swap these nodes",
+      "translation": "Exchange positions of #1 and #2."
     },
     {
-      "input": "Is it a unmatched",
-      "translation": "It unmatched?"
+      "input": "Link these adjacent nodes",
+      "translation": "Link #1 to #2."
     },
     {
-      "input": "How many unmatched nodes are there",
-      "translation": "How many unmatched?"
+      "input": "Unlink these nodes",
+      "translation": "Unlink #1 from #2."
     },
     {
-      "input": "Turn it a quarter turn clockwise",
-      "translation": "Rotate it clockwise."
+      "input": "Close its dangling arms",
+      "translation": "Close unmatched ports of it."
     },
     {
-      "input": "Rotate it ninety degrees anticlockwise",
-      "translation": "Rotate it counterclockwise."
+      "input": "Copy these ports",
+      "translation": "Copy pattern from #1 to #2."
     },
     {
-      "input": "Mirror it from left to right",
-      "translation": "Flip it horizontally."
+      "input": "Move its ports to another node",
+      "translation": "Transfer pattern from #1 to #2."
     },
     {
-      "input": "Copy the port pattern of the red node onto it",
-      "translation": "Make it the same pattern as the red."
+      "input": "Copy all its appearance",
+      "translation": "Copy appearance from #1 to #2."
     },
     {
-      "input": "Colour its whole connected component blue",
-      "translation": "Color the component of it blue."
+      "input": "Exchange their colors",
+      "translation": "Exchange color of #1 and #2."
     },
     {
-      "input": "Create an empty node at H1",
-      "translation": "H1 ----."
+      "input": "Rotate its ports clockwise",
+      "translation": "Rotate ports of it by 90 degrees clockwise."
     },
     {
-      "input": "How many separate networks are there",
-      "translation": "How many components?"
+      "input": "Reflect its ports left to right",
+      "translation": "Reflect ports of it across vertical."
     },
     {
-      "input": "Are A1 and H8 connected through red nodes",
-      "translation": "A1 connected to H8 by a red path?"
+      "input": "Rotate the drawing clockwise, carrying node identities and ports",
+      "translation": "Rotate drawing of objects at [D4, E4, D5, E5] by 90 degrees clockwise about the center of rectangle D4 to E5."
     },
     {
-      "input": "Trim its dangling ports",
-      "translation": "Remove unmatched ports from it."
+      "input": "Rotate only the node positions, preserving port orientations",
+      "translation": "Rotate positions of objects at [D4, E4, D5, E5] by 90 degrees clockwise about the center of rectangle D4 to E5."
+    },
+    {
+      "input": "Rotate appearances among fixed identities",
+      "translation": "Rotate appearance of objects at [D4, E4, D5, E5] by 90 degrees clockwise about the center of rectangle D4 to E5."
+    },
+    {
+      "input": "Build a route between these existing nodes",
+      "translation": "Build shortest connection from #1 to #2."
+    },
+    {
+      "input": "Build a route from here to an empty square",
+      "translation": "Build shortest connection from it to H8."
+    },
+    {
+      "input": "Are these nodes directly linked?",
+      "translation": "Does #1 satisfy linked to #2?"
+    },
+    {
+      "input": "Are these nodes connected by any existing path?",
+      "translation": "Does #1 satisfy connected to #2?"
+    },
+    {
+      "input": "How many neighbors does it actually link to?",
+      "translation": "What is the degree of it?"
+    },
+    {
+      "input": "Find the existing shortest distance between them",
+      "translation": "What is the distance from #1 to #2?"
+    },
+    {
+      "input": "Show a shortest existing path between them",
+      "translation": "What is a shortest path from #1 to #2?"
+    },
+    {
+      "input": "Count components",
+      "translation": "How many components in the network?"
+    },
+    {
+      "input": "Count reciprocal links",
+      "translation": "How many links in the network?"
+    },
+    {
+      "input": "Count placed nodes",
+      "translation": "How many objects in the network?"
+    },
+    {
+      "input": "Is its entire component a blue tree?",
+      "translation": "Does the component of it satisfy tree and monochromatic with color blue?"
+    },
+    {
+      "input": "Is its blue-only reachable component a tree?",
+      "translation": "Does the component of it within the subgraph of the network induced by objects matching color is blue satisfy tree?"
+    },
+    {
+      "input": "Do all blue nodes in its original component induce a tree?",
+      "translation": "Does the subgraph of the component of it induced by objects matching color is blue satisfy tree?"
+    },
+    {
+      "input": "Is this link a bridge?",
+      "translation": "Does the link between #1 and #2 satisfy bridge?"
+    },
+    {
+      "input": "Are all red nodes on the board?",
+      "translation": "Does every object matching color is red satisfy position is present?"
+    },
+    {
+      "input": "Are there blue nodes in a corner?",
+      "translation": "Does some object matching color is blue satisfy in a corner?"
+    },
+    {
+      "input": "Is C5 occupied?",
+      "translation": "Does C5 satisfy occupied?"
+    },
+    {
+      "input": "Is C5 vacant?",
+      "translation": "Does C5 satisfy not occupied?"
+    },
+    {
+      "input": "What color is it?",
+      "translation": "What is the color of it?"
+    },
+    {
+      "input": "What ports does it have?",
+      "translation": "What is the pattern of it?"
+    },
+    {
+      "input": "Where is it?",
+      "translation": "What is the position of it?"
+    },
+    {
+      "input": "Rotate it or change a different node atomically",
+      "translation": "Atomically { Rotate ports of #1 by 180 degrees. Set color of #2 to red. }."
+    },
+    {
+      "input": "Create two dots and join them",
+      "translation": "Create object on A1. Create object on B1. Link the object at A1 to the object at B1."
+    },
+    {
+      "input": "Undo the last entry",
+      "translation": "Undo."
+    },
+    {
+      "input": "Ask about a square, then ask about that same square again",
+      "translation": "Does D1 satisfy not occupied? Does it satisfy occupied?"
+    },
+    {
+      "input": "Recall a square and move object 3 there",
+      "translation": "Does D4 satisfy occupied? Move #3 to it."
+    },
+    {
+      "input": "Create a new object on the square just mentioned",
+      "translation": "Does C3 satisfy not occupied? Create object on it."
+    },
+    {
+      "input": "Recolor the occupant of the square just mentioned",
+      "translation": "Does A1 satisfy occupied? Set color of the object at it to green."
+    },
+    {
+      "input": "Find out which object occupies that square",
+      "translation": "Which object occupies it?"
+    },
+    {
+      "input": "Check whether the recently mentioned location or object is in a corner",
+      "translation": "Does it satisfy in a corner?"
+    },
+    {
+      "input": "Remember an object and a different square, then recolor the object",
+      "translation": "Does #3 exist? Does D4 satisfy occupied? Set color of it to blue."
+    },
+    {
+      "input": "Check the shading of that square",
+      "translation": "Does it satisfy shading is dark?"
     }
   ]
 }

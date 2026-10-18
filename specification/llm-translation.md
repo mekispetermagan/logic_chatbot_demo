@@ -73,10 +73,14 @@ the local engine/database and incur no additional GPT charge.
 
 ## Prompt and transport
 
-`backend/api/prompts/shared.md` defines the translation task and common syntax.
-`objects.md` and `network.md` define domain vocabulary and operations.
-`examples.json` contains 142 object-domain and 191 network-domain examples;
-tests validate every example translation with Haskell's parser.
+`app/agent_instructions.py` assembles the reviewed common/domain instructions
+from `specification/agent-instructions-draft.md`, the active standalone
+[Objects v2](object-language-v2.md) or [Network v2](network-language-v2.md)
+reference, and `backend/api/prompts/examples.json`. Both transports use that
+contract. There are 184 object and 214 network examples; tests validate every
+translation with the real Haskell parser. The short files under `prompts/` point
+to these authoritative sources rather than defining another grammar.
+
 The prompt permits general knowledge, coordinate calculations, ordered
 assignments and creative composition of supported operations. No live web tools
 are provided. Examples illustrate syntax without enumerating all possible goals.
@@ -94,8 +98,9 @@ The Responses user message contains JSON with `entry` and `world`. The latter
 uses the existing world contract: dimensions and objects with identifiers,
 attributes and nullable positions; x=0/y=0 denotes A1. Unplaced objects occupy no
 square. The model may select targets by snapshot data, while pronouns and definite
-references remain for Haskell. Coordinate assignment edits an occupied cell;
-indefinite creation always introduces a new object. The complete world payload
+references remain for Haskell. Coordinates denote locations; explicit occupant references edit existing nodes,
+and explicit creation introduces a new identity. Missing references never create
+objects. The complete world payload
 is included in token counting before generation.
 
 Follow-up requests add `clarification`, containing ordered question/answer

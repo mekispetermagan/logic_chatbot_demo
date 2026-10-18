@@ -1,5 +1,7 @@
 # Controlled English: Core Language Reference
 
+> Archived pre-v2 design. Current contracts: [Objects v2](../object-language-v2.md) and [Network v2](../network-language-v2.md).
+
 This document describes the **implemented atomic core**. Layer 2 syntax and
 reference-resolution semantics are described in [Layer 2](controlled-english-layer2.md).
 It is a reference for writing demo chat entries and understanding their evaluation.
@@ -396,14 +398,14 @@ to retrieve committed state rather than automatically repeating the submission.
 
 | Module | Responsibility |
 | --- | --- |
-| [Ontology.hs](../backend/logic_engine/Ontology.hs) | Objects, references, properties, world |
-| [AtomicParser.hs](../backend/logic_engine/AtomicParser.hs) | Parse one sentence or a complete sequence |
-| [ReferenceResolution.hs](../backend/logic_engine/ReferenceResolution.hs) | Resolve references; create performative subjects |
-| [AtomicPerformative.hs](../backend/logic_engine/AtomicPerformative.hs) | Attribute, unplace, swap, or delete objects and report changes |
-| [AtomicPropertyCheck.hs](../backend/logic_engine/AtomicPropertyCheck.hs) | Evaluate Boolean checks |
-| [AtomicSquareCheck.hs](../backend/logic_engine/AtomicSquareCheck.hs) | Check square occupancy without object reference resolution |
-| [AtomicPropertyQuery.hs](../backend/logic_engine/AtomicPropertyQuery.hs) | Evaluate attribute-value questions |
-| [AtomicEvaluation.hs](../backend/logic_engine/AtomicEvaluation.hs) | Evaluate sequences and format feedback |
+| [Ontology.hs](../../backend/logic_engine/Ontology.hs) | Objects, references, properties, world |
+| [AtomicParser.hs](../../backend/logic_engine/AtomicParser.hs) | Parse one sentence or a complete sequence |
+| [ReferenceResolution.hs](../../backend/logic_engine/ReferenceResolution.hs) | Resolve references; create performative subjects |
+| [AtomicPerformative.hs](../../backend/logic_engine/AtomicPerformative.hs) | Attribute, unplace, swap, or delete objects and report changes |
+| [AtomicPropertyCheck.hs](../../backend/logic_engine/AtomicPropertyCheck.hs) | Evaluate Boolean checks |
+| [AtomicSquareCheck.hs](../../backend/logic_engine/AtomicSquareCheck.hs) | Check square occupancy without object reference resolution |
+| [AtomicPropertyQuery.hs](../../backend/logic_engine/AtomicPropertyQuery.hs) | Evaluate attribute-value questions |
+| [AtomicEvaluation.hs](../../backend/logic_engine/AtomicEvaluation.hs) | Evaluate sequences and format feedback |
 
 Parsing returns `Either String ...`: a parse error or parsed syntax. Check and
 query evaluation return the engine's `Result` type: an answer or a diagnostic

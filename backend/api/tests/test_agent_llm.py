@@ -23,7 +23,7 @@ class AgentTests(unittest.TestCase):
                                  openai_api_key='test-agent-key', llm_log_path=Path(self.temporary.name) / 'transcript.jsonl')
         self.calls, self.inputs = [], []
         self.agents, self.sessions = {}, {}
-        self.translation, self.question = 'B2 red.', ''
+        self.translation, self.question = 'Create object with color red on B2.', ''
         self.reply, self.explanation = '', 'Test reading.'
         self.turn_status = 'completed'
         self.status = 'proposals'
@@ -143,6 +143,72 @@ class AgentTests(unittest.TestCase):
         self.status, self.reply, self.explanation = 'conversation', reply, ''
         self.candidates, self.question = [], ''
 
+    def test_object_v2_review_keeps_identity_and_appearance_alternatives_distinct(self):
+        state = self.client.post('/conversations', json={'domain': 'objects'}).json()
+        base = '/conversations/' + state['conversationId']
+        self.client.post(base + '/clear')
+        body = ' '.join(f'Create object with (color {color} and shape {shape}) on {square}.'
+                        for color,shape,square in [('blue','bloom','D4'),('yellow','spark','E4'),('red','drop','E5'),('green','loop','D5')])
+        seeded = self.client.post(base + '/chat', json={'text': body}).json()
+        first_id = state['nextObjectId']
+        next_id = seeded['nextObjectId']
+        self.status, self.question = 'clarification', 'Move object identities, or keep identities fixed and rotate appearance?'
+        suffix = ' of objects at [D4, E4, D5, E5] by 90 degrees clockwise about the center of rectangle D4 to E5.'
+        self.candidates = [{'interpretation': label, 'translation': 'Rotate '+component+suffix, 'explanation': label}
+                           for label,component in [('Move identities','positions'),('Keep identities fixed','appearance')]]
+        offered = self.offer('Rotate the formation clockwise', base)
+        self.assertEqual(len(offered['proposal']['candidates']),2)
+        self.assertEqual(offered['proposal']['languageVersion'],'objects-v2')
+        moved = self.review(offered,'preview',{'rank':1},base).json()
+        changed = self.review(offered,'preview',{'rank':2},base).json()
+        self.assertTrue(all(c['kind']=='position' for c in moved['preview']['changes']))
+        self.assertTrue(all(c['kind']=='appearance' for c in changed['preview']['changes']))
+        self.assertEqual(moved['world'],seeded['world'])
+        self.assertEqual(changed['nextObjectId'],next_id)
+        accepted = self.review(offered,'accept',{'rank':2},base).json()
+        blue_slot = next(o for o in accepted['world']['objects'] if o['id']==first_id)
+        self.assertEqual(blue_slot['position'],{'x':3,'y':3})
+        self.assertEqual(blue_slot['attributes']['color'],'yellow')
+
+    def test_object_v2_preview_creation_does_not_allocate_until_accepted(self):
+        state = self.client.post('/conversations',json={'domain':'objects'}).json()
+        base = '/conversations/'+state['conversationId']
+        self.translation = 'Create object with (color red) off the board.'
+        offered = self.offer('Create a new red object, unplaced',base)
+        preview = self.review(offered,'preview',{'rank':1},base).json()
+        self.assertEqual(preview['nextObjectId'],state['nextObjectId'])
+        self.assertEqual(len(preview['preview']['world']['objects']),len(state['world']['objects'])+1)
+        accepted = self.review(offered,'accept',{'rank':1},base).json()
+        self.assertEqual(accepted['nextObjectId'],state['nextObjectId']+1)
+        self.client.post(base+'/undo')
+        new = self.client.post(base+'/chat',json={'text':'Create object off the board.'}).json()
+        self.assertEqual(new['nextObjectId'],state['nextObjectId']+2)
+
+    def test_object_legacy_interpretation_stays_rejectable_but_cannot_execute(self):
+        state = self.client.post('/conversations',json={'domain':'objects'}).json()
+        base = '/conversations/'+state['conversationId']
+        self.translation='Set color of #0 to blue.'
+        offered=self.offer('Make number zero blue',base)
+        with Database(self.settings.database_path).connection() as connection:
+            proposal=offered['proposal'];proposal['languageVersion']='objects-legacy'
+            connection.execute('UPDATE interpretation_proposals SET proposal_json=? WHERE id=?',
+                               (json.dumps(proposal),proposal['id']))
+        for action in ('preview','accept'):
+            response=self.review(offered,action,{'rank':1},base)
+            self.assertEqual(response.status_code,409,response.text)
+        rejected=self.review(offered,'reject',base=base)
+        self.assertEqual(rejected.status_code,200,rejected.text)
+        self.assertIsNone(rejected.json()['proposal'])
+        self.assertEqual(rejected.json()['world'],state['world'])
+
+    def test_object_prompt_has_v2_contract_without_legacy_network_grammar(self):
+        objects=configuration_for('objects')['instructions']
+        self.assertIn('IDENTITY IS CONSEQUENTIALLY DISTINCT FROM APPEARANCE',objects)
+        self.assertIn('exchange positions of',objects)
+        self.assertIn('the object at A4',objects)
+        self.assertNotIn('## Shared language reference',objects)
+        self.assertNotIn('S is PROPERTIES.',objects)
+
     def test_courtesy_is_plain_persisted_chat_without_symbolic_state_changes(self):
         self.conversational()
         before = self.snapshots()
@@ -170,14 +236,14 @@ class AgentTests(unittest.TestCase):
     def test_mixed_greeting_and_task_keep_reply_out_of_the_candidate_program(self):
         self.reply = 'Hello!'
         before = self.snapshots()
-        offered = self.offer('Hello! Please paint B2 red.')
+        offered = self.offer('Hello! Please paint Create object with color red on B2.')
         self.assertTrue(offered['feedback'].startswith('Hello!\n\nInterpretations ready'))
-        self.assertEqual(offered['proposal']['candidates'][0]['translation'], 'B2 red.')
+        self.assertEqual(offered['proposal']['candidates'][0]['translation'], 'Create object with color red on B2.')
         self.assertEqual(self.snapshots(), before)
         engine = self.client.app.state.conversation_service.engine
         with patch.object(engine, 'edit', wraps=engine.edit) as evaluated:
             accepted = self.review(offered, 'accept', {'rank': 1}).json()
-        self.assertEqual([call.args[2] for call in evaluated.call_args_list], [{'type': 'chat', 'text': 'B2 red.'}])
+        self.assertEqual([call.args[2] for call in evaluated.call_args_list], [{'type': 'chat', 'text': 'Create object with color red on B2.'}])
         self.assertNotIn('Hello!', accepted['feedback'])
         self.assertEqual(accepted['world']['objects'][0]['attributes'], {'color': 'red'})
 
@@ -212,7 +278,7 @@ class AgentTests(unittest.TestCase):
         self.assertEqual(self.snapshots(), before)
 
     def test_conversation_contract_rejects_hidden_tasks_and_missing_reply(self):
-        for field, value in [('candidates', [{'interpretation': 'Hidden update', 'translation': 'B2 red.', 'explanation': ''}]),
+        for field, value in [('candidates', [{'interpretation': 'Hidden update', 'translation': 'Create object with color red on B2.', 'explanation': ''}]),
                              ('question', 'Which object?'), ('explanation', 'A hidden answer'), ('reply', ''),
                              ('reply', {'text': 'Hello!'})]:
             with self.subTest(field=field):
@@ -310,12 +376,12 @@ class AgentTests(unittest.TestCase):
             self.assertEqual(connection.execute('SELECT COUNT(*) FROM chat_messages').fetchone()[0], 5)
 
     def test_clarification_and_parser_failures_use_same_session_and_do_not_apply(self):
-        self.status, self.question, self.translation = 'clarification', 'Do you mean isolated nodes?', 'B2 red -sw.'
+        self.status, self.question, self.translation = 'clarification', 'Do you mean isolated nodes?', 'Create object with color red and pattern -sw on B2.'
         first = self.offer('Draw something using nodes')
         self.assertEqual(first['proposal']['candidates'], [])
-        self.assertIn('Unsupported syntax', first['proposal']['validationFailures'][0]['reason'])
+        self.assertIn('network language v2:', first['proposal']['validationFailures'][0]['reason'])
         before = self.snapshots()
-        self.status, self.question, self.translation = 'proposals', '', 'B2 red ----.'
+        self.status, self.question, self.translation = 'proposals', '', 'Create object with color red and pattern ---- on B2.'
         second = self.review(first, 'answer', {'text': 'Yes, isolated nodes'}).json()
         self.assertEqual(len(self.sessions), 1)
         self.assertEqual(self.inputs[-1]['entry'], 'Draw something using nodes')
@@ -328,7 +394,7 @@ class AgentTests(unittest.TestCase):
     def test_paginated_final_output_is_used_without_commentary(self):
         self.pagination = True
         state = self.offer()
-        self.assertEqual(state['proposal']['candidates'][0]['translation'], 'B2 red.')
+        self.assertEqual(state['proposal']['candidates'][0]['translation'], 'Create object with color red on B2.')
         self.assertTrue(any(request.url.params.get('after') == 'commentary' for request in self.calls))
 
     def test_usage_is_estimated_conservatively_and_can_exceed_old_responses_limits(self):

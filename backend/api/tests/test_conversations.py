@@ -67,6 +67,19 @@ class ConversationTests(unittest.TestCase):
         with Database(self.path).connection() as connection:
             self.assertEqual(connection.execute("SELECT count(*) FROM conversations").fetchone()[0], 0)
 
+
+    def test_old_schema_is_rejected_unchanged(self):
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        with sqlite3.connect(self.path) as connection:
+            connection.execute('CREATE TABLE conversations (id TEXT PRIMARY KEY)')
+            connection.execute("INSERT INTO conversations VALUES ('old-demo')")
+            connection.execute('PRAGMA user_version=1')
+        with self.assertRaisesRegex(RuntimeError, 'Legacy demo database is unsupported'):
+            Database(self.path).initialize()
+        with sqlite3.connect(self.path) as connection:
+            self.assertEqual(connection.execute('PRAGMA user_version').fetchone()[0],1)
+            self.assertEqual(connection.execute('SELECT id FROM conversations').fetchone()[0],'old-demo')
+
     def test_unknown_and_malformed_ids(self):
         with TestClient(create_app(self.settings)) as client:
             missing = client.get(f"/conversations/{uuid4()}")
@@ -131,36 +144,6 @@ class ConversationTests(unittest.TestCase):
             with self.assertRaises(ValidationError):
                 World.model_validate(invalid)
 
-    def test_legacy_snapshot_migration_preserves_world_history(self):
-        self.path.parent.mkdir(parents=True)
-        identifier = uuid4()
-        with sqlite3.connect(self.path) as connection:
-            connection.executescript("""
-                CREATE TABLE conversations (id TEXT PRIMARY KEY);
-                CREATE TABLE world_snapshots (
-                    conversation_id TEXT NOT NULL REFERENCES conversations(id),
-                    sequence INTEGER NOT NULL, world_json TEXT NOT NULL,
-                    PRIMARY KEY (conversation_id, sequence));
-            """)
-            connection.execute("INSERT INTO conversations VALUES (?)", (str(identifier),))
-            for sequence in (0, 1):
-                connection.execute("INSERT INTO world_snapshots VALUES (?, ?, ?)",
-                                   (str(identifier), sequence, json.dumps(self.initial_world)))
-        database = Database(self.path)
-        database.initialize()
-        database.initialize()
-        repository = ConversationRepository(database)
-        state = repository.get(identifier)
-        self.assertEqual(state.domain, "objects")
-        self.assertTrue(state.canUndo)
-        self.assertIsNone(state.pending)
-        with database.connection() as connection:
-            rows = connection.execute("SELECT salience_json, pending_json FROM world_snapshots").fetchall()
-            self.assertEqual([(row[0], row[1]) for row in rows], [("[]", "null"), ("[]", "null")])
-        restored = repository.undo(identifier)
-        self.assertEqual(restored.domain, "objects")
-        self.assertFalse(restored.canUndo)
-        self.assertEqual(restored.world.model_dump(), self.initial_world)
 
 
 if __name__ == "__main__":

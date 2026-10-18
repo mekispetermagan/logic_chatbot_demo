@@ -180,6 +180,12 @@ class ConversationController extends ChangeNotifier {
   Future<bool> clarify(int objectId) =>
       _edit((id) => api.clarify(id, objectId), chat: true, allowPending: true);
 
+  Future<bool> clarifyGrouping(int groupingId) => _edit(
+    (id) => api.clarifyGrouping(id, groupingId),
+    chat: true,
+    allowPending: true,
+  );
+
   void selectInterpretation(int rank) {
     if (!canReview ||
         !conversation!.proposal!.candidates.any(
