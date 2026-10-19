@@ -27,7 +27,16 @@ class ConversationService:
     def undo(self, conversation_id: UUID) -> EditState | None:
         return self.repository.undo(conversation_id)
 
+    def save_world_slot(self, conversation_id: UUID, slot: int, overwrite: bool) -> EditState | None:
+        return self.repository.world_slot(conversation_id, slot, save=True, overwrite=overwrite)
+
+    def load_world_slot(self, conversation_id: UUID, slot: int) -> EditState | None:
+        return self.repository.world_slot(conversation_id, slot, save=False)
+
     def chat(self, conversation_id: UUID, text: str, use_llm: bool = False) -> EditState | None:
+        control = self.repository.reset_control(conversation_id, text)
+        if control is not None:
+            return control
         attempt = None
         if use_llm and self.translator is not None:
             snapshot = self.repository.get_with_revision(conversation_id)

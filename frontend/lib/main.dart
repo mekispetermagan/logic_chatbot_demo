@@ -106,15 +106,26 @@ class _DemoScreenState extends State<DemoScreen> {
               onPaint: _controller.canEdit ? _controller.paint : null,
               onErase: _controller.canEdit ? _controller.erase : null,
               onClear: _controller.canEdit ? _controller.clear : null,
+              onSaveSlot: _controller.canEdit
+                  ? (slot, overwrite) =>
+                        _controller.saveWorldSlot(slot, overwrite: overwrite)
+                  : null,
+              onLoadSlot: _controller.canEdit
+                  ? _controller.loadWorldSlot
+                  : null,
             ),
           );
 
           final chatPanel = PanelFrame(
             child: ChatPanel(
-              key: ValueKey(_controller.domain),
+              key: ValueKey((_controller.domain, _controller.conversation?.id)),
               messages: _controller.conversation?.messages ?? const [],
               llmBudget: _controller.conversation?.llmBudget,
               canSend: _controller.canEdit,
+              canSendControl: _controller.canRequest
+                  ? _controller.canSendControl
+                  : null,
+              resetPending: _controller.conversation?.resetPending == true,
               pending: _controller.conversation?.pending,
               proposal: _controller.conversation?.proposal,
               preview: _controller.preview,
@@ -128,11 +139,11 @@ class _DemoScreenState extends State<DemoScreen> {
               onAccept: _controller.acceptInterpretation,
               onReject: _controller.rejectInterpretation,
               onAnswer: _controller.answerInterpretation,
-              onChoose: _controller.canRequest ? _controller.clarify : null,
-              onChooseGrouping: _controller.canRequest
+              onChoose: _controller.canClarify ? _controller.clarify : null,
+              onChooseGrouping: _controller.canClarify
                   ? _controller.clarifyGrouping
                   : null,
-              onChooseSquare: _controller.canRequest
+              onChooseSquare: _controller.canClarify
                   ? _controller.clarifySquare
                   : null,
               sending: _controller.sendingChat,
@@ -200,12 +211,7 @@ class _DemoScreenState extends State<DemoScreen> {
                     padding: EdgeInsets.only(right: actionSpacing),
                     child: IconButton(
                       tooltip: 'Undo',
-                      onPressed:
-                          _controller.canRequest &&
-                              _controller.conversation?.proposal == null &&
-                              _controller.conversation?.canUndo == true
-                          ? _controller.undo
-                          : null,
+                      onPressed: _controller.canUndo ? _controller.undo : null,
                       icon: const Icon(Icons.undo),
                     ),
                   ),

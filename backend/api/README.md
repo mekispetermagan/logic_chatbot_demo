@@ -48,6 +48,21 @@ All editing endpoints use `POST /conversations/{id}/...` and return
 | `erase` | `{"position":{"x":0,"y":0}}` | Remove the object on a square |
 | `clear` | No body | Empty the world, including unplaced objects |
 | `undo` | No body | Restore the previous snapshot |
+| `slots/{slot}/save` | `{"overwrite":false}` | Save the committed world and salience ranking in slot 1–5 |
+| `slots/{slot}/load` | No body | Restore a saved setup as one undoable step |
+
+Every conversation response includes five `worldSlots` entries, each containing
+`slot` and nullable `savedAt`. Slots belong to one conversation (and therefore
+one domain), survive restarts, and remain saved after Undo or Clear. Empty worlds
+can also be saved. Saving does not advance world history or change reference
+context; overwriting requires `{"overwrite":true}` (otherwise HTTP 409).
+Loading preserves object identifiers, restores the saved salience ranking, keeps
+the conversation's identifier allocator moving forward, and appends a short chat
+message plus an event for the interpreter agent. Chat history and the LLM session
+are retained. Undo restores the complete state from before loading. Empty slots
+return 404; invalid slot numbers return 422. Save/load is blocked with HTTP 409
+while an interpretation or symbolic clarification is pending. The slot table is
+added automatically on startup to existing v2 databases without removing data.
 
 Properties are explicit attribute/value pairs validated by Haskell. Objects use
 color, size, and shape; networks use color and unary north/east/south/west ports.
@@ -68,6 +83,33 @@ is a SQLite transaction covering retrieval, evaluation, and persistence. Undo
 retains the initial snapshot; editing after Undo starts a new history branch.
 
 ## Chat
+
+### Full conversation reset
+
+Send `full reset` through the existing chat endpoint. It is case-insensitive,
+ignores surrounding/repeated whitespace and accepts an optional final period.
+FastAPI asks for confirmation without invoking Haskell or the LLM. Replies carry
+`resetPending:true`; `yes` confirms, `no` cancels (also case-insensitive, optional
+period). Other replies repeat the question. Confirmation survives restart.
+While waiting, edits, Undo, save/load, interpretation review and symbolic choices
+return HTTP 409. Reset is available even during an existing review/clarification;
+cancelling preserves it.
+
+Confirmation atomically creates an empty conversation in the same domain and
+deletes the old world's history, chat, proposals and agent-session link. There
+is no Undo. All five saved slots and their salience rankings transfer unchanged.
+The allocation counter is retained so restored slot identities remain valid.
+The new conversation gets a fresh interpreter session on its next LLM call.
+Global spending records and file transcripts remain intact; no model call is
+needed to reset.
+
+The reply has a new `conversationId` and `resetFrom` containing the old ID. Clients
+must persist the new ID and clear their old composer/history state. A small ID
+handover receipt allows GET or chat retries against the old ID to return the
+replacement with `resetFrom`, without executing that stale request. Other writes
+to the old ID return 404. Repeated resets update receipts to the latest ID.
+
+### Controlled entries
 
 `POST /conversations/{id}/chat` accepts a `text` entry. Object conversations use
 [Objects v2](../../specification/object-language-v2.md), for example:

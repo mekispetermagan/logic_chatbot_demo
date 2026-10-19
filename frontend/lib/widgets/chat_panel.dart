@@ -33,6 +33,8 @@ class ChatPanel extends StatefulWidget {
     this.onReject,
     this.onAnswer,
     this.languageVersion = 'unknown',
+    this.canSendControl,
+    this.resetPending = false,
   });
 
   final List<ChatMessage> messages;
@@ -56,6 +58,8 @@ class ChatPanel extends StatefulWidget {
   final Future<bool> Function()? onReject;
   final Future<bool> Function(String)? onAnswer;
   final String languageVersion;
+  final bool Function(String)? canSendControl;
+  final bool resetPending;
 
   @override
   State<ChatPanel> createState() => _ChatPanelState();
@@ -72,12 +76,17 @@ class _ChatPanelState extends State<ChatPanel> {
   bool get _staleProposal =>
       widget.proposal != null &&
       widget.proposal!.languageVersion != widget.languageVersion;
-  bool get _canSubmit => widget.proposal == null
-      ? widget.canSend
-      : _answering &&
-            !_staleProposal &&
-            widget.canReview &&
-            widget.onAnswer != null;
+  bool get _sendingControl =>
+      widget.canSendControl?.call(_composer.text) == true;
+  bool get _canSubmit {
+    if (_sendingControl) return true;
+    if (widget.resetPending) return false;
+    if (widget.proposal == null) return widget.canSend;
+    return _answering &&
+        !_staleProposal &&
+        widget.canReview &&
+        widget.onAnswer != null;
+  }
 
   KeyEventResult _navigateHistory(FocusNode node, KeyEvent event) {
     final keyboard = HardwareKeyboard.instance;
@@ -169,7 +178,7 @@ class _ChatPanelState extends State<ChatPanel> {
     _draft = null;
     setState(() => _submitting = true);
     try {
-      final accepted = await (_answering
+      final accepted = await (_answering && !_sendingControl
           ? widget.onAnswer!(text)
           : widget.onSend(text));
       if (mounted && accepted && _composer.text == text) _composer.clear();
@@ -378,16 +387,19 @@ class _ChatPanelState extends State<ChatPanel> {
                     focusNode: _composerFocus,
                     enabled:
                         !busy &&
-                        !_staleProposal &&
-                        widget.pending == null &&
-                        (widget.proposal == null || _answering),
+                        (widget.canSendControl != null ||
+                            (!_staleProposal &&
+                                widget.pending == null &&
+                                (widget.proposal == null || _answering))),
                     minLines: 1,
                     maxLines: 4,
                     textInputAction: TextInputAction.send,
                     onSubmitted: (_) => _send(),
                     onEditingComplete: () {},
                     decoration: InputDecoration(
-                      hintText: _answering
+                      hintText: widget.resetPending
+                          ? 'Reply yes or no'
+                          : _answering
                           ? 'Clarification or correction'
                           : 'Enter a message',
                       border: const OutlineInputBorder(),
@@ -404,7 +416,7 @@ class _ChatPanelState extends State<ChatPanel> {
                     _canSubmit && !busy && value.text.trim().isNotEmpty
                     ? _send
                     : null;
-                return _answering
+                return _answering && !_sendingControl
                     ? FilledButton(
                         onPressed: submit,
                         child: const Text('Submit answer'),

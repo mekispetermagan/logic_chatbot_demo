@@ -4,6 +4,7 @@ import 'world_object.dart';
 import 'chat_message.dart';
 import 'llm_usage.dart';
 import 'interpretation_proposal.dart';
+import 'world_slot.dart';
 
 class ConversationState {
   const ConversationState({
@@ -18,6 +19,9 @@ class ConversationState {
     this.proposal,
     this.preview,
     this.languageVersion = 'unknown',
+    this.worldSlots = const [],
+    this.resetPending = false,
+    this.resetFrom,
   });
 
   factory ConversationState.fromJson(Map<String, dynamic> json) {
@@ -30,6 +34,13 @@ class ConversationState {
       languageVersion: json['languageVersion'] as String? ?? 'unknown',
       world: World.fromJson(json['world'] as Map<String, dynamic>),
       canUndo: json['canUndo'] as bool,
+      resetPending: json['resetPending'] as bool? ?? false,
+      resetFrom: json['resetFrom'] as String?,
+      worldSlots: List.unmodifiable(
+        (json['worldSlots'] as List<dynamic>? ?? []).map(
+          (slot) => WorldSlot.fromJson(slot as Map<String, dynamic>),
+        ),
+      ),
       llmBudget: json['llmBudget'] == null
           ? null
           : LlmBudget.fromJson(json['llmBudget'] as Map<String, dynamic>),
@@ -66,6 +77,9 @@ class ConversationState {
   final InterpretationProposal? proposal;
   final InterpretationPreview? preview;
   final String languageVersion;
+  final List<WorldSlot> worldSlots;
+  final bool resetPending;
+  final String? resetFrom;
 }
 
 class ClarificationCandidate {

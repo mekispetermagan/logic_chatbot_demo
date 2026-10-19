@@ -5,7 +5,7 @@
 Create an anonymous conversation with `POST /conversations` and
 `{"domain":"objects"}` or `{"domain":"network"}`. Each domain starts with its
 own fixed seven-object world. The response includes `conversationId`, `domain`,
-`world`, `canUndo`, `messages`, `languageVersion`, `nextObjectId`, and nullable `pending` and `proposal`. Editing replies also
+`world`, `canUndo`, `messages`, `worldSlots`, `resetPending`, `languageVersion`, `nextObjectId`, and nullable `pending`, `proposal`, and `resetFrom`. Editing replies also
 include `feedback`, typed `changes`, and nullable `preview`. Domain selection is immutable for a conversation; subsequent
 requests address the conversation ID and inherit its domain.
 
@@ -112,6 +112,59 @@ isolated node. Repeated identical edits are no-ops. Each changed edit produces
 one undoable snapshot. Duplicate ports, aliases, and use outside the network
 domain are rejected. The engine action has `"type":"ports"` with the same fields.
 
+## Saved world slots
+
+Each conversation owns five persistent slots. Replies include
+`worldSlots: [{"slot": 1, "savedAt": null}, ...]`; a non-null UTC timestamp marks
+a saved setup, including a deliberately empty world. No world data is supplied
+by the client when saving or loading.
+
+- `POST /conversations/{id}/slots/{slot}/save` with `{"overwrite":false}` stores
+  the committed world, typed salience ranking and language version. Replacing
+  an occupied slot requires `{"overwrite":true}`; otherwise HTTP 409.
+- `POST /conversations/{id}/slots/{slot}/load` without a body restores that world
+  and ranking in one new snapshot, with no pending clarification. Object
+  identifiers are preserved and `nextObjectId` remains unchanged. Undo restores
+  the complete pre-load snapshot. A repeated load still creates one Undo step.
+
+Saving does not create history or chat entries. Loading appends `Loaded slot N`
+to chat and queues a `world_loaded` outcome for the next interpreter call, which
+also receives the authoritative current world. Existing chat/agent history is
+retained. Neither operation evaluates a controlled-language entry. Both reject
+pending interpretations or clarifications with HTTP 409. Empty slots return
+404, invalid numbers outside 1–5 return 422, and incompatible saved language
+versions return 409. Slots survive Clear, Undo and application restarts, and
+cannot be loaded across conversations or domains.
+
+## Chat reset control
+
+The existing chat endpoint recognizes `full reset` before grammar checking or
+LLM translation, including during pending review/clarification. Matching is
+case-insensitive, whitespace-normalized, with an optional final period. The
+confirmation is persisted in `conversations.reset_pending` and exposed as
+`resetPending`. While true, only chat responses to this control are accepted;
+edits, Undo, review, save/load and symbolic choices return 409. `yes` confirms,
+`no` cancels; other input repeats the question. Both answers also accept an
+optional final period. Cancellation preserves the world, salience, pending
+symbolic entry and reviewable proposal; confirmation itself is not an Undo step.
+
+On confirmation the reply has a new `conversationId` and `resetFrom` set to the
+old ID. The new conversation has the same domain/version, an empty initial
+world, empty salience, no pending entry/proposal, no Undo history and one reset
+acknowledgment message. Saved slots (worlds and rankings) transfer unchanged.
+The allocation counter is retained for saved identities. Old application chat,
+snapshots, proposals and agent-session links are deleted in the same SQLite
+transaction. The next LLM request starts a fresh session. Global accounting and
+file transcripts are retained.
+
+Clients persist the new ID and discard old input recall state. GET or chat
+requests to a reset ID return its replacement with `resetFrom`; stale chat input
+is not executed. `conversation_resets` stores only these ID receipts, updating
+earlier receipts after repeated resets. This makes a lost response or failed
+local-preferences write recoverable without performing another reset. Other
+writes to the old ID return 404. Unknown IDs retain their existing 404 behavior.
+The additive column/table are initialized automatically in existing v2 databases.
+
 ## Engine requests and discourse storage
 
 Each FastAPI-to-Haskell request contains `domain`, `world`, `action`, `salience`,
@@ -163,6 +216,9 @@ schema version is rejected unchanged. There is no migration or legacy grammar
 continuation. The demo database is reset for this release, including conversation,
 salience, proposal, agent-session and local accounting records. Provider-side
 billing is unaffected.
+
+The saved-world feature adds `world_slots` on startup in existing v2 databases.
+This additive table does not change the language version or remove existing data.
 
 Flutter retains one conversation ID per domain. A removed conversation returns
 404 and the client creates a fresh one. Both domains retain seven fixed initial

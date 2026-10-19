@@ -30,6 +30,8 @@ class ConversationWorldPanel extends StatelessWidget {
     this.onClear,
     this.previewWorld,
     this.previewLabel = 'Preview — not applied',
+    this.onSaveSlot,
+    this.onLoadSlot,
   });
 
   final NetworkShape selectedNetworkShape;
@@ -50,6 +52,8 @@ class ConversationWorldPanel extends StatelessWidget {
   final VoidCallback? onClear;
   final World? previewWorld;
   final String previewLabel;
+  final Future<bool> Function(int, bool)? onSaveSlot;
+  final Future<bool> Function(int)? onLoadSlot;
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +89,7 @@ class ConversationWorldPanel extends StatelessWidget {
     final enabled =
         !busy &&
         error == null &&
+        !state.resetPending &&
         state.pending == null &&
         state.proposal == null;
     return Stack(
@@ -108,10 +113,15 @@ class ConversationWorldPanel extends StatelessWidget {
           onPaint: enabled ? onPaint : null,
           onErase: enabled ? onErase : null,
           onClear: enabled ? onClear : null,
+          worldSlots: state.worldSlots,
+          onSaveSlot: enabled ? onSaveSlot : null,
+          onLoadSlot: enabled ? onLoadSlot : null,
           interactionHint: busy
               ? 'Please wait…'
               : error != null
               ? 'Refresh the world before editing.'
+              : state.resetPending
+              ? 'Reply yes or no in Chat to confirm or cancel the reset.'
               : state.pending != null
               ? 'Choose an object in Chat, or undo the entry.'
               : state.proposal != null

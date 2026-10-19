@@ -33,6 +33,7 @@ class Database:
                     domain TEXT NOT NULL,
                     language_version TEXT NOT NULL,
                     next_object_id INTEGER NOT NULL CHECK (next_object_id >= 0),
+                    reset_pending INTEGER NOT NULL DEFAULT 0 CHECK (reset_pending IN (0, 1)),
                     created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
                 );
                 CREATE TABLE IF NOT EXISTS world_snapshots (
@@ -52,6 +53,19 @@ class Database:
                     is_error INTEGER NOT NULL DEFAULT 0,
                     llm_json TEXT,
                     PRIMARY KEY (conversation_id, sequence)
+                );
+                CREATE TABLE IF NOT EXISTS world_slots (
+                    conversation_id TEXT NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
+                    slot INTEGER NOT NULL CHECK (slot BETWEEN 1 AND 5),
+                    language_version TEXT NOT NULL,
+                    world_json TEXT NOT NULL,
+                    salience_json TEXT NOT NULL,
+                    saved_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+                    PRIMARY KEY (conversation_id, slot)
+                );
+                CREATE TABLE IF NOT EXISTS conversation_resets (
+                    old_id TEXT PRIMARY KEY,
+                    new_id TEXT NOT NULL
                 );
                 CREATE TABLE IF NOT EXISTS llm_requests (
                     id TEXT PRIMARY KEY,
@@ -97,5 +111,9 @@ class Database:
                     expires_at REAL NOT NULL
                 );
             """)
+
+            columns = {row['name'] for row in connection.execute('PRAGMA table_info(conversations)')}
+            if 'reset_pending' not in columns:
+                connection.execute('ALTER TABLE conversations ADD COLUMN reset_pending INTEGER NOT NULL DEFAULT 0')
 
             connection.execute("PRAGMA user_version = 2")

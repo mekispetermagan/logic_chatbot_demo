@@ -28,68 +28,73 @@ Map<String, dynamic> pausedState() => {
 
 void main() {
   for (final selectSquare in [true, false]) {
-    testWidgets(
-      'mixed referent choice submits its type: square=$selectSquare',
-      (tester) async {
-        final requests = <http.Request>[];
-        final state = pausedState();
-        state['pending'] = {
-          'sentence': 'Does it satisfy at the edge?',
-          'candidates': [
-            {'objectId': 0, 'label': '#0: red on A1'},
-          ],
-          'squareChoices': [
-            {'x': 0, 'y': 0},
-          ],
-        };
-        final controller = ConversationController(
-          store: SavedId(),
-          api: ConversationApi(
-            baseUrl: Uri.parse('http://localhost:8000'),
-            client: MockClient((request) async {
-              requests.add(request);
-              if (request.method == 'POST') state['pending'] = null;
-              return http.Response(
-                jsonEncode({...state, 'feedback': 'Resolved'}),
-                200,
-              );
-            }),
-          ),
-        );
-        await tester.pumpWidget(
-          MaterialApp(home: DemoScreen(createController: () => controller)),
-        );
-        await tester.pumpAndSettle();
-        await tester.tap(find.text('Chat'));
-        await tester.pumpAndSettle();
-        expect(
-          find.textContaining('Which referent: object or square?'),
-          findsOneWidget,
-        );
-        expect(find.text('Square A1'), findsOneWidget);
-        expect(find.text('Object #0: red on A1'), findsOneWidget);
-        expect(
-          tester.widget<TextField>(find.byType(TextField)).enabled,
-          isFalse,
-        );
-        await tester.tap(
-          find.text(selectSquare ? 'Square A1' : 'Object #0: red on A1'),
-        );
-        await tester.pumpAndSettle();
-        final request = requests.last;
-        expect(request.url.path, '/conversations/saved/clarify');
-        expect(
-          jsonDecode(request.body),
-          selectSquare
-              ? {
-                  'position': {'x': 0, 'y': 0},
-                }
-              : {'objectId': 0},
-        );
-        expect(controller.conversation!.pending, isNull);
-        expect(tester.takeException(), isNull);
-      },
-    );
+    testWidgets('mixed referent choice submits its type: square=$selectSquare', (
+      tester,
+    ) async {
+      final requests = <http.Request>[];
+      final state = pausedState();
+      state['pending'] = {
+        'sentence': 'Does it satisfy at the edge?',
+        'candidates': [
+          {'objectId': 0, 'label': '#0: red on A1'},
+        ],
+        'squareChoices': [
+          {'x': 0, 'y': 0},
+        ],
+      };
+      final controller = ConversationController(
+        store: SavedId(),
+        api: ConversationApi(
+          baseUrl: Uri.parse('http://localhost:8000'),
+          client: MockClient((request) async {
+            requests.add(request);
+            if (request.method == 'POST') state['pending'] = null;
+            return http.Response(
+              jsonEncode({...state, 'feedback': 'Resolved'}),
+              200,
+            );
+          }),
+        ),
+      );
+      await tester.pumpWidget(
+        MaterialApp(home: DemoScreen(createController: () => controller)),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Chat'));
+      await tester.pumpAndSettle();
+      expect(
+        find.textContaining('Which referent: object or square?'),
+        findsOneWidget,
+      );
+      expect(find.text('Square A1'), findsOneWidget);
+      expect(find.text('Object #0: red on A1'), findsOneWidget);
+      expect(
+        tester.widget<TextField>(find.byType(TextField)).enabled,
+        isTrue, // A pending choice still allows the "full reset" control command.
+      );
+      expect(
+        tester
+            .widget<IconButton>(find.widgetWithIcon(IconButton, Icons.send))
+            .onPressed,
+        isNull,
+      );
+      await tester.tap(
+        find.text(selectSquare ? 'Square A1' : 'Object #0: red on A1'),
+      );
+      await tester.pumpAndSettle();
+      final request = requests.last;
+      expect(request.url.path, '/conversations/saved/clarify');
+      expect(
+        jsonDecode(request.body),
+        selectSquare
+            ? {
+                'position': {'x': 0, 'y': 0},
+              }
+            : {'objectId': 0},
+      );
+      expect(controller.conversation!.pending, isNull);
+      expect(tester.takeException(), isNull);
+    });
   }
 
   testWidgets('grouping choices retain parentheses and submit a grouping ID', (

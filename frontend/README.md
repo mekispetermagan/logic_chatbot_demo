@@ -39,6 +39,21 @@ press erases. Select an unplaced object, then tap an empty square to place it;
 blocked placement retains the selection. Choosing a property cancels placement.
 Clear and Undo clear placement selection after a successful response.
 
+Five numbered save/load slots sit below the property selectors. Save records
+the current world and its reference ranking in SQLite; replacing a saved setup
+asks for confirmation. Load restores that setup as one undoable step and clears
+placement selection. Empty slots have disabled Load buttons. Each domain's
+conversation has its own five slots, retained across restarts. Chat history stays
+visible, with a short message when a setup is loaded. Slots are disabled during
+requests, interpretation review, and reference clarification.
+
+To start over, enter `full reset` in Chat and reply `yes` to confirm or `no` to
+cancel. Confirmation starts a new empty conversation in the same domain, clears
+chat/input history and reference context, and has no Undo. The five saved slots
+are preserved. The command bypasses the LLM and remains available during a
+pending interpretation or symbolic clarification; other actions pause until
+confirmation is answered. The new conversation ID is saved on this device.
+
 Controls are disabled while a request is pending. Failed edits preserve the
 displayed world and offer Refresh world. Refresh retrieves authoritative state
 without repeating the edit, since a failed response may follow a committed edit.

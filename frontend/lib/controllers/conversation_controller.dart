@@ -56,7 +56,11 @@ class ConversationController extends ChangeNotifier {
   InterpretationPreview? preview;
   String? _reviewProposalId;
   int? selectedInterpretationRank;
-  bool get canReview => conversation?.proposal != null && !loading && !editing;
+  bool get canReview =>
+      conversation?.proposal != null &&
+      conversation?.resetPending != true &&
+      !loading &&
+      !editing;
 
   void setUseLlm(bool value) {
     if (_disposed || loading || editing || useLlm == value) return;
@@ -71,8 +75,23 @@ class ConversationController extends ChangeNotifier {
       conversation != null && !loading && !editing && error == null;
   bool get canEdit =>
       canRequest &&
+      conversation?.resetPending != true &&
       conversation?.pending == null &&
       conversation?.proposal == null;
+  bool get canClarify => canRequest && conversation?.resetPending != true;
+  bool get canUndo =>
+      canClarify &&
+      conversation?.canUndo == true &&
+      conversation?.proposal == null;
+
+  bool canSendControl(String text) {
+    final command = text.trim().toLowerCase().split(RegExp(r'\s+')).join(' ');
+    return canRequest &&
+        (conversation?.resetPending == true ||
+            command == 'full reset' ||
+            command == 'full reset.');
+  }
+
   bool _disposed = false;
 
   Future<void> load() async {
@@ -161,14 +180,25 @@ class ConversationController extends ChangeNotifier {
   Future<void> erase(int x, int y) =>
       _edit((id) => api.erase(id, BoardPosition(x, y)));
   Future<void> clear() => _edit(api.clear, clearSelection: true);
+
+  Future<bool> saveWorldSlot(int slot, {bool overwrite = false}) =>
+      _edit((id) => api.saveWorldSlot(id, slot, overwrite: overwrite));
+
+  Future<bool> loadWorldSlot(int slot) =>
+      _edit((id) => api.loadWorldSlot(id, slot), clearSelection: true);
+
   Future<void> undo() async {
-    if (conversation?.canUndo != true || conversation?.proposal != null) return;
+    if (!canUndo) return;
     await _edit(api.undo, clearSelection: true, allowPending: true);
   }
 
   Future<bool> sendChat(String text) async {
     if (text.trim().isEmpty) return false;
-    return _edit((id) => api.chat(id, text, useLlm: useLlm), chat: true);
+    return _edit(
+      (id) => api.chat(id, text, useLlm: useLlm),
+      chat: true,
+      control: canSendControl(text),
+    );
   }
 
   Future<bool> clarifySquare(BoardPosition position) => _edit(
@@ -280,13 +310,17 @@ class ConversationController extends ChangeNotifier {
     bool clearSelection = false,
     bool chat = false,
     bool allowPending = false,
+    bool control = false,
   }) async {
-    if (!(allowPending ? canRequest : canEdit) || _disposed) return false;
+    final allowed =
+        canEdit || (control && canRequest) || (allowPending && canClarify);
+    if (!allowed || _disposed) return false;
     editing = true;
     sendingChat = chat;
     notifyListeners();
     try {
-      final updated = await request(conversation!.id);
+      final previousId = conversation!.id;
+      final updated = await request(previousId);
       if (_disposed) return false;
       if (updated.domain != conversation!.domain) {
         throw const ApiException('The server returned an unexpected domain.');
@@ -295,6 +329,19 @@ class ConversationController extends ChangeNotifier {
       _reconcileReview();
       if (clearSelection) selectedUnplacedObjectId = null;
       _reconcileSelection();
+      if (updated.id != previousId) {
+        selectedUnplacedObjectId = null;
+        _pending = updated;
+        try {
+          await store.write(updated.id, domain: domain);
+          if (_disposed) return false;
+          _pending = null;
+        } catch (_) {
+          throw const ApiException(
+            'Conversation reset. Refresh to save its new identifier on this device.',
+          );
+        }
+      }
       return true;
     } on ApiException catch (exception) {
       error = exception.message;

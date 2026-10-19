@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import '../models/object_property.dart';
 import '../models/world.dart';
 import '../models/world_object.dart';
+import '../models/world_slot.dart';
 import 'world_object_widget.dart';
 import 'shape_glyph.dart';
 import 'object_palette.dart';
 import 'world_widget.dart';
+import 'world_slots.dart';
 
 class WorldDisplay extends StatelessWidget {
   const WorldDisplay({
@@ -25,6 +27,9 @@ class WorldDisplay extends StatelessWidget {
     required this.onClear,
     this.interactionHint,
     this.selector,
+    this.worldSlots = const [],
+    this.onSaveSlot,
+    this.onLoadSlot,
   });
 
   final World world;
@@ -38,6 +43,9 @@ class WorldDisplay extends StatelessWidget {
   final VoidCallback? onClear;
   final String? interactionHint;
   final Widget? selector;
+  final List<WorldSlot> worldSlots;
+  final Future<bool> Function(int, bool)? onSaveSlot;
+  final Future<bool> Function(int)? onLoadSlot;
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +61,11 @@ class WorldDisplay extends StatelessWidget {
               constraints.maxHeight,
               domain == WorldDomain.network
                   ? math.min(constraints.maxWidth, 320) +
-                        240 +
+                        292 +
                         (20 / (constraints.maxWidth / 54).floor().clamp(4, 20))
                                 .ceil() *
                             56
-                  : 520,
+                  : 572,
             ),
             child: Column(
               children: [
@@ -168,6 +176,12 @@ class WorldDisplay extends StatelessWidget {
                       ],
                     ),
                   ],
+                ),
+                const SizedBox(height: 12),
+                WorldSlots(
+                  slots: worldSlots,
+                  onSave: onSaveSlot,
+                  onLoad: onLoadSlot,
                 ),
                 const SizedBox(height: 12),
                 SizedBox(

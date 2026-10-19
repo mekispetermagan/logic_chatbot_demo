@@ -160,6 +160,15 @@ class InterpretationPreview(Schema):
     changes: list[WorldChange] = Field(default_factory=list)
 
 
+class WorldSlot(Schema):
+    slot: StrictInt = Field(ge=1, le=5)
+    savedAt: str | None = None
+
+
+class SaveWorldSlot(Schema):
+    overwrite: StrictBool = False
+
+
 class ConversationState(Schema):
     conversationId: UUID
     domain: DomainId
@@ -171,6 +180,9 @@ class ConversationState(Schema):
     proposal: InterpretationProposal | None = None
     languageVersion: str = 'unknown'
     nextObjectId: StrictInt = Field(default=0, ge=0)
+    worldSlots: list[WorldSlot] = Field(default_factory=list)
+    resetPending: bool = False
+    resetFrom: UUID | None = None
 
 
 class EditState(ConversationState):

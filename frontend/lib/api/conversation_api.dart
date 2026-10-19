@@ -87,6 +87,20 @@ class ConversationApi {
   Future<ConversationState> undo(String id) =>
       _request('POST', id: id, action: 'undo');
 
+  Future<ConversationState> saveWorldSlot(
+    String id,
+    int slot, {
+    bool overwrite = false,
+  }) => _request(
+    'POST',
+    id: id,
+    action: 'slots/$slot/save',
+    body: {'overwrite': overwrite},
+  );
+
+  Future<ConversationState> loadWorldSlot(String id, int slot) =>
+      _request('POST', id: id, action: 'slots/$slot/load');
+
   Future<ConversationState> chat(
     String id,
     String text, {
@@ -218,7 +232,9 @@ class ConversationApi {
       if (expectedDomain != null && state.domain != expectedDomain) {
         throw const FormatException('Unexpected domain');
       }
-      if (id != null && state.id != id) {
+      final resetHandover =
+          state.resetFrom == id && (method == 'GET' || action == 'chat');
+      if (id != null && state.id != id && !resetHandover) {
         throw const FormatException('Unexpected conversation');
       }
       if (action != null && state.feedback == null) {

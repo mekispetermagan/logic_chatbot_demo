@@ -1,12 +1,14 @@
 from uuid import UUID
+from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from fastapi import APIRouter, Depends, HTTPException, Path, Request, Response
 
 from .schemas import PortsEdit, CreateConversation, ClarificationChoice, ChatEntry, ConversationState, EditState, EraseEdit, PlaceEdit, PropertyEdit
 from .service import ConversationService
-from .schemas import InterpretationChoice, InterpretationAnswer
+from .schemas import InterpretationChoice, InterpretationAnswer, SaveWorldSlot
 
 router = APIRouter(prefix="/conversations", tags=["conversations"])
+SlotNumber = Annotated[int, Path(ge=1, le=5)]
 
 
 def get_service(request: Request) -> ConversationService:
@@ -96,6 +98,18 @@ def clear_world(conversation_id: UUID,
 def undo_edit(conversation_id: UUID,
               service: ConversationService = Depends(get_service)) -> EditState:
     return require_edit(service.undo(conversation_id))
+
+
+@router.post('/{conversation_id}/slots/{slot}/save', response_model=EditState)
+def save_world_slot(conversation_id: UUID, slot: SlotNumber, entry: SaveWorldSlot,
+                    service: ConversationService = Depends(get_service)) -> EditState:
+    return require_edit(service.save_world_slot(conversation_id, slot, entry.overwrite))
+
+
+@router.post('/{conversation_id}/slots/{slot}/load', response_model=EditState)
+def load_world_slot(conversation_id: UUID, slot: SlotNumber,
+                    service: ConversationService = Depends(get_service)) -> EditState:
+    return require_edit(service.load_world_slot(conversation_id, slot))
 
 
 @router.get("/{conversation_id}", response_model=ConversationState)

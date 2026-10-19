@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 from .config import Settings, INITIAL_WORLD_PATHS
 from .database import Database
 from .engine import EngineUnavailable, EngineInvalidRequest, LogicEngine
-from .repository import ConversationRepository, PendingConflict, SnapshotConflict
+from .repository import ConversationRepository, PendingConflict, SnapshotConflict, WorldSlotEmpty
 from .routes import router
 from .schemas import World
 from .service import ConversationService
@@ -54,6 +54,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.exception_handler(SnapshotConflict)
     async def snapshot_conflict(request, exception):
         return JSONResponse(status_code=409, content={"detail": str(exception)})
+
+    @app.exception_handler(WorldSlotEmpty)
+    async def world_slot_empty(request, exception):
+        return JSONResponse(status_code=404, content={"detail": str(exception)})
 
     app.add_middleware(CORSMiddleware, allow_origins=list(settings.cors_origins),
                        allow_methods=["GET", "POST"], allow_headers=["Accept", "Content-Type"])

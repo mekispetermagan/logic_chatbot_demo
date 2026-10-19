@@ -207,7 +207,15 @@ void main() {
         );
         expect(
           tester.widget<TextField>(find.byType(TextField)).enabled,
-          isFalse,
+          isTrue, // The composer remains available for "full reset".
+        );
+        expect(
+          tester
+              .widget<FilledButton>(
+                find.widgetWithText(FilledButton, 'Submit answer'),
+              )
+              .onPressed,
+          isNull,
         );
         await tapVisible(tester, find.widgetWithText(OutlinedButton, 'Reject'));
         expect(controller.conversation!.proposal, isNull);

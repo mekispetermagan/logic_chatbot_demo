@@ -1,11 +1,11 @@
 import json
-from uuid import UUID
+from uuid import UUID, uuid4
 from collections.abc import Callable
 
 from .database import Database
 from .engine import EngineReply
 from .schemas import (ChatMessage, ConversationState, EditState, World, PendingEntry, DomainId, LlmUsage,
-                      InterpretationProposal, InterpretationPreview)
+                      InterpretationProposal, InterpretationPreview, WorldSlot)
 from .llm_budget import budget_in
 
 
@@ -14,6 +14,10 @@ class PendingConflict(Exception):
 
 
 class SnapshotConflict(Exception):
+    pass
+
+
+class WorldSlotEmpty(Exception):
     pass
 
 
@@ -42,7 +46,7 @@ class ConversationRepository:
     def _latest(self, connection, conversation_id):
         return connection.execute("""
             SELECT world_snapshots.*, conversations.domain, conversations.language_version,
-                   conversations.next_object_id FROM world_snapshots
+                   conversations.next_object_id, conversations.reset_pending FROM world_snapshots
             JOIN conversations ON conversations.id = world_snapshots.conversation_id
             WHERE conversation_id = ? ORDER BY sequence DESC LIMIT 1
         """, (str(conversation_id),)).fetchone()
@@ -50,6 +54,24 @@ class ConversationRepository:
     def _pending(self, row):
         value = json.loads(row["pending_json"])
         return PendingEntry.model_validate(value) if value is not None else None
+
+    def _require_not_resetting(self, row):
+        if row['reset_pending']:
+            raise PendingConflict('Reply yes or no in Chat to confirm or cancel the reset')
+
+    def _replacement(self, connection, conversation_id, feedback=None):
+        receipt = connection.execute('SELECT new_id FROM conversation_resets WHERE old_id=?',
+                                     (str(conversation_id),)).fetchone()
+        if receipt is None:
+            return None
+        replacement_id = UUID(receipt['new_id'])
+        row = self._latest(connection, replacement_id)
+        if row is None:
+            return None
+        state = self._state(connection, row, replacement_id,
+                            self._messages(connection, replacement_id), feedback)
+        state.resetFrom = conversation_id
+        return state
 
     def _active_proposal(self, connection, conversation_id):
         return connection.execute(
@@ -73,12 +95,17 @@ class ConversationRepository:
 
     def _state(self, connection, row, conversation_id, messages, feedback=None):
         proposal = self._active_proposal(connection, conversation_id)
+        saved_slots = {slot['slot']: slot['saved_at'] for slot in connection.execute(
+            'SELECT slot, saved_at FROM world_slots WHERE conversation_id=?',
+            (str(conversation_id),)).fetchall()}
         values = dict(conversationId=conversation_id, domain=row["domain"],
                       world=World.model_validate_json(row["world_json"]),
                       canUndo=row["sequence"] > 0, messages=messages, pending=self._pending(row),
                       llmBudget=budget_in(connection),
                       languageVersion=row['language_version'], nextObjectId=row['next_object_id'],
-                      proposal=InterpretationProposal.model_validate_json(proposal['proposal_json']) if proposal else None)
+                      resetPending=bool(row['reset_pending']),
+                      proposal=InterpretationProposal.model_validate_json(proposal['proposal_json']) if proposal else None,
+                      worldSlots=[WorldSlot(slot=slot, savedAt=saved_slots.get(slot)) for slot in range(1, 6)])
         return ConversationState(**values) if feedback is None else EditState(**values, feedback=feedback)
 
     def create(self, conversation_id: UUID, world: World, domain: DomainId) -> ConversationState:
@@ -111,9 +138,73 @@ class ConversationRepository:
             connection.execute('BEGIN')
             row = self._latest(connection, conversation_id)
             if row is None:
-                return None
+                replacement = self._replacement(connection, conversation_id)
+                if replacement is None:
+                    return None
+                current = self._latest(connection, replacement.conversationId)
+                return replacement, self._revision(connection, current, replacement.conversationId)
             state = self._state(connection, row, conversation_id, self._messages(connection, conversation_id))
             return state, self._revision(connection, row, conversation_id)
+
+    def reset_control(self, conversation_id: UUID, text: str) -> EditState | None:
+        """Chat-only lifecycle command; neither Haskell nor the interpreter sees it."""
+        command = ' '.join(text.strip().casefold().split())
+        with self.database.connection() as connection:
+            connection.execute('BEGIN IMMEDIATE')
+            row = self._latest(connection, conversation_id)
+            if row is None:
+                # A lost confirmation response can be retried without resetting twice
+                # or replaying an old command against the fresh conversation.
+                return self._replacement(connection, conversation_id, 'Conversation reset. New conversation started.')
+            requesting = command in ('full reset', 'full reset.')
+            if not requesting and not row['reset_pending']:
+                return None
+            if row['reset_pending'] and command in ('yes', 'yes.'):
+                replacement_id = uuid4()
+                previous = World.model_validate_json(row['world_json'])
+                empty = World(width=previous.width, height=previous.height, objects=[])
+                connection.execute('''
+                    INSERT INTO conversations (id, domain, language_version, next_object_id)
+                    VALUES (?, ?, ?, ?)
+                ''', (str(replacement_id), row['domain'], row['language_version'], row['next_object_id']))
+                connection.execute('''
+                    INSERT INTO world_snapshots (conversation_id, sequence, world_json)
+                    VALUES (?, 0, ?)
+                ''', (str(replacement_id), empty.model_dump_json()))
+                connection.execute('''
+                    INSERT INTO world_slots
+                    (conversation_id, slot, language_version, world_json, salience_json, saved_at)
+                    SELECT ?, slot, language_version, world_json, salience_json, saved_at
+                    FROM world_slots WHERE conversation_id=?
+                ''', (str(replacement_id), str(conversation_id)))
+                # Retain only ID handover receipts, so device preferences can recover
+                # after a lost response. Old chat, worlds and agent-session links go.
+                connection.execute('UPDATE conversation_resets SET new_id=? WHERE new_id=?',
+                                   (str(replacement_id), str(conversation_id)))
+                connection.execute('INSERT INTO conversation_resets (old_id, new_id) VALUES (?, ?)',
+                                   (str(conversation_id), str(replacement_id)))
+                connection.execute('DELETE FROM conversations WHERE id=?', (str(conversation_id),))
+                feedback = 'Conversation reset. New conversation started.'
+                self._append_messages(connection, replacement_id, feedback)
+                state = self._state(connection, self._latest(connection, replacement_id), replacement_id,
+                                    self._messages(connection, replacement_id), feedback)
+                state.resetFrom = conversation_id
+                return state
+            active = self._active_proposal(connection, conversation_id)
+            revision = self._revision(connection, row, conversation_id)
+            cancelling = row['reset_pending'] and command in ('no', 'no.')
+            feedback = ('Reset cancelled.' if cancelling else
+                        'Reset this conversation permanently? Saved slots will be kept. Reply yes or no.')
+            connection.execute('UPDATE conversations SET reset_pending=? WHERE id=?',
+                               (0 if cancelling else 1, str(conversation_id)))
+            self._append_messages(connection, conversation_id, feedback, user_text=text)
+            current = self._latest(connection, conversation_id)
+            # A cancelled confirmation leaves an otherwise valid offer reviewable.
+            if active is not None and tuple(json.loads(active['base_revision_json'])) == revision:
+                connection.execute('UPDATE interpretation_proposals SET base_revision_json=? WHERE id=?',
+                                   (json.dumps(self._revision(connection, current, conversation_id)), active['id']))
+            return self._state(connection, current, conversation_id,
+                               self._messages(connection, conversation_id), feedback)
 
     def edit(self, conversation_id: UUID,
              update: Callable[[DomainId, World, list[dict], PendingEntry | None, int], EngineReply],
@@ -127,6 +218,7 @@ class ConversationRepository:
             row = self._latest(connection, conversation_id)
             if row is None:
                 return None
+            self._require_not_resetting(row)
             active = self._active_proposal(connection, conversation_id)
             selected = None
             if accepting_proposal is not None:
@@ -194,12 +286,59 @@ class ConversationRepository:
                            (str(conversation_id), row["sequence"]))
         return self._latest(connection, conversation_id), "Undone"
 
+    def world_slot(self, conversation_id: UUID, slot: int, *, save: bool,
+                   overwrite: bool = False) -> EditState | None:
+        """Store or restore an exact checkpoint; this does not interpret or edit objects."""
+        with self.database.connection() as connection:
+            connection.execute('BEGIN IMMEDIATE')
+            row = self._latest(connection, conversation_id)
+            if row is None:
+                return None
+            self._require_not_resetting(row)
+            if self._active_proposal(connection, conversation_id) is not None or self._pending(row) is not None:
+                raise PendingConflict('Finish the pending interpretation or clarification first')
+            stored = connection.execute(
+                'SELECT * FROM world_slots WHERE conversation_id=? AND slot=?',
+                (str(conversation_id), slot)).fetchone()
+            if save:
+                if stored is not None and not overwrite:
+                    raise SnapshotConflict(f'Slot {slot} is already saved; confirm overwrite')
+                connection.execute('''
+                    INSERT INTO world_slots (conversation_id, slot, language_version, world_json, salience_json)
+                    VALUES (?, ?, ?, ?, ?)
+                    ON CONFLICT(conversation_id, slot) DO UPDATE SET
+                        language_version=excluded.language_version, world_json=excluded.world_json,
+                        salience_json=excluded.salience_json,
+                        saved_at=strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
+                ''', (str(conversation_id), slot, row['language_version'], row['world_json'], row['salience_json']))
+                feedback = f'Saved slot {slot}'
+            else:
+                if stored is None:
+                    raise WorldSlotEmpty(f'Slot {slot} is empty')
+                if stored['language_version'] != row['language_version']:
+                    raise SnapshotConflict('Saved setup uses a different language version')
+                # Allocation is conversation-wide and never moves backwards, including
+                # when restoring earlier identifiers from a saved world.
+                connection.execute('''
+                    INSERT INTO world_snapshots
+                    (conversation_id, sequence, world_json, salience_json, pending_json)
+                    VALUES (?, ?, ?, ?, 'null')
+                ''', (str(conversation_id), row['sequence'] + 1, stored['world_json'], stored['salience_json']))
+                feedback = f'Loaded slot {slot}'
+                self._append_messages(connection, conversation_id, feedback)
+                record_outcome(connection, conversation_id, kind='world_loaded', slot=slot,
+                               feedback=feedback, referenceContextRestored=True)
+                row = self._latest(connection, conversation_id)
+            return self._state(connection, row, conversation_id,
+                               self._messages(connection, conversation_id), feedback)
+
     def undo(self, conversation_id: UUID) -> EditState | None:
         with self.database.connection() as connection:
             connection.execute("BEGIN IMMEDIATE")
             row = self._latest(connection, conversation_id)
             if row is None:
                 return None
+            self._require_not_resetting(row)
             if self._active_proposal(connection, conversation_id) is not None:
                 raise PendingConflict('Accept or reject the interpretation first')
             row, feedback = self._undo_snapshot(connection, conversation_id, row)
@@ -214,6 +353,7 @@ class ConversationRepository:
             row = self._latest(connection, conversation_id)
             if row is None:
                 return None
+            self._require_not_resetting(row)
             if self._revision(connection, row, conversation_id) != expected_revision:
                 raise SnapshotConflict('Conversation changed during LLM translation; retry your entry')
             if replacing_proposal is not None:
@@ -245,6 +385,7 @@ class ConversationRepository:
             row = self._latest(connection, conversation_id)
             if row is None:
                 return None
+            self._require_not_resetting(row)
             if self._revision(connection, row, conversation_id) != expected_revision:
                 raise SnapshotConflict('Conversation changed during LLM response; refresh and resend')
             if proposal_id is not None:
@@ -260,6 +401,7 @@ class ConversationRepository:
             return self._state(connection, row, conversation_id, self._messages(connection, conversation_id), reply)
 
     def _review_proposal(self, connection, conversation_id, row, proposal_id):
+        self._require_not_resetting(row)
         active = self._active_proposal(connection, conversation_id)
         if active is None or active['id'] != str(proposal_id):
             raise PendingConflict('This interpretation is no longer pending; refresh the conversation')
@@ -331,6 +473,7 @@ class ConversationRepository:
             row = self._latest(connection, conversation_id)
             if row is None:
                 return None
+            self._require_not_resetting(row)
             active = self._active_proposal(connection, conversation_id)
             if active is None or active['id'] != str(proposal_id):
                 raise PendingConflict('This interpretation is no longer pending; refresh the conversation')
