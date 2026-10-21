@@ -4,7 +4,8 @@ from collections.abc import Callable
 
 from .database import Database
 from .engine import EngineReply
-from .schemas import (ChatMessage, ConversationState, EditState, World, PendingEntry, DomainId, LlmUsage,
+from .schemas import (ChatMessage, ConversationState, EditState, World, WorldState, CellularWorld,
+                      PendingEntry, DomainId, LlmUsage, world_from_json,
                       InterpretationProposal, InterpretationPreview, WorldSlot)
 from .llm_budget import budget_in
 
@@ -99,7 +100,7 @@ class ConversationRepository:
             'SELECT slot, saved_at FROM world_slots WHERE conversation_id=?',
             (str(conversation_id),)).fetchall()}
         values = dict(conversationId=conversation_id, domain=row["domain"],
-                      world=World.model_validate_json(row["world_json"]),
+                      world=world_from_json(row['domain'], row["world_json"]),
                       canUndo=row["sequence"] > 0, messages=messages, pending=self._pending(row),
                       llmBudget=budget_in(connection),
                       languageVersion=row['language_version'], nextObjectId=row['next_object_id'],
@@ -108,11 +109,11 @@ class ConversationRepository:
                       worldSlots=[WorldSlot(slot=slot, savedAt=saved_slots.get(slot)) for slot in range(1, 6)])
         return ConversationState(**values) if feedback is None else EditState(**values, feedback=feedback)
 
-    def create(self, conversation_id: UUID, world: World, domain: DomainId) -> ConversationState:
+    def create(self, conversation_id: UUID, world: WorldState, domain: DomainId) -> ConversationState:
+        next_id = max((o.id for o in world.objects), default=-1) + 1 if isinstance(world, World) else 0
         with self.database.connection() as connection:
             connection.execute("INSERT INTO conversations (id, domain, language_version, next_object_id) VALUES (?, ?, ?, ?)",
-                               (str(conversation_id), domain, domain + '-v2',
-                                max((o.id for o in world.objects), default=-1)+1))
+                               (str(conversation_id), domain, domain + '-v2', next_id))
             connection.execute(
                 "INSERT INTO world_snapshots (conversation_id, sequence, world_json) VALUES (?, 0, ?)",
                 (str(conversation_id), world.model_dump_json()),
@@ -146,7 +147,8 @@ class ConversationRepository:
             state = self._state(connection, row, conversation_id, self._messages(connection, conversation_id))
             return state, self._revision(connection, row, conversation_id)
 
-    def reset_control(self, conversation_id: UUID, text: str) -> EditState | None:
+    def reset_control(self, conversation_id: UUID, text: str,
+                      cellular_initial: CellularWorld | None = None) -> EditState | None:
         """Chat-only lifecycle command; neither Haskell nor the interpreter sees it."""
         command = ' '.join(text.strip().casefold().split())
         with self.database.connection() as connection:
@@ -161,8 +163,13 @@ class ConversationRepository:
                 return None
             if row['reset_pending'] and command in ('yes', 'yes.'):
                 replacement_id = uuid4()
-                previous = World.model_validate_json(row['world_json'])
-                empty = World(width=previous.width, height=previous.height, objects=[])
+                previous = world_from_json(row['domain'], row['world_json'])
+                if isinstance(previous, CellularWorld):
+                    if cellular_initial is None:
+                        raise SnapshotConflict('Cellular initial state is unavailable')
+                    empty = cellular_initial
+                else:
+                    empty = World(width=previous.width, height=previous.height, objects=[])
                 connection.execute('''
                     INSERT INTO conversations (id, domain, language_version, next_object_id)
                     VALUES (?, ?, ?, ?)
@@ -207,7 +214,7 @@ class ConversationRepository:
                                self._messages(connection, conversation_id), feedback)
 
     def edit(self, conversation_id: UUID,
-             update: Callable[[DomainId, World, list[dict], PendingEntry | None, int], EngineReply],
+             update: Callable[[DomainId, WorldState, list[dict], PendingEntry | None, int], EngineReply],
              user_text: str | None = None, continuation: bool = False,
              llm: LlmUsage | None = None,
              expected_revision: ConversationRevision | None = None,
@@ -230,7 +237,7 @@ class ConversationRepository:
             pending = self._pending(row)
             if (continuation and not pending) or (pending and not continuation and user_text is None):
                 raise PendingConflict("Choose an object, square, or grouping, or undo" if pending else "No clarification pending")
-            previous = World.model_validate_json(row["world_json"])
+            previous = world_from_json(row['domain'], row["world_json"])
             salience = json.loads(row["salience_json"])
             reply = update(row["domain"], previous, salience, pending, row['next_object_id'])
             if reply.nextObjectId is not None:
@@ -277,6 +284,7 @@ class ConversationRepository:
             result = self._state(connection, current, conversation_id,
                                  self._messages(connection, conversation_id), feedback)
             result.changes = reply.changes
+            result.changedCells = reply.changedCells
             return result
 
     def _undo_snapshot(self, connection, conversation_id, row):
@@ -437,14 +445,14 @@ class ConversationRepository:
             if row is None:
                 return None
             _, candidate = self._review_candidate(connection, conversation_id, row, proposal_id, rank)
-            world = World.model_validate_json(row['world_json'])
+            world = world_from_json(row['domain'], row['world_json'])
             reply = evaluate(row['domain'], world, json.loads(row['salience_json']), candidate.translation, row['next_object_id'])
             if reply.undoRequested:
                 previous = connection.execute(
                     'SELECT * FROM world_snapshots WHERE conversation_id = ? AND sequence < ? ORDER BY sequence DESC LIMIT 1',
                     (str(conversation_id), row['sequence']),
                 ).fetchone()
-                reply.world = World.model_validate_json(previous['world_json']) if previous else world
+                reply.world = world_from_json(row['domain'], previous['world_json']) if previous else world
                 reply.pending = self._pending(previous) if previous else self._pending(row)
                 reply.feedback = 'Undone' if previous else 'No change'
             state = self._state(connection, row, conversation_id, self._messages(connection, conversation_id),

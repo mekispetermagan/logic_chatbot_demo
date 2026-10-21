@@ -3,6 +3,8 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Iterator
 
+from .cellular_migration import expand_cellular_boards
+
 
 class Database:
     def __init__(self, path: Path):
@@ -116,4 +118,7 @@ class Database:
             if 'reset_pending' not in columns:
                 connection.execute('ALTER TABLE conversations ADD COLUMN reset_pending INTEGER NOT NULL DEFAULT 0')
 
+            if not connection.in_transaction:
+                connection.execute('BEGIN IMMEDIATE')
+            expand_cellular_boards(connection)
             connection.execute("PRAGMA user_version = 2")

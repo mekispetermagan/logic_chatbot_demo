@@ -1,6 +1,7 @@
 import 'world_object.dart';
+import 'grid_world.dart';
 
-class World {
+class World implements GridWorld {
   factory World.fromJson(Map<String, dynamic> json) => World(
     width: json['width'] as int,
     height: json['height'] as int,
@@ -20,7 +21,9 @@ class World {
     }
   }
 
+  @override
   final int width;
+  @override
   final int height;
   final List<WorldObject> objects;
 

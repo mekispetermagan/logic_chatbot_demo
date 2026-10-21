@@ -1,7 +1,8 @@
 # Haskell logic engine
 
-The served languages are [Objects v2](../../specification/object-language-v2.md)
-and [Network v2](../../specification/network-language-v2.md). Both implement
+The served languages are [Objects v2](../../specification/object-language-v2.md),
+[Network v2](../../specification/network-language-v2.md) and
+[Cellular v2](../../specification/cellular-language-v2.md). All implement
 three layers: atomic operations, symbolic references, and conceptual macros.
 Commands require a period; questions require `?`. Coordinates denote locations;
 `the object at A4` explicitly denotes an existing occupant. Creation is explicit.
@@ -55,7 +56,7 @@ or none. Pending atomic work exposes a separate provisional world. Continuations
 replay their frozen seed and accepted choices through the canonical parser.
 One entry and all its clarifications form one Undo unit in FastAPI.
 
-Both domains return monotonic allocation counters outside Undo history. Preview
+Object and network domains return monotonic allocation counters outside Undo history. Preview
 does not persist allocations. Visual editor operations retain explicit
 create-or-update convenience. Ordinary chat never creates a missing referent.
 Graph facts in salience carry explicit context and are rechecked after updates.
@@ -80,3 +81,15 @@ survives deletion of its occupant. Clarification choices retain their types;
 Undo and atomic rollback restore both kinds together. Old object-only ranking
 records retain their JSON representation. The experimental legacy `Discourse`
 module is separate from the served typed ranking.
+
+## Cellular language
+
+`Domains.Cellular.Language` exports its parser, formatter, typed syntax and
+pure evaluator. `runEntry` takes an automaton, ranking, unsigned random seed,
+entry, cell-coordinate choices and completed-sentence offset. Cellular cells
+are fixed coordinates A1–P16, never occupants. The existing cellular evaluator
+supplies synchronous stepping and ruleset validation.
+
+Forecasts, bounded stabilization and return-time questions do not advance the
+current world. Random operations and paused batches retain their seed through
+review/continuation. Tests: `cabal test cellular-tests cellular-language-tests`.

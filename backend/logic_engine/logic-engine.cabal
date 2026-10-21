@@ -7,6 +7,9 @@ library
   other-modules: ControlledLanguage.Grammar, ControlledLanguage.Canonical,
                  ControlledLanguage.CanonicalPretty
   exposed-modules: Ontology, Domain, DomainLibrary,
+                   Domains.Cellular.Types, Domains.Cellular.Evaluation, Domains.Cellular.Language,
+                   Domains.Cellular.Language.Syntax, Domains.Cellular.Language.Parser,
+                   Domains.Cellular.Language.Pretty, Domains.Cellular.Language.Evaluation,
                    ControlledLanguage.Domain, ControlledLanguage.Discourse, ControlledLanguage.Syntax, ControlledLanguage.Parser, ControlledLanguage.Pretty, ControlledLanguage.Evaluation,
                    Domains.Network.Language, Domains.Network.Language.Parser, Domains.Network.Language.Evaluation,
                    Domains.Network.Analysis,
@@ -32,7 +35,7 @@ library
 
 executable logic-engine-editor
   main-is: Main.hs
-  other-modules: EditorJson
+  other-modules: EditorJson, CellularJson
   hs-source-dirs: bridge
   build-depends: base >=4.14 && <5, logic-engine, containers, aeson >=2 && <3, bytestring
   default-language: Haskell2010
@@ -61,7 +64,7 @@ test-suite square-occupancy-tests
 test-suite world-editor-tests
   type: exitcode-stdio-1.0
   main-is: WorldEditorTest.hs
-  other-modules: EditorJson
+  other-modules: EditorJson, CellularJson
   hs-source-dirs: test, bridge
   build-depends: base >=4.14 && <5, logic-engine, containers, aeson >=2 && <3
   default-language: Haskell2010
@@ -125,6 +128,20 @@ test-suite network-language-tests
 test-suite typed-salience-tests
   type: exitcode-stdio-1.0
   main-is: TypedSalienceTest.hs
+  hs-source-dirs: test
+  build-depends: base >=4.14 && <5, logic-engine, containers
+  default-language: Haskell2010
+
+test-suite cellular-tests
+  type: exitcode-stdio-1.0
+  main-is: CellularTest.hs
+  hs-source-dirs: test
+  build-depends: base >=4.14 && <5, logic-engine, containers
+  default-language: Haskell2010
+
+test-suite cellular-language-tests
+  type: exitcode-stdio-1.0
+  main-is: CellularLanguageTest.hs
   hs-source-dirs: test
   build-depends: base >=4.14 && <5, logic-engine, containers
   default-language: Haskell2010

@@ -65,9 +65,9 @@ void main() {
       addTearDown(subject.dispose);
       await subject.load();
       expect(store.id, 'saved');
-      expect(subject.conversation!.world.objects.length, 7);
-      expect(subject.conversation!.world.objects[2].color, isNull);
-      expect(subject.conversation!.world.objects[5].position, isNull);
+      expect(subject.conversation!.objectWorld!.objects.length, 7);
+      expect(subject.conversation!.objectWorld!.objects[2].color, isNull);
+      expect(subject.conversation!.objectWorld!.objects[5].position, isNull);
       await subject.load();
       expect(requests.map((r) => r.method), ['POST', 'GET']);
       expect(requests.first.url.path, '/api/conversations');

@@ -1,5 +1,7 @@
 import 'domain.dart';
 import 'world.dart';
+import 'grid_world.dart';
+import 'cellular_world.dart';
 import 'world_object.dart';
 import 'chat_message.dart';
 import 'llm_usage.dart';
@@ -22,17 +24,26 @@ class ConversationState {
     this.worldSlots = const [],
     this.resetPending = false,
     this.resetFrom,
+    this.changedCells,
   });
 
   factory ConversationState.fromJson(Map<String, dynamic> json) {
     final id = json['conversationId'] as String;
     if (id.isEmpty) throw const FormatException('Missing conversation ID');
     final domain = WorldDomain.values.byName(json['domain'] as String);
+    final changedCells = json['changedCells'] as int?;
+    if (changedCells != null &&
+        (changedCells < 0 || changedCells > CellularWorld.cellCount)) {
+      throw const FormatException('Invalid changed-cell count');
+    }
     return ConversationState(
       id: id,
       domain: domain,
       languageVersion: json['languageVersion'] as String? ?? 'unknown',
-      world: World.fromJson(json['world'] as Map<String, dynamic>),
+      world: domain == WorldDomain.cellular
+          ? CellularWorld.fromJson(json['world'] as Map<String, dynamic>)
+          : World.fromJson(json['world'] as Map<String, dynamic>),
+      changedCells: changedCells,
       canUndo: json['canUndo'] as bool,
       resetPending: json['resetPending'] as bool? ?? false,
       resetFrom: json['resetFrom'] as String?,
@@ -68,7 +79,10 @@ class ConversationState {
 
   final String id;
   final WorldDomain domain;
-  final World world;
+  final GridWorld world;
+  World? get objectWorld => world is World ? world as World : null;
+  CellularWorld? get cellularWorld =>
+      world is CellularWorld ? world as CellularWorld : null;
   final bool canUndo;
   final String? feedback;
   final PendingEntry? pending;
@@ -80,6 +94,7 @@ class ConversationState {
   final List<WorldSlot> worldSlots;
   final bool resetPending;
   final String? resetFrom;
+  final int? changedCells;
 }
 
 class ClarificationCandidate {
@@ -121,6 +136,8 @@ class PendingEntry {
     ),
     stagedWorld: json['stagedWorld'] == null
         ? null
+        : (json['stagedWorld'] as Map<String, dynamic>).containsKey('cells')
+        ? CellularWorld.fromJson(json['stagedWorld'] as Map<String, dynamic>)
         : World.fromJson(json['stagedWorld'] as Map<String, dynamic>),
     squareChoices: List.unmodifiable(
       (json['squareChoices'] as List<dynamic>? ?? []).map(
@@ -138,5 +155,5 @@ class PendingEntry {
   final List<ClarificationCandidate> candidates;
   final List<BoardPosition> squareChoices;
   final List<GroupingCandidate> groupingChoices;
-  final World? stagedWorld;
+  final GridWorld? stagedWorld;
 }

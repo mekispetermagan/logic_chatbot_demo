@@ -7,6 +7,7 @@ import 'controllers/conversation_controller.dart';
 import 'storage/conversation_id_store.dart';
 import 'widgets/conversation_world_panel.dart';
 import 'widgets/chat_panel.dart';
+import 'widgets/domain_selector.dart';
 
 void main() {
   runApp(const MainApp());
@@ -90,22 +91,39 @@ class _DemoScreenState extends State<DemoScreen> {
               selectedProperty: _controller.selectedProperty,
               selectedNetworkShape: _controller.selectedNetworkShape,
               selectedNetworkColor: _controller.selectedNetworkColor,
-              onNetworkShapeChanged: _controller.canEdit
+              onNetworkShapeChanged: _controller.canManipulateObjects
                   ? _controller.selectNetworkShape
                   : null,
-              onNetworkColorChanged: _controller.canEdit
+              onNetworkColorChanged: _controller.canManipulateObjects
                   ? _controller.selectNetworkColor
                   : null,
               selectedUnplacedObjectId: _controller.selectedUnplacedObjectId,
-              onPropertyChanged: _controller.canEdit
+              onPropertyChanged: _controller.canManipulateObjects
                   ? _controller.selectProperty
                   : null,
-              onUnplacedObjectSelected: _controller.canEdit
+              onUnplacedObjectSelected: _controller.canManipulateObjects
                   ? _controller.selectUnplacedObject
                   : null,
-              onPaint: _controller.canEdit ? _controller.paint : null,
-              onErase: _controller.canEdit ? _controller.erase : null,
-              onClear: _controller.canEdit ? _controller.clear : null,
+              onPaint: _controller.canManipulateObjects
+                  ? _controller.paint
+                  : null,
+              onErase: _controller.canManipulateObjects
+                  ? _controller.erase
+                  : null,
+              onClear: _controller.canManipulateObjects
+                  ? _controller.clear
+                  : null,
+              onStep: _controller.canStep ? _controller.step : null,
+              onRulesetSubmitted: _controller.canEditCells
+                  ? _controller.replaceRuleset
+                  : null,
+              selectedCellColor: _controller.selectedCellColor,
+              onCellColorChanged: _controller.canEditCells
+                  ? _controller.selectCellColor
+                  : null,
+              onPaintCell: _controller.canEditCells
+                  ? _controller.paintCell
+                  : null,
               onSaveSlot: _controller.canEdit
                   ? (slot, overwrite) =>
                         _controller.saveWorldSlot(slot, overwrite: overwrite)
@@ -121,7 +139,11 @@ class _DemoScreenState extends State<DemoScreen> {
               key: ValueKey((_controller.domain, _controller.conversation?.id)),
               messages: _controller.conversation?.messages ?? const [],
               llmBudget: _controller.conversation?.llmBudget,
-              canSend: _controller.canEdit,
+              canSend: _controller.canChat,
+              emptyHint: _controller.domain == WorldDomain.cellular
+                  ? 'Edit cells, change rules, or ask about future generations.'
+                  : 'Enter a sentence to begin.',
+              composerHint: 'Enter a message',
               canSendControl: _controller.canRequest
                   ? _controller.canSendControl
                   : null,
@@ -161,45 +183,30 @@ class _DemoScreenState extends State<DemoScreen> {
                 actions: [
                   Padding(
                     padding: EdgeInsets.only(right: actionSpacing),
-                    child: SegmentedButton<WorldDomain>(
-                      segments: const [
-                        ButtonSegment(
-                          value: WorldDomain.objects,
-                          label: Text('Objects'),
-                        ),
-                        ButtonSegment(
-                          value: WorldDomain.network,
-                          label: Text('Network'),
-                        ),
-                      ],
-                      selected: {_controller.domain},
-                      showSelectedIcon: false,
-                      style: const ButtonStyle(
-                        visualDensity: VisualDensity.compact,
-                        padding: WidgetStatePropertyAll(
-                          EdgeInsets.symmetric(horizontal: 4),
-                        ),
-                        minimumSize: WidgetStatePropertyAll(Size(0, 36)),
-                      ),
-                      onSelectionChanged: _controller.canSwitchDomain
-                          ? (selection) =>
-                                _controller.switchDomain(selection.single)
+                    child: DomainSelector(
+                      selected: _controller.domain,
+                      compact: constraints.maxWidth < 480,
+                      onChanged: _controller.canSwitchDomain
+                          ? _controller.switchDomain
                           : null,
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: actionSpacing),
                     child: Tooltip(
-                      message:
-                          'Activate LLM: propose interpretations after a syntax error',
+                      message: _controller.llmAvailable
+                          ? 'Activate LLM: propose interpretations after a syntax error'
+                          : 'Cellular dialogue is not available yet',
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           if (wide) const Text('LLM'),
                           Switch(
                             padding: EdgeInsets.zero,
-                            value: _controller.useLlm,
-                            onChanged: _controller.canSwitchDomain
+                            value: _controller.llmEnabled,
+                            onChanged:
+                                _controller.canSwitchDomain &&
+                                    _controller.llmAvailable
                                 ? _controller.setUseLlm
                                 : null,
                           ),

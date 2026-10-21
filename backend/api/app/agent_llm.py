@@ -9,6 +9,7 @@ import httpx
 
 from .agent_instructions import configuration_for
 from .agent_store import AgentStore
+from .agent_context import build_input, InputTooLong
 from .llm import LlmTranslator, TranslationAttempt, create_client, failure_note
 from .llm_budget import MODEL, MAX_REQUEST_NANO, NANO_PER_USD
 from .repository import PendingConflict
@@ -119,6 +120,13 @@ class AgentTranslator(LlmTranslator):
             return TranslationAttempt(LlmUsage(status='not_configured'), note='LLM is not configured on the server.')
         if not self.ledger.can_reserve():
             return TranslationAttempt(LlmUsage(status='budget_exhausted'), note='The shared $1 LLM budget is exhausted.')
+        current_world = world.model_dump()
+        try:
+            # Reject genuinely oversized requests before configuring an agent or
+            # reserving spend. Backlogged outcomes are bounded separately below.
+            build_input(text, current_world, [], clarification)
+        except InputTooLong as error:
+            return TranslationAttempt(LlmUsage(status='input_too_long'), note=str(error))
         context = {'attemptId': str(uuid4()), 'conversationId': str(conversation_id), 'domain': domain}
         metadata = LlmUsage(status='unavailable')
         deadline, session_id, submitted = time.monotonic() + 65, None, False
@@ -132,11 +140,17 @@ class AgentTranslator(LlmTranslator):
                     previous_turn = None
                     cursor = saved['event_cursor'] if reuse else 0
                     events, next_cursor = self.store.events(conversation_id, cursor)
-                    payload = {'entry': text, 'world': world.model_dump(), 'outcomes': events,
-                               **({'clarification': clarification} if clarification is not None else {})}
-                    encoded = json.dumps(payload, separators=(',', ':'))
-                    if len(encoded.encode()) > 40_000:
-                        return TranslationAttempt(LlmUsage(status='input_too_long'), note='Entry/context exceeds the LLM input limit.')
+                    try:
+                        encoded = build_input(text, current_world, events, clarification)
+                    except InputTooLong as error:
+                        return TranslationAttempt(LlmUsage(status='input_too_long'), note=str(error))
+                    summary = json.loads(encoded).get('historySummary')
+                    if summary:
+                        self.log_feedback('context compacted', **context,
+                                          inputBytes=len(encoded.encode('utf-8')),
+                                          coalescedGuiEvents=summary['coalescedGuiEvents'],
+                                          omittedEvents=summary['omittedEvents'],
+                                          omittedByKind=summary['omittedByKind'])
                     inputs = [{'role': 'user', 'content': [{'type': 'input_text', 'text': encoded}]}]
                     stage = 'agent session'
                     if reuse:

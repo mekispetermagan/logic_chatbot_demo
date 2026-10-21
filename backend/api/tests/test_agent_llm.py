@@ -143,6 +143,96 @@ class AgentTests(unittest.TestCase):
         self.status, self.reply, self.explanation = 'conversation', reply, ''
         self.candidates, self.question = [], ''
 
+    def queue_outcomes(self, conversation_id, events):
+        with Database(self.settings.database_path).connection() as connection:
+            connection.executemany('INSERT INTO llm_session_events (conversation_id, payload_json) VALUES (?, ?)',
+                                   [(conversation_id, json.dumps(event)) for event in events])
+            return connection.execute('SELECT MAX(sequence) FROM llm_session_events WHERE conversation_id=?',
+                                      (conversation_id,)).fetchone()[0]
+
+    def test_cellular_greeting_with_thousand_queued_gui_updates_reaches_agent(self):
+        state = self.client.post('/conversations', json={'domain': 'cellular'}).json()
+        conversation_id = state['conversationId']
+        base = '/conversations/' + conversation_id
+        events = [{'kind': 'engine_result', 'userText': None, 'translation': None,
+                   'feedback': f'Generation {n}: 4 cells changed', 'pending': False, 'isError': False}
+                  for n in range(1083)]
+        cursor = self.queue_outcomes(conversation_id, events)
+        before = self.snapshots()
+        self.conversational('Hi!')
+        result = self.offer('Hi.', base)
+        self.assertEqual(result['feedback'], 'Hi!')
+        self.assertIsNone(result['proposal'])
+        self.assertEqual(result['world'], state['world'])
+        self.assertEqual(self.snapshots(), before)
+        payload = self.inputs[-1]
+        self.assertEqual(payload['entry'], 'Hi.')
+        self.assertEqual(payload['world'], state['world'])
+        self.assertEqual(payload['historySummary']['coalescedGuiEvents'], 1083)
+        self.assertEqual(payload['outcomes'][0]['count'], 1083)
+        self.assertLessEqual(len(json.dumps(payload, separators=(',', ':')).encode()), 40_000)
+        self.assertIn('context compacted', self.settings.llm_log_path.read_text())
+        self.assertEqual(AgentStore(Database(self.settings.database_path)).session(conversation_id)['event_cursor'], cursor)
+        with Database(self.settings.database_path).connection() as connection:
+            stored = connection.execute('SELECT payload_json FROM llm_session_events WHERE conversation_id=? ORDER BY sequence',
+                                        (conversation_id,)).fetchall()
+        self.assertEqual([json.loads(row[0]) for row in stored], events)
+        self.offer('Hello again.', base)
+        self.assertEqual(self.inputs[-1]['outcomes'], [])
+        self.assertEqual(len(self.sessions), 1)
+
+    def test_bounded_history_keeps_recent_review_undo_and_errors_on_session_reuse(self):
+        first = self.offer()
+        self.review(first, 'reject')
+        events = [{'kind': 'engine_result', 'userText': f'Question {n}', 'translation': None,
+                   'feedback': 'false', 'isError': False, 'pending': False} for n in range(100)]
+        important = [{'kind': 'accepted', 'translation': 'Set color of #0 to blue.'},
+                     {'kind': 'undo', 'feedback': 'Undone'},
+                     {'kind': 'world_loaded', 'slot': 1},
+                     {'kind': 'rejected', 'originalText': 'Please recolor'},
+                     {'kind': 'engine_result', 'userText': None, 'isError': True,
+                      'pending': False, 'feedback': 'Failed update'}]
+        cursor = self.queue_outcomes(self.state['conversationId'], events + important)
+        self.conversational()
+        self.offer('Hi.')
+        payload = self.inputs[-1]
+        self.assertEqual(payload['outcomes'][-len(important):], important)
+        self.assertEqual(len(payload['outcomes']), 64)
+        self.assertEqual(payload['historySummary']['omittedEvents'], 42)
+        self.assertEqual(len(self.sessions), 1)
+        store = AgentStore(Database(self.settings.database_path))
+        self.assertEqual(store.session(self.state['conversationId'])['event_cursor'], cursor)
+
+    def test_oversized_single_outcome_does_not_block_a_greeting(self):
+        self.queue_outcomes(self.state['conversationId'], [{'kind': 'accepted', 'translation': 'x' * 50_000}])
+        self.conversational()
+        state = self.offer('Hi.')
+        self.assertEqual(state['feedback'], 'Hello!')
+        self.assertEqual(self.inputs[-1]['outcomes'], [])
+        self.assertEqual(self.inputs[-1]['historySummary']['omittedEvents'], 2)
+
+    def test_failed_turn_does_not_advance_compacted_outcome_cursor(self):
+        events = [{'kind': 'engine_result', 'userText': None, 'translation': None,
+                   'feedback': 'GUI edit', 'pending': False, 'isError': False} for _ in range(1083)]
+        self.queue_outcomes(self.state['conversationId'], events)
+        self.timeout = True
+        self.offer('Hi.')
+        store = AgentStore(Database(self.settings.database_path))
+        self.assertEqual(store.session(self.state['conversationId'])['event_cursor'], 0)
+        self.assertEqual(self.inputs[-1]['outcomes'][0]['count'], 1084)  # Includes initial GUI clear.
+        self.timeout = False
+        self.conversational()
+        self.offer('Hello again.')
+        self.assertEqual(self.inputs[-1]['outcomes'][0]['count'], 1084)
+        self.assertGreater(store.session(self.state['conversationId'])['event_cursor'], 0)
+
+    def test_oversized_current_entry_rejected_before_agent_setup_or_spend(self):
+        state = self.offer('x' * 40_000)
+        self.assertIn('Entry, current world or clarification exceeds', state['feedback'])
+        self.assertIsNone(state['proposal'])
+        self.assertEqual(self.calls, [])
+        self.assertEqual(state['llmBudget']['requestCount'], 0)
+
     def test_object_v2_review_keeps_identity_and_appearance_alternatives_distinct(self):
         state = self.client.post('/conversations', json={'domain': 'objects'}).json()
         base = '/conversations/' + state['conversationId']
@@ -200,6 +290,52 @@ class AgentTests(unittest.TestCase):
         self.assertEqual(rejected.status_code,200,rejected.text)
         self.assertIsNone(rejected.json()['proposal'])
         self.assertEqual(rejected.json()['world'],state['world'])
+
+    def test_cellular_agent_random_preview_accept_and_continuation_reuse_seed(self):
+        initial = self.client.post('/conversations', json={'domain': 'cellular'}).json()
+        base = '/conversations/' + initial['conversationId']
+        self.translation = ('Initialize the board randomly. '
+                            'Set color of cells [O16, P16] to black. Set color of it to white.')
+        offered = self.offer('Randomize, then paint the two cells and ask me which to clear.', base)
+        self.assertEqual(len(offered['proposal']['candidates']), 1)
+        self.assertEqual(offered['world'], initial['world'])
+        self.assertIn('ACTIVE DOMAIN: cellular', next(iter(self.agents.values()))['instructions'])
+        first = self.review(offered, 'preview', {'rank': 1}, base)
+        self.assertEqual(first.status_code, 200, first.text)
+        preview = first.json()['preview']
+        again = self.review(offered, 'preview', {'rank': 1}, base).json()['preview']
+        self.assertEqual(preview, again)
+        self.assertIsNotNone(preview['pending'])
+        self.assertEqual(self.client.get(base).json()['world'], initial['world'])
+        with TestClient(create_app(self.settings)) as restarted:
+            accepted = restarted.post(base + '/interpretations/' + offered['proposal']['id'] + '/accept', json={'rank': 1})
+            self.assertEqual(accepted.status_code, 200, accepted.text)
+            self.assertEqual(accepted.json()['world'], preview['world'])
+            chosen = restarted.post(base + '/clarify', json={'position': {'x': 15, 'y': 15}})
+            self.assertEqual(chosen.status_code, 200, chosen.text)
+            expected = json.loads(json.dumps(preview['world']))
+            expected['cells'][-1] = 'white'
+            self.assertEqual(chosen.json()['world'], expected)
+            self.assertEqual(restarted.post(base + '/undo').json()['world'], initial['world'])
+
+    def test_cellular_extinction_translation_is_reviewed_before_symbolic_answer(self):
+        initial = self.client.post('/conversations', json={'domain': 'cellular'}).json()
+        base = '/conversations/' + initial['conversationId']
+        self.translation = 'Does the count of cells matching color is black reach 0 within 70 generations?'
+        offered = self.offer('Will the black cells go extinct within 70 generations?', base)
+        self.assertEqual(len(offered['proposal']['candidates']), 1)
+        self.assertEqual(offered['world'], initial['world'])
+        preview = self.review(offered, 'preview', {'rank': 1}, base)
+        self.assertEqual(preview.status_code, 200, preview.text)
+        self.assertIn('false; count does not reach 0 within 70 generations', preview.json()['preview']['feedback'])
+        self.assertEqual(preview.json()['preview']['world'], initial['world'])
+        accepted = self.review(offered, 'accept', {'rank': 1}, base)
+        self.assertEqual(accepted.status_code, 200, accepted.text)
+        self.assertEqual(accepted.json()['world'], initial['world'])
+        self.assertIn('false; count does not reach 0 within 70 generations', accepted.json()['feedback'])
+        instructions = configuration_for('cellular')['instructions']
+        self.assertIn('permanent absence', instructions)
+        self.assertIn('count of cells matching color', instructions)
 
     def test_object_prompt_has_v2_contract_without_legacy_network_grammar(self):
         objects=configuration_for('objects')['instructions']

@@ -2,9 +2,9 @@ import json
 import subprocess
 from pathlib import Path
 
-from pydantic import Field
+from pydantic import Field, model_validator
 
-from .schemas import Schema, World, PendingEntry, DomainId, WorldChange
+from .schemas import Schema, WorldState, PendingEntry, DomainId, WorldChange, validate_world_domain, CELLULAR_CELL_COUNT
 
 
 class EngineInvalidRequest(Exception):
@@ -17,7 +17,7 @@ class EngineUnavailable(Exception):
 
 class EngineReply(Schema):
     domain: DomainId
-    world: World
+    world: WorldState
     feedback: str
     isError: bool = False
     undoRequested: bool = False
@@ -27,6 +27,12 @@ class EngineReply(Schema):
     languageVersion: str = 'unknown'
     nextObjectId: int | None = Field(default=None, ge=0)
     changes: list[WorldChange] = Field(default_factory=list)
+    changedCells: int | None = Field(default=None, ge=0, le=CELLULAR_CELL_COUNT)
+
+    @model_validator(mode='after')
+    def world_matches_domain(self):
+        validate_world_domain(self.domain, self.world)
+        return self
 
 
 class LogicEngine:
@@ -36,7 +42,7 @@ class LogicEngine:
         self.executable = executable
         self.timeout = timeout
 
-    def edit(self, domain: DomainId, world: World, action: dict, salience: list[dict] | None = None,
+    def edit(self, domain: DomainId, world: WorldState, action: dict, salience: list[dict] | None = None,
              pending: PendingEntry | None = None, next_object_id: int | None = None) -> EngineReply:
         try:
             result = subprocess.run(

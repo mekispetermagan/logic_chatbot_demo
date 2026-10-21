@@ -1594,5 +1594,487 @@
       "input": "Check the shading of that square",
       "translation": "Does it satisfy shading is dark?"
     }
+  ],
+  "cellular": [
+    {
+      "input": "Make A3 black.",
+      "translation": "Set color of A3 to black."
+    },
+    {
+      "input": "What color is A3?",
+      "translation": "What is the color of A3?"
+    },
+    {
+      "input": "Run twenty generations.",
+      "translation": "Advance 20 generations."
+    },
+    {
+      "input": "Predict A3 after twenty generations.",
+      "translation": "After 20 generations, what is the color of A3?"
+    },
+    {
+      "input": "Will it stop changing within a hundred generations?",
+      "translation": "Does the board reach a fixed point within 100 generations?"
+    },
+    {
+      "input": "When does it stabilize within twenty generations?",
+      "translation": "What is the stabilization time of the board within 20 generations?"
+    },
+    {
+      "input": "Is the current board stable?",
+      "translation": "Does the board satisfy fixed point?"
+    },
+    {
+      "input": "What is its cycle return time within twenty generations?",
+      "translation": "What is the least return time of the board within 20 generations?"
+    },
+    {
+      "input": "Are A3 and D5 connected?",
+      "translation": "Does A3 satisfy connected to D5?"
+    },
+    {
+      "input": "Paint the component containing A3 blue.",
+      "translation": "Set color of cells connected to A3 to blue."
+    },
+    {
+      "input": "Count black cells.",
+      "translation": "How many cells match color is black?"
+    },
+    {
+      "input": "Count black neighbors of A3.",
+      "translation": "How many neighbors of A3 match color is black?"
+    },
+    {
+      "input": "Which cells will change next?",
+      "translation": "Which cells match changes in the next generation?"
+    },
+    {
+      "input": "Why will A3 change next?",
+      "translation": "What is the next transition of A3?"
+    },
+    {
+      "input": "Make the board all white.",
+      "translation": "Set color of cells matching true to white."
+    },
+    {
+      "input": "Use Life without repainting.",
+      "translation": "Replace ruleset with preset game of life, preserving the board."
+    },
+    {
+      "input": "Use RGB cycle, allowing a random refill if necessary.",
+      "translation": "Replace ruleset with preset rgb cycle, randomly refilling the board if required."
+    },
+    {
+      "input": "Randomize the current board.",
+      "translation": "Initialize the board randomly."
+    },
+    {
+      "input": "Disable the white rule.",
+      "translation": "Disable rule for white."
+    },
+    {
+      "input": "Is every black cell adjacent to A3?",
+      "translation": "Does every cell matching color is black satisfy neighbor of A3?"
+    },
+    {
+      "input": "Paint A1 white.",
+      "translation": "Set color of A1 to white."
+    },
+    {
+      "input": "Paint A1 black.",
+      "translation": "Set color of A1 to black."
+    },
+    {
+      "input": "Paint A1 red.",
+      "translation": "Set color of A1 to red."
+    },
+    {
+      "input": "Paint A1 green.",
+      "translation": "Set color of A1 to green."
+    },
+    {
+      "input": "Paint A1 blue.",
+      "translation": "Set color of A1 to blue."
+    },
+    {
+      "input": "Paint A1 yellow.",
+      "translation": "Set color of A1 to yellow."
+    },
+    {
+      "input": "Paint B1 white.",
+      "translation": "Set color of B1 to white."
+    },
+    {
+      "input": "Paint B1 black.",
+      "translation": "Set color of B1 to black."
+    },
+    {
+      "input": "Paint B1 red.",
+      "translation": "Set color of B1 to red."
+    },
+    {
+      "input": "Paint B1 green.",
+      "translation": "Set color of B1 to green."
+    },
+    {
+      "input": "Paint B1 blue.",
+      "translation": "Set color of B1 to blue."
+    },
+    {
+      "input": "Paint B1 yellow.",
+      "translation": "Set color of B1 to yellow."
+    },
+    {
+      "input": "Paint C1 white.",
+      "translation": "Set color of C1 to white."
+    },
+    {
+      "input": "Paint C1 black.",
+      "translation": "Set color of C1 to black."
+    },
+    {
+      "input": "Paint C1 red.",
+      "translation": "Set color of C1 to red."
+    },
+    {
+      "input": "Paint C1 green.",
+      "translation": "Set color of C1 to green."
+    },
+    {
+      "input": "Paint C1 blue.",
+      "translation": "Set color of C1 to blue."
+    },
+    {
+      "input": "Paint C1 yellow.",
+      "translation": "Set color of C1 to yellow."
+    },
+    {
+      "input": "Paint D1 white.",
+      "translation": "Set color of D1 to white."
+    },
+    {
+      "input": "Paint D1 black.",
+      "translation": "Set color of D1 to black."
+    },
+    {
+      "input": "Paint D1 red.",
+      "translation": "Set color of D1 to red."
+    },
+    {
+      "input": "Paint D1 green.",
+      "translation": "Set color of D1 to green."
+    },
+    {
+      "input": "Paint D1 blue.",
+      "translation": "Set color of D1 to blue."
+    },
+    {
+      "input": "Paint D1 yellow.",
+      "translation": "Set color of D1 to yellow."
+    },
+    {
+      "input": "Paint E1 white.",
+      "translation": "Set color of E1 to white."
+    },
+    {
+      "input": "Paint E1 black.",
+      "translation": "Set color of E1 to black."
+    },
+    {
+      "input": "Paint E1 red.",
+      "translation": "Set color of E1 to red."
+    },
+    {
+      "input": "Paint E1 green.",
+      "translation": "Set color of E1 to green."
+    },
+    {
+      "input": "Paint E1 blue.",
+      "translation": "Set color of E1 to blue."
+    },
+    {
+      "input": "Paint E1 yellow.",
+      "translation": "Set color of E1 to yellow."
+    },
+    {
+      "input": "Paint F1 white.",
+      "translation": "Set color of F1 to white."
+    },
+    {
+      "input": "Paint F1 black.",
+      "translation": "Set color of F1 to black."
+    },
+    {
+      "input": "Paint F1 red.",
+      "translation": "Set color of F1 to red."
+    },
+    {
+      "input": "Paint F1 green.",
+      "translation": "Set color of F1 to green."
+    },
+    {
+      "input": "Paint F1 blue.",
+      "translation": "Set color of F1 to blue."
+    },
+    {
+      "input": "Paint F1 yellow.",
+      "translation": "Set color of F1 to yellow."
+    },
+    {
+      "input": "Paint G1 white.",
+      "translation": "Set color of G1 to white."
+    },
+    {
+      "input": "Paint G1 black.",
+      "translation": "Set color of G1 to black."
+    },
+    {
+      "input": "Paint G1 red.",
+      "translation": "Set color of G1 to red."
+    },
+    {
+      "input": "Paint G1 green.",
+      "translation": "Set color of G1 to green."
+    },
+    {
+      "input": "Paint G1 blue.",
+      "translation": "Set color of G1 to blue."
+    },
+    {
+      "input": "Paint G1 yellow.",
+      "translation": "Set color of G1 to yellow."
+    },
+    {
+      "input": "Paint H1 white.",
+      "translation": "Set color of H1 to white."
+    },
+    {
+      "input": "Paint H1 black.",
+      "translation": "Set color of H1 to black."
+    },
+    {
+      "input": "Paint H1 red.",
+      "translation": "Set color of H1 to red."
+    },
+    {
+      "input": "Paint H1 green.",
+      "translation": "Set color of H1 to green."
+    },
+    {
+      "input": "Paint H1 blue.",
+      "translation": "Set color of H1 to blue."
+    },
+    {
+      "input": "Paint H1 yellow.",
+      "translation": "Set color of H1 to yellow."
+    },
+    {
+      "input": "Paint I1 white.",
+      "translation": "Set color of I1 to white."
+    },
+    {
+      "input": "Paint I1 black.",
+      "translation": "Set color of I1 to black."
+    },
+    {
+      "input": "Paint I1 red.",
+      "translation": "Set color of I1 to red."
+    },
+    {
+      "input": "Paint I1 green.",
+      "translation": "Set color of I1 to green."
+    },
+    {
+      "input": "Paint I1 blue.",
+      "translation": "Set color of I1 to blue."
+    },
+    {
+      "input": "Paint I1 yellow.",
+      "translation": "Set color of I1 to yellow."
+    },
+    {
+      "input": "Paint J1 white.",
+      "translation": "Set color of J1 to white."
+    },
+    {
+      "input": "Paint J1 black.",
+      "translation": "Set color of J1 to black."
+    },
+    {
+      "input": "Paint J1 red.",
+      "translation": "Set color of J1 to red."
+    },
+    {
+      "input": "Paint J1 green.",
+      "translation": "Set color of J1 to green."
+    },
+    {
+      "input": "Paint J1 blue.",
+      "translation": "Set color of J1 to blue."
+    },
+    {
+      "input": "Paint J1 yellow.",
+      "translation": "Set color of J1 to yellow."
+    },
+    {
+      "input": "Paint K1 white.",
+      "translation": "Set color of K1 to white."
+    },
+    {
+      "input": "Paint K1 black.",
+      "translation": "Set color of K1 to black."
+    },
+    {
+      "input": "Paint K1 red.",
+      "translation": "Set color of K1 to red."
+    },
+    {
+      "input": "Paint K1 green.",
+      "translation": "Set color of K1 to green."
+    },
+    {
+      "input": "Paint K1 blue.",
+      "translation": "Set color of K1 to blue."
+    },
+    {
+      "input": "Paint K1 yellow.",
+      "translation": "Set color of K1 to yellow."
+    },
+    {
+      "input": "Paint L1 white.",
+      "translation": "Set color of L1 to white."
+    },
+    {
+      "input": "Paint L1 black.",
+      "translation": "Set color of L1 to black."
+    },
+    {
+      "input": "Paint L1 red.",
+      "translation": "Set color of L1 to red."
+    },
+    {
+      "input": "Paint L1 green.",
+      "translation": "Set color of L1 to green."
+    },
+    {
+      "input": "Paint L1 blue.",
+      "translation": "Set color of L1 to blue."
+    },
+    {
+      "input": "Paint L1 yellow.",
+      "translation": "Set color of L1 to yellow."
+    },
+    {
+      "input": "Paint M1 white.",
+      "translation": "Set color of M1 to white."
+    },
+    {
+      "input": "Paint M1 black.",
+      "translation": "Set color of M1 to black."
+    },
+    {
+      "input": "Paint M1 red.",
+      "translation": "Set color of M1 to red."
+    },
+    {
+      "input": "Paint M1 green.",
+      "translation": "Set color of M1 to green."
+    },
+    {
+      "input": "Paint M1 blue.",
+      "translation": "Set color of M1 to blue."
+    },
+    {
+      "input": "Paint M1 yellow.",
+      "translation": "Set color of M1 to yellow."
+    },
+    {
+      "input": "Paint N1 white.",
+      "translation": "Set color of N1 to white."
+    },
+    {
+      "input": "Paint N1 black.",
+      "translation": "Set color of N1 to black."
+    },
+    {
+      "input": "Paint N1 red.",
+      "translation": "Set color of N1 to red."
+    },
+    {
+      "input": "Paint N1 green.",
+      "translation": "Set color of N1 to green."
+    },
+    {
+      "input": "Paint N1 blue.",
+      "translation": "Set color of N1 to blue."
+    },
+    {
+      "input": "Paint N1 yellow.",
+      "translation": "Set color of N1 to yellow."
+    },
+    {
+      "input": "Paint O1 white.",
+      "translation": "Set color of O1 to white."
+    },
+    {
+      "input": "Paint O1 black.",
+      "translation": "Set color of O1 to black."
+    },
+    {
+      "input": "Paint O1 red.",
+      "translation": "Set color of O1 to red."
+    },
+    {
+      "input": "Paint O1 green.",
+      "translation": "Set color of O1 to green."
+    },
+    {
+      "input": "Paint O1 blue.",
+      "translation": "Set color of O1 to blue."
+    },
+    {
+      "input": "Paint O1 yellow.",
+      "translation": "Set color of O1 to yellow."
+    },
+    {
+      "input": "Paint P1 white.",
+      "translation": "Set color of P1 to white."
+    },
+    {
+      "input": "Paint P1 black.",
+      "translation": "Set color of P1 to black."
+    },
+    {
+      "input": "Paint P1 red.",
+      "translation": "Set color of P1 to red."
+    },
+    {
+      "input": "Paint P1 green.",
+      "translation": "Set color of P1 to green."
+    },
+    {
+      "input": "Paint P1 blue.",
+      "translation": "Set color of P1 to blue."
+    },
+    {
+      "input": "Paint P1 yellow.",
+      "translation": "Set color of P1 to yellow."
+    },
+    {
+      "input": "Will the black cells go extinct within 70 generations?",
+      "translation": "Does the count of cells matching color is black reach 0 within 70 generations?"
+    },
+    {
+      "input": "Will red cells become absent at some point within twenty generations?",
+      "translation": "Does the count of cells matching color is red reach 0 within 20 generations?"
+    },
+    {
+      "input": "Will the red cell count reach twelve within twenty generations?",
+      "translation": "Does the count of cells matching color is red reach 12 within 20 generations?"
+    },
+    {
+      "input": "Will the number of black cells in row eight reach one within five generations?",
+      "translation": "Does the count of cells matching (color is black and row is 8) reach 1 within 5 generations?"
+    }
   ]
 }

@@ -161,7 +161,9 @@ void main() {
       MaterialApp(home: DemoScreen(createController: () => controller)),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Network'));
+    await tester.tap(find.byKey(const ValueKey('domain-selector')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Network').last);
     await tester.pumpAndSettle();
     expect(controller.conversation!.domain, WorldDomain.network);
     expect(find.byType(NetworkSelector), findsOneWidget);

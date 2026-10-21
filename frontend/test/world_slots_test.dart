@@ -80,7 +80,7 @@ void main() {
       expect(await controller.loadWorldSlot(2), isTrue);
       expect(requests.last.url.path, '/api/conversations/saved/slots/2/load');
       expect(requests.last.body, isEmpty);
-      expect(controller.conversation!.world.objects, isEmpty);
+      expect(controller.conversation!.objectWorld!.objects, isEmpty);
       expect(controller.conversation!.canUndo, isTrue);
       expect(controller.selectedUnplacedObjectId, isNull);
       controller.conversation = ConversationState.fromJson({

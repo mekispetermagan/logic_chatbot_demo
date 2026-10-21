@@ -8,8 +8,9 @@ stateless transport; there is no automatic provider/model fallback.
 
 ## Instructions and saved agents
 
-Both agents receive their standalone v2 language reference: [Objects v2](object-language-v2.md)
-with 184 validated examples, or [Network v2](network-language-v2.md) with 214.
+Each agent receives its standalone v2 language reference: [Objects v2](object-language-v2.md)
+with 184 validated examples, [Network v2](network-language-v2.md) with 214,
+or [Cellular v2](cellular-language-v2.md) with 120.
 Both transports assemble the same reviewed instructions for their active domain.
 Explicit creation, location/occupant distinctions, identity versus appearance,
 and consequential graph-scope alternatives are part of those contracts.
@@ -49,6 +50,31 @@ the current world, the entry and backend outcomes not yet sent to the session.
 Clarification requests also carry the original prompt, accumulated answers,
 previous candidates and parser failures. Instructions and complete conversation
 history are managed by the session rather than reconstructed in each request.
+
+### Bounded outcome context
+
+`app/agent_context.py` prepares the input without changing stored history.
+Consecutive successful GUI results with no user text, translation, error or
+pending choice are coalesced into one outcome with their count and the final
+update's feedback. Commands, acceptance/rejection, Undo, slot loads, errors and
+clarification remain separate events.
+
+Each request retains at most the newest 64 resulting outcome entries. Older
+whole entries are omitted as needed to fit the existing 40,000-byte UTF-8 input
+limit. `historySummary` reports how many GUI events were coalesced, how many
+original events were omitted and their kinds. The agent is instructed to use
+the current world, avoid inventing missing history and clarify when it matters.
+Programs and feedback are never cut into misleading partial sentences.
+
+The current world, user entry and clarification are always complete. If these
+alone exceed the limit, the backend rejects the request before agent setup or
+spend reservation. Outcome compaction applies on first use, session reuse and
+session replacement, including conversations with large pre-existing backlogs.
+Only transport context is bounded: SQLite outcome records, chat, worlds, Undo
+history and saved slots are retained. The outcome cursor advances across the
+complete fetched range after the remote turn is observed, including entries
+represented by summaries or omission counts. Failed admission and uncertain
+turns do not advance it; a subsequent request can compact that backlog again.
 
 `llm_session_events` is a durable outcome queue. Accepted programs, rejection,
 direct controlled-English evaluation, visual edits, reference clarification,

@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import '../models/conversation_state.dart';
 import '../models/attribute_property.dart';
 import '../models/domain.dart';
+import '../models/cellular_world.dart';
 import '../models/world_object.dart';
 
 class ApiException implements Exception {
@@ -86,6 +87,34 @@ class ConversationApi {
       _request('POST', id: id, action: 'clear');
   Future<ConversationState> undo(String id) =>
       _request('POST', id: id, action: 'undo');
+
+  Future<ConversationState> step(String id) =>
+      _request('POST', id: id, action: 'step');
+
+  Future<ConversationState> paintCell(
+    String id,
+    BoardPosition position,
+    CellColor color,
+  ) => _request(
+    'POST',
+    id: id,
+    action: 'cell',
+    body: {
+      'position': {'x': position.x, 'y': position.y},
+      'color': color.name,
+    },
+  );
+
+  Future<ConversationState> replaceRuleset(
+    String id,
+    CellularRuleset ruleset, {
+    required bool refill,
+  }) => _request(
+    'POST',
+    id: id,
+    action: 'ruleset',
+    body: {'ruleset': ruleset.toJson(), 'refill': refill},
+  );
 
   Future<ConversationState> saveWorldSlot(
     String id,

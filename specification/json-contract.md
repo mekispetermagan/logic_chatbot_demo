@@ -1,5 +1,15 @@
 # Domain-aware JSON contract
 
+The third domain, `cellular`, has a dense 16×16 cell/ruleset world representation and
+structured one-generation `step`, single-cell `cell` painting, and complete
+`ruleset` replacement actions.
+Its complete backend contract is in
+[Cellular Automata Backend](cellular-automata-backend.md). Object and network
+world shapes and languages below retain their existing representation. Cellular
+dialogue uses [Cellular v2](cellular-language-v2.md), including forecasts and
+clarification. Flutter also paints cells and requests single generations through
+the step endpoint.
+
 ## Conversations and worlds
 
 Create an anonymous conversation with `POST /conversations` and
@@ -9,8 +19,8 @@ own fixed seven-object world. The response includes `conversationId`, `domain`,
 include `feedback`, typed `changes`, and nullable `preview`. Domain selection is immutable for a conversation; subsequent
 requests address the conversation ID and inherit its domain.
 
-A world contains integer `width`, `height`, and an `objects` list. Both current
-domains use 8×8 boards. Example network object:
+An object/network world contains integer `width`, `height`, and an `objects` list.
+Both domains use 8×8 boards. Example network object:
 
 ```json
 {
@@ -372,3 +382,22 @@ IDs, unavailable ranks and stale preview/accept requests return 409. Rank must
 be a JSON integer in 1..3; malformed choices return 422. Reject remains allowed
 for a stale draft so the user can revise and resend. API charges survive both
 rejection and Undo, with paid metadata recorded once on the offer message.
+
+## Cellular v2 chat and review
+
+Cellular conversations now support the same `chat`, `checkSyntax`, `clarify` and
+interpretation review operations as the other domains. See
+[Cellular v2](cellular-language-v2.md). Dense worlds do not acquire object IDs:
+`nextObjectId` stays zero and cell salience uses the typed `position` referent.
+Properties are defined, grounded cellular conditions; Haskell rechecks them
+after GUI or dialogue updates. Clarification uses `position` or `groupingId`.
+Pending atomic batches may carry a dense cellular `stagedWorld`; previews likewise
+carry the active domain's world type.
+
+The internal `chat` action may carry a server-generated unsigned 64-bit
+`randomSeed`. Interpretation proposals persist an optional `executionSeed` for
+cellular random commands. Preview and acceptance reuse it; continuation payloads
+retain it alongside the original world, ranking, canonical program, choices and
+completed-sentence offset. Seeds are execution metadata, not grammar or a new
+public chat parameter. Ordinary GUI edits introduce no dialogue mentions.
+Existing worlds, slots and Undo histories require no purge.

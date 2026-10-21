@@ -35,6 +35,8 @@ class ChatPanel extends StatefulWidget {
     this.languageVersion = 'unknown',
     this.canSendControl,
     this.resetPending = false,
+    this.emptyHint = 'Enter a sentence to begin.',
+    this.composerHint = 'Enter a message',
   });
 
   final List<ChatMessage> messages;
@@ -60,6 +62,8 @@ class ChatPanel extends StatefulWidget {
   final String languageVersion;
   final bool Function(String)? canSendControl;
   final bool resetPending;
+  final String emptyHint;
+  final String composerHint;
 
   @override
   State<ChatPanel> createState() => _ChatPanelState();
@@ -234,7 +238,9 @@ class _ChatPanelState extends State<ChatPanel> {
       children: [
         Expanded(
           child: widget.messages.isEmpty && widget.proposal == null
-              ? const Center(child: Text('Enter a sentence to begin.'))
+              ? Center(
+                  child: Text(widget.emptyHint, textAlign: TextAlign.center),
+                )
               : ListView.builder(
                   reverse: true,
                   padding: const EdgeInsets.symmetric(vertical: 8),
@@ -401,7 +407,7 @@ class _ChatPanelState extends State<ChatPanel> {
                           ? 'Reply yes or no'
                           : _answering
                           ? 'Clarification or correction'
-                          : 'Enter a message',
+                          : widget.composerHint,
                       border: const OutlineInputBorder(),
                     ),
                   ),

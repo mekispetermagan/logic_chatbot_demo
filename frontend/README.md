@@ -9,7 +9,7 @@ size a medium footprint with a superscript `?`. Tooltips describe all attributes
 ## Conversations
 
 The app creates an anonymous conversation through FastAPI and saves its ID in
-device/browser preferences, separately for each API URL. On restart it retrieves
+device/browser preferences, separately for each API URL and domain. On restart it retrieves
 the server's current world. Only a missing conversation (HTTP 404) creates a
 replacement; other failures show Retry and preserve the saved ID.
 
@@ -48,8 +48,9 @@ visible, with a short message when a setup is loaded. Slots are disabled during
 requests, interpretation review, and reference clarification.
 
 To start over, enter `full reset` in Chat and reply `yes` to confirm or `no` to
-cancel. Confirmation starts a new empty conversation in the same domain, clears
-chat/input history and reference context, and has no Undo. The five saved slots
+cancel. Confirmation starts a new conversation in the same domain, clears
+chat/input history and reference context, and has no Undo. Objects/network start
+empty; cellular restores its initial glider. The five saved slots
 are preserved. The command bypasses the LLM and remains available during a
 pending interpretation or symbolic clarification; other actions pause until
 confirmation is answered. The new conversation ID is saved on this device.
@@ -99,8 +100,8 @@ and 20% black at the bottom; colorless
 pieces use neutral grey, and the loop's hole remains transparent. Size scaling,
 unknown-shape question marks, and unknown-size badges remain supported.
 
-The API client creates either `WorldDomain.objects` (the default) or
-`WorldDomain.network`. Conversation state stores that typed domain. Objects
+The API client creates `WorldDomain.objects` (the default), `WorldDomain.network`,
+or `WorldDomain.cellular`. Conversation state stores that typed domain. Objects
 retain immutable generic attribute maps, with color/size/shape getters for the
 existing display and `NetworkPort` presence checks for network consumers.
 Property edits send canonical `AttributeProperty` pairs. The existing objects
@@ -119,3 +120,51 @@ placement, and shared Undo retain their usual behavior. Each pattern tap uses on
 `assets/images/network_shapes/`, with 20% center dots and center-lit gradients.
 Domain-specific conversation IDs are stored separately per API URL; the original
 objects key is retained for existing installations.
+
+## Cellular player
+
+Select Cellular in the app bar to open a separate persisted conversation. On
+narrow screens the domain selector becomes a dropdown. New cellular conversations
+start with a centered Game of Life glider, black on white. The 16×16 grid uses
+A1–P16 coordinates; Objects and Network retain their 8×8 grids. Colored rulesets also support red, green,
+blue, and yellow.
+
+Select one active color button and tap or left-click a cell to repaint it.
+Black is initially selected for Game of Life. Right click and long press do not
+edit cells. The color row scrolls horizontally when needed. Painting calls
+`POST /conversations/{id}/cell` and displays the returned world; generation and
+rules stay unchanged. Each changed cell is undoable; painting the same color
+adds no history. Buttons and painting pause during requests.
+
+Step requests exactly one generation from `POST /conversations/{id}/step` and
+displays the returned board and generation number. Haskell computes every
+transition; Flutter does not simulate cells locally. The button is disabled
+during requests, and the grid keeps its size while updating. Undo and all five
+save/load slots preserve the complete cellular state, including rules and
+generation. A failed response offers Refresh world without repeating the step.
+
+`CellularWorld` and `World` implement the shared `GridWorld` interface.
+`ConversationController` owns API calls and request state; stateless cellular
+widgets receive data and callbacks. Cellular chat and the LLM switch are enabled:
+commands, questions, forecasts and clarification use the shared chat interface.
+Preview and staged atomic batches display a dense cellular board without changing
+the authoritative state. `full reset` still requires confirmation and preserves
+saved slots. Continuous playback is not implemented.
+See [Cellular v2](../specification/cellular-language-v2.md) for the grammar.
+
+API startup expands older cellular worlds, Undo history, and saved slots with
+white padding, keeping their patterns centered and generation numbers intact.
+
+Edit rules opens a modal with a local `CellularRulesetController` draft: choose
+at least two colors, Moore (8) or von Neumann (4) neighbors, then configure one
+enabled/disabled rule per source color. Select a target color and any counts;
+neighbors of that same target color are counted. Game of Life and RGB-cycle
+buttons at the bottom only prefill the form. Submit sends the complete ruleset
+to `POST /conversations/{id}/ruleset`, as one undoable operation.
+
+Rules-only changes preserve the board/generation and increase the ruleset
+revision. Removing colors still on the board asks for confirmation to refill
+randomly using the new palette and restart generation zero. Cancel leaves the
+draft open without sending anything. An unchanged submission adds no history.
+The form pauses during submission; uncertain failures require refreshing the
+authoritative world before retrying.

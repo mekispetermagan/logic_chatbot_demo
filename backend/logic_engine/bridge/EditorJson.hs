@@ -19,6 +19,7 @@ import qualified ControlledLanguage.Parser as V2
 import qualified ControlledLanguage.Pretty as V2
 import qualified ControlledLanguage.Syntax as V2
 import qualified ControlledLanguage.Evaluation as V2
+import qualified CellularJson
 
 parsePosition :: Value -> Parser Position
 parsePosition = withObject "position" $ \value -> (,) <$> value .: "x" <*> value .: "y"
@@ -196,6 +197,11 @@ parseV2Request = withObject "request" $ \v -> do
 
 processRequest :: Value -> Either String Value
 processRequest input = do
+  name <- parseEither (withObject "request" (.: "domain")) input :: Either String String
+  if name == "cellular" then CellularJson.processRequest input else processObjectRequest input
+
+processObjectRequest :: Value -> Either String Value
+processObjectRequest input = do
   (domain,world,ranking,next,pending,operation) <- parseEither parseV2Request input
   let reply :: World -> SalienceRanking -> Int -> Maybe Value -> String -> Bool -> Bool -> Bool -> [V2.Change] -> Value
       reply w r n p feedback failed syntax undo changes = object

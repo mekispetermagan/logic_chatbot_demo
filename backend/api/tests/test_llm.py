@@ -10,7 +10,7 @@ from uuid import uuid4
 import httpx
 from fastapi.testclient import TestClient
 
-from app.config import Settings
+from app.config import INITIAL_WORLD_PATHS, Settings
 from app.database import Database
 from app.engine import LogicEngine
 from app.llm import prompt_for, PROMPTS
@@ -18,7 +18,7 @@ from app.llm_transcript import LlmTranscript
 from app.llm_budget import (LlmBudgetLedger, budget_in, BUDGET_NANO, MAX_REQUEST_NANO,
                             MAX_INPUT_TOKENS, MAX_OUTPUT_TOKENS)
 from app.main import create_app
-from app.schemas import World
+from app.schemas import CellularWorld, World
 
 
 class LlmTests(unittest.TestCase):
@@ -822,9 +822,11 @@ class LlmTests(unittest.TestCase):
             self.assertGreater(len(cases), 100)
             self.assertIn('ACTIVE DOMAIN: ' + domain, prompt_for(domain))
             for case in cases:
-                checked = engine.edit(domain, empty, {'type': 'checkSyntax', 'text': case['translation']})
+                syntax_world = (CellularWorld.model_validate(json.loads(INITIAL_WORLD_PATHS['cellular'].read_text()))
+                                if domain == 'cellular' else empty)
+                checked = engine.edit(domain, syntax_world, {'type': 'checkSyntax', 'text': case['translation']})
                 self.assertFalse(checked.isError, checked.feedback)
-                self.assertEqual(checked.world, empty)
+                self.assertEqual(checked.world, syntax_world)
                 self.assertEqual(checked.salience, [])
 
 

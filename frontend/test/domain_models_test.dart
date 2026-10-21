@@ -9,6 +9,7 @@ import 'package:logic_chatbot/models/attribute_property.dart';
 import 'package:logic_chatbot/models/conversation_state.dart';
 import 'package:logic_chatbot/models/domain.dart';
 import 'package:logic_chatbot/models/world.dart';
+import 'package:logic_chatbot/models/cellular_world.dart';
 import 'package:logic_chatbot/models/world_object.dart';
 
 Map<String, dynamic> fixture(WorldDomain domain) => {
@@ -16,18 +17,29 @@ Map<String, dynamic> fixture(WorldDomain domain) => {
   'domain': domain.name,
   'world': jsonDecode(
     File(
-      '../backend/shared/${domain == WorldDomain.objects ? 'toy_world' : 'network_world'}.json',
+      '../backend/shared/${switch (domain) {
+        WorldDomain.objects => 'toy_world',
+        WorldDomain.network => 'network_world',
+        WorldDomain.cellular => 'cellular_world',
+      }}.json',
     ).readAsStringSync(),
   ),
   'canUndo': false,
 };
 
 void main() {
-  test('both domain fixtures decode without losing attributes', () {
+  test('all domain fixtures decode without losing state', () {
     for (final domain in WorldDomain.values) {
       final state = ConversationState.fromJson(fixture(domain));
       expect(state.domain, domain);
-      expect(state.world.objects, hasLength(7));
+      if (domain == WorldDomain.cellular) {
+        expect(
+          state.cellularWorld!.cells.where((color) => color == CellColor.black),
+          hasLength(5),
+        );
+      } else {
+        expect(state.objectWorld!.objects, hasLength(7));
+      }
     }
     final network = World.fromJson(fixture(WorldDomain.network)['world']);
     final node = network.objects.first;

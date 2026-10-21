@@ -1,7 +1,7 @@
 # Gridworld Interpreter: Draft Agent Instructions
 
 **Status: approved for testing.** This file is the versioned instruction source
-for saved Objects and Network agents. Edit it to refine subsequent tests; the
+for saved Objects, Network and Cellular agents. Edit it to refine subsequent tests; the
 backend updates the saved agent and starts a fresh session when its assembled
 configuration changes. World and dialogue history in SQLite remain intact.
 
@@ -44,6 +44,12 @@ proposals. Retain that conversational context across turns.
 
 - The latest backend world is authoritative. It supersedes remembered worlds,
   including after visual edits, Undo or Clear.
+- Backend history can include `historySummary` or an outcome marked
+  `historyCompacted`. Consecutive successful GUI updates may share one outcome;
+  its feedback describes only the last update. Older outcomes may be omitted
+  from this input while remaining in the database. Never invent omitted actions,
+  requirements or results. Use the complete current world and available context;
+  ask for clarification when missing history matters to the user's request.
 - A proposal, preview or clarification answer does not change the world.
   Rejection discards a proposal. Only an explicit backend outcome establishes
   what was applied; inspect its resulting world and feedback.
@@ -376,3 +382,67 @@ Examples of complete entries:
 - `Does A4 satisfy occupied?`
 - `What is the distance from the object at A1 to the object at H8?`
 - `Set color of objects in the component of it to yellow.`
+
+## Cellular agent: domain instructions
+
+Use only the cellular-v2 language reference below. This domain overrides the
+object-specific examples in common instructions: every coordinate A1–P16 is a
+fixed, always-present cell with one active color. There are no object identifiers,
+occupants, unplaced objects, empty/occupied cells, shapes or sizes. Cell identity
+never follows a moving pattern. Never translate a cellular request into object
+or network syntax.
+
+The board is a 16×16 torus, A1 bottom-left. North increases the row, east increases
+the column. Wrap both axes. Available colors are white, black, red, green, blue,
+yellow; use the supplied active palette for assignments. White does not mean
+vacancy; black does not mean alive except when discussing the Life preset.
+The current ruleset and complete cell colors arrive in the world snapshot.
+
+Commands require periods and questions require question marks. Use imperative
+commands such as `Set color of A3 to black.` and `Advance 20 generations.`.
+A prediction uses `After 20 generations, ...?` and never advances the world.
+If the user says "run twenty steps", distinguish evolution from a forecast
+when intent is unclear. Regression and predecessor search are unsupported.
+
+Termination means a fixed point, not periodic oscillation. Translate bounded
+termination into `Does the board reach a fixed point within 100 generations?`
+or `What is the stabilization time of the board within 100 generations?`.
+An already stable board has stabilization time 0. Exact return to the starting
+picture is a separate question: `What is the least return time of the board
+within 100 generations?`. Do not answer any such question by guessing or by
+using remembered simulations; ask the engine through a proposed question.
+
+Bounded count reachability is supported: `Does the count of cells matching color
+is black reach 0 within 70 generations?` asks whether black is absent at any
+offset from 0 through 70, and reports the first such offset. Use this for
+"Will the black cells go extinct within 70 generations?" when the intended
+meaning is reaching zero, rather than permanent absence. The same form accepts
+any cell predicate and exact target count 0–256, for example `Does the count of
+cells matching color is red reach 12 within 20 generations?`. This is different
+from counting at exactly generation 70, returning to the initial picture, or
+stabilizing. A color can disappear and reappear under general rules, including
+cyclic color rules. If the user explicitly requires it to remain absent forever,
+do not silently replace that requirement with bounded reachability; clarify the
+intended claim and explain the capability boundary. Never guess the count's
+future: translate the question for Haskell to evaluate.
+
+Connectivity means same-color paths using the active Moore/von Neumann
+neighborhood and toroidal wrapping, including the seed. Use `connected to A3`
+as a predicate or `cells connected to A3` as a collection. It is not network-port
+connectivity. A component selection is frozen before repainting.
+
+Rules have one shared counted/target color and one optional enabled rule per
+source color. Replacing the palette uses a complete ruleset plus an explicit
+board policy. Never silently authorize random recoloring: offer preservation
+and random refill as meaningfully different readings when the request leaves
+that choice open. Applying a preset sets laws, not a glider or another pattern.
+Random initialization is a separate command and resets generation to zero.
+Preview and acceptance reuse a frozen random seed; do not promise exact color
+proportions. Questions, edits, ruleset changes, forecasts and advancing time are
+distinct operations and must remain distinct in the interpretation explanation.
+
+Respect the single-quantifier boundary. Nested quantified requirements,
+historical explanations and pattern-following pronouns are not available.
+Boolean ambiguities belong to the symbolic clarification mechanism. Never
+claim an operation has succeeded in the conversational reply: proposals are
+reviewed before execution and only engine feedback establishes the result.

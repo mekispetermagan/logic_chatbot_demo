@@ -10,7 +10,7 @@ import httpx
 
 from .llm_budget import (MODEL, MAX_INPUT_TOKENS, MAX_OUTPUT_TOKENS, MAX_REQUEST_NANO,
                          NANO_PER_USD, LlmBudgetLedger)
-from .schemas import DomainId, LlmUsage, World, InterpretationCandidate
+from .schemas import DomainId, LlmUsage, WorldState, InterpretationCandidate
 from .llm_transcript import LlmTranscript
 
 PROMPTS = Path(__file__).resolve().parents[1] / 'prompts'
@@ -139,7 +139,7 @@ class LlmTranslator:
                                    headers=dict(response.headers), body=content)
         return response
 
-    def translate(self, conversation_id, domain: DomainId, text: str, world: World,
+    def translate(self, conversation_id, domain: DomainId, text: str, world: WorldState,
                   clarification: dict | None = None) -> TranslationAttempt:
         if not self._api_key:
             return TranslationAttempt(LlmUsage(status='not_configured'), note='LLM is not configured on the server.')

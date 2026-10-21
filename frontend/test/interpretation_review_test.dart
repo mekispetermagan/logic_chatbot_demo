@@ -243,7 +243,7 @@ void main() {
     await tapVisible(tester, find.widgetWithText(OutlinedButton, 'Preview'));
     expect(find.text('Identity and state changes'), findsOneWidget);
     expect(find.text('#0: color none -> yellow'), findsOneWidget);
-    expect(controller.conversation!.world.objects, isEmpty);
+    expect(controller.conversation!.objectWorld!.objects, isEmpty);
     expect(controller.preview!.changes.single.kind, 'appearance');
     expect(tester.takeException(), isNull);
   });
@@ -264,8 +264,8 @@ void main() {
     await tapVisible(tester, find.widgetWithText(OutlinedButton, 'Preview'));
     expect(find.text('#0: pattern ---- -> -e-w'), findsOneWidget);
     expect(controller.conversation!.languageVersion, 'network-v2');
-    expect(controller.conversation!.world.objects, isEmpty);
-    expect(controller.preview!.world.objects.single.attributes, {
+    expect(controller.conversation!.objectWorld!.objects, isEmpty);
+    expect(controller.preview!.objectWorld!.objects.single.attributes, {
       'color': 'yellow',
       'east': 'east',
       'west': 'west',
@@ -286,8 +286,8 @@ void main() {
     controller.selectInterpretation(2);
     await controller.previewInterpretation();
     await tester.pumpAndSettle();
-    expect(controller.conversation!.world.objects, isEmpty);
-    expect(controller.preview!.world.objects, isEmpty);
+    expect(controller.conversation!.objectWorld!.objects, isEmpty);
+    expect(controller.preview!.objectWorld!.objects, isEmpty);
     expect(
       tester
           .widget<WorldDisplay>(find.byType(WorldDisplay))
@@ -314,7 +314,7 @@ void main() {
       await controller.load();
       controller.setUseLlm(true);
       expect(await controller.sendChat(original), isTrue);
-      expect(controller.conversation!.world.objects, isEmpty);
+      expect(controller.conversation!.objectWorld!.objects, isEmpty);
       expect(
         server.requests.where((path) => path.endsWith('/accept')),
         isEmpty,
@@ -323,10 +323,10 @@ void main() {
       controller.selectInterpretation(2);
       expect(await controller.previewInterpretation(), isTrue);
       expect(
-        controller.preview!.world.objects.single.color,
+        controller.preview!.objectWorld!.objects.single.color,
         ObjectColor.yellow,
       );
-      expect(controller.conversation!.world.objects, isEmpty);
+      expect(controller.conversation!.objectWorld!.objects, isEmpty);
       controller.selectInterpretation(1);
       expect(controller.preview, isNull);
       controller.selectInterpretation(2);
@@ -337,7 +337,7 @@ void main() {
       expect(controller.conversation!.proposal!.originalText, original);
       expect(await controller.acceptInterpretation(), isTrue);
       expect(
-        controller.conversation!.world.objects.single.color,
+        controller.conversation!.objectWorld!.objects.single.color,
         ObjectColor.yellow,
       );
       expect(controller.conversation!.proposal, isNull);
@@ -359,7 +359,7 @@ void main() {
       expect(await controller.acceptInterpretation(), isFalse);
       expect(controller.error, contains('Conversation changed; reject'));
       expect(controller.canReview, isTrue);
-      expect(controller.conversation!.world.objects, isEmpty);
+      expect(controller.conversation!.objectWorld!.objects, isEmpty);
       expect(await controller.rejectInterpretation(), isTrue);
       expect(controller.error, isNull);
       expect(controller.canEdit, isTrue);
@@ -384,12 +384,12 @@ void main() {
       await tester.enterText(find.byType(TextField), original);
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
       await tester.pumpAndSettle();
-      expect(controller.conversation!.world.objects, isEmpty);
+      expect(controller.conversation!.objectWorld!.objects, isEmpty);
       expect(tester.widget<TextField>(find.byType(TextField)).enabled, isTrue);
       await tapVisible(tester, find.byKey(const ValueKey('interpretation-2')));
       await tapVisible(tester, find.widgetWithText(OutlinedButton, 'Preview'));
       expect(controller.preview!.rank, 2);
-      expect(controller.conversation!.world.objects, isEmpty);
+      expect(controller.conversation!.objectWorld!.objects, isEmpty);
       if (width < 900) await tapVisible(tester, find.text('World'));
       expect(
         tester
@@ -414,7 +414,7 @@ void main() {
       );
       expect(input.focusNode!.hasFocus, isTrue);
       expect(controller.preview, isNull);
-      expect(controller.conversation!.world.objects, isEmpty);
+      expect(controller.conversation!.objectWorld!.objects, isEmpty);
       await tester.enterText(find.byType(TextField), '$original Use yellow.');
       await tester.sendKeyEvent(LogicalKeyboardKey.enter);
       await tester.pumpAndSettle();
@@ -423,7 +423,7 @@ void main() {
       await tapVisible(tester, find.widgetWithText(FilledButton, 'Accept'));
       expect(controller.conversation!.proposal, isNull);
       expect(
-        controller.conversation!.world.objects.single.color,
+        controller.conversation!.objectWorld!.objects.single.color,
         ObjectColor.yellow,
       );
       expect(controller.preview, isNull);
@@ -513,7 +513,7 @@ void main() {
           endsWith('/interpretations/proposal-0/answer'),
         );
         expect(server.prompts, isEmpty);
-        expect(controller.conversation!.world.objects, isEmpty);
+        expect(controller.conversation!.objectWorld!.objects, isEmpty);
         expect(controller.conversation!.proposal!.originalText, original);
         expect(
           tester.widget<TextField>(find.byType(TextField)).controller!.text,
@@ -529,13 +529,13 @@ void main() {
           find.widgetWithText(OutlinedButton, 'Preview'),
         );
         expect(
-          controller.preview!.world.objects.single.color,
+          controller.preview!.objectWorld!.objects.single.color,
           ObjectColor.yellow,
         );
-        expect(controller.conversation!.world.objects, isEmpty);
+        expect(controller.conversation!.objectWorld!.objects, isEmpty);
         await tapVisible(tester, find.widgetWithText(FilledButton, 'Accept'));
         expect(
-          controller.conversation!.world.objects.single.color,
+          controller.conversation!.objectWorld!.objects.single.color,
           ObjectColor.yellow,
         );
         expect(tester.takeException(), isNull);
@@ -560,7 +560,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(server.answers, ['B2, please']);
       expect(server.prompts, isEmpty);
-      expect(controller.conversation!.world.objects, isEmpty);
+      expect(controller.conversation!.objectWorld!.objects, isEmpty);
       await tapVisible(tester, find.widgetWithText(OutlinedButton, 'Reject'));
       expect(
         tester.widget<TextField>(find.byType(TextField)).controller!.text,

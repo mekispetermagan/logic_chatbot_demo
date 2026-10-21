@@ -9,7 +9,7 @@ from .database import Database
 from .engine import EngineUnavailable, EngineInvalidRequest, LogicEngine
 from .repository import ConversationRepository, PendingConflict, SnapshotConflict, WorldSlotEmpty
 from .routes import router
-from .schemas import World
+from .schemas import world_from_json
 from .service import ConversationService
 from .llm import LlmTranslator
 from .llm_budget import LlmBudgetLedger
@@ -24,7 +24,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def lifespan(app: FastAPI):
         database = Database(settings.database_path)
         database.initialize()
-        initial_worlds = {domain: World.model_validate_json(path.read_text(encoding="utf-8"))
+        initial_worlds = {domain: world_from_json(domain, path.read_text(encoding="utf-8"))
                           for domain, path in INITIAL_WORLD_PATHS.items()}
         if settings.llm_backend not in ('agents', 'responses'):
             raise ValueError('LOGIC_CHATBOT_LLM_BACKEND must be agents or responses')

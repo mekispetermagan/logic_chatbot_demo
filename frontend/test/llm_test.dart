@@ -196,7 +196,7 @@ void main() {
     expect(find.text('Assistant'), findsOneWidget);
     expect(find.text('Review interpretation'), findsNothing);
     expect(find.text('Accept'), findsNothing);
-    expect(controller.conversation!.world.objects, isEmpty);
+    expect(controller.conversation!.objectWorld!.objects, isEmpty);
     expect(controller.conversation!.canUndo, isFalse);
     expect(controller.canEdit, isTrue);
     expect(

@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, Path, Request, Response
 
 from .schemas import PortsEdit, CreateConversation, ClarificationChoice, ChatEntry, ConversationState, EditState, EraseEdit, PlaceEdit, PropertyEdit
 from .service import ConversationService
-from .schemas import InterpretationChoice, InterpretationAnswer, SaveWorldSlot
+from .schemas import InterpretationChoice, InterpretationAnswer, SaveWorldSlot, StepGeneration, CellEdit, RulesetEdit
 
 router = APIRouter(prefix="/conversations", tags=["conversations"])
 SlotNumber = Annotated[int, Path(ge=1, le=5)]
@@ -42,6 +42,25 @@ def chat(conversation_id: UUID, entry: ChatEntry,
 def apply_property(conversation_id: UUID, edit: PropertyEdit,
                    service: ConversationService = Depends(get_service)) -> EditState:
     return require_edit(service.edit(conversation_id, {"type": "property", **edit.model_dump()}))
+
+
+@router.post('/{conversation_id}/step', response_model=EditState)
+def step(conversation_id: UUID,
+         entry: StepGeneration | None = None,
+         service: ConversationService = Depends(get_service)) -> EditState:
+    return require_edit(service.step(conversation_id))
+
+
+@router.post('/{conversation_id}/cell', response_model=EditState)
+def paint_cell(conversation_id: UUID, edit: CellEdit,
+               service: ConversationService = Depends(get_service)) -> EditState:
+    return require_edit(service.edit(conversation_id, {'type': 'cell', **edit.model_dump()}))
+
+
+@router.post('/{conversation_id}/ruleset', response_model=EditState)
+def replace_ruleset(conversation_id: UUID, edit: RulesetEdit,
+                    service: ConversationService = Depends(get_service)) -> EditState:
+    return require_edit(service.replace_ruleset(conversation_id, edit.ruleset.model_dump(), edit.refill))
 
 
 @router.post('/{conversation_id}/interpretations/{proposal_id}/preview', response_model=EditState)

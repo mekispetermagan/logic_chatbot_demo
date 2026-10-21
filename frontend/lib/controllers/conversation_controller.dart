@@ -1,6 +1,7 @@
 import '../models/domain.dart';
 import '../models/network_shape.dart';
 import '../models/attribute_property.dart';
+import '../models/cellular_world.dart';
 import 'package:flutter/foundation.dart';
 
 import '../api/conversation_api.dart';
@@ -17,7 +18,10 @@ class ConversationController extends ChangeNotifier {
   WorldDomain domain = WorldDomain.objects;
   NetworkShape selectedNetworkShape = NetworkShape.empty;
   ObjectColor? selectedNetworkColor = ObjectColor.red;
+  CellColor selectedCellColor = CellColor.black;
   bool get canSwitchDomain => !loading && !editing;
+  bool get llmAvailable => true;
+  bool get llmEnabled => llmAvailable && useLlm;
 
   Future<void> switchDomain(WorldDomain next) async {
     if (!canSwitchDomain || next == domain || _disposed) return;
@@ -31,7 +35,7 @@ class ConversationController extends ChangeNotifier {
   }
 
   void selectNetworkShape(NetworkShape shape) {
-    if (!canEdit || _disposed) return;
+    if (!canManipulateObjects || _disposed) return;
     selectedNetworkShape = shape;
     selectedNetworkColor = null;
     selectedUnplacedObjectId = null;
@@ -39,7 +43,7 @@ class ConversationController extends ChangeNotifier {
   }
 
   void selectNetworkColor(ObjectColor color) {
-    if (!canEdit || _disposed) return;
+    if (!canManipulateObjects || _disposed) return;
     selectedNetworkColor = color;
     selectedUnplacedObjectId = null;
     notifyListeners();
@@ -63,7 +67,9 @@ class ConversationController extends ChangeNotifier {
       !editing;
 
   void setUseLlm(bool value) {
-    if (_disposed || loading || editing || useLlm == value) return;
+    if (_disposed || !llmAvailable || loading || editing || useLlm == value) {
+      return;
+    }
     useLlm = value;
     notifyListeners();
   }
@@ -78,6 +84,10 @@ class ConversationController extends ChangeNotifier {
       conversation?.resetPending != true &&
       conversation?.pending == null &&
       conversation?.proposal == null;
+  bool get canManipulateObjects => canEdit && domain != WorldDomain.cellular;
+  bool get canStep => canEdit && domain == WorldDomain.cellular;
+  bool get canEditCells => canEdit && domain == WorldDomain.cellular;
+  bool get canChat => canEdit;
   bool get canClarify => canRequest && conversation?.resetPending != true;
   bool get canUndo =>
       canClarify &&
@@ -137,16 +147,18 @@ class ConversationController extends ChangeNotifier {
   }
 
   void selectProperty(ObjectProperty property) {
-    if (!canEdit || _disposed) return;
+    if (!canManipulateObjects || _disposed) return;
     selectedProperty = property;
     selectedUnplacedObjectId = null;
     notifyListeners();
   }
 
   void selectUnplacedObject(int id) {
-    if (!canEdit ||
+    final world = conversation?.objectWorld;
+    if (!canManipulateObjects ||
+        world == null ||
         _disposed ||
-        !conversation!.world.objects.any(
+        !world.objects.any(
           (object) => object.id == id && object.position == null,
         )) {
       return;
@@ -156,6 +168,7 @@ class ConversationController extends ChangeNotifier {
   }
 
   Future<void> paint(int x, int y) {
+    if (!canManipulateObjects) return Future.value();
     final selected = selectedUnplacedObjectId;
     return _edit((id) {
       if (selected != null) return api.place(id, selected, BoardPosition(x, y));
@@ -177,12 +190,49 @@ class ConversationController extends ChangeNotifier {
     });
   }
 
-  Future<void> erase(int x, int y) =>
-      _edit((id) => api.erase(id, BoardPosition(x, y)));
-  Future<void> clear() => _edit(api.clear, clearSelection: true);
+  Future<void> erase(int x, int y) async {
+    if (canManipulateObjects) {
+      await _edit((id) => api.erase(id, BoardPosition(x, y)));
+    }
+  }
+
+  Future<void> clear() async {
+    if (canManipulateObjects) await _edit(api.clear, clearSelection: true);
+  }
+
+  Future<void> step() async {
+    if (canStep) await _edit(api.step);
+  }
+
+  void selectCellColor(CellColor color) {
+    if (_disposed ||
+        !canEditCells ||
+        !conversation!.cellularWorld!.ruleset.palette.contains(color)) {
+      return;
+    }
+    selectedCellColor = color;
+    notifyListeners();
+  }
+
+  Future<void> paintCell(int x, int y) async {
+    if (!canEditCells ||
+        !conversation!.cellularWorld!.ruleset.palette.contains(
+          selectedCellColor,
+        )) {
+      return;
+    }
+    await _edit(
+      (id) => api.paintCell(id, BoardPosition(x, y), selectedCellColor),
+    );
+  }
 
   Future<bool> saveWorldSlot(int slot, {bool overwrite = false}) =>
       _edit((id) => api.saveWorldSlot(id, slot, overwrite: overwrite));
+
+  Future<bool> replaceRuleset(CellularRuleset ruleset, bool refill) async {
+    if (!canEditCells) return false;
+    return _edit((id) => api.replaceRuleset(id, ruleset, refill: refill));
+  }
 
   Future<bool> loadWorldSlot(int slot) =>
       _edit((id) => api.loadWorldSlot(id, slot), clearSelection: true);
@@ -193,9 +243,11 @@ class ConversationController extends ChangeNotifier {
   }
 
   Future<bool> sendChat(String text) async {
-    if (text.trim().isEmpty) return false;
+    if (text.trim().isEmpty || (!canChat && !canSendControl(text))) {
+      return false;
+    }
     return _edit(
-      (id) => api.chat(id, text, useLlm: useLlm),
+      (id) => api.chat(id, text, useLlm: llmEnabled),
       chat: true,
       control: canSendControl(text),
     );
@@ -356,11 +408,18 @@ class ConversationController extends ChangeNotifier {
   }
 
   void _reconcileSelection() {
+    final palette = conversation?.cellularWorld?.ruleset.palette;
+    if (palette != null && !palette.contains(selectedCellColor)) {
+      selectedCellColor = palette.first;
+    }
+    final world = conversation?.objectWorld;
     if (selectedUnplacedObjectId != null &&
-        !conversation!.world.objects.any(
-          (object) =>
-              object.id == selectedUnplacedObjectId && object.position == null,
-        )) {
+        (world == null ||
+            !world.objects.any(
+              (object) =>
+                  object.id == selectedUnplacedObjectId &&
+                  object.position == null,
+            ))) {
       selectedUnplacedObjectId = null;
     }
   }

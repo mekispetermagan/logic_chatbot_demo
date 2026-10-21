@@ -1,14 +1,16 @@
 from uuid import UUID, uuid4
+from functools import partial
+from secrets import randbits
 
 from .repository import ConversationRepository, PendingConflict
 from .engine import LogicEngine
 from .llm import LlmTranslator
-from .schemas import (ConversationState, EditState, World, ClarificationChoice, DomainId,
+from .schemas import (ConversationState, EditState, World, WorldState, ClarificationChoice, DomainId,
                       InterpretationProposal, InterpretationFailure, InterpretationTurn)
 
 
 class ConversationService:
-    def __init__(self, repository: ConversationRepository, initial_worlds: dict[DomainId, World],
+    def __init__(self, repository: ConversationRepository, initial_worlds: dict[DomainId, WorldState],
                  engine: LogicEngine, translator: LlmTranslator | None = None):
         self.repository = repository
         self.initial_worlds = initial_worlds
@@ -24,6 +26,15 @@ class ConversationService:
     def edit(self, conversation_id: UUID, action: dict) -> EditState | None:
         return self.repository.edit(conversation_id, lambda domain, world, salience, pending, next_id: self.engine.edit(domain, world, action, salience, pending, next_id))
 
+    def step(self, conversation_id: UUID) -> EditState | None:
+        return self.edit(conversation_id, {'type': 'step'})
+
+    def replace_ruleset(self, conversation_id: UUID, ruleset: dict, refill: bool) -> EditState | None:
+        action = {'type': 'ruleset', 'ruleset': ruleset, 'refill': refill}
+        if refill:
+            action['randomSeed'] = randbits(64)
+        return self.edit(conversation_id, action)
+
     def undo(self, conversation_id: UUID) -> EditState | None:
         return self.repository.undo(conversation_id)
 
@@ -34,7 +45,7 @@ class ConversationService:
         return self.repository.world_slot(conversation_id, slot, save=False)
 
     def chat(self, conversation_id: UUID, text: str, use_llm: bool = False) -> EditState | None:
-        control = self.repository.reset_control(conversation_id, text)
+        control = self.repository.reset_control(conversation_id, text, self.initial_worlds.get('cellular'))
         if control is not None:
             return control
         attempt = None
@@ -55,8 +66,9 @@ class ConversationService:
                     if proposal is not None:
                         return self.repository.propose(conversation_id, proposal, revision,
                                                        self._with_reply(attempt.reply, self._proposal_feedback(proposal)))
+        execution_seed = randbits(64)
         def update(domain, world, salience, pending, next_id):
-            reply = self.engine.edit(domain, world, {'type': 'chat', 'text': text}, salience, pending, next_id)
+            reply = self.engine.edit(domain, world, {'type': 'chat', 'text': text, **({'randomSeed': execution_seed} if domain == 'cellular' else {})}, salience, pending, next_id)
             if attempt is not None and attempt.note:
                 reply.feedback += '\n\n' + attempt.note
             if attempt is not None:
@@ -86,7 +98,7 @@ class ConversationService:
         proposal = InterpretationProposal(id=uuid4(), originalText=text, candidates=valid,
                                           question=attempt.question, explanation=attempt.explanation,
                                           validationFailures=failures, clarifications=clarifications or [],
-                                          llm=attempt.usage, languageVersion=state.languageVersion)
+                                          llm=attempt.usage, languageVersion=state.languageVersion, executionSeed=randbits(64) if state.domain == 'cellular' else None)
         self.translator.log_feedback('proposal', conversationId=str(conversation_id), proposalId=str(proposal.id),
                                      candidates=[c.model_dump() for c in valid], question=proposal.question,
                                      validationFailures=[failure.model_dump() for failure in failures])
@@ -140,25 +152,33 @@ class ConversationService:
             proposal = InterpretationProposal(id=uuid4(), originalText=previous.originalText,
                                               clarifications=turns, llm=attempt.usage,
                                               explanation=attempt.note or attempt.explanation,
-                                              languageVersion=state.languageVersion)
+                                              languageVersion=state.languageVersion, executionSeed=randbits(64) if state.domain == 'cellular' else None)
         self.translator.log_feedback('answer', conversationId=str(conversation_id), proposalId=str(proposal_id),
                                      replacementId=str(proposal.id), question=previous.question, answer=text)
         return self.repository.propose(conversation_id, proposal, revision,
                                        self._with_reply(attempt.reply, self._proposal_feedback(proposal)),
                                        replacing_proposal=proposal_id, answer=text)
 
-    def _evaluate_interpretation(self, domain, world, salience, text, next_id):
-        return self.engine.edit(domain, world, {'type': 'chat', 'text': text}, salience, next_object_id=next_id)
+    def _evaluate_interpretation(self, domain, world, salience, text, next_id, random_seed=None):
+        action = {'type': 'chat', 'text': text}
+        if random_seed is not None:
+            action['randomSeed'] = random_seed
+        return self.engine.edit(domain, world, action, salience, next_object_id=next_id)
+
+    def _review_evaluator(self, conversation_id, proposal_id):
+        snapshot = self.repository.proposal_with_revision(conversation_id, proposal_id)
+        seed = snapshot[0].proposal.executionSeed if snapshot else None
+        return partial(self._evaluate_interpretation, random_seed=seed)
 
     def preview(self, conversation_id: UUID, proposal_id: UUID, rank: int) -> EditState | None:
-        state = self.repository.preview(conversation_id, proposal_id, rank, self._evaluate_interpretation)
+        state = self.repository.preview(conversation_id, proposal_id, rank, self._review_evaluator(conversation_id, proposal_id))
         if state is not None and self.translator is not None:
             self.translator.log_feedback('preview', conversationId=str(conversation_id), proposalId=str(proposal_id),
                                          rank=rank, feedback=state.preview.feedback)
         return state
 
     def accept(self, conversation_id: UUID, proposal_id: UUID, rank: int) -> EditState | None:
-        state = self.repository.accept(conversation_id, proposal_id, rank, self._evaluate_interpretation)
+        state = self.repository.accept(conversation_id, proposal_id, rank, self._review_evaluator(conversation_id, proposal_id))
         if state is not None and self.translator is not None:
             self.translator.log_feedback('accepted', conversationId=str(conversation_id), proposalId=str(proposal_id),
                                          rank=rank, feedback=state.feedback)
@@ -178,7 +198,7 @@ class ConversationService:
             label = f"Grouping {choice.groupingId}"
         else:
             x, y = choice.position.x, choice.position.y
-            label = f"{chr(65 + x)}{y + 1}" if 0 <= x < 8 and 0 <= y < 8 else f"({x}, {y})"
+            label = f"{chr(65 + x)}{y + 1}" if 0 <= x < 16 and 0 <= y < 16 else f"({x}, {y})"
         return self.repository.edit(conversation_id,
             lambda domain, world, salience, pending, next_id: self.engine.edit(domain, world, action, salience, pending, next_id),
             user_text=label, continuation=True)

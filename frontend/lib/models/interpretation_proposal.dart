@@ -1,5 +1,7 @@
 import 'conversation_state.dart' show PendingEntry;
 import 'world.dart';
+import 'grid_world.dart';
+import 'cellular_world.dart';
 
 class InterpretationCandidate {
   const InterpretationCandidate({
@@ -102,7 +104,9 @@ class InterpretationPreview {
       InterpretationPreview(
         proposalId: json['proposalId'] as String,
         rank: json['rank'] as int,
-        world: World.fromJson(json['world'] as Map<String, dynamic>),
+        world: (json['world'] as Map<String, dynamic>).containsKey('cells')
+            ? CellularWorld.fromJson(json['world'] as Map<String, dynamic>)
+            : World.fromJson(json['world'] as Map<String, dynamic>),
         feedback: json['feedback'] as String,
         changes: List.unmodifiable(
           (json['changes'] as List<dynamic>? ?? []).map(
@@ -116,7 +120,10 @@ class InterpretationPreview {
 
   final String proposalId;
   final int rank;
-  final World world;
+  final GridWorld world;
+  World? get objectWorld => world is World ? world as World : null;
+  CellularWorld? get cellularWorld =>
+      world is CellularWorld ? world as CellularWorld : null;
   final String feedback;
   final PendingEntry? pending;
   final List<WorldChange> changes;

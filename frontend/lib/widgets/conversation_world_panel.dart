@@ -2,6 +2,9 @@ import '../models/domain.dart';
 import '../models/network_shape.dart';
 import '../models/world_object.dart';
 import '../models/world.dart';
+import '../models/grid_world.dart';
+import '../models/cellular_world.dart';
+import 'cellular_world_display.dart';
 import 'network_selector.dart';
 import 'package:flutter/material.dart';
 
@@ -32,6 +35,11 @@ class ConversationWorldPanel extends StatelessWidget {
     this.previewLabel = 'Preview — not applied',
     this.onSaveSlot,
     this.onLoadSlot,
+    this.onStep,
+    this.selectedCellColor = CellColor.black,
+    this.onCellColorChanged,
+    this.onPaintCell,
+    this.onRulesetSubmitted,
   });
 
   final NetworkShape selectedNetworkShape;
@@ -50,10 +58,15 @@ class ConversationWorldPanel extends StatelessWidget {
   final void Function(int, int)? onPaint;
   final void Function(int, int)? onErase;
   final VoidCallback? onClear;
-  final World? previewWorld;
+  final GridWorld? previewWorld;
   final String previewLabel;
   final Future<bool> Function(int, bool)? onSaveSlot;
   final Future<bool> Function(int)? onLoadSlot;
+  final VoidCallback? onStep;
+  final CellColor selectedCellColor;
+  final ValueChanged<CellColor>? onCellColorChanged;
+  final void Function(int, int)? onPaintCell;
+  final Future<bool> Function(CellularRuleset, bool)? onRulesetSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -92,42 +105,56 @@ class ConversationWorldPanel extends StatelessWidget {
         !state.resetPending &&
         state.pending == null &&
         state.proposal == null;
+    final world = previewWorld ?? state.world;
     return Stack(
       fit: StackFit.expand,
       children: [
-        WorldDisplay(
-          world: previewWorld ?? state.world,
-          domain: state.domain,
-          selector: state.domain == WorldDomain.network
-              ? NetworkSelector(
-                  selectedShape: selectedNetworkShape,
-                  selectedColor: selectedNetworkColor,
-                  onShapeChanged: enabled ? onNetworkShapeChanged : null,
-                  onColorChanged: enabled ? onNetworkColorChanged : null,
-                )
-              : null,
-          selectedProperty: selectedProperty,
-          selectedUnplacedObjectId: selectedUnplacedObjectId,
-          onUnplacedObjectSelected: enabled ? onUnplacedObjectSelected : null,
-          onPropertyChanged: enabled ? onPropertyChanged : null,
-          onPaint: enabled ? onPaint : null,
-          onErase: enabled ? onErase : null,
-          onClear: enabled ? onClear : null,
-          worldSlots: state.worldSlots,
-          onSaveSlot: enabled ? onSaveSlot : null,
-          onLoadSlot: enabled ? onLoadSlot : null,
-          interactionHint: busy
-              ? 'Please wait…'
-              : error != null
-              ? 'Refresh the world before editing.'
-              : state.resetPending
-              ? 'Reply yes or no in Chat to confirm or cancel the reset.'
-              : state.pending != null
-              ? 'Choose an object in Chat, or undo the entry.'
-              : state.proposal != null
-              ? 'Review the interpretation in Chat.'
-              : null,
-        ),
+        if (world is CellularWorld)
+          CellularWorldDisplay(
+            world: world,
+            selectedColor: selectedCellColor,
+            onColorChanged: enabled ? onCellColorChanged : null,
+            onPaint: enabled ? onPaintCell : null,
+            onRulesetSubmitted: enabled ? onRulesetSubmitted : null,
+            onStep: enabled ? onStep : null,
+            slots: state.worldSlots,
+            onSaveSlot: enabled ? onSaveSlot : null,
+            onLoadSlot: enabled ? onLoadSlot : null,
+          )
+        else
+          WorldDisplay(
+            world: world as World,
+            domain: state.domain,
+            selector: state.domain == WorldDomain.network
+                ? NetworkSelector(
+                    selectedShape: selectedNetworkShape,
+                    selectedColor: selectedNetworkColor,
+                    onShapeChanged: enabled ? onNetworkShapeChanged : null,
+                    onColorChanged: enabled ? onNetworkColorChanged : null,
+                  )
+                : null,
+            selectedProperty: selectedProperty,
+            selectedUnplacedObjectId: selectedUnplacedObjectId,
+            onUnplacedObjectSelected: enabled ? onUnplacedObjectSelected : null,
+            onPropertyChanged: enabled ? onPropertyChanged : null,
+            onPaint: enabled ? onPaint : null,
+            onErase: enabled ? onErase : null,
+            onClear: enabled ? onClear : null,
+            worldSlots: state.worldSlots,
+            onSaveSlot: enabled ? onSaveSlot : null,
+            onLoadSlot: enabled ? onLoadSlot : null,
+            interactionHint: busy
+                ? 'Please wait…'
+                : error != null
+                ? 'Refresh the world before editing.'
+                : state.resetPending
+                ? 'Reply yes or no in Chat to confirm or cancel the reset.'
+                : state.pending != null
+                ? 'Choose an object in Chat, or undo the entry.'
+                : state.proposal != null
+                ? 'Review the interpretation in Chat.'
+                : null,
+          ),
         if (previewWorld != null)
           Positioned(top: 8, right: 8, child: Chip(label: Text(previewLabel))),
         if (busy)

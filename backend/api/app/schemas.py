@@ -8,11 +8,16 @@ class Schema(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
-DomainId = Literal["objects", "network"]
+DomainId = Literal["objects", "network", "cellular"]
 
 
 class CreateConversation(Schema):
     domain: DomainId
+
+
+class StepGeneration(Schema):
+    """Exactly one step; no client-supplied board, rules or step count."""
+    pass
 
 
 class Position(Schema):
@@ -30,6 +35,78 @@ class World(Schema):
     width: StrictInt = Field(gt=0)
     height: StrictInt = Field(gt=0)
     objects: list[WorldObject]
+
+
+CellColor = Literal['white', 'black', 'red', 'green', 'blue', 'yellow']
+CELLULAR_BOARD_SIZE = 16
+CELLULAR_CELL_COUNT = CELLULAR_BOARD_SIZE ** 2
+
+
+class CellEdit(Schema):
+    position: Position
+    color: CellColor
+
+
+class CellularRule(Schema):
+    targetColor: CellColor
+    neighborColor: CellColor
+    counts: list[StrictInt] = Field(max_length=9)
+    enabled: StrictBool = True
+
+
+class CellularRuleset(Schema):
+    palette: list[CellColor] = Field(min_length=2, max_length=6)
+    neighborhood: Literal[4, 8]
+    rules: dict[CellColor, CellularRule]
+
+    @model_validator(mode='after')
+    def valid_configuration(self):
+        active = set(self.palette)
+        if len(active) != len(self.palette):
+            raise ValueError('Duplicate palette color')
+        for source, rule in self.rules.items():
+            if not {source, rule.targetColor, rule.neighborColor} <= active:
+                raise ValueError('Rules must use active colors')
+            if source == rule.targetColor:
+                raise ValueError('A rule target must differ from its source')
+            if len(set(rule.counts)) != len(rule.counts) or any(n < 0 or n > self.neighborhood for n in rule.counts):
+                raise ValueError('Counts must be distinct integers within the neighborhood')
+        return self
+
+
+class RulesetEdit(Schema):
+    ruleset: CellularRuleset
+    refill: StrictBool = False
+
+
+class CellularWorld(Schema):
+    width: StrictInt = Field(default=CELLULAR_BOARD_SIZE, ge=CELLULAR_BOARD_SIZE, le=CELLULAR_BOARD_SIZE)
+    height: StrictInt = Field(default=CELLULAR_BOARD_SIZE, ge=CELLULAR_BOARD_SIZE, le=CELLULAR_BOARD_SIZE)
+    topology: Literal['torus'] = 'torus'
+    # A1, B1, ..., P1, A2, ..., P16: y increases from the bottom of the board.
+    cells: list[CellColor] = Field(min_length=CELLULAR_CELL_COUNT, max_length=CELLULAR_CELL_COUNT)
+    ruleset: CellularRuleset
+    generation: StrictInt = Field(default=0, ge=0)
+    rulesetRevision: StrictInt = Field(default=1, ge=1)
+
+    @model_validator(mode='after')
+    def active_cells(self):
+        if not set(self.cells) <= set(self.ruleset.palette):
+            raise ValueError('A cell uses an inactive color')
+        return self
+
+
+WorldState = World | CellularWorld
+
+
+def world_from_json(domain: DomainId, source: str) -> WorldState:
+    model = CellularWorld if domain == 'cellular' else World
+    return model.model_validate_json(source)
+
+
+def validate_world_domain(domain: DomainId, world: WorldState):
+    if (domain == 'cellular') != isinstance(world, CellularWorld):
+        raise ValueError('World representation does not match its domain')
 
 
 class LlmUsage(Schema):
@@ -104,7 +181,7 @@ class PendingEntry(Schema):
     squareChoices: list[Position] = Field(default_factory=list)
     groupingChoices: list[GroupingCandidate] = Field(default_factory=list)
     payload: dict | None = None
-    stagedWorld: World | None = None
+    stagedWorld: WorldState | None = None
 
 
 class WorldChange(Schema):
@@ -145,6 +222,7 @@ class InterpretationProposal(Schema):
     clarifications: list[InterpretationTurn] = Field(default_factory=list)
     llm: LlmUsage
     languageVersion: str = 'unknown'
+    executionSeed: StrictInt | None = Field(default=None, ge=0, lt=2**64)
 
 
 class InterpretationChoice(Schema):
@@ -154,7 +232,7 @@ class InterpretationChoice(Schema):
 class InterpretationPreview(Schema):
     proposalId: UUID
     rank: StrictInt
-    world: World
+    world: WorldState
     feedback: str
     pending: PendingEntry | None = None
     changes: list[WorldChange] = Field(default_factory=list)
@@ -172,7 +250,7 @@ class SaveWorldSlot(Schema):
 class ConversationState(Schema):
     conversationId: UUID
     domain: DomainId
-    world: World
+    world: WorldState
     canUndo: bool
     messages: list[ChatMessage] = Field(default_factory=list)
     pending: PendingEntry | None = None
@@ -184,11 +262,17 @@ class ConversationState(Schema):
     resetPending: bool = False
     resetFrom: UUID | None = None
 
+    @model_validator(mode='after')
+    def world_matches_domain(self):
+        validate_world_domain(self.domain, self.world)
+        return self
+
 
 class EditState(ConversationState):
     feedback: str
     preview: InterpretationPreview | None = None
     changes: list[WorldChange] = Field(default_factory=list)
+    changedCells: StrictInt | None = Field(default=None, ge=0, le=CELLULAR_CELL_COUNT)
 
 
 class AttributeProperty(Schema):

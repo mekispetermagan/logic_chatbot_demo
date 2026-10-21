@@ -107,7 +107,7 @@ void main() {
       addTearDown(controller.dispose);
       expect(await controller.sendChat('yes'), isFalse);
       expect(controller.conversation!.id, 'new');
-      expect(controller.conversation!.world.objects, isEmpty);
+      expect(controller.conversation!.objectWorld!.objects, isEmpty);
       expect(controller.error, contains('Refresh'));
       store.failWrite = false;
       await controller.load();
@@ -220,7 +220,7 @@ void main() {
         await tester.pumpAndSettle();
         expect(controller.conversation!.id, 'new');
         expect(store.id, 'new');
-        expect(controller.conversation!.world.objects, isEmpty);
+        expect(controller.conversation!.objectWorld!.objects, isEmpty);
         expect(controller.conversation!.worldSlots.single.isSaved, isTrue);
         expect(controller.canUndo, isFalse);
         expect(controller.conversation!.pending, isNull);

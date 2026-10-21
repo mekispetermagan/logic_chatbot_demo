@@ -124,7 +124,10 @@ void main() {
       pending.complete(reply(returned));
       await editing;
       expect(requests.length, 1);
-      expect(subject.conversation!.world.objects.first.color, ObjectColor.blue);
+      expect(
+        subject.conversation!.objectWorld!.objects.first.color,
+        ObjectColor.blue,
+      );
       expect(subject.conversation!.canUndo, isTrue);
       expect(subject.canEdit, isTrue);
     },
@@ -158,7 +161,7 @@ void main() {
       await subject.paint(0, 0);
       expect(subject.selectedUnplacedObjectId, isNull);
       expect(
-        subject.conversation!.world.objects[5].position,
+        subject.conversation!.objectWorld!.objects[5].position,
         const BoardPosition(0, 0),
       );
       subject.selectUnplacedObject(6);
@@ -211,7 +214,7 @@ void main() {
       expect(methods, ['POST']);
       await subject.load();
       expect(methods, ['POST', 'GET']);
-      expect(subject.conversation!.world.objects, isEmpty);
+      expect(subject.conversation!.objectWorld!.objects, isEmpty);
       expect(subject.selectedUnplacedObjectId, isNull);
       expect(subject.canEdit, isTrue);
     },
