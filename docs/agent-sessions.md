@@ -6,6 +6,83 @@ proposals. Flutter's API and Preview / Accept / Reject / Submit answer flow are
 unchanged. Set `LOGIC_CHATBOT_LLM_BACKEND=responses` to explicitly use the earlier
 stateless transport; there is no automatic provider/model fallback.
 
+## Setup for a fresh clone
+
+No agent IDs or API keys are shipped in the repository. SQLite and `.env` are
+local, Git-ignored files. A fresh clone uses agents created under the OpenAI
+project accessible to its own configured `OPENAI_API_KEY`, not the author's agents.
+The key must have access to the configured model and Agents read/write operations.
+
+1. Follow the [root quickstart](../README.md#ubuntulinux-quickstart), save your own
+   key in `backend/api/.env`, export it in the backend terminal, and start Uvicorn.
+2. Select Objects, enable the LLM switch and submit ordinary language, for example
+   `Please make the object at A1 blue`. The first interpretation automatically
+   creates the Objects agent from the common policy, Objects instructions,
+   Objects v2 reference and validated examples.
+3. Select Network and submit `Please make the object at A1 blue` with the LLM
+   switch enabled. This independently creates the Network agent using its own
+   instructions, Network v2 reference and examples.
+4. Select Cellular and submit `Please paint A1 black` with the LLM switch enabled.
+   This creates the Cellular agent with its instructions, Cellular v2 reference
+   and examples. A separate session is created for each conversation.
+5. Review the returned proposal. Preview and Accept use Haskell; neither manual
+   dashboard setup nor copying agent IDs into configuration is necessary.
+
+Direct controlled English bypasses the interpreter, so it does not provision an
+agent. Only domains actually used for LLM interpretation need remote agents.
+Check the backend's `agent configured` log for the new ID and domain, and the
+usual proposal/usage feedback for a completed interpretation. Setup/transport
+errors remain explicit. Without a key, all controlled-English features work.
+These examples request normal model turns under the shared admission budget;
+they are not free connectivity probes. The optional Responses backend does not
+create or use saved agents.
+
+## Recreate agents or change account/project
+
+Saved IDs belong to the local database, not to the source checkout. If you reuse
+a database with a key for a different project/account, or its remote agents or
+sessions have been deleted or become inaccessible, explicitly recreate the local
+associations. Replacing a key with another key for the same project does not
+require recreation if it retains access to the existing resources.
+
+Stop the backend first and wait for any active request to finish. From
+`backend/api/`, with `.venv` active and the same database configuration used by
+Uvicorn, run one of:
+
+```bash
+python -m app.agents recreate --domain objects
+python -m app.agents recreate --domain network
+python -m app.agents recreate --domain cellular
+```
+
+For a project/account change, use all domains:
+
+```bash
+python -m app.agents recreate --domain all
+```
+
+This local-only command detaches the selected saved agent IDs and all local
+session associations for conversations in those domains, in one transaction.
+It rejects active affected interpreter leases and leaves other domains alone.
+Replacements are created lazily on the next LLM request for each selected domain,
+with a new session for each conversation when next used. Repeating the command
+before that request is harmless. The command honors `LOGIC_CHATBOT_DB_PATH`,
+requires an existing current-schema database, and does not load `.env` itself.
+
+Worlds, salience, chat, pending review/clarification, Undo, saved slots, queued
+outcomes, and all usage/reservations remain unchanged. A new session receives
+the authoritative world, bounded queued outcomes and explicit clarification
+context; it does not recover the old remote session's full memory. The command
+does not invoke the provider, need a key, or reset the budget. It does not delete
+old remote agents or sessions, cancel uncertain remote turns, or undo their costs.
+
+After a key/project change, edit `.env`, reload/export it in the backend terminal,
+then restart Uvicorn. Reload the same custom `LOGIC_CHATBOT_DB_PATH` if set.
+Use an ordinary request with the LLM switch enabled to verify each domain you
+need. Do not delete the database to repair agent access: that also removes local
+worlds and accounting. Attaching externally managed agents by ID is unsupported;
+the application owns configuration assembled from the versioned local sources.
+
 ## Instructions and saved agents
 
 Each agent receives its standalone v2 language reference: [Objects v2](object-language-v2.md)

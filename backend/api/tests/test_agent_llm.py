@@ -494,6 +494,21 @@ class AgentTests(unittest.TestCase):
         self.assertIn('Use memory and current state correctly', objects['instructions'])
         self.assertNotIn('Assembly notes for the backend', objects['instructions'])
 
+    def test_recreated_agent_starts_new_session_on_next_interpretation(self):
+        first = self.offer()
+        self.review(first, 'reject')
+        store = AgentStore(Database(self.settings.database_path))
+        previous_agent = store.agent('network')['agent_id']
+        previous_session = store.session(self.state['conversationId'])['session_id']
+        calls_before = len(self.calls)
+        self.assertEqual(store.recreate(('network',)), (1, 1))
+        self.assertEqual(len(self.calls), calls_before)
+        second = self.offer('Please make a colorful edit')
+        self.assertIsNotNone(second['proposal'])
+        self.assertNotEqual(store.agent('network')['agent_id'], previous_agent)
+        self.assertNotEqual(store.session(self.state['conversationId'])['session_id'], previous_session)
+        self.assertEqual(second['world'], first['world'])
+
     def test_instruction_changes_update_same_agent_and_rotate_only_llm_session(self):
         first = self.offer()
         self.review(first, 'reject')

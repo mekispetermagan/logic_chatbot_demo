@@ -31,6 +31,35 @@ class AgentStore:
             row = connection.execute('SELECT * FROM llm_agents WHERE domain = ?', (domain,)).fetchone()
             return dict(row) if row else None
 
+    def recreate(self, domains):
+        """Detach selected agents/sessions; next interpretation creates replacements."""
+        domains = tuple(domains)
+        if not domains or any(domain not in ('objects', 'network', 'cellular') for domain in domains):
+            raise ValueError('Select objects, network or cellular')
+        placeholders = ','.join('?' for _ in domains)
+        with self.database.connection() as connection:
+            connection.execute('BEGIN IMMEDIATE')
+            if connection.execute('PRAGMA user_version').fetchone()[0] != 2:
+                raise ValueError('Unsupported database schema; use the current application database')
+            busy = connection.execute(f'''
+                SELECT 1 FROM llm_locks WHERE expires_at > ? AND (
+                    name IN ({placeholders}) OR name IN (
+                        SELECT 'conversation:' || id FROM conversations
+                        WHERE domain IN ({placeholders})
+                    )
+                ) LIMIT 1
+            ''', (time.time(), *('agent:' + domain for domain in domains), *domains)).fetchone()
+            if busy:
+                raise PendingConflict('An affected interpreter is busy; stop the backend and retry after its request finishes')
+            sessions = connection.execute(f'''
+                DELETE FROM llm_sessions WHERE conversation_id IN (
+                    SELECT id FROM conversations WHERE domain IN ({placeholders})
+                )
+            ''', domains).rowcount
+            agents = connection.execute(
+                f'DELETE FROM llm_agents WHERE domain IN ({placeholders})', domains).rowcount
+        return agents, sessions
+
     def save_agent(self, domain, agent_id, config_hash):
         with self.database.connection() as connection:
             connection.execute('INSERT INTO llm_agents VALUES (?, ?, ?) ON CONFLICT(domain) DO UPDATE SET '

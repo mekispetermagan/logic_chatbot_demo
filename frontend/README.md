@@ -6,6 +6,8 @@ tabs. The vector board uses a `Stack`, with chessboard coordinates and partial
 objects. Missing shape uses `?`, missing color a neutral grey silhouette, and missing
 size a medium footprint with a superscript `?`. Tooltips describe all attributes.
 
+The Linux app launches fullscreen at the display's current resolution.
+
 ## Conversations
 
 The app creates an anonymous conversation through FastAPI and saves its ID in
@@ -61,19 +63,39 @@ without repeating the edit, since a failed response may follow a committed edit.
 
 ## Development
 
-Start FastAPI using `backend/api/README.md`, then run from `frontend/`:
+See the [root quickstart](../README.md#ubuntulinux-quickstart) for first-time
+Ubuntu setup. The current lockfile requires Flutter 3.47.0 or newer with Dart
+3.13.0 or newer. Run `flutter doctor` and resolve Linux toolchain issues before
+building; the prerequisite packages are listed in that quickstart.
+
+Start FastAPI using the [API README](../backend/api/README.md) and leave it
+running in its terminal. If using LLM interpretation, load/export the API key
+there before starting Uvicorn. In a second terminal, run from `frontend/`:
 
 ```sh
 flutter pub get
 flutter run -d linux
+```
+
+For a different target, use one of these instead of the Linux run command:
+
+```sh
 flutter run -d chrome --web-port=8080
 flutter run -d <android-device-id>
+```
+
+Development checks, also run from `frontend/`:
+
+```sh
 flutter analyze
 flutter test
 dart format lib test
 ```
 
 Restart the app fully after installing the new native preferences plugin.
+For a quick check, select Objects and send `How many objects match true?`.
+Enable the LLM switch for ordinary language; it defaults to off. If it reports
+that LLM is not configured, reload the key and restart the backend, not just Flutter.
 Linux and web default to `http://127.0.0.1:8000`; Android defaults to the emulator
 host address `http://10.0.2.2:8000`. For a physical phone, start FastAPI with
 `uvicorn app.main:app --host 0.0.0.0 --port 8000`, connect to the same network,

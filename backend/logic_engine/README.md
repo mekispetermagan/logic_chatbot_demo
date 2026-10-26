@@ -7,11 +7,35 @@ three layers: atomic operations, symbolic references, and conceptual macros.
 Commands require a period; questions require `?`. Coordinates denote locations;
 `the object at A4` explicitly denotes an existing occupant. Creation is explicit.
 
+## Prerequisites
+
+Install GHC, Cabal and native build dependencies before building. The build was
+verified with GHC 9.10.3 and Cabal 3.18.2.0. On Ubuntu, `build-essential` and
+`libgmp-dev` are required; a missing GMP development library produces the linker
+error `cannot find -lgmp`. See the [root quickstart](../../README.md#ubuntulinux-quickstart)
+for the combined Flutter/Haskell/Python prerequisite list.
+
+For GHCup installations, ensure `~/.ghcup/bin` is on PATH and select installed
+versions if the unversioned `ghc` and `cabal` commands are unavailable:
+
+```bash
+export PATH="$HOME/.ghcup/bin:$PATH"
+ghcup set ghc 9.10.3
+ghcup set cabal 3.18.2.0
+ghc --version
+cabal --version
+```
+
+If those versions are absent, install them with `ghcup install ghc 9.10.3` and
+`ghcup install cabal 3.18.2.0` first. Persist the PATH export in your shell startup
+file if needed. GHCup itself must already be installed.
+
 ## Build and test
 
 Run from this directory:
 
 ```sh
+cabal update
 cabal build exe:logic-engine-editor
 mkdir -p bin
 cp "$(cabal list-bin exe:logic-engine-editor)" bin/logic-engine-editor

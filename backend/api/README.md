@@ -1,7 +1,14 @@
 # Demo conversation API
 
 A small FastAPI application using Python's built-in SQLite library. Requires
-Python 3.10 or newer. First build the editor from `backend/logic_engine/`:
+Python 3.10 or newer. For the complete Ubuntu setup and two-terminal startup,
+see the [root quickstart](../../README.md#ubuntulinux-quickstart).
+
+On Ubuntu, install `python3-venv` before creating the virtual environment. If
+`ensurepip` is unavailable, install that package (or the matching versioned venv
+package for a separately installed Python) and retry. First build the editor
+from `backend/logic_engine/`; its [README](../logic_engine/README.md#prerequisites)
+covers GHC/Cabal and the native GMP dependency:
 
 ```sh
 cabal build exe:logic-engine-editor
@@ -15,11 +22,16 @@ Then run from `backend/api/`:
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-uvicorn app.main:app --reload
 ```
 
+For optional LLM interpretation, configure/export the key using the
+[instructions below](#optional-llm-translation) before starting the backend.
+With `.venv` active, run `uvicorn app.main:app --reload` and leave it running in
+this terminal. Start Flutter from a second terminal. On subsequent starts,
+reactivate `.venv` and reload any saved environment variables before Uvicorn.
+
 The real entry point is `app/main.py`; there is no root forwarding script or
-packaging configuration. Interactive API documentation is at `/docs`.
+packaging configuration. Check startup at `http://127.0.0.1:8000/docs`.
 
 ## Endpoints
 
@@ -301,6 +313,55 @@ key into chat or Flutter configuration. `.env` files are ignored by Git; this
 app reads environment variables and does not automatically load `.env` files.
 No additional Python dependency is needed. Without a key, the rest of the demo
 works and a requested correction reports that LLM is not configured.
+
+To save the key across terminal sessions, create `backend/api/.env` in an editor:
+
+```dotenv
+OPENAI_API_KEY=your-secret-key
+```
+
+From `backend/api/`, with `.venv` active, load it before starting Uvicorn:
+
+```bash
+set -a
+source .env
+set +a
+uvicorn app.main:app --reload
+```
+
+`set -a` automatically exports assignments from `.env` so Uvicorn inherits them;
+`set +a` turns that behavior off afterward. These commands use Bash and source
+your local file as shell input. Repeat the loading step in each new backend
+terminal. After changing `.env`, stop Uvicorn with Ctrl+C, reload the file, and
+restart Uvicorn; the running process does not pick up changes automatically.
+Enable the frontend's LLM switch after startup; it defaults to off.
+
+### Agent setup and replacement
+
+A fresh clone does not use the author's agents. Its local SQLite database starts
+without agent IDs; the first LLM interpretation in each of Objects, Network and
+Cellular creates an app-managed agent under the project accessible to your key.
+The application uploads that domain's versioned instructions, grammar and
+examples automatically. No dashboard setup or manual agent-ID configuration is
+required. Direct controlled-English input does not create agents.
+
+If switching accounts/projects while retaining your database, or replacing
+deleted/inaccessible agents, stop Uvicorn and wait for active requests to finish.
+From `backend/api/`, with `.venv` active and the same database settings, run:
+
+```bash
+python -m app.agents recreate --domain all
+```
+
+Use `--domain objects`, `--domain network` or `--domain cellular` for one domain.
+The command clears only selected local agent/session associations; replacements
+are created on the next LLM request. It makes no provider calls, requires no key,
+and preserves worlds, chat, pending proposals, Undo, slots, outcomes and accounting.
+It honors `LOGIC_CHATBOT_DB_PATH` and does not automatically load `.env`. Existing
+remote agents/sessions are not deleted. After changing keys, reload/export `.env`
+and restart Uvicorn. See [per-domain setup and recovery](../../docs/agent-sessions.md#setup-for-a-fresh-clone)
+for verification examples and session-memory limits. This operation applies to
+the default Agents transport; Responses does not use saved agents.
 
 Translation failures report the stage (token counting, generation, usage or
 translation validation), HTTP status and recognized provider error code/parameter.
