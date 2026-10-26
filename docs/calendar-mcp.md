@@ -144,7 +144,8 @@ and the fixed dedicated calendar; there is no arbitrary MCP endpoint.
 Do not enable them behind a public reverse proxy: loopback filtering is a local
 demo boundary, not application authentication. Public deployment requires a
 separate authenticated access design. Flutter uses these endpoints for weekly display and create/edit/delete dialogs.
-The full controlled live write cycle remains pending.
+The user has confirmed that live creation, editing and deletion work locally;
+see the validation notes below.
 
 The subprocess enables `list-calendars`, `list-events`, `get-freebusy`, and `get-event`.
 With writes enabled for the dedicated calendar it also enables `create-event`,
@@ -183,8 +184,9 @@ end, and both endpoints must have the same kind.
 
 Create and PATCH accept optional `colorId` strings `"1"`–`"11"`. Omission
 preserves the current color on PATCH; resetting an explicit color to the calendar
-default is not supported. Flutter interprets ID 11 as importance 2 (red), ID 5
-as importance 1 (yellow), and all other/absent IDs as importance 0 (green).
+default is not supported. Flutter displays ID 11 as Critical (importance 2, red),
+ID 5 as Important (importance 1, yellow), and all other/absent IDs as Normal
+(importance 0, green).
 Its importance selector writes IDs 11, 5 or 10; unrelated edits preserve color.
 
 PATCH accepts any of `summary`, `description`, `location`, `colorId`, or the pair `start` and
@@ -247,4 +249,23 @@ The initial live check found primary `logic.engine.demo@gmail.com` and
 The first explicit interval returned one existing event and one busy interval.
 No calendar events were changed during the initial read-only setup/checks. A later,
 explicitly authorized one-off creation was verified through API read-back and the
-user's Google Calendar browser view. Live update/delete verification remains pending.
+user's Google Calendar browser view. The user subsequently tested the GUI and
+confirmed that live editing and deletion also work (2026-10-27). These are manual
+checks; automated write tests continue to use mocked MCP responses.
+
+
+## Controlled testing assumptions
+
+Local tests use the dedicated `logic.engine.demo@gmail.com` account and calendar.
+This is a single-user project account, with no other users or contacts expected
+to create events or send invitations. During tests, only the demo app writes to
+the calendar; do not edit it in Google's interface or run another writer.
+
+Automatic invitation addition is disabled by choosing **Settings → Event settings
+→ Add invitations to my calendar → When I respond to the invitation in email**.
+The unattended account does not respond to invitations. Birthdays, holidays and
+tasks are also switched off in the Calendar interface. These are test-environment
+settings, not application-enforced restrictions or API filters.
+
+These assumptions make unexpected external changes unlikely; they do not
+provide a cloud lock. External-edit conflict detection remains unimplemented.

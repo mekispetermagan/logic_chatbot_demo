@@ -3,8 +3,9 @@
 **Progress:** Stages A and B are implemented for local read-only use; see
 [Calendar MCP setup](calendar-mcp.md) for installation, authorization, endpoints
 and validation. Stage C's scoped write endpoints are implemented with mocked
-tests; its explicitly authorized live create/update/delete checkpoint remains
-pending. Flutter's weekly display and create/edit/delete dialogs are implemented;
+tests. Live creation was verified by API read-back and browser inspection; the
+user also confirmed that GUI editing and deletion work (2026-10-27).
+Flutter's weekly display and create/edit/delete dialogs are implemented;
 subsequent language/chat control remains pending. This proposal preserves the staged plan.
 
 ## Objective
@@ -40,7 +41,12 @@ The user has prepared:
 
 **Do not ask the user to recreate these resources.** Ask only for the local path to the downloaded JSON when it is needed. Never ask the user to paste the credential contents into chat or commit the file.
 
-The demo account is dedicated to testing. The calendar can be populated with fictional appointments, but do not alter events without explicit authorization for the test operation.
+The demo account is dedicated to single-user testing. No other writers are used
+during tests; automatic invitation addition is disabled, and birthdays, holidays
+and tasks are switched off in the Calendar interface. See the
+[controlled testing assumptions](calendar-mcp.md#controlled-testing-assumptions).
+The calendar can be populated with fictional appointments, but do not alter events
+without explicit authorization for the test operation.
 
 ## MCP implementation
 

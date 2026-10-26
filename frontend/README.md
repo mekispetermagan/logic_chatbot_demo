@@ -21,8 +21,9 @@ The grid scrolls vertically through 00:00–24:00, with fixed day headers, hourl
 lines, and colored event rectangles spanning their start/end times. Overlapping
 events share a day column side by side. Hover for title, date/time, description
 and location; touch platforms can use Flutter's normal long-press tooltip.
-Event colors show importance: Google color ID 11 is level 2 (red), ID 5 is
-level 1 (yellow), and every other or absent ID is level 0 (green).
+Event colors show importance: Google color ID 11 is Critical (level 2, red),
+ID 5 is Important (level 1, yellow), and every other or absent ID is Normal
+(level 0, green).
 A red current-time line spans today's column in Budapest time, updates at each
 minute boundary and on app resume, and scrolls with the grid. It is hidden when
 the selected week does not include today. Clock updates do not fetch events.
@@ -53,8 +54,9 @@ before deleting. Click an empty grid slot (rounded down to 15 minutes), or use
 New event, to create a same-day timed event. Times use Budapest; ambiguous or
 nonexistent DST times must be changed before saving. Recurring events are read-only.
 
-The Importance selector offers levels 0, 1 and 2. Setting them writes Google
-color IDs 10, 5 and 11 respectively. New events default to level 0 and write ID 10.
+The Importance selector offers Normal (0), Important (1) and Critical (2).
+Setting them writes Google color IDs 10, 5 and 11 respectively. New events
+default to Normal and write ID 10.
 Viewing events or editing unrelated fields preserves their original color ID;
 explicitly selecting level 0 writes ID 10 even if the old ID already mapped to 0.
 Description and location can be cleared; omitted fields remain unchanged.
