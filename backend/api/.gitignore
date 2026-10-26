@@ -6,3 +6,8 @@ __pycache__/
 .env
 .env.*
 !.env.example
+oauth-client*.json
+client_secret*.json
+gcp-oauth*.json
+tokens*.json
+.gcp-saved-tokens.json

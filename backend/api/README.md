@@ -33,6 +33,28 @@ reactivate `.venv` and reload any saved environment variables before Uvicorn.
 The real entry point is `app/main.py`; there is no root forwarding script or
 packaging configuration. Check startup at `http://127.0.0.1:8000/docs`.
 
+## Optional local Google Calendar MCP
+
+The Calendar integration is opt-in and independent of the LLM/Haskell
+dialogue domains. See [local setup and authorization](../../docs/calendar-mcp.md)
+for the pinned MCP server, private credentials/token paths and `.env` settings.
+With it enabled, loopback clients can use `GET /calendar/calendars`,
+`GET /calendar/events` and `GET /calendar/freebusy`. Events and free/busy require
+explicit timezone-aware `timeMin`/`timeMax` bounds; `timeZone` defaults to
+Europe/Budapest. The adapter manages a stdio subprocess for each read, keeps
+Google event data out of SQLite, and offers no arbitrary MCP calls.
+`GET /calendar/events/{eventId}` retrieves one event. Optional local editing uses
+`POST /calendar/events`, `PATCH /calendar/events/{eventId}` and
+`DELETE /calendar/events/{eventId}`. Writes additionally require
+`LOGIC_CHATBOT_CALENDAR_WRITES_ENABLED=true` and the fixed dedicated calendar
+`logic.engine.demo@gmail.com`; they are disabled by default. The initial editor
+supports one-off timed/all-day events, validates times, and reads back changes.
+See the [event editing contract](../../docs/calendar-mcp.md#one-off-event-editing)
+for payloads, recurrence restrictions and recovery from an unconfirmed write.
+Calendar display/editor and chat control are subsequent work. Keep this
+integration disabled on public deployments until application access control is
+specified; the loopback guard is for the local demo only.
+
 ## Endpoints
 
 - `POST /conversations` with `{"domain":"objects"}` or `{"domain":"network"}`: creates a random UUID conversation and its

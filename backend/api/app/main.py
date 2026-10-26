@@ -15,6 +15,8 @@ from .llm import LlmTranslator
 from .llm_budget import LlmBudgetLedger
 from .llm_transcript import LlmTranscript
 from .agent_llm import AgentTranslator
+from .calendar_mcp import CalendarError, CalendarMcp
+from .calendar_routes import router as calendar_router
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -35,9 +37,17 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                           LlmTranscript(settings.llm_log_path, settings.openai_api_key)
                           if settings.llm_log_path is not None else None)
         )
+        app.state.calendar = CalendarMcp(settings)
         yield
 
     app = FastAPI(title="Logic Chatbot Demo API", lifespan=lifespan)
+
+    @app.exception_handler(CalendarError)
+    async def calendar_error(request, exception):
+        content = {'detail': exception.detail}
+        if exception.outcome_unknown:
+            content.update(eventId=exception.event_id, outcomeUnknown=True)
+        return JSONResponse(status_code=exception.status_code, content=content)
 
     @app.exception_handler(EngineUnavailable)
     async def engine_unavailable(request, exception):
@@ -60,8 +70,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return JSONResponse(status_code=404, content={"detail": str(exception)})
 
     app.add_middleware(CORSMiddleware, allow_origins=list(settings.cors_origins),
-                       allow_methods=["GET", "POST"], allow_headers=["Accept", "Content-Type"])
+                       allow_methods=["GET", "POST", "PATCH", "DELETE"], allow_headers=["Accept", "Content-Type"])
     app.include_router(router)
+    app.include_router(calendar_router)
     return app
 
 

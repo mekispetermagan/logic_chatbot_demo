@@ -18,6 +18,14 @@ class Settings:
     openai_api_key: str | None = field(default=None, repr=False)
     llm_log_path: Path | None = None
     llm_backend: str = 'agents'
+    calendar_enabled: bool = False
+    calendar_writes_enabled: bool = False
+    calendar_node: str = 'node'
+    calendar_mcp_path: Path | None = None
+    google_oauth_credentials: Path | None = None
+    calendar_token_path: Path | None = None
+    calendar_account: str = 'demo'
+    calendar_id: str = 'logic.engine.demo@gmail.com'
 
     @classmethod
     def from_environment(cls) -> "Settings":
@@ -33,4 +41,12 @@ class Settings:
             openai_api_key=os.environ.get("OPENAI_API_KEY") or None,
             llm_log_path=Path(os.environ.get('LOGIC_CHATBOT_LLM_LOG_PATH', str(LLM_LOG_PATH))),
             llm_backend=os.environ.get('LOGIC_CHATBOT_LLM_BACKEND', 'agents'),
+            calendar_enabled=os.environ.get('LOGIC_CHATBOT_CALENDAR_ENABLED', '').lower() in ('1', 'true'),
+            calendar_writes_enabled=os.environ.get('LOGIC_CHATBOT_CALENDAR_WRITES_ENABLED', '').lower() in ('1', 'true'),
+            calendar_node=os.environ.get('LOGIC_CHATBOT_CALENDAR_NODE', 'node'),
+            calendar_mcp_path=Path(value).expanduser() if (value := os.environ.get('LOGIC_CHATBOT_CALENDAR_MCP_PATH')) else None,
+            google_oauth_credentials=Path(value).expanduser() if (value := os.environ.get('GOOGLE_OAUTH_CREDENTIALS')) else None,
+            calendar_token_path=Path(value).expanduser() if (value := os.environ.get('GOOGLE_CALENDAR_MCP_TOKEN_PATH')) else None,
+            calendar_account=os.environ.get('LOGIC_CHATBOT_CALENDAR_ACCOUNT', 'demo'),
+            calendar_id=os.environ.get('LOGIC_CHATBOT_CALENDAR_ID', 'logic.engine.demo@gmail.com'),
         )
