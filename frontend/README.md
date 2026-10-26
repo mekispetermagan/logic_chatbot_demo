@@ -21,7 +21,8 @@ The grid scrolls vertically through 00:00–24:00, with fixed day headers, hourl
 lines, and colored event rectangles spanning their start/end times. Overlapping
 events share a day column side by side. Hover for title, date/time, description
 and location; touch platforms can use Flutter's normal long-press tooltip.
-Explicit Google event colors are used when present, with blue as the default.
+Event colors show importance: Google color ID 11 is level 2 (red), ID 5 is
+level 1 (yellow), and every other or absent ID is level 0 (green).
 A red current-time line spans today's column in Budapest time, updates at each
 minute boundary and on app resume, and scrolls with the grid. It is hidden when
 the selected week does not include today. Clock updates do not fetch events.
@@ -46,15 +47,16 @@ late responses from previous weeks cannot replace the selected week's data.
 On narrow screens the seven-column grid can also scroll horizontally.
 Enable/configure the local MCP backend using [Calendar setup](../docs/calendar-mcp.md).
 Click an event to open read-only details. The pencil opens an editor for title,
-date, start/end time, description, location and Google color ID; Save submits
+date, start/end time, description, location and importance; Save submits
 only changed fields, and Cancel discards the draft. The trash icon asks Yes/No
 before deleting. Click an empty grid slot (rounded down to 15 minutes), or use
 New event, to create a same-day timed event. Times use Budapest; ambiguous or
 nonexistent DST times must be changed before saving. Recurring events are read-only.
 
-Colors 1–11 use Google's event palette. New events can inherit the calendar's
-default color; existing explicit colors can be changed to another palette color.
-Resetting an explicit color to the calendar default is not supported yet.
+The Importance selector offers levels 0, 1 and 2. Setting them writes Google
+color IDs 10, 5 and 11 respectively. New events default to level 0 and write ID 10.
+Viewing events or editing unrelated fields preserves their original color ID;
+explicitly selecting level 0 writes ID 10 even if the old ID already mapped to 0.
 Description and location can be cleared; omitted fields remain unchanged.
 
 Writes require the backend's opt-in write configuration. A successful write

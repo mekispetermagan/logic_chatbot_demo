@@ -183,7 +183,9 @@ end, and both endpoints must have the same kind.
 
 Create and PATCH accept optional `colorId` strings `"1"`–`"11"`. Omission
 preserves the current color on PATCH; resetting an explicit color to the calendar
-default is not supported.
+default is not supported. Flutter interprets ID 11 as importance 2 (red), ID 5
+as importance 1 (yellow), and all other/absent IDs as importance 0 (green).
+Its importance selector writes IDs 11, 5 or 10; unrelated edits preserve color.
 
 PATCH accepts any of `summary`, `description`, `location`, `colorId`, or the pair `start` and
 `end`. Omitted fields remain unchanged. Null values and empty updates are rejected;

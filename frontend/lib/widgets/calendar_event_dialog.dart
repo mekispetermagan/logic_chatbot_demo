@@ -34,7 +34,8 @@ class _CalendarEventDialogState extends State<CalendarEventDialog> {
   late DateTime _date;
   late TimeOfDay _start;
   late TimeOfDay _end;
-  String _color = '';
+  int _importance = 0;
+  bool _importanceSet = false;
   bool _busy = false;
   bool _unconfirmed = false;
   String? _error;
@@ -58,7 +59,8 @@ class _CalendarEventDialogState extends State<CalendarEventDialog> {
     _title.text = event?.title ?? '';
     _description.text = event?.description ?? '';
     _location.text = event?.location ?? '';
-    _color = event?.colorId ?? '';
+    _importance = calendarImportance(event?.colorId);
+    _importanceSet = false;
     _error = null;
   }
 
@@ -119,8 +121,8 @@ class _CalendarEventDialogState extends State<CalendarEventDialog> {
     if (event == null || _location.text != event.location) {
       fields['location'] = _location.text;
     }
-    if (_color.isNotEmpty && _color != event?.colorId) {
-      fields['colorId'] = _color;
+    if (event == null || _importanceSet) {
+      fields['colorId'] = calendarImportanceColorId(_importance);
     }
     if (_timesChanged) {
       final start = _resolve(_start);
@@ -288,7 +290,7 @@ class _CalendarEventDialogState extends State<CalendarEventDialog> {
               SelectableText(event.description),
             ],
             const SizedBox(height: 16),
-            _colorLabel(event.colorId ?? ''),
+            _importanceLabel(calendarImportance(event.colorId)),
             if (event.isRecurring) ...[
               const SizedBox(height: 16),
               const Text('Recurring events are read-only in this editor.'),
@@ -383,22 +385,24 @@ class _CalendarEventDialogState extends State<CalendarEventDialog> {
               decoration: const InputDecoration(labelText: 'Location'),
               maxLength: 1024,
             ),
-            DropdownButtonFormField<String>(
-              key: const ValueKey('calendar-color'),
-              initialValue: _color,
-              decoration: const InputDecoration(labelText: 'Color'),
+            DropdownButtonFormField<int>(
+              key: const ValueKey('calendar-importance'),
+              initialValue: _importance,
+              decoration: const InputDecoration(labelText: 'Importance'),
               isExpanded: true,
               items: [
-                if (widget.event?.colorId == null)
-                  DropdownMenuItem(value: '', child: _colorLabel('')),
-                if (_color.isNotEmpty && !calendarColors.containsKey(_color))
-                  DropdownMenuItem(value: _color, child: _colorLabel(_color)),
-                for (final id in calendarColors.keys)
-                  DropdownMenuItem(value: id, child: _colorLabel(id)),
+                for (var level = 0; level <= 2; level++)
+                  DropdownMenuItem(
+                    value: level,
+                    child: _importanceLabel(level),
+                  ),
               ],
               onChanged: _busy || _unconfirmed
                   ? null
-                  : (value) => setState(() => _color = value!),
+                  : (value) => setState(() {
+                      _importance = value!;
+                      _importanceSet = true;
+                    }),
             ),
             if (_error != null) ...[
               const SizedBox(height: 16),
@@ -465,7 +469,7 @@ class _CalendarEventDialogState extends State<CalendarEventDialog> {
     ],
   );
 
-  Widget _colorLabel(String id) => Row(
+  Widget _importanceLabel(int level) => Row(
     mainAxisSize: MainAxisSize.min,
     children: [
       Container(
@@ -473,15 +477,11 @@ class _CalendarEventDialogState extends State<CalendarEventDialog> {
         height: 14,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: calendarEventColor(id),
+          color: calendarEventColor(calendarImportanceColorId(level)),
         ),
       ),
       const SizedBox(width: 8),
-      Text(
-        id.isEmpty
-            ? 'Default'
-            : '${calendarColors[id]?.$1 ?? 'Color'} · ID $id',
-      ),
+      Text(const ['Normal', 'Important', 'Critical'][level]),
     ],
   );
 }
