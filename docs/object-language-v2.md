@@ -856,7 +856,7 @@ Further revisions should review whether the canonical sentence forms are easy
 to inspect, whether stop-on-failure and batch rollback fit the dialogue, and
 whether the macro inventory has the right scope. Semantic requirements and
 exact grammar must be versioned together. Each language version must remain a
-standalone contract. This coordinated v2 release preserves the revised object
-semantics and starts with a fresh database; legacy syntax and continuations
-are unsupported. A semantic change requires an explicit compatibility or
-migration policy for stored continuations, interpretation proposals and sessions.
+standalone contract. The original coordinated object/network v2 release
+required a fresh database; legacy syntax and continuations remain unsupported.
+Current v2 databases are retained, as described in the [JSON contract](json-contract.md).
+A semantic change requires an explicit compatibility or migration policy for stored continuations, interpretation proposals and sessions.

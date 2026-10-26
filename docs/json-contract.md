@@ -13,8 +13,9 @@ the step endpoint.
 ## Conversations and worlds
 
 Create an anonymous conversation with `POST /conversations` and
-`{"domain":"objects"}` or `{"domain":"network"}`. Each domain starts with its
-own fixed seven-object world. The response includes `conversationId`, `domain`,
+`{"domain":"objects"}`, `{"domain":"network"}` or `{"domain":"cellular"}`.
+Objects and Network each start with their own fixed seven-object world; Cellular
+starts with its Life glider on a 16×16 board. The response includes `conversationId`, `domain`,
 `world`, `canUndo`, `messages`, `worldSlots`, `resetPending`, `languageVersion`, `nextObjectId`, and nullable `pending`, `proposal`, and `resetFrom`. Editing replies also
 include `feedback`, typed `changes`, and nullable `preview`. Domain selection is immutable for a conversation; subsequent
 requests address the conversation ID and inherit its domain.
@@ -41,8 +42,11 @@ such as `flower` belong to LLM interpretation only; Objects v2 accepts `bloom`.
 
 ## V2 execution state
 
-Conversations use `objects-v2` or `network-v2`, with standalone contracts in
-[Objects v2](object-language-v2.md) and [Network v2](network-language-v2.md).
+Conversations use `objects-v2`, `network-v2` or `cellular-v2`, with standalone
+contracts in [Objects v2](object-language-v2.md), [Network v2](network-language-v2.md)
+and [Cellular v2](cellular-language-v2.md). The object/network allocation and
+continuation details below apply to those two domains; Cellular uses fixed cell
+coordinates and the continuation format described in the Cellular section.
 FastAPI supplies `languageVersion` and `nextObjectId` on every engine request.
 Haskell echoes the version and returns its allocation counter. FastAPI rejects
 outdated executables and backwards counters.
@@ -52,7 +56,7 @@ Delete, Clear and Undo never decrement it. Preview does not persist allocations.
 Aborted staged work can consume identifiers without committing objects. Initial
 allocation starts above the fixed world's greatest identifier.
 
-Pending entries in both domains add `payload` and nullable `stagedWorld`:
+Pending entries in Objects and Network add `payload` and nullable `stagedWorld`:
 
 - For reference/placement clarification, `payload.version` is the conversation’s `objects-v2` or `network-v2`;
   the payload contains fully delimited source, the
@@ -76,11 +80,11 @@ required. A selected grouping can subsequently pause for reference resolution.
 Both steps remain one entry and one Undo unit. Invalid choices retain pending
 state. `checkSyntax` recognizes ambiguous but well-formed input without creating
 pending state or setting `syntaxError`; the subsequent chat call asks the question
-without invoking the LLM. Both domains use these same grouping and continuation
+without invoking the LLM. Objects and Network use these same grouping and continuation
 mechanisms. Replays use the fully delimited canonical parser, retaining the
 chosen scope. Unsupported/missing continuation versions are rejected.
 
-Execution and previews in either domain return `changes`, an ordered list of:
+Object/network execution and previews return `changes`, an ordered list of:
 
 ```json
 {"objectId":3,"kind":"position","detail":"#3: on D4 -> on D5"}
@@ -94,7 +98,7 @@ staged work has no committed changes. Preview changes are nested under
 Interpretation proposals include `languageVersion`. Revision checks include
 the active version and allocation counter as well as world/discourse/messages.
 An older proposal cannot be previewed, accepted or answered; it remains
-rejectable so the original prompt can be resent. This rule applies to both domains.
+rejectable so the original prompt can be resent. This rule applies to all three domains.
 
 ## Visual editing
 
@@ -159,9 +163,10 @@ optional final period. Cancellation preserves the world, salience, pending
 symbolic entry and reviewable proposal; confirmation itself is not an Undo step.
 
 On confirmation the reply has a new `conversationId` and `resetFrom` set to the
-old ID. The new conversation has the same domain/version, an empty initial
-world, empty salience, no pending entry/proposal, no Undo history and one reset
-acknowledgment message. Saved slots (worlds and rankings) transfer unchanged.
+old ID. The new conversation has the same domain/version, empty salience, no
+pending entry/proposal, no Undo history and one reset acknowledgment message.
+Objects and Network start with an empty world; Cellular restores its initial
+Life glider at generation zero. Saved slots (worlds and rankings) transfer unchanged.
 The allocation counter is retained for saved identities. Old application chat,
 snapshots, proposals and agent-session links are deleted in the same SQLite
 transaction. The next LLM request starts a fresh session. Global accounting and
@@ -222,17 +227,20 @@ subjects, and square choices. They are parsed using the conversation's domain.
 ## SQLite release policy
 
 Fresh databases use SQLite `user_version = 2`. An existing database with another
-schema version is rejected unchanged. There is no migration or legacy grammar
-continuation. The demo database is reset for this release, including conversation,
-salience, proposal, agent-session and local accounting records. Provider-side
-billing is unaffected.
+schema version is rejected unchanged. The original object/network v2 release
+required a fresh database and discontinued legacy grammar continuations, including
+old conversation, salience, proposal, agent-session and local accounting records.
+That was a release compatibility break, not an automatic startup reset; provider-side
+billing was unaffected. Current v2 databases are retained. Startup applies additive
+schema updates and expands older 8×8 cellular snapshots and slots to 16×16 without
+removing their histories; see the [cellular backend contract](cellular-automata-backend.md).
 
 The saved-world feature adds `world_slots` on startup in existing v2 databases.
 This additive table does not change the language version or remove existing data.
 
 Flutter retains one conversation ID per domain. A removed conversation returns
-404 and the client creates a fresh one. Both domains retain seven fixed initial
-objects. The app bar switches domains; network controls offer four colors and
+404 and the client creates a fresh one. Objects and Network retain seven fixed
+initial objects; Cellular starts with the Life glider. The app bar switches domains; network controls offer four colors and
 all sixteen exact patterns. Generic object attributes are unchanged.
 
 ## Optional LLM translation and accounting
@@ -309,8 +317,8 @@ Haskell reference-clarification `pending` field. A pending proposal contains:
   "question": "By warm, do you mean red or yellow?",
   "explanation": "Both colors fit the request.",
   "candidates": [
-    {"rank": 1, "interpretation": "Use red", "translation": "B2 red.", "explanation": "Red is a warm color."},
-    {"rank": 2, "interpretation": "Use yellow", "translation": "B2 yellow.", "explanation": "Yellow is another warm color."}
+    {"rank": 1, "interpretation": "Use red", "translation": "Set color of the object at B2 to red.", "explanation": "Red is a warm color."},
+    {"rank": 2, "interpretation": "Use yellow", "translation": "Set color of the object at B2 to yellow.", "explanation": "Yellow is another warm color."}
   ],
   "validationFailures": [],
   "clarifications": [],
@@ -359,8 +367,8 @@ Submit answer is available when a question or validation failure is present,
 or no valid candidate remains. It sends the answer to the pending proposal's
 `answer` endpoint rather than normal chat. The API sends GPT the original entry,
 current world and a `clarification` object with accumulated `turns`,
-`previousCandidates` and `validationFailures`. Both token counting and generation
-receive this same context. The answer is saved as a user message and the new
+`previousCandidates` and `validationFailures`. Responses uses the same context
+for token counting and generation; Agents includes it in the bounded session input. The answer is saved as a user message and the new
 offer as a machine message with its own usage metadata. The replacement has a
 new proposal ID but retains `originalText` and all clarification turns. The old
 draft is retired with status `rejected`; acceptance of it returns 409.

@@ -7,8 +7,9 @@ revised network language. It shares revision number 2, execution rules and
 reference machinery with the object-domain language. Natural synonyms belong to
 LLM interpretation; the controlled language exposes the exact operation and
 meaning for human review. The logic engine resolves references and computes
-answers. This release starts with a fresh database; previous syntax and saved
-continuations are unsupported.
+answers. The original object/network v2 release required a fresh database;
+pre-v2 syntax and saved continuations remain unsupported. Current v2 databases
+are retained, as described in the [JSON contract](json-contract.md).
 
 The three layers are elementary operations/questions, symbolic referential
 macros, and domain-specific conceptual operations/questions. An elementary

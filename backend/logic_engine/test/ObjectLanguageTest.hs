@@ -56,7 +56,7 @@ main = do
          alternatives "Does #3 satisfy on a square matching shading is light or true?") $ \reading -> do
     check "human-readable grouping round trip" (parseEntry (entryText reading) == Right reading)
     check "fully delimited replay round trip" (parseEntry (canonicalEntryText reading) == Right reading)
-  source <- readFile "../../specification/object-language-v2.md"
+  source <- readFile "../../docs/object-language-v2.md"
   forM_ (examples (lines source)) $ \example -> case parseEntry example of
     Left message -> fail message
     Right parsed -> check "canonical round trip" (parseEntry (entryText parsed) == Right parsed)

@@ -1,8 +1,8 @@
 # Haskell logic engine
 
-The served languages are [Objects v2](../../specification/object-language-v2.md),
-[Network v2](../../specification/network-language-v2.md) and
-[Cellular v2](../../specification/cellular-language-v2.md). All implement
+The served languages are [Objects v2](../../docs/object-language-v2.md),
+[Network v2](../../docs/network-language-v2.md) and
+[Cellular v2](../../docs/cellular-language-v2.md). All implement
 three layers: atomic operations, symbolic references, and conceptual macros.
 Commands require a period; questions require `?`. Coordinates denote locations;
 `the object at A4` explicitly denotes an existing occupant. Creation is explicit.
@@ -23,7 +23,7 @@ Rebuild and copy after Haskell changes; FastAPI invokes the installed executable
 The JSON bridge reads one request from stdin, writes one reply to stdout, and
 exits. Invalid transport/versions exit 2 with a diagnostic on stderr. Language
 syntax/evaluation failures are normal structured responses. No HTTP, database or
-provider access occurs in Haskell. See the [JSON contract](../../specification/json-contract.md).
+provider access occurs in Haskell. See the [JSON contract](../../docs/json-contract.md).
 
 ## Interactive use
 
@@ -61,10 +61,12 @@ does not persist allocations. Visual editor operations retain explicit
 create-or-update convenience. Ordinary chat never creates a missing referent.
 Graph facts in salience carry explicit context and are rechecked after updates.
 
-There is no legacy continuation support or database migration. Older atomic,
-Layer 2, DomainLibrary and Sandbox modules remain available for experiments and
+Legacy continuations are unsupported. FastAPI retains current v2 databases,
+applies additive schema updates and expands older cellular boards to 16×16;
+it rejects other schema versions unchanged. Haskell does not migrate storage.
+Older atomic, Layer 2, DomainLibrary and Sandbox modules remain available for experiments and
 regression tests; their aliases and convenience semantics are not served grammar.
-See [domain architecture](../../specification/domain-architecture.md).
+See [domain architecture](../../docs/domain-architecture.md).
 
 ## Object and square antecedents
 

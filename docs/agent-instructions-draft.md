@@ -11,7 +11,7 @@ Each saved agent receives the common instructions, its standalone v2 language re
 its own domain section, and that domain's validated examples from
 [`backend/api/prompts/examples.json`](../backend/api/prompts/examples.json).
 Examples are appended during agent creation; the agent need not access repository
-files. Do not attach the other domain's vocabulary or examples.
+files. Do not attach the other domains' vocabulary or examples.
 
 The output fields below retain the current proposal contract. The backend
 provides the corresponding structured-output schema separately. Model settings,
@@ -66,7 +66,7 @@ proposals. Retain that conversational context across turns.
 
 ### Object and square references
 
-Both v2 domains maintain distinct object and square antecedents. `it` resolves
+Objects v2 and Network v2 maintain distinct object and square antecedents. `it` resolves
 within the kind required by its expression: colors/patterns are object facts;
 occupancy/shading are square facts; edge/corner/row/column allow either kind.
 For either-kind expressions, use the engine’s recency and typed clarification.

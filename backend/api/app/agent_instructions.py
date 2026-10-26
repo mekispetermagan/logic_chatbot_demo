@@ -5,7 +5,7 @@ from pathlib import Path
 from .llm import PROMPTS, RESPONSE_SCHEMA
 from .llm_budget import MODEL
 
-INSTRUCTIONS_PATH = Path(__file__).resolve().parents[3] / 'specification' / 'agent-instructions-draft.md'
+INSTRUCTIONS_PATH = Path(__file__).resolve().parents[3] / 'docs' / 'agent-instructions-draft.md'
 
 
 def configuration_for(domain: str) -> dict:

@@ -74,10 +74,11 @@ the local engine/database and incur no additional GPT charge.
 ## Prompt and transport
 
 `app/agent_instructions.py` assembles the reviewed common/domain instructions
-from `specification/agent-instructions-draft.md`, the active standalone
-[Objects v2](object-language-v2.md) or [Network v2](network-language-v2.md)
-reference, and `backend/api/prompts/examples.json`. Both transports use that
-contract. There are 184 object and 214 network examples; tests validate every
+from `docs/agent-instructions-draft.md`, the active standalone
+[Objects v2](object-language-v2.md), [Network v2](network-language-v2.md) or
+[Cellular v2](cellular-language-v2.md) reference, and
+`backend/api/prompts/examples.json`. Both transports use that contract.
+There are 184 object, 214 network and 120 cellular examples; tests validate every
 translation with the real Haskell parser. The short files under `prompts/` point
 to these authoritative sources rather than defining another grammar.
 
@@ -95,15 +96,16 @@ lets the model inspect occupancy, attributes and positions when planning. Haskel
 still determines feasibility, and a valid translation can still be a poor plan.
 
 The Responses user message contains JSON with `entry` and `world`. The latter
-uses the existing world contract: dimensions and objects with identifiers,
-attributes and nullable positions; x=0/y=0 denotes A1. Unplaced objects occupy no
-square. The model may select targets by snapshot data, while pronouns and definite
+uses the active domain's world contract. Objects and Network include dimensions
+and objects with identifiers, attributes and nullable positions; x=0/y=0 denotes
+A1. Unplaced objects occupy no square. Cellular supplies its dense cell colors,
+ruleset, generation and ruleset revision instead. The model may select targets by snapshot data, while pronouns and definite
 references remain for Haskell. Coordinates denote locations; explicit occupant references edit existing nodes,
 and explicit creation introduces a new identity. Missing references never create
 objects. The complete world payload
 is included in token counting before generation.
 
-Follow-up requests add `clarification`, containing ordered question/answer
+In Responses mode, follow-up requests add `clarification`, containing ordered question/answer
 `turns`, `previousCandidates` and `validationFailures`. The original `entry`
 remains unchanged. The same full input is counted before each generation, so
 growing clarification context stays within the existing token and cost caps.

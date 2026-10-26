@@ -36,7 +36,7 @@ examples (_:rest) = examples rest
 
 main :: IO ()
 main = do
-  source <- readFile "../../specification/network-language-v2.md"
+  source <- readFile "../../docs/network-language-v2.md"
   forM_ (examples (lines source)) $ \text -> case parseEntry text of
     Left message -> fail message
     Right entry -> do

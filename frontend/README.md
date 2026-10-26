@@ -23,7 +23,7 @@ secondary container colors. Replies preserve prettyprinted sentences and answers
 parse errors have a distinct label and border. Enter submits, Shift+Enter inserts
 a new line, and the Send button remains available; failed requests retain the
 draft. For example, send
-`#0 blue. #0 blue? color of #0?`. A whole entry is one undoable world/discourse update,
+`Set color of #0 to blue. Does #0 satisfy color is blue? What is the color of #0?`. A whole entry is one undoable world/discourse update,
 and Undo keeps chat messages. Ambiguity displays candidate buttons; choosing one
 resumes the same entry. While clarification is pending, new entries and visual
 edits are disabled. The shared Undo in the app bar cancels the whole entry,
@@ -108,7 +108,7 @@ Property edits send canonical `AttributeProperty` pairs. The existing objects
 editor uses this transport; network rendering uses 16 SVG port patterns with the Lego palette. The app-bar
 selector resumes a separate conversation for each domain. Later requests use the conversation ID and inherit
 the server's stored domain. See the
-[JSON contract](../specification/json-contract.md).
+[JSON contract](../docs/json-contract.md).
 
 ## Network editor
 
@@ -150,7 +150,7 @@ commands, questions, forecasts and clarification use the shared chat interface.
 Preview and staged atomic batches display a dense cellular board without changing
 the authoritative state. `full reset` still requires confirmation and preserves
 saved slots. Continuous playback is not implemented.
-See [Cellular v2](../specification/cellular-language-v2.md) for the grammar.
+See [Cellular v2](../docs/cellular-language-v2.md) for the grammar.
 
 API startup expands older cellular worlds, Undo history, and saved slots with
 white padding, keeping their patterns centered and generation numbers intact.

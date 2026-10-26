@@ -1,4 +1,13 @@
-# Logic-Based Chatbot: Demo Brief
+# Logic-Based Chatbot: Original Demo Brief
+
+**Status: historical brief for the October 19, 2026 presentation.** The requirements
+below preserve the original scope, including its exclusion of LLMs. The application
+has since added Network and Cellular domains, optional LLM interpretation, persistent
+agent sessions, interpretation review and saved worlds. For current behavior, see
+[domain architecture](domain-architecture.md), the [JSON contract](json-contract.md),
+and the standalone [Objects](object-language-v2.md), [Network](network-language-v2.md)
+and [Cellular](cellular-language-v2.md) v2 language contracts. This brief does not
+override those contracts.
 
 **Companion to:** the logic-dialogue concept note  
 **Presentation:** in person with Egri Győző, CEO of Faulhorn, on October 19, 2026  

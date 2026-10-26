@@ -18,11 +18,14 @@ and consequential graph-scope alternatives are part of those contracts.
 [`agent-instructions-draft.md`](agent-instructions-draft.md) is the approved
 instruction source despite its original filename. `app/agent_instructions.py`
 assembles common policy, one domain section, its standalone grammar and its
-examples. It excludes maintainer assembly notes and the other domain’s language.
+examples. It excludes maintainer assembly notes and the other domains’ languages.
 
-The v2 release resets the local database. Previous agent/session metadata,
-conversations and continuation state are discontinued. Agents are configured
-lazily on the next LLM request.
+The original object/network v2 release required a fresh local database and
+discontinued pre-v2 agent/session metadata, conversations and continuations.
+Current v2 databases and sessions are retained across startup, including when
+Cellular is added or older cellular boards are expanded to 16×16. Unsupported
+schema versions are rejected unchanged. Agents are configured lazily on the
+next LLM request.
 
 On the first LLM use of each domain, FastAPI creates a saved agent and stores its
 ID and assembled configuration hash in `llm_agents`. The configuration fixes
@@ -48,8 +51,10 @@ The first request creates a session with its saved agent ID and initial input;
 later requests submit input-message events to that session. Each input contains
 the current world, the entry and backend outcomes not yet sent to the session.
 Clarification requests also carry the original prompt, accumulated answers,
-previous candidates and parser failures. Instructions and complete conversation
-history are managed by the session rather than reconstructed in each request.
+previous candidates and parser failures. The remote session manages its own
+conversation context and compaction rather than receiving a reconstructed full
+history on each request. SQLite retains the application's complete local history;
+only queued backend outcomes are sent, subject to the bounds below.
 
 ### Bounded outcome context
 
