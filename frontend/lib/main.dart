@@ -2,12 +2,15 @@ import 'models/domain.dart';
 import 'package:flutter/material.dart';
 
 import 'api/conversation_api.dart';
+import 'api/calendar_api.dart';
 import 'config/api_config.dart';
 import 'controllers/conversation_controller.dart';
+import 'controllers/calendar_controller.dart';
 import 'storage/conversation_id_store.dart';
 import 'widgets/conversation_world_panel.dart';
 import 'widgets/chat_panel.dart';
 import 'widgets/domain_selector.dart';
+import 'widgets/calendar_week_view.dart';
 
 void main() {
   runApp(const MainApp());
@@ -34,9 +37,14 @@ class MainApp extends StatelessWidget {
 }
 
 class DemoScreen extends StatefulWidget {
-  const DemoScreen({super.key, this.createController});
+  const DemoScreen({
+    super.key,
+    this.createController,
+    this.createCalendarController,
+  });
 
   final ConversationController Function()? createController;
+  final CalendarController Function()? createCalendarController;
 
   @override
   State<DemoScreen> createState() => _DemoScreenState();
@@ -44,6 +52,8 @@ class DemoScreen extends StatefulWidget {
 
 class _DemoScreenState extends State<DemoScreen> {
   late final ConversationController _controller;
+  late final CalendarController _calendar;
+  bool _showCalendar = false;
 
   @override
   void initState() {
@@ -56,11 +66,15 @@ class _DemoScreenState extends State<DemoScreen> {
           store: PreferencesConversationIdStore(baseUrl: baseUrl),
         );
     _controller.load();
+    _calendar =
+        widget.createCalendarController?.call() ??
+        CalendarController(api: CalendarApi(baseUrl: baseUrl));
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _calendar.dispose();
     super.dispose();
   }
 
@@ -175,7 +189,22 @@ class _DemoScreenState extends State<DemoScreen> {
             ),
           );
 
+          final displayedWorldPanel = _showCalendar
+              ? PanelFrame(child: CalendarWeekView(controller: _calendar))
+              : worldPanel;
+          final displayedChatPanel = _showCalendar
+              ? const PanelFrame(
+                  child: Center(
+                    child: Text(
+                      'Calendar chat is not available yet.',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
+              : chatPanel;
+
           return DefaultTabController(
+            key: ValueKey(_showCalendar),
             length: 2,
             child: Scaffold(
               appBar: AppBar(
@@ -186,42 +215,54 @@ class _DemoScreenState extends State<DemoScreen> {
                     child: DomainSelector(
                       selected: _controller.domain,
                       compact: constraints.maxWidth < 480,
+                      calendarSelected: _showCalendar,
+                      onCalendarSelected: () {
+                        setState(() => _showCalendar = true);
+                        _calendar.load();
+                      },
                       onChanged: _controller.canSwitchDomain
-                          ? _controller.switchDomain
+                          ? (domain) {
+                              setState(() => _showCalendar = false);
+                              _controller.switchDomain(domain);
+                            }
                           : null,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(right: actionSpacing),
-                    child: Tooltip(
-                      message: _controller.llmAvailable
-                          ? 'Activate LLM: propose interpretations after a syntax error'
-                          : 'Cellular dialogue is not available yet',
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (wide) const Text('LLM'),
-                          Switch(
-                            padding: EdgeInsets.zero,
-                            value: _controller.llmEnabled,
-                            onChanged:
-                                _controller.canSwitchDomain &&
-                                    _controller.llmAvailable
-                                ? _controller.setUseLlm
-                                : null,
-                          ),
-                        ],
+                  if (!_showCalendar)
+                    Padding(
+                      padding: EdgeInsets.only(right: actionSpacing),
+                      child: Tooltip(
+                        message: _controller.llmAvailable
+                            ? 'Activate LLM: propose interpretations after a syntax error'
+                            : 'Cellular dialogue is not available yet',
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (wide) const Text('LLM'),
+                            Switch(
+                              padding: EdgeInsets.zero,
+                              value: _controller.llmEnabled,
+                              onChanged:
+                                  _controller.canSwitchDomain &&
+                                      _controller.llmAvailable
+                                  ? _controller.setUseLlm
+                                  : null,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(right: actionSpacing),
-                    child: IconButton(
-                      tooltip: 'Undo',
-                      onPressed: _controller.canUndo ? _controller.undo : null,
-                      icon: const Icon(Icons.undo),
+                  if (!_showCalendar)
+                    Padding(
+                      padding: EdgeInsets.only(right: actionSpacing),
+                      child: IconButton(
+                        tooltip: 'Undo',
+                        onPressed: _controller.canUndo
+                            ? _controller.undo
+                            : null,
+                        icon: const Icon(Icons.undo),
+                      ),
                     ),
-                  ),
                 ],
                 bottom: wide
                     ? null
@@ -236,11 +277,13 @@ class _DemoScreenState extends State<DemoScreen> {
                 child: wide
                     ? Row(
                         children: [
-                          Expanded(child: worldPanel),
-                          Expanded(child: chatPanel),
+                          Expanded(child: displayedWorldPanel),
+                          Expanded(child: displayedChatPanel),
                         ],
                       )
-                    : TabBarView(children: [worldPanel, chatPanel]),
+                    : TabBarView(
+                        children: [displayedWorldPanel, displayedChatPanel],
+                      ),
               ),
             ),
           );

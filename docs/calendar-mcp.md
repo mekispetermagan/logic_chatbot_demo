@@ -5,7 +5,9 @@
 Implemented: local OAuth setup and FastAPI reads plus opt-in, scoped event writes through the upstream
 [`@cocal/google-calendar-mcp`](https://github.com/nspady/google-calendar-mcp) server,
 using stdio. Google Calendar is the source of truth; there is no SQL event mirror,
-calendar conversation, Haskell language, LLM integration or Flutter calendar UI yet.
+calendar conversation, Haskell language or LLM integration. Flutter now has a
+read-only [weekly display](../frontend/README.md#calendar-week-view); editor controls
+remain future work.
 The existing Objects, Network and Cellular domains remain independent.
 
 Verified locally with Node **24.22.1**, MCP server **2.7.0**, and Python MCP SDK
@@ -142,8 +144,8 @@ non-loopback clients with 403. Write routes require the additional enable flag
 and the fixed dedicated calendar; there is no arbitrary MCP endpoint.
 Do not enable them behind a public reverse proxy: loopback filtering is a local
 demo boundary, not application authentication. Public deployment requires a
-separate authenticated access design. The controlled live write test and subsequent
-GUI editor remain pending at this checkpoint.
+separate authenticated access design. Flutter's read-only week view uses the
+events endpoint; GUI editing and the full controlled live write cycle remain pending.
 
 The subprocess enables `list-calendars`, `list-events`, `get-freebusy`, and `get-event`.
 With writes enabled for the dedicated calendar it also enables `create-event`,

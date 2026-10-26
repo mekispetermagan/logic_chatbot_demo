@@ -8,6 +8,46 @@ size a medium footprint with a superscript `?`. Tooltips describe all attributes
 
 The Linux app launches fullscreen at the display's current resolution.
 
+## Calendar week view
+
+Select **Calendar** in the app bar (or the narrow-screen dropdown) to open a
+read-only Monday–Sunday week view inside the World panel. Wide screens retain
+the World/Chat split; narrow screens retain the two tabs. The header shows weekday
+names and dates;
+previous/next arrows fetch the selected week's events, and Refresh reloads it.
+The month/year label covers both months or years when a week crosses a boundary.
+
+The grid scrolls vertically through 00:00–24:00, with fixed day headers, hourly
+lines, and colored event rectangles spanning their start/end times. Overlapping
+events share a day column side by side. Hover for title, date/time, description
+and location; touch platforms can use Flutter's normal long-press tooltip.
+Explicit Google event colors are used when present, with blue as the default.
+A red current-time line spans today's column in Budapest time, updates at each
+minute boundary and on app resume, and scrolls with the grid. It is hidden when
+the selected week does not include today. Clock updates do not fetch events.
+
+All times and week bounds use Europe/Budapest via the bundled IANA timezone
+database, independently of the device timezone. Navigation constructs local
+midnights so DST weeks can contain 167 or 169 actual hours. The grid remains a
+24-hour wall-clock view; an event crossing the repeated autumn hour whose end
+clock time is not later than its start uses elapsed duration for its rectangle,
+with the clock change and offsets explained in its tooltip.
+
+All-day, cancelled and cross-day events (including those ending exactly at the
+next midnight) are omitted from this initial display. This is a presentation
+filter; the API still returns its complete event list. Calendar is a separate
+view, not a symbolic conversation domain: the Chat panel shows a placeholder,
+LLM and Undo controls are hidden, and existing domain state is retained when
+switching back. No event write calls
+are made by the view.
+
+Each selection/week change uses one `GET /calendar/events` request with explicit
+week bounds and the Budapest timezone. Loading, empty and retry states are shown;
+late responses from previous weeks cannot replace the selected week's data.
+On narrow screens the seven-column grid can also scroll horizontally.
+Enable/configure the local MCP backend using [Calendar setup](../docs/calendar-mcp.md).
+Editing controls and calendar chat remain future work.
+
 ## Conversations
 
 The app creates an anonymous conversation through FastAPI and saves its ID in

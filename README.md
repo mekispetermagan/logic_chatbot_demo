@@ -150,8 +150,8 @@ API addresses are documented in the [frontend README](frontend/README.md#develop
 For the optional local Google Calendar connection, follow
 [Calendar MCP setup](docs/calendar-mcp.md). It uses your private Google OAuth
 files and does not require an LLM. Reads and opt-in one-off event write endpoints
-are available in FastAPI. Flutter calendar display/editor and chat control are
-not yet implemented.
+are available in FastAPI. Select Calendar in Flutter for a read-only weekly
+display; GUI editing and calendar chat control are not yet implemented.
 
 Run `cabal test` in `backend/logic_engine/`,
 `python -m unittest discover -s tests -v` in `backend/api/` with `.venv` active,
