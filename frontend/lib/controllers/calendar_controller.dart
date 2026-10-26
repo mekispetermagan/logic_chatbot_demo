@@ -13,6 +13,9 @@ class CalendarController extends ChangeNotifier {
   CalendarWeek week;
   List<CalendarEvent> events = const [];
   bool loading = false;
+  bool editing = false;
+  bool needsRefresh = false;
+  bool get canEdit => !loading && !editing && !needsRefresh && error == null;
   String? error;
   int _request = 0;
   bool _disposed = false;
@@ -35,6 +38,7 @@ class CalendarController extends ChangeNotifier {
                 event.start.isBefore(requestedWeek.end),
           )
           .toList();
+      needsRefresh = false;
     } on ApiException catch (failure) {
       if (_disposed || request != _request) return;
       error = failure.message;
@@ -47,9 +51,39 @@ class CalendarController extends ChangeNotifier {
   }
 
   Future<void> shiftWeek(int offset) {
-    if (_disposed) return Future.value();
+    if (_disposed || editing) return Future.value();
     week = week.shift(offset);
     return load();
+  }
+
+  Future<void> save({String? id, required Map<String, dynamic> fields}) =>
+      _mutate(() => id == null ? api.create(fields) : api.update(id, fields));
+
+  Future<void> delete(String id) => _mutate(() => api.delete(id));
+
+  Future<void> _mutate(Future<void> Function() operation) async {
+    if (_disposed || !canEdit) {
+      throw const ApiException('Refresh the calendar before editing.');
+    }
+    editing = true;
+    error = null;
+    notifyListeners();
+    try {
+      await operation();
+    } on CalendarWriteException catch (failure) {
+      if (!_disposed && failure.outcomeUnknown) {
+        needsRefresh = true;
+        error =
+            'The change may have completed. Refresh the calendar before editing again.';
+      }
+      rethrow;
+    } finally {
+      if (!_disposed) {
+        editing = false;
+        notifyListeners();
+      }
+    }
+    if (!_disposed) await load();
   }
 
   @override

@@ -208,7 +208,7 @@ class CalendarTests(unittest.IsolatedAsyncioTestCase):
                 del stored[identifier]
                 return result({'success': True, 'eventId': identifier, 'calendarId': self.settings.calendar_id})
             event = stored.setdefault(identifier, {'id': identifier, 'calendarId': self.settings.calendar_id})
-            for name in ('summary', 'description', 'location', 'start', 'end'):
+            for name in ('summary', 'description', 'location', 'start', 'end', 'colorId'):
                 if name in arguments:
                     event[name] = json.loads(arguments[name]) if name in ('start', 'end') else arguments[name]
             return result({'event': event})
@@ -220,8 +220,9 @@ class CalendarTests(unittest.IsolatedAsyncioTestCase):
             self.assertRegex(identifier, r'^[a-f0-9]{32}$')
             self.assertTrue(created['verified'])
             self.assertEqual(created['event']['start'], body['start'])
-            updated = await self.adapter.update_event(identifier, {'summary': 'Changed', 'location': ''})
+            updated = await self.adapter.update_event(identifier, {'summary': 'Changed', 'location': '', 'colorId': '11'})
             self.assertEqual(updated['event']['summary'], 'Changed')
+            self.assertEqual(updated['event']['colorId'], '11')
             self.assertTrue(updated['verified'])
             deleted = await self.adapter.delete_event(identifier)
             self.assertTrue(deleted['deleted'])
@@ -402,6 +403,17 @@ class CalendarRouteTests(unittest.TestCase):
             self.assertEqual(response.status_code, 422, response.text)
         self.adapter.create_event.assert_not_awaited()
         self.adapter.update_event.assert_not_awaited()
+
+    def test_color_and_partial_text_updates_preserve_omitted_fields(self):
+        self.adapter.create_event.return_value = {'event': {'id': 'event'}, 'verified': True}
+        self.adapter.update_event.return_value = {'event': {'id': 'event'}, 'verified': True}
+        self.assertEqual(self.client.post('/calendar/events', json={**CREATE, 'colorId': '2'}).status_code, 201)
+        self.assertEqual(self.adapter.create_event.call_args.args[0]['colorId'], '2')
+        for body in ({'colorId': '11'}, {'description': ''}, {'location': 'Meeting room 2'}):
+            self.assertEqual(self.client.patch('/calendar/events/event', json=body).status_code, 200)
+            self.assertEqual(self.adapter.update_event.call_args.args, ('event', body))
+        for value in (None, '', '0', '12', 2, '#ff0000'):
+            self.assertEqual(self.client.patch('/calendar/events/event', json={'colorId': value}).status_code, 422)
 
     def test_writes_default_disabled_and_remote_writes_denied(self):
         self.app.state.calendar = CalendarMcp(Settings(database_path=Path('unused'), calendar_enabled=True))

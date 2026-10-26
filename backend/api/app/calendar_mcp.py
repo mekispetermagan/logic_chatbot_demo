@@ -185,7 +185,7 @@ class CalendarMcp:
             raise CalendarError('Calendar event is deleted or unavailable.', 410)
 
     async def verified_write(self, tool, event_id, fields):
-        if set(fields) - {'summary', 'start', 'end', 'description', 'location'}:
+        if set(fields) - {'summary', 'start', 'end', 'description', 'location', 'colorId'}:
             raise CalendarError('Unsupported event fields; account and calendar are fixed by the backend.', 422)
         arguments = {'account': self.settings.calendar_account, 'calendarId': self.settings.calendar_id,
                      'eventId': event_id, 'sendUpdates': 'none', **fields}

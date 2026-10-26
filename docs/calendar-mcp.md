@@ -6,8 +6,7 @@ Implemented: local OAuth setup and FastAPI reads plus opt-in, scoped event write
 [`@cocal/google-calendar-mcp`](https://github.com/nspady/google-calendar-mcp) server,
 using stdio. Google Calendar is the source of truth; there is no SQL event mirror,
 calendar conversation, Haskell language or LLM integration. Flutter now has a
-read-only [weekly display](../frontend/README.md#calendar-week-view); editor controls
-remain future work.
+[weekly display and event editor](../frontend/README.md#calendar-week-view).
 The existing Objects, Network and Cellular domains remain independent.
 
 Verified locally with Node **24.22.1**, MCP server **2.7.0**, and Python MCP SDK
@@ -144,8 +143,8 @@ non-loopback clients with 403. Write routes require the additional enable flag
 and the fixed dedicated calendar; there is no arbitrary MCP endpoint.
 Do not enable them behind a public reverse proxy: loopback filtering is a local
 demo boundary, not application authentication. Public deployment requires a
-separate authenticated access design. Flutter's read-only week view uses the
-events endpoint; GUI editing and the full controlled live write cycle remain pending.
+separate authenticated access design. Flutter uses these endpoints for weekly display and create/edit/delete dialogs.
+The full controlled live write cycle remains pending.
 
 The subprocess enables `list-calendars`, `list-events`, `get-freebusy`, and `get-event`.
 With writes enabled for the dedicated calendar it also enables `create-event`,
@@ -182,7 +181,11 @@ must include explicit offsets, use whole seconds, and, if supplied, have an IANA
 timezone consistent with that offset at the specified instant. Start must precede
 end, and both endpoints must have the same kind.
 
-PATCH accepts any of `summary`, `description`, `location`, or the pair `start` and
+Create and PATCH accept optional `colorId` strings `"1"`–`"11"`. Omission
+preserves the current color on PATCH; resetting an explicit color to the calendar
+default is not supported.
+
+PATCH accepts any of `summary`, `description`, `location`, `colorId`, or the pair `start` and
 `end`. Omitted fields remain unchanged. Null values and empty updates are rejected;
 use `"description":""` or `"location":""` to clear those text fields. A summary
 must be nonblank. Changing times requires both endpoints to avoid hidden duration

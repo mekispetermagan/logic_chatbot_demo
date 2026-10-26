@@ -4,8 +4,8 @@
 [Calendar MCP setup](calendar-mcp.md) for installation, authorization, endpoints
 and validation. Stage C's scoped write endpoints are implemented with mocked
 tests; its explicitly authorized live create/update/delete checkpoint remains
-pending. Flutter's read-only weekly display is implemented; its editor and
-subsequent language/chat control remain pending. This proposal preserves the staged plan.
+pending. Flutter's weekly display and create/edit/delete dialogs are implemented;
+subsequent language/chat control remains pending. This proposal preserves the staged plan.
 
 ## Objective
 

@@ -11,6 +11,7 @@ class CalendarEvent {
     this.description = '',
     this.location = '',
     this.colorId,
+    this.isRecurring = false,
   });
 
   final String id;
@@ -20,6 +21,7 @@ class CalendarEvent {
   final String description;
   final String location;
   final String? colorId;
+  final bool isRecurring;
 
   static CalendarEvent? fromJson(Map<String, dynamic> json) {
     if (json['status'] == 'cancelled') return null;
@@ -51,6 +53,10 @@ class CalendarEvent {
       description: json['description'] as String? ?? '',
       location: json['location'] as String? ?? '',
       colorId: json['colorId'] as String?,
+      isRecurring:
+          (json['recurrence'] as List?)?.isNotEmpty == true ||
+          json['recurringEventId'] != null ||
+          json['originalStartTime'] != null,
     );
   }
 

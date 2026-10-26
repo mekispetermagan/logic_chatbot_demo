@@ -7,6 +7,17 @@ import '../models/calendar_event.dart';
 import '../models/calendar_week.dart';
 import 'conversation_api.dart' show ApiException;
 
+class CalendarWriteException extends ApiException {
+  const CalendarWriteException(
+    super.message, {
+    super.statusCode,
+    this.outcomeUnknown = false,
+    this.eventId,
+  });
+  final bool outcomeUnknown;
+  final String? eventId;
+}
+
 class CalendarApi {
   CalendarApi({
     required this.baseUrl,
@@ -67,4 +78,80 @@ class CalendarApi {
   }
 
   void close() => _client.close();
+
+  Future<void> create(Map<String, dynamic> fields) =>
+      _write('POST', null, fields);
+  Future<void> update(String id, Map<String, dynamic> fields) =>
+      _write('PATCH', id, fields);
+  Future<void> delete(String id) => _write('DELETE', id, null);
+
+  Future<void> _write(
+    String method,
+    String? id,
+    Map<String, dynamic>? body,
+  ) async {
+    final uri = baseUrl.replace(
+      pathSegments: [
+        ...baseUrl.pathSegments.where((part) => part.isNotEmpty),
+        'calendar',
+        'events',
+        ?id,
+      ],
+    );
+    final request = http.Request(method, uri)
+      ..headers['Accept'] = 'application/json';
+    if (body != null) {
+      request.headers['Content-Type'] = 'application/json';
+      request.body = jsonEncode(body);
+    }
+    final http.Response response;
+    try {
+      response = await (() async => http.Response.fromStream(
+        await _client.send(request),
+      ))().timeout(const Duration(seconds: 100));
+    } on TimeoutException {
+      throw CalendarWriteException(
+        'The calendar request timed out. Refresh before trying again.',
+        outcomeUnknown: true,
+        eventId: id,
+      );
+    } on http.ClientException {
+      throw CalendarWriteException(
+        'The calendar response was lost. Refresh before trying again.',
+        outcomeUnknown: true,
+        eventId: id,
+      );
+    }
+    Map<String, dynamic>? data;
+    try {
+      data =
+          jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+    } catch (_) {}
+    if (response.statusCode != (method == 'POST' ? 201 : 200)) {
+      throw CalendarWriteException(
+        data?['detail'] is String
+            ? data!['detail'] as String
+            : 'Calendar write failed.',
+        statusCode: response.statusCode,
+        outcomeUnknown:
+            data?['outcomeUnknown'] == true || response.statusCode >= 500,
+        eventId: data?['eventId'] is String ? data!['eventId'] as String : id,
+      );
+    }
+    final event = data?['event'];
+    final valid =
+        (data?['verified']) == true &&
+        (method == 'DELETE'
+            ? (data?['deleted']) == true && (data?['eventId']) == id
+            : event is Map &&
+                  event['id'] is String &&
+                  (id == null || event['id'] == id));
+    if (!valid) {
+      throw CalendarWriteException(
+        'The calendar change could not be confirmed. Refresh before trying again.',
+        outcomeUnknown: true,
+        eventId: id,
+      );
+    }
+  }
 }

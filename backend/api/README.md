@@ -48,10 +48,11 @@ Google event data out of SQLite, and offers no arbitrary MCP calls.
 `DELETE /calendar/events/{eventId}`. Writes additionally require
 `LOGIC_CHATBOT_CALENDAR_WRITES_ENABLED=true` and the fixed dedicated calendar
 `logic.engine.demo@gmail.com`; they are disabled by default. The initial editor
-supports one-off timed/all-day events, validates times, and reads back changes.
+supports one-off timed/all-day events and color IDs 1–11, validates times, and reads back changes.
 See the [event editing contract](../../docs/calendar-mcp.md#one-off-event-editing)
 for payloads, recurrence restrictions and recovery from an unconfirmed write.
-Calendar display/editor and chat control are subsequent work. Keep this
+Flutter provides weekly display and same-day timed-event editing. Calendar chat
+control remains subsequent work. Keep this
 integration disabled on public deployments until application access control is
 specified; the loopback guard is for the local demo only.
 

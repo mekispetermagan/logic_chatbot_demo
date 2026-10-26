@@ -8,6 +8,8 @@ import '../controllers/calendar_controller.dart';
 import '../models/calendar_event.dart';
 import '../models/calendar_week.dart';
 import 'calendar_event_layout.dart';
+import 'calendar_colors.dart';
+import 'calendar_event_dialog.dart';
 
 const calendarHourHeight = 64.0;
 const _axisWidth = 58.0;
@@ -60,6 +62,24 @@ class _CalendarWeekViewState extends State<CalendarWeekView>
     super.dispose();
   }
 
+  void _openEvent(CalendarEvent event) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => CalendarEventDialog(controller: controller, event: event),
+    );
+  }
+
+  void _newEvent(tz.TZDateTime start) {
+    if (!controller.canEdit) return;
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) =>
+          CalendarEventDialog(controller: controller, initialStart: start),
+    );
+  }
+
   @override
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: controller,
@@ -74,12 +94,16 @@ class _CalendarWeekViewState extends State<CalendarWeekView>
               children: [
                 IconButton(
                   tooltip: 'Previous week',
-                  onPressed: () => controller.shiftWeek(-1),
+                  onPressed: controller.editing
+                      ? null
+                      : () => controller.shiftWeek(-1),
                   icon: const Icon(Icons.chevron_left),
                 ),
                 IconButton(
                   tooltip: 'Next week',
-                  onPressed: () => controller.shiftWeek(1),
+                  onPressed: controller.editing
+                      ? null
+                      : () => controller.shiftWeek(1),
                   icon: const Icon(Icons.chevron_right),
                 ),
                 const SizedBox(width: 8),
@@ -93,8 +117,32 @@ class _CalendarWeekViewState extends State<CalendarWeekView>
                 if (MediaQuery.sizeOf(context).width >= 600)
                   Text(calendarTimeZone, style: theme.textTheme.bodySmall),
                 IconButton(
+                  tooltip: 'New event',
+                  onPressed: controller.canEdit
+                      ? () {
+                          final date =
+                              !_now.isBefore(controller.week.start) &&
+                                  _now.isBefore(controller.week.end)
+                              ? _now
+                              : controller.week.start;
+                          _newEvent(
+                            tz.TZDateTime(
+                              budapest,
+                              date.year,
+                              date.month,
+                              date.day,
+                              9,
+                            ),
+                          );
+                        }
+                      : null,
+                  icon: const Icon(Icons.add),
+                ),
+                IconButton(
                   tooltip: 'Refresh calendar',
-                  onPressed: controller.loading ? null : controller.load,
+                  onPressed: controller.loading || controller.editing
+                      ? null
+                      : controller.load,
                   icon: const Icon(Icons.refresh),
                 ),
               ],
@@ -153,6 +201,12 @@ class _CalendarWeekViewState extends State<CalendarWeekView>
                                           week: controller.week,
                                           events: controller.events,
                                           now: _now,
+                                          onCreate: controller.canEdit
+                                              ? _newEvent
+                                              : null,
+                                          onEvent: controller.editing
+                                              ? null
+                                              : _openEvent,
                                         ),
                                       ),
                                     ),
@@ -273,10 +327,14 @@ class _WeekGrid extends StatelessWidget {
     required this.week,
     required this.events,
     required this.now,
+    this.onCreate,
+    this.onEvent,
   });
   final CalendarWeek week;
   final List<CalendarEvent> events;
   final DateTime now;
+  final ValueChanged<tz.TZDateTime>? onCreate;
+  final ValueChanged<CalendarEvent>? onEvent;
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
@@ -288,10 +346,45 @@ class _WeekGrid extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(
-              child: CustomPaint(
-                painter: _CalendarGridPainter(
-                  color: Theme.of(context).colorScheme.outlineVariant,
-                  weekend: Theme.of(context).colorScheme.surfaceContainerLow,
+              child: GestureDetector(
+                key: const ValueKey('calendar-empty-slots'),
+                behavior: HitTestBehavior.opaque,
+                onTapUp: onCreate == null
+                    ? null
+                    : (details) {
+                        final point = details.localPosition;
+                        if (point.dx < _axisWidth ||
+                            point.dy < _gridTop ||
+                            point.dy >= _gridTop + 24 * calendarHourHeight) {
+                          return;
+                        }
+                        final day = ((point.dx - _axisWidth) / dayWidth)
+                            .floor()
+                            .clamp(0, 6);
+                        final minute =
+                            (((point.dy - _gridTop) /
+                                        calendarHourHeight *
+                                        60) ~/
+                                    15 *
+                                    15)
+                                .clamp(0, 1439);
+                        final date = week.day(day);
+                        onCreate!(
+                          tz.TZDateTime(
+                            budapest,
+                            date.year,
+                            date.month,
+                            date.day,
+                            minute ~/ 60,
+                            minute % 60,
+                          ),
+                        );
+                      },
+                child: CustomPaint(
+                  painter: _CalendarGridPainter(
+                    color: Theme.of(context).colorScheme.outlineVariant,
+                    weekend: Theme.of(context).colorScheme.surfaceContainerLow,
+                  ),
                 ),
               ),
             ),
@@ -359,60 +452,52 @@ class _WeekGrid extends StatelessWidget {
       child: _EventTile(
         key: ValueKey('calendar-event-${event.id}'),
         event: event,
+        onTap: onEvent == null ? null : () => onEvent!(event),
       ),
     );
   }
 }
 
 class _EventTile extends StatelessWidget {
-  const _EventTile({super.key, required this.event});
+  const _EventTile({super.key, required this.event, this.onTap});
   final CalendarEvent event;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    const colors = {
-      '1': Color(0xff7986cb),
-      '2': Color(0xff33b679),
-      '3': Color(0xff8e24aa),
-      '4': Color(0xffe67c73),
-      '5': Color(0xfff6bf26),
-      '6': Color(0xfff4511e),
-      '7': Color(0xff039be5),
-      '8': Color(0xff616161),
-      '9': Color(0xff3f51b5),
-      '10': Color(0xff0b8043),
-      '11': Color(0xffd50000),
-    };
-    final color = colors[event.colorId] ?? const Color(0xff4285f4);
+    final color = calendarEventColor(event.colorId);
     final foreground =
         ThemeData.estimateBrightnessForColor(color) == Brightness.dark
         ? Colors.white
         : Colors.black;
-    return Tooltip(
-      message: event.tooltip,
-      waitDuration: const Duration(milliseconds: 350),
-      child: Semantics(
-        label: event.tooltip,
-        child: Container(
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: LayoutBuilder(
-            builder: (context, constraints) => Padding(
-              padding: EdgeInsets.all(constraints.maxHeight < 20 ? 1 : 6),
-              child: Text(
-                constraints.maxHeight >= 44
-                    ? '${event.title}\n${calendarTime(event.start)}–${calendarTime(event.end)}'
-                    : event.title,
-                maxLines: constraints.maxHeight >= 44 ? 3 : 1,
-                overflow: TextOverflow.clip,
-                style: TextStyle(
-                  color: foreground,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  height: 1.25,
+    return GestureDetector(
+      onTap: onTap,
+      child: Tooltip(
+        message: event.tooltip,
+        waitDuration: const Duration(milliseconds: 350),
+        child: Semantics(
+          label: event.tooltip,
+          child: Container(
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: LayoutBuilder(
+              builder: (context, constraints) => Padding(
+                padding: EdgeInsets.all(constraints.maxHeight < 20 ? 1 : 6),
+                child: Text(
+                  constraints.maxHeight >= 44
+                      ? '${event.title}\n${calendarTime(event.start)}–${calendarTime(event.end)}'
+                      : event.title,
+                  maxLines: constraints.maxHeight >= 44 ? 3 : 1,
+                  overflow: TextOverflow.clip,
+                  style: TextStyle(
+                    color: foreground,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    height: 1.25,
+                  ),
                 ),
               ),
             ),

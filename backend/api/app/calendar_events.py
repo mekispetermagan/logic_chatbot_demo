@@ -1,12 +1,13 @@
 """Transport validation for the initial one-off calendar event editor."""
 import re
 from datetime import date as Date, datetime
-from typing import Annotated
+from typing import Annotated, Literal
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, StringConstraints, field_validator, model_validator
 
 Summary = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=1024)]
+ColorId = Literal['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']
 
 
 class EventTime(BaseModel):
@@ -65,6 +66,7 @@ class CreateEvent(BaseModel):
     end: EventTime
     description: str = Field(default='', max_length=8192)
     location: str = Field(default='', max_length=1024)
+    colorId: ColorId | None = None
 
     @model_validator(mode='after')
     def valid_event(self):
@@ -74,7 +76,8 @@ class CreateEvent(BaseModel):
     def tool_fields(self):
         return {'summary': self.summary, 'start': self.start.model_dump_json(exclude_none=True),
                 'end': self.end.model_dump_json(exclude_none=True),
-                'description': self.description, 'location': self.location}
+                'description': self.description, 'location': self.location,
+                **({'colorId': self.colorId} if self.colorId is not None else {})}
 
 
 class UpdateEvent(BaseModel):
@@ -84,6 +87,7 @@ class UpdateEvent(BaseModel):
     end: EventTime | None = None
     description: str | None = Field(default=None, max_length=8192)
     location: str | None = Field(default=None, max_length=1024)
+    colorId: ColorId | None = None
 
     @model_validator(mode='after')
     def valid_update(self):

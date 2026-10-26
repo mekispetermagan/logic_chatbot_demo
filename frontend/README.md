@@ -11,7 +11,7 @@ The Linux app launches fullscreen at the display's current resolution.
 ## Calendar week view
 
 Select **Calendar** in the app bar (or the narrow-screen dropdown) to open a
-read-only Monday–Sunday week view inside the World panel. Wide screens retain
+Monday–Sunday week view inside the World panel. Wide screens retain
 the World/Chat split; narrow screens retain the two tabs. The header shows weekday
 names and dates;
 previous/next arrows fetch the selected week's events, and Refresh reloads it.
@@ -38,15 +38,30 @@ next midnight) are omitted from this initial display. This is a presentation
 filter; the API still returns its complete event list. Calendar is a separate
 view, not a symbolic conversation domain: the Chat panel shows a placeholder,
 LLM and Undo controls are hidden, and existing domain state is retained when
-switching back. No event write calls
-are made by the view.
+switching back.
 
 Each selection/week change uses one `GET /calendar/events` request with explicit
 week bounds and the Budapest timezone. Loading, empty and retry states are shown;
 late responses from previous weeks cannot replace the selected week's data.
 On narrow screens the seven-column grid can also scroll horizontally.
 Enable/configure the local MCP backend using [Calendar setup](../docs/calendar-mcp.md).
-Editing controls and calendar chat remain future work.
+Click an event to open read-only details. The pencil opens an editor for title,
+date, start/end time, description, location and Google color ID; Save submits
+only changed fields, and Cancel discards the draft. The trash icon asks Yes/No
+before deleting. Click an empty grid slot (rounded down to 15 minutes), or use
+New event, to create a same-day timed event. Times use Budapest; ambiguous or
+nonexistent DST times must be changed before saving. Recurring events are read-only.
+
+Colors 1–11 use Google's event palette. New events can inherit the calendar's
+default color; existing explicit colors can be changed to another palette color.
+Resetting an explicit color to the calendar default is not supported yet.
+Description and location can be cleared; omitted fields remain unchanged.
+
+Writes require the backend's opt-in write configuration. A successful write
+reloads the selected week from Google. While saving, dismissal and duplicate
+submissions are disabled. If a response is lost or verification fails, close the
+dialog and refresh before trying again; writes are never automatically retried.
+Calendar chat remains future work.
 
 ## Conversations
 
