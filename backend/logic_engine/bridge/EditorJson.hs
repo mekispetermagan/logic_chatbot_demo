@@ -19,6 +19,7 @@ import qualified ControlledLanguage.Parser as V2
 import qualified ControlledLanguage.Pretty as V2
 import qualified ControlledLanguage.Syntax as V2
 import qualified ControlledLanguage.Evaluation as V2
+import qualified Domains.Calendar.Language as Calendar
 import qualified CellularJson
 
 parsePosition :: Value -> Parser Position
@@ -198,7 +199,8 @@ parseV2Request = withObject "request" $ \v -> do
 processRequest :: Value -> Either String Value
 processRequest input = do
   name <- parseEither (withObject "request" (.: "domain")) input :: Either String String
-  if name == "cellular" then CellularJson.processRequest input else processObjectRequest input
+  if name == "calendar" then Calendar.processRequest input
+  else if name == "cellular" then CellularJson.processRequest input else processObjectRequest input
 
 processObjectRequest :: Value -> Either String Value
 processObjectRequest input = do

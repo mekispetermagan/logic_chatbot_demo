@@ -198,6 +198,11 @@ class _CalendarWeekViewState extends State<CalendarWeekView>
                                           'calendar-hours-scroll',
                                         ),
                                         child: _WeekGrid(
+                                          eventHandles:
+                                              controller
+                                                      .dialogue?['eventHandles']
+                                                  as Map? ??
+                                              {},
                                           week: controller.week,
                                           events: controller.events,
                                           now: _now,
@@ -329,7 +334,9 @@ class _WeekGrid extends StatelessWidget {
     required this.now,
     this.onCreate,
     this.onEvent,
+    this.eventHandles = const {},
   });
+  final Map eventHandles;
   final CalendarWeek week;
   final List<CalendarEvent> events;
   final DateTime now;
@@ -448,6 +455,7 @@ class _WeekGrid extends StatelessWidget {
       child: _EventTile(
         key: ValueKey('calendar-event-${event.id}'),
         segment: placement.segment,
+        languageHandle: eventHandles[event.id] as int?,
         onTap: onEvent == null ? null : () => onEvent!(event),
       ),
     );
@@ -455,7 +463,13 @@ class _WeekGrid extends StatelessWidget {
 }
 
 class _EventTile extends StatelessWidget {
-  const _EventTile({super.key, required this.segment, this.onTap});
+  const _EventTile({
+    super.key,
+    required this.segment,
+    this.onTap,
+    this.languageHandle,
+  });
+  final int? languageHandle;
   final CalendarSegment segment;
   CalendarEvent get event => segment.event;
   final VoidCallback? onTap;
@@ -470,7 +484,9 @@ class _EventTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Tooltip(
-        message: event.tooltip,
+        message: languageHandle == null
+            ? event.tooltip
+            : '#$languageHandle\n${event.tooltip}',
         waitDuration: const Duration(milliseconds: 350),
         child: Semantics(
           label: event.tooltip,
@@ -487,8 +503,8 @@ class _EventTile extends StatelessWidget {
                     padding: EdgeInsets.all(constraints.maxHeight < 20 ? 1 : 6),
                     child: Text(
                       constraints.maxHeight >= 44
-                          ? '${event.title}\n${segment.timeLabel}'
-                          : '${segment.continuesBefore ? '↑ ' : ''}${event.title}${segment.continuesAfter ? ' ↓' : ''}',
+                          ? '${event.displayTitle}\n${segment.timeLabel}'
+                          : '${segment.continuesBefore ? '↑ ' : ''}${event.displayTitle}${segment.continuesAfter ? ' ↓' : ''}',
                       maxLines: constraints.maxHeight >= 44 ? 3 : 1,
                       overflow: TextOverflow.clip,
                       style: TextStyle(

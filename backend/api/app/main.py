@@ -16,6 +16,7 @@ from .llm_budget import LlmBudgetLedger
 from .llm_transcript import LlmTranscript
 from .agent_llm import AgentTranslator
 from .calendar_mcp import CalendarError, CalendarMcp
+from .calendar_dialogue import CalendarDialogue
 from .calendar_routes import router as calendar_router
 
 
@@ -38,6 +39,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                           if settings.llm_log_path is not None else None)
         )
         app.state.calendar = CalendarMcp(settings)
+        app.state.calendar_dialogue = CalendarDialogue(database, settings.engine_path, lambda: app.state.calendar)
         yield
 
     app = FastAPI(title="Logic Chatbot Demo API", lifespan=lifespan)

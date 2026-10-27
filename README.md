@@ -151,7 +151,8 @@ For the optional local Google Calendar connection, follow
 [Calendar MCP setup](docs/calendar-mcp.md). It uses your private Google OAuth
 files and does not require an LLM. Reads and opt-in one-off event write endpoints
 are available in FastAPI. Select Calendar in Flutter for a weekly display with
-create/edit/delete dialogs. Calendar chat control is not yet implemented.
+create/edit/delete dialogs. The [Calendar controlled-language chat](docs/calendar-language-v1.md) supports
+clarification, scheduling, clash repair and reviewed writes.
 
 Run `cabal test` in `backend/logic_engine/`,
 `python -m unittest discover -s tests -v` in `backend/api/` with `.venv` active,

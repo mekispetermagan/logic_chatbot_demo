@@ -35,14 +35,14 @@ packaging configuration. Check startup at `http://127.0.0.1:8000/docs`.
 
 ## Optional local Google Calendar MCP
 
-The Calendar integration is opt-in and independent of the LLM/Haskell
-dialogue domains. See [local setup and authorization](../../docs/calendar-mcp.md)
+The Calendar integration is opt-in. Its controlled language is evaluated by
+Haskell; Google access stays in the Python MCP adapter. See [local setup and authorization](../../docs/calendar-mcp.md)
 for the pinned MCP server, private credentials/token paths and `.env` settings.
 With it enabled, loopback clients can use `GET /calendar/calendars`,
 `GET /calendar/events` and `GET /calendar/freebusy`. Events and free/busy require
 explicit timezone-aware `timeMin`/`timeMax` bounds; `timeZone` defaults to
 Europe/Budapest. The adapter manages a stdio subprocess for each read, keeps
-Google event data out of SQLite, and offers no arbitrary MCP calls.
+Google as the event source of truth, and offers no arbitrary MCP calls.
 `GET /calendar/events/{eventId}` retrieves one event. Optional local editing uses
 `POST /calendar/events`, `PATCH /calendar/events/{eventId}` and
 `DELETE /calendar/events/{eventId}`. Writes additionally require
@@ -51,8 +51,10 @@ Google event data out of SQLite, and offers no arbitrary MCP calls.
 supports one-off timed/all-day events and color IDs 1–11, validates times, and reads back changes.
 See the [event editing contract](../../docs/calendar-mcp.md#one-off-event-editing)
 for payloads, recurrence restrictions and recovery from an unconfirmed write.
-Flutter provides weekly display and timed-event editing, including cross-day intervals. Calendar chat
-control remains subsequent work. Keep this
+Flutter provides weekly display and timed-event editing, including cross-day intervals. [Calendar dialogue](../../docs/calendar-language-v1.md) adds loopback-only
+`GET/POST /calendar/dialogue`, provisional review, persistent discourse and
+write recovery. SQLite stores pending/recovery data and handle mappings, not an
+authoritative event mirror. Run one local API worker. Keep this
 integration disabled on public deployments until application access control is
 specified; the loopback guard is for the local demo only.
 

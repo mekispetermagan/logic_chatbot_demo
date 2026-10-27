@@ -119,3 +119,14 @@ supplies synchronous stepping and ruleset validation.
 Forecasts, bounded stabilization and return-time questions do not advance the
 current world. Random operations and paused batches retain their seed through
 review/continuation. Tests: `cabal test cellular-tests cellular-language-tests`.
+
+
+## Calendar controlled language
+
+`Domains/Calendar/` implements `calendar-v1`: parser/formatter, typed references,
+resumable evaluation, questions and the three finite scheduling operations.
+`logic-engine-editor` dispatches `domain: "calendar"` to this independent evaluator;
+Python supplies timestamp/offset data and owns persistence and Google writes.
+See [Calendar language v1](../../docs/calendar-language-v1.md). Run `cabal test`
+for the grammar/model suite; API tests also exercise this real executable against
+a fake provider, including write review and recovery.

@@ -6,7 +6,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, StringConstraints, field_validator, model_validator
 
-Summary = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=1024)]
+Summary = Annotated[str, StringConstraints(max_length=1024)]
 ColorId = Literal['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']
 
 
@@ -61,7 +61,7 @@ def validate_times(start, end):
 
 class CreateEvent(BaseModel):
     model_config = ConfigDict(extra='forbid')
-    summary: Summary
+    summary: Summary = ''
     start: EventTime
     end: EventTime
     description: str = Field(default='', max_length=8192)

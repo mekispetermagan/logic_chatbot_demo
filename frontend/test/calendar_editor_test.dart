@@ -251,68 +251,61 @@ void main() {
     expect(requests.map((r) => r.method), ['GET', 'DELETE', 'GET']);
   });
 
-  testWidgets(
-    'empty slot creates a timed event and narrow editor validates title',
-    (tester) async {
-      tester.view.physicalSize = const Size(320, 800);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
-      final requests = <http.Request>[];
-      final subject = controller((request) async {
-        requests.add(request);
-        if (request.method == 'POST') {
-          return http.Response(
-            jsonEncode({'verified': true, 'event': original}),
-            201,
-          );
-        }
-        return eventsResponse([]);
-      });
-      addTearDown(subject.dispose);
-      await subject.load();
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(body: CalendarWeekView(controller: subject)),
-        ),
-      );
-      await tester.pumpAndSettle();
-      final grid = tester.getRect(
-        find.byKey(const ValueKey('calendar-empty-slots')),
-      );
-      await tester.tapAt(
-        Offset(grid.left + 80, grid.top + 10 + 2.25 * calendarHourHeight),
-      );
-      await tester.pumpAndSettle();
-      expect(
-        find.byKey(const ValueKey('calendar-event-editor')),
-        findsOneWidget,
-      );
-      expect(find.text('Start 02:15'), findsOneWidget);
-      await tester.tap(find.text('Save'));
-      await tester.pumpAndSettle();
-      expect(find.text('Enter a title.'), findsOneWidget);
-      expect(requests.length, 1);
-      await tester.enterText(
-        find.byKey(const ValueKey('calendar-title')),
-        'New appointment',
-      );
-      await tester.tap(find.text('Save'));
-      await tester.pumpAndSettle();
-      expect(requests.map((r) => r.method), ['GET', 'POST', 'GET']);
-      final fields = jsonDecode(requests[1].body) as Map;
-      expect(fields['summary'], 'New appointment');
-      expect(fields['colorId'], '10');
-      final start = DateTime.parse(fields['start']['dateTime'] as String);
-      expect(start.toUtc(), DateTime.utc(2026, 10, 26, 1, 15));
-      expect(fields['start']['timeZone'], 'Europe/Budapest');
-      expect(
-        DateTime.parse(fields['end']['dateTime'] as String).difference(start),
-        const Duration(hours: 1),
-      );
-      expect(tester.takeException(), isNull);
-    },
-  );
+  testWidgets('empty slot creates a timed event in the narrow editor', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final requests = <http.Request>[];
+    final subject = controller((request) async {
+      requests.add(request);
+      if (request.method == 'POST') {
+        return http.Response(
+          jsonEncode({'verified': true, 'event': original}),
+          201,
+        );
+      }
+      return eventsResponse([]);
+    });
+    addTearDown(subject.dispose);
+    await subject.load();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(body: CalendarWeekView(controller: subject)),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final grid = tester.getRect(
+      find.byKey(const ValueKey('calendar-empty-slots')),
+    );
+    await tester.tapAt(
+      Offset(grid.left + 80, grid.top + 10 + 2.25 * calendarHourHeight),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('calendar-event-editor')), findsOneWidget);
+    expect(find.text('Start 02:15'), findsOneWidget);
+    expect(requests.length, 1);
+    await tester.enterText(
+      find.byKey(const ValueKey('calendar-title')),
+      'New appointment',
+    );
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(requests.map((r) => r.method), ['GET', 'POST', 'GET']);
+    final fields = jsonDecode(requests[1].body) as Map;
+    expect(fields['summary'], 'New appointment');
+    expect(fields['colorId'], '10');
+    final start = DateTime.parse(fields['start']['dateTime'] as String);
+    expect(start.toUtc(), DateTime.utc(2026, 10, 26, 1, 15));
+    expect(fields['start']['timeZone'], 'Europe/Budapest');
+    expect(
+      DateTime.parse(fields['end']['dateTime'] as String).difference(start),
+      const Duration(hours: 1),
+    );
+    expect(tester.takeException(), isNull);
+  });
 
   test(
     'uncertain writes block resubmission until refresh, without retry',

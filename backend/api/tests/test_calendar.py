@@ -381,7 +381,7 @@ class CalendarRouteTests(unittest.TestCase):
 
     def test_invalid_create_and_update_payloads_never_invoke_provider(self):
         bad_creates = [
-            {**CREATE, 'summary': ' '}, {**CREATE, 'start': CREATE['end']},
+            {**CREATE, 'start': CREATE['end']},
             {**CREATE, 'start': {'dateTime': '2026-10-29T09:00:00'}},
             {**CREATE, 'start': {'dateTime': 0}},
             {**CREATE, 'start': {'date': '2026-10-29T00:00:00'}},

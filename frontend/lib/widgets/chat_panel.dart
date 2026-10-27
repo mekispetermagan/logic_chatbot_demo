@@ -37,6 +37,9 @@ class ChatPanel extends StatefulWidget {
     this.resetPending = false,
     this.emptyHint = 'Enter a sentence to begin.',
     this.composerHint = 'Enter a message',
+    this.controls,
+    this.composerEnabled = true,
+    this.composerKey,
   });
 
   final List<ChatMessage> messages;
@@ -64,6 +67,9 @@ class ChatPanel extends StatefulWidget {
   final bool resetPending;
   final String emptyHint;
   final String composerHint;
+  final Widget? controls;
+  final bool composerEnabled;
+  final Key? composerKey;
 
   @override
   State<ChatPanel> createState() => _ChatPanelState();
@@ -83,6 +89,7 @@ class _ChatPanelState extends State<ChatPanel> {
   bool get _sendingControl =>
       widget.canSendControl?.call(_composer.text) == true;
   bool get _canSubmit {
+    if (!widget.composerEnabled) return false;
     if (_sendingControl) return true;
     if (widget.resetPending) return false;
     if (widget.proposal == null) return widget.canSend;
@@ -100,6 +107,7 @@ class _ChatPanelState extends State<ChatPanel> {
         keyboard.isAltPressed ||
         keyboard.isMetaPressed ||
         _submitting ||
+        !widget.composerEnabled ||
         widget.sending ||
         widget.pending != null ||
         widget.proposal != null) {
@@ -276,6 +284,8 @@ class _ChatPanelState extends State<ChatPanel> {
                   },
                 ),
         ),
+        if (widget.controls case final controls?)
+          Flexible(child: SingleChildScrollView(child: controls)),
         if (widget.pending case final pending?) ...[
           if (pending.stagedWorld != null)
             const Text(
@@ -389,10 +399,12 @@ class _ChatPanelState extends State<ChatPanel> {
                     ): _send,
                   },
                   child: TextField(
+                    key: widget.composerKey,
                     controller: _composer,
                     focusNode: _composerFocus,
                     enabled:
                         !busy &&
+                        widget.composerEnabled &&
                         (widget.canSendControl != null ||
                             (!_staleProposal &&
                                 widget.pending == null &&

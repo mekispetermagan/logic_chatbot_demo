@@ -77,6 +77,52 @@ class CalendarApi {
     }
   }
 
+  Future<Map<String, dynamic>> dialogue([Map<String, dynamic>? action]) async {
+    final uri = baseUrl.replace(
+      pathSegments: [
+        ...baseUrl.pathSegments.where((part) => part.isNotEmpty),
+        'calendar',
+        'dialogue',
+      ],
+    );
+    try {
+      final response =
+          await (action == null
+                  ? _client.get(uri, headers: {'Accept': 'application/json'})
+                  : _client.post(
+                      uri,
+                      headers: {'Content-Type': 'application/json'},
+                      body: jsonEncode(action),
+                    ))
+              .timeout(const Duration(minutes: 5));
+      final value = jsonDecode(utf8.decode(response.bodyBytes));
+      if (response.statusCode != 200) {
+        throw ApiException(
+          value is Map && value['detail'] is String
+              ? value['detail'] as String
+              : 'Calendar dialogue failed.',
+          statusCode: response.statusCode,
+        );
+      }
+      if (value is! Map<String, dynamic> ||
+          value['revision'] is! int ||
+          value['status'] is! String) {
+        throw const ApiException('Invalid Calendar dialogue response.');
+      }
+      return value;
+    } on TimeoutException {
+      throw const ApiException(
+        'Calendar request timed out. Refresh dialogue status before any retry.',
+      );
+    } on http.ClientException {
+      throw const ApiException(
+        'Calendar connection lost. Refresh dialogue status before any retry.',
+      );
+    } on FormatException {
+      throw const ApiException('Invalid Calendar dialogue response.');
+    }
+  }
+
   void close() => _client.close();
 
   Future<void> create(Map<String, dynamic> fields) =>

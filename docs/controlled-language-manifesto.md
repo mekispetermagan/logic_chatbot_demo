@@ -12,6 +12,9 @@ This document records design principles and a direction for future development.
 It does not claim that the current grammars implement every principle below,
 and it does not authorize changing their existing semantics. Domain-specific
 syntax and unresolved execution policies require separate specifications.
+Section 14 establishes decision/clarification dialogue as a required design
+standard for all forthcoming domains; it does not retroactively change the
+approved behavior of existing domains.
 
 ## 1. Put convenience at the interpretation boundary
 
@@ -37,7 +40,7 @@ The components have distinct responsibilities:
 | --- | --- |
 | Human | Establish intended meaning and settle consequential ambiguity |
 | LLM | Propose and explain candidate interpretations; interpret clarification answers |
-| Logic engine | Resolve references, enforce constraints, evaluate operations and derive answers |
+| Logic engine | Identify unresolved choices, govern clarification, resolve references, enforce constraints, evaluate operations and derive answers |
 | Search | Explore formal possibilities when direct evaluation is insufficient |
 | Orchestration and interface | Present proposals and feedback, persist state and manage review and Undo |
 
@@ -132,6 +135,8 @@ Every primitive and conceptual macro needs a contract covering:
 - What remains unchanged.
 - Behavior for absent values, missing referents and empty selections.
 - Atomicity, failure, no-change and clarification behavior.
+- The decision structure, unresolved parameters, permissions and revision rules
+  through which the operation becomes sufficiently specified to evaluate.
 - Returned answers and explanations.
 
 Reject conflicting assignments within one simultaneous update. Intentional
@@ -265,11 +270,137 @@ The design goal is a toolkit with one sharp operation for each meaningful task,
 composed into concepts humans can inspect and approve. Precision concerns both
 correct execution and establishing what should be executed.
 
+## 14. Specify the decision/clarification dialectic
+
+For every forthcoming domain, specify how a task's meaning is established through
+interaction, not only the algorithm that solves a fully specified task. The
+operation's semantic contract includes its **decision/clarification structure**.
+This applies to atomic operations, references and questions as well as conceptual
+commands. A fully specified deterministic operation can have a trivial structure;
+do not manufacture questions for it.
+
+The dialectic is a cycle of proposal, clarification, explicit commitment,
+verification and, when necessary, revision. It may be drawn as a decision tree,
+but persistent choices, retries and revisions generally form a state graph.
+A fixed questionnaire is insufficient: some requests already supply the needed
+information, and other questions become relevant only after a feasibility check.
+
+### 14.1 No consequential decision in silence
+
+Distinguish user-established requirements and permissions, disclosed domain
+defaults, symbolically derived conclusions, explicitly delegated choices, and
+unresolved alternatives. Record their provenance. A necessary consequence of
+accepted constraints is not an arbitrary assumption; an implementation's search
+order is not authority to choose a materially different action.
+
+Every material scope, constraint, objective and selection rule determining the
+result must be inspectable. Approved defaults need not be asked repeatedly, but
+their use must be visible. A delegated choice stays within its stated bounds and
+uses a disclosed selection policy. Otherwise, ask before making the consequential
+choice. Transparency means exposing the decisions and evidence that matter,
+not printing every internal search step.
+
+### 14.2 Represent incomplete meaning and clarify during evaluation
+
+The language must have an explicit, typed representation of supported incomplete
+requests and semantic alternatives. A missing value, an empty value, a default,
+a failed reference and a grant of permission are distinct. Do not represent a
+request's missing parameter by silently inventing a domain fact. A complete
+domain entity may have total attributes while a request about it has unresolved
+parameters.
+
+Parsing validates the request's structure and types. Evaluation identifies what
+is unresolved and may return a pending clarification instead of a completed
+transformation or answer. Malformed syntax remains an error; it is not repaired
+by guessing intent. Exact syntax and correction behavior belong in the domain
+specification.
+
+The engine owns clarification conditions, alternatives and validation. Prompts
+may use any clear English and need not be executable controlled-language
+sentences. The LLM may express a prompt or propose a typed interpretation of a
+reply, but must not supply missing parameters, choose referents, relax constraints,
+or grant permission without the user's meaning being established. Direct UI
+choices should reach the same typed response boundary without needing an LLM.
+
+### 14.3 Document decision nodes and their dependencies
+
+For each material decision, specify:
+
+- The unresolved issue, its expected type and why it affects the task.
+- The condition activating the node and which existing commitments settle it.
+- The prompt or allowed response alternatives and how replies are validated.
+- The constraint, permission or selection established by a valid answer.
+- Its effects on task, domain and discourse state, including any provisional work.
+- The next steps for completion, ambiguity, invalid replies, infeasibility,
+  resource exhaustion, cancellation and revision, where applicable.
+
+Order questions by semantic dependencies and avoid repeating settled questions.
+A solver may establish that a permission is unnecessary, such as when a task can
+succeed without changing existing entities. Specify that branch explicitly;
+never skip unresolved meaning just because a guessed interpretation happens to
+have a convenient solution. Mathematical infeasibility must not be inferred
+from an unanswered permission question.
+
+### 14.4 Persist commitments and revise without forgetting
+
+Persist the pending request, grounded references, established requirements,
+permission scopes, decision provenance and continuation. Associate responses
+with the precise pending question and task revision; stale or invalid replies
+do not fill a different slot. Resume the same evaluation without replaying
+completed operations, duplicating creation or aging discourse for each reply.
+
+A requirement revision replaces the named commitment and invalidates its dependent
+results. Preserve unrelated commitments and explain consequential invalidations.
+A broader scope cannot inherit narrower authorization silently. Relevant world or
+version changes require revalidation; do not reinterpret an old reference under
+new salience or substitute a similar entity for a deleted one.
+
+Define cancellation, sequence prefixes, staged work and external-effect recovery
+explicitly. A successful internal calculation does not establish that an external
+write completed. Clarification and permission answers do not automatically accept
+a final action proposal. The domain's execution/review contract must state what
+is authorized, provisional, applied, verified or uncertain at each boundary.
+
+### 14.5 Keep questions and solver outcomes faithful
+
+Questions use the same semantic rules and clarification machinery as commands,
+but do not acquire permission to mutate domain facts. A hypothetical movement
+allowance is a constraint on a calculation, not authorization for a real move.
+Return answers and witnesses with their actual scope and evidence. Multiple
+witnesses need not make a scalar answer ambiguous; choosing an action among them
+is a separate consequential decision.
+
+Distinguish unresolved meaning, invalid input, failed reference, successful
+no-change, feasible witness, proved infeasibility, proved optimum, search limit
+and uncertain external effects wherever the domain needs them. Exhausting a
+budget is not proof of impossibility. If the user may relax a constraint, present
+that as a new decision, preserve the other requirements, and obtain the specific
+permission before solving the relaxed problem.
+
+### 14.6 Test the dialogue contract as well as the algorithm
+
+Each forthcoming domain specification must include worked dialogue paths and
+acceptance obligations for incomplete requests, meaningful alternatives,
+permission boundaries and revisions. Test that requirements survive multiple
+turns; stale replies are rejected; clarification resumes once; explicit defaults
+and empty values differ from holes; and a changed requirement does not erase
+independent commitments.
+
+Test the branches between solving and asking, not just successful final states.
+Explanations must be derived from actual commitments, grounded facts and solver
+or execution evidence. Rejected proposals and hypothetical answers must not leak
+false discourse facts or unapproved domain effects. Interpretation coverage still
+needs separate evaluation: the engine's verified treatment of a submitted request
+does not prove that the LLM represented every plausible human intention.
+
 ## Related documents
 
 - [Overall project concept note](logic-dialogue-concept-note.pdf)
 - [Current domain-library architecture](domain-architecture.md)
 - [Current object-domain language](object-language-v2.md)
+- [Current network-domain language](network-language-v2.md)
+- [Current cellular-domain language](cellular-language-v2.md)
+- [Proposed Calendar language and task dialogues](proposed-calendar-language.md)
 - [Archived atomic core](archive/controlled-english-core.md)
 - [Archived referential layer](archive/controlled-english-layer2.md)
 - [Archived object-domain conceptual layer](archive/controlled-english-layer3.md)

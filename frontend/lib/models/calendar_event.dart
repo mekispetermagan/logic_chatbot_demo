@@ -16,6 +16,7 @@ class CalendarEvent {
 
   final String id;
   final String title;
+  String get displayTitle => title.trim().isEmpty ? '(Untitled)' : title;
   final tz.TZDateTime start;
   final tz.TZDateTime end;
   final String description;
@@ -46,7 +47,7 @@ class CalendarEvent {
     final title = json['summary'] as String?;
     return CalendarEvent(
       id: json['id'] as String,
-      title: title == null || title.trim().isEmpty ? '(Untitled)' : title,
+      title: title ?? '',
       start: start,
       end: end,
       description: json['description'] as String? ?? '',
@@ -71,7 +72,7 @@ class CalendarEvent {
     final hours = offset.inMinutes.abs() ~/ 60;
     final minutes = offset.inMinutes.abs() % 60;
     return [
-      title,
+      displayTitle,
       'Start: ${calendarDateTime(start)}',
       'End: ${calendarDateTime(end)} · $calendarTimeZone',
       'UTC$sign${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}'

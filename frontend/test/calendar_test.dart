@@ -364,7 +364,7 @@ void main() {
 
   for (final width in [320.0, 1920.0]) {
     testWidgets(
-      'Calendar occupies the World panel at width $width without a calendar conversation',
+      'Calendar occupies the World panel at width $width with Calendar dialogue',
       (tester) async {
         tester.view.physicalSize = Size(width, 1080);
         tester.view.devicePixelRatio = 1;
@@ -374,6 +374,12 @@ void main() {
         final conversationRequests = <http.Request>[];
         final calendar = controller((request) async {
           calendarRequests.add(request);
+          if (request.url.path.endsWith('/dialogue')) {
+            return http.Response(
+              jsonEncode({'status': 'idle', 'revision': 0, 'messages': []}),
+              200,
+            );
+          }
           return eventsResponse([]);
         });
         final world = jsonDecode(
@@ -431,25 +437,19 @@ void main() {
             tester.getRect(find.byType(CalendarWeekView)).right,
             lessThanOrEqualTo(width / 2),
           );
-          expect(
-            find.text('Calendar chat is not available yet.'),
-            findsOneWidget,
-          );
+          expect(find.text('Calendar dialogue'), findsOneWidget);
           expect(find.byType(TabBar), findsNothing);
         } else {
           expect(find.byType(TabBar), findsOneWidget);
           await tester.tap(find.text('Chat'));
           await tester.pumpAndSettle();
-          expect(
-            find.text('Calendar chat is not available yet.').hitTestable(),
-            findsOneWidget,
-          );
+          expect(find.text('Calendar dialogue').hitTestable(), findsOneWidget);
           await tester.tap(find.text('World'));
           await tester.pumpAndSettle();
         }
         expect(find.byType(Switch), findsNothing);
         expect(find.byTooltip('Undo'), findsNothing);
-        expect(calendarRequests, hasLength(1));
+        expect(calendarRequests, hasLength(2));
         expect(conversationRequests, hasLength(1));
         if (width < 480) {
           await tester.tap(find.byKey(const ValueKey('domain-selector')));

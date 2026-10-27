@@ -15,7 +15,23 @@ class CalendarController extends ChangeNotifier {
   bool loading = false;
   bool editing = false;
   bool needsRefresh = false;
-  bool get canEdit => !loading && !editing && !needsRefresh && error == null;
+  Map<String, dynamic>? dialogue;
+  bool chatBusy = false;
+  String? chatError;
+  bool get dialoguePending => const [
+    'clarify',
+    'review',
+    'prefix',
+    'applying',
+    'recovery',
+  ].contains(dialogue?['status']);
+  bool get canEdit =>
+      !loading &&
+      !editing &&
+      !chatBusy &&
+      !dialoguePending &&
+      !needsRefresh &&
+      error == null;
   String? error;
   int _request = 0;
   bool _disposed = false;
@@ -52,8 +68,69 @@ class CalendarController extends ChangeNotifier {
 
   Future<void> shiftWeek(int offset) {
     if (_disposed || editing) return Future.value();
+    if (chatBusy ||
+        const ['applying', 'recovery'].contains(dialogue?['status'])) {
+      return Future.value();
+    }
+    if (dialoguePending) return _cancelAndShift(offset);
     week = week.shift(offset);
     return load();
+  }
+
+  Future<void> _cancelAndShift(int offset) async {
+    await act({'type': 'cancel'});
+    if (!dialoguePending && !chatBusy) {
+      week = week.shift(offset);
+      await load();
+    }
+  }
+
+  Future<void> loadDialogue() async {
+    if (_disposed || chatBusy) return;
+    chatBusy = true;
+    chatError = null;
+    notifyListeners();
+    try {
+      final result = await api.dialogue();
+      if (!_disposed) dialogue = result;
+    } on ApiException catch (failure) {
+      if (!_disposed) chatError = failure.message;
+    } finally {
+      if (!_disposed) {
+        chatBusy = false;
+        notifyListeners();
+      }
+    }
+  }
+
+  Future<void> act(Map<String, dynamic> action) async {
+    if (_disposed || chatBusy) return;
+    chatBusy = true;
+    chatError = null;
+    notifyListeners();
+    try {
+      final result = await api.dialogue({
+        ...action,
+        'revision': dialogue?['revision'] ?? 0,
+        if (action['type'] == 'start') ...{
+          'timeMin': week.start.toUtc().toIso8601String(),
+          'timeMax': week.end.toUtc().toIso8601String(),
+        },
+      });
+      if (!_disposed) {
+        dialogue = result;
+        if (const ['answered', 'idle', 'recovery'].contains(result['status'])) {
+          await load();
+        }
+      }
+    } on ApiException catch (failure) {
+      if (!_disposed) chatError = failure.message;
+    } finally {
+      if (!_disposed) {
+        chatBusy = false;
+        notifyListeners();
+      }
+    }
   }
 
   Future<void> save({String? id, required Map<String, dynamic> fields}) =>

@@ -113,8 +113,8 @@ class _CalendarEventDialogState extends State<CalendarEventDialog> {
   Map<String, dynamic> _fields() {
     final event = widget.event;
     final fields = <String, dynamic>{};
-    if (event == null || _title.text.trim() != event.title) {
-      fields['summary'] = _title.text.trim();
+    if (event == null || _title.text != event.title) {
+      fields['summary'] = _title.text;
     }
     if (event == null || _description.text != event.description) {
       fields['description'] = _description.text;
@@ -254,7 +254,7 @@ class _CalendarEventDialogState extends State<CalendarEventDialog> {
         children: [
           Expanded(
             child: Text(
-              event.title,
+              event.displayTitle,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
@@ -329,9 +329,6 @@ class _CalendarEventDialogState extends State<CalendarEventDialog> {
               enabled: !_busy && !_unconfirmed,
               decoration: const InputDecoration(labelText: 'Title'),
               maxLength: 1024,
-              validator: (value) => value == null || value.trim().isEmpty
-                  ? 'Enter a title.'
-                  : null,
             ),
             const SizedBox(height: 8),
             for (final start in [true, false])

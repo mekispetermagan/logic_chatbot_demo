@@ -80,3 +80,20 @@ Future domains may add Haskell libraries and exported ontology metadata. Constan
 ontology documents and changing conversation state remain separate. Runtime
 ontology loading, continuous attributes and arbitrary stored relations are
 outside this demo.
+
+
+## Calendar language v1
+
+Calendar uses a separate timestamp-based world representation in
+`Domains/Calendar/`, dispatched by the editor JSON bridge. Haskell owns its
+parser, references, clarification continuation, questions and finite scheduling
+search. It receives exact events plus an explicit week/timezone context; it
+returns a provisional net effect plan and discourse state. Python's
+`calendar_dialogue.py` freezes fresh provider data, persists pending work and
+reserved handles, gates manual edits, and journals/reconciles accepted writes.
+Google remains authoritative; SQLite is not used as a Calendar event mirror.
+Flutter's Calendar chat panel handles typed questions, requirement revisions,
+review and recovery alongside the existing weekly display. See
+[Calendar language v1](calendar-language-v1.md) and the
+[detailed design](proposed-calendar-language.md). Calendar LLM translation and
+Undo remain outside this implementation.

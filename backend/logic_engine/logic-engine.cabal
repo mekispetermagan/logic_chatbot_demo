@@ -7,6 +7,11 @@ library
   other-modules: ControlledLanguage.Grammar, ControlledLanguage.Canonical,
                  ControlledLanguage.CanonicalPretty
   exposed-modules: Ontology, Domain, DomainLibrary,
+                   Domains.Calendar.Language, Domains.Calendar.Types, Domains.Calendar.Language.Syntax,
+                   Domains.Calendar.Language.Parser, Domains.Calendar.Language.Pretty,
+                   Domains.Calendar.Language.State, Domains.Calendar.Language.Resolution,
+                   Domains.Calendar.Language.Planning, Domains.Calendar.Language.Queries,
+                   Domains.Calendar.Language.Evaluation,
                    Domains.Cellular.Types, Domains.Cellular.Evaluation, Domains.Cellular.Language,
                    Domains.Cellular.Language.Syntax, Domains.Cellular.Language.Parser,
                    Domains.Cellular.Language.Pretty, Domains.Cellular.Language.Evaluation,
@@ -29,7 +34,7 @@ library
                    SyntaxVocabulary, Layer2Syntax, Layer2Parser, Discourse,
                    Layer2Evaluation, Layer3Evaluation
   hs-source-dirs: .
-  build-depends: base >=4.14 && <5, megaparsec >=9 && <10, containers, mtl
+  build-depends: base >=4.14 && <5, megaparsec >=9 && <10, containers, mtl, aeson >=2 && <3, time, text, bytestring
   default-language: Haskell2010
   default-extensions: InstanceSigs
 
@@ -144,4 +149,12 @@ test-suite cellular-language-tests
   main-is: CellularLanguageTest.hs
   hs-source-dirs: test
   build-depends: base >=4.14 && <5, logic-engine, containers
+  default-language: Haskell2010
+
+
+test-suite calendar-language-tests
+  type: exitcode-stdio-1.0
+  main-is: CalendarLanguageTest.hs
+  hs-source-dirs: test
+  build-depends: base >=4.14 && <5, logic-engine
   default-language: Haskell2010

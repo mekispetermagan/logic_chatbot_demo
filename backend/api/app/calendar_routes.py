@@ -1,10 +1,10 @@
 """Opt-in local Calendar reads and scoped writes; no arbitrary MCP invocation."""
-from typing import Annotated
+from typing import Annotated, Any, Literal
 from ipaddress import ip_address
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Request
-from pydantic import AwareDatetime, BaseModel, model_validator
+from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, model_validator
 
 from .calendar_mcp import CalendarMcp
 from .calendar_events import CreateEvent, UpdateEvent
@@ -23,9 +23,10 @@ def local_calendar(request: Request) -> CalendarMcp:
     return request.app.state.calendar
 
 
-def writable_calendar(calendar: CalendarMcp = Depends(local_calendar)) -> CalendarMcp:
+async def writable_calendar(request: Request, calendar: CalendarMcp = Depends(local_calendar)):
     calendar.require_writes()
-    return calendar
+    async with request.app.state.calendar_dialogue.manual():
+        yield calendar
 
 
 class CalendarInterval(BaseModel):
@@ -86,3 +87,32 @@ async def delete_event(event_id: EventId, calendar: CalendarMcp = Depends(writab
 @router.get('/freebusy')
 async def freebusy(query: CalendarInterval = Depends(interval), calendar: CalendarMcp = Depends(local_calendar)):
     return await calendar.freebusy(query.timeMin, query.timeMax, query.timeZone)
+
+
+class DialogueAction(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    type: Literal['start', 'answer', 'revise', 'accept', 'cancel', 'reconcile', 'continue', 'keepPartial']
+    revision: int = Field(ge=0)
+    text: str = Field(default='', max_length=65536)
+    key: str = Field(default='', max_length=512)
+    value: Any = None
+    timeMin: AwareDatetime | None = None
+    timeMax: AwareDatetime | None = None
+
+    @model_validator(mode='after')
+    def complete_action(self):
+        if self.type == 'start' and (not self.text.strip() or self.timeMin is None or self.timeMax is None):
+            raise ValueError('A new Calendar entry requires text and week bounds')
+        if self.type in ('answer', 'revise') and not self.key:
+            raise ValueError('An answer/revision must identify its parameter')
+        return self
+
+
+@router.get('/dialogue')
+async def dialogue_state(request: Request, calendar: CalendarMcp = Depends(local_calendar)):
+    return request.app.state.calendar_dialogue.public(request.app.state.calendar_dialogue.read())
+
+
+@router.post('/dialogue')
+async def dialogue_action(entry: DialogueAction, request: Request, calendar: CalendarMcp = Depends(local_calendar)):
+    return await request.app.state.calendar_dialogue.act(entry.model_dump(mode='json'))

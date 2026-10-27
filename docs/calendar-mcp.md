@@ -280,3 +280,18 @@ settings, not application-enforced restrictions or API filters.
 
 These assumptions make unexpected external changes unlikely; they do not
 provide a cloud lock. External-edit conflict detection remains unimplemented.
+
+
+## Controlled-English Calendar dialogue
+
+The weekly display now has a Calendar chat panel. See
+[Calendar language v1](calendar-language-v1.md) for examples, Haskell build/setup,
+clarifications, requirement revisions, acceptance and recovery. Existing MCP/OAuth
+settings also serve dialogue; no additional consent is needed. Natural-language
+LLM interpretation for this domain is not connected yet.
+
+Run one local API worker. Manual event writes share a lock with dialogue and are
+blocked while a task awaits clarification/review or provider recovery. SQLite
+stores pending evaluation and the write journal, while fresh Google reads remain
+the source of every new entry. Do not delete pending journal state to bypass an
+uncertain write; use the explicit recovery actions.

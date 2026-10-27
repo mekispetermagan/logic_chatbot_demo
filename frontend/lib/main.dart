@@ -11,6 +11,7 @@ import 'widgets/conversation_world_panel.dart';
 import 'widgets/chat_panel.dart';
 import 'widgets/domain_selector.dart';
 import 'widgets/calendar_week_view.dart';
+import 'widgets/calendar_chat_panel.dart';
 
 void main() {
   runApp(const MainApp());
@@ -193,14 +194,7 @@ class _DemoScreenState extends State<DemoScreen> {
               ? PanelFrame(child: CalendarWeekView(controller: _calendar))
               : worldPanel;
           final displayedChatPanel = _showCalendar
-              ? const PanelFrame(
-                  child: Center(
-                    child: Text(
-                      'Calendar chat is not available yet.',
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                )
+              ? PanelFrame(child: CalendarChatPanel(controller: _calendar))
               : chatPanel;
 
           return DefaultTabController(

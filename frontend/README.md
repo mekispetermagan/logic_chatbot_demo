@@ -42,9 +42,9 @@ earlier day, ↓ means continued into a later day. Actual starts show their time
 including 00:00; an event ending at midnight has no segment on the next day.
 Each segment's tooltip and details show both complete start/end dates and times.
 These are presentation rules; the API still returns its complete event list. Calendar is a separate
-view, not a symbolic conversation domain: the Chat panel shows a placeholder,
-LLM and Undo controls are hidden, and existing domain state is retained when
-switching back.
+dialogue domain: the Chat panel accepts controlled English, asks clarification
+questions and reviews net changes before submitting writes. LLM and Undo controls
+are hidden. Existing domain state is retained when switching back.
 
 Each selection/week change uses one `GET /calendar/events` request with explicit
 week bounds and the Budapest timezone. Loading, empty and retry states are shown;
@@ -69,7 +69,8 @@ Writes require the backend's opt-in write configuration. A successful write
 reloads the selected week from Google. While saving, dismissal and duplicate
 submissions are disabled. If a response is lost or verification fails, close the
 dialog and refresh before trying again; writes are never automatically retried.
-Calendar chat remains future work.
+See [Calendar language v1](../docs/calendar-language-v1.md) for examples,
+requirement revisions and write recovery. Pending dialogue disables manual edits.
 
 ## Conversations
 
