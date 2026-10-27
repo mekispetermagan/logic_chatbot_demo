@@ -35,9 +35,13 @@ midnights so DST weeks can contain 167 or 169 actual hours. The grid remains a
 clock time is not later than its start uses elapsed duration for its rectangle,
 with the clock change and offsets explained in its tooltip.
 
-All-day, cancelled and cross-day events (including those ending exactly at the
-next midnight) are omitted from this initial display. This is a presentation
-filter; the API still returns its complete event list. Calendar is a separate
+All-day and cancelled events are omitted. Timed events overlapping the selected
+week are included even when they start before it or end after it. Cross-day
+events appear as daily segments sharing one identity: ↑ means continued from an
+earlier day, ↓ means continued into a later day. Actual starts show their time,
+including 00:00; an event ending at midnight has no segment on the next day.
+Each segment's tooltip and details show both complete start/end dates and times.
+These are presentation rules; the API still returns its complete event list. Calendar is a separate
 view, not a symbolic conversation domain: the Chat panel shows a placeholder,
 LLM and Undo controls are hidden, and existing domain state is retained when
 switching back.
@@ -48,10 +52,10 @@ late responses from previous weeks cannot replace the selected week's data.
 On narrow screens the seven-column grid can also scroll horizontally.
 Enable/configure the local MCP backend using [Calendar setup](../docs/calendar-mcp.md).
 Click an event to open read-only details. The pencil opens an editor for title,
-date, start/end time, description, location and importance; Save submits
+start/end dates and times, description, location and importance; Save submits
 only changed fields, and Cancel discards the draft. The trash icon asks Yes/No
 before deleting. Click an empty grid slot (rounded down to 15 minutes), or use
-New event, to create a same-day timed event. Times use Budapest; ambiguous or
+New event, to create a timed event. Start and end dates are independent. Times use Budapest; ambiguous or
 nonexistent DST times must be changed before saving. Recurring events are read-only.
 
 The Importance selector offers Normal (0), Important (1) and Critical (2).

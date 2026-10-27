@@ -40,7 +40,6 @@ class CalendarEvent {
 
     final start = parse(startValue);
     final end = parse(endValue);
-    if (!sameCalendarDay(start, end)) return null;
     if (!end.isAfter(start) || json['id'] is! String) {
       throw const FormatException('Invalid calendar event');
     }
@@ -63,7 +62,8 @@ class CalendarEvent {
   double get startMinute => start.hour * 60 + start.minute + start.second / 60;
   double get endMinute => end.hour * 60 + end.minute + end.second / 60;
 
-  bool get crossesRepeatedHour => endMinute <= startMinute;
+  bool get crossesRepeatedHour =>
+      sameCalendarDay(start, end) && endMinute <= startMinute;
 
   String get tooltip {
     final offset = start.timeZoneOffset;
@@ -72,9 +72,8 @@ class CalendarEvent {
     final minutes = offset.inMinutes.abs() % 60;
     return [
       title,
-      '${calendarWeekdays[start.weekday - 1]}, ${start.day} '
-          '${calendarMonths[start.month - 1]} ${start.year}',
-      '${calendarTime(start)}–${calendarTime(end)} · $calendarTimeZone',
+      'Start: ${calendarDateTime(start)}',
+      'End: ${calendarDateTime(end)} · $calendarTimeZone',
       'UTC$sign${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}'
           '${start.timeZoneOffset != end.timeZoneOffset ? ' → UTC+${end.timeZoneOffset.inHours.toString().padLeft(2, '0')}:00' : ''}',
       if (crossesRepeatedHour)

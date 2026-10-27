@@ -34,7 +34,7 @@ class CalendarController extends ChangeNotifier {
       events = result
           .where(
             (event) =>
-                !event.start.isBefore(requestedWeek.start) &&
+                event.end.isAfter(requestedWeek.start) &&
                 event.start.isBefore(requestedWeek.end),
           )
           .toList();

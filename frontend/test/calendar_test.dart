@@ -92,7 +92,7 @@ void main() {
   );
 
   test(
-    'events use Budapest wall time and omit all-day, cross-day and cancelled entries',
+    'events use Budapest wall time and omit only all-day and cancelled entries',
     () {
       final event = CalendarEvent.fromJson(
         entry('party', '2026-10-26T21:00:00Z', '2026-10-26T22:00:00Z'),
@@ -117,7 +117,7 @@ void main() {
             '2026-10-27T01:00:00+01:00',
           ),
         ),
-        isNull,
+        isNotNull,
       );
       expect(
         CalendarEvent.fromJson(
@@ -127,7 +127,7 @@ void main() {
             '2026-10-27T00:00:00+01:00',
           ),
         ),
-        isNull,
+        isNotNull,
       );
       expect(
         CalendarEvent.fromJson({'id': 'cancelled', 'status': 'cancelled'}),

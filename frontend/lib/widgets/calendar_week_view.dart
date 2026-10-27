@@ -401,11 +401,8 @@ class _WeekGrid extends StatelessWidget {
               ),
             for (var day = 0; day < 7; day++)
               for (final placement in layoutCalendarDay(
-                events
-                    .where(
-                      (event) => sameCalendarDay(event.start, week.day(day)),
-                    )
-                    .toList(),
+                events,
+                day: week.day(day),
               ))
                 _positionedEvent(placement, day, dayWidth),
             for (var day = 0; day < 7; day++)
@@ -440,18 +437,17 @@ class _WeekGrid extends StatelessWidget {
     double dayWidth,
   ) {
     final event = placement.event;
-    final minutes = event.crossesRepeatedHour
-        ? event.end.difference(event.start).inSeconds / 60
-        : event.endMinute - event.startMinute;
+    final minutes = placement.segment.endMinute - placement.segment.startMinute;
     final width = dayWidth / placement.lanes;
     return Positioned(
+      key: ValueKey('calendar-segment-${event.id}-$day'),
       left: _axisWidth + day * dayWidth + placement.lane * width + 2,
-      top: _gridTop + event.startMinute / 60 * calendarHourHeight,
+      top: _gridTop + placement.segment.startMinute / 60 * calendarHourHeight,
       width: math.max(1, width - 4),
       height: math.max(4, minutes / 60 * calendarHourHeight - 2),
       child: _EventTile(
         key: ValueKey('calendar-event-${event.id}'),
-        event: event,
+        segment: placement.segment,
         onTap: onEvent == null ? null : () => onEvent!(event),
       ),
     );
@@ -459,8 +455,9 @@ class _WeekGrid extends StatelessWidget {
 }
 
 class _EventTile extends StatelessWidget {
-  const _EventTile({super.key, required this.event, this.onTap});
-  final CalendarEvent event;
+  const _EventTile({super.key, required this.segment, this.onTap});
+  final CalendarSegment segment;
+  CalendarEvent get event => segment.event;
   final VoidCallback? onTap;
 
   @override
@@ -484,21 +481,31 @@ class _EventTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
             ),
             child: LayoutBuilder(
-              builder: (context, constraints) => Padding(
-                padding: EdgeInsets.all(constraints.maxHeight < 20 ? 1 : 6),
-                child: Text(
-                  constraints.maxHeight >= 44
-                      ? '${event.title}\n${calendarTime(event.start)}–${calendarTime(event.end)}'
-                      : event.title,
-                  maxLines: constraints.maxHeight >= 44 ? 3 : 1,
-                  overflow: TextOverflow.clip,
-                  style: TextStyle(
-                    color: foreground,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    height: 1.25,
+              builder: (context, constraints) => Stack(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(constraints.maxHeight < 20 ? 1 : 6),
+                    child: Text(
+                      constraints.maxHeight >= 44
+                          ? '${event.title}\n${segment.timeLabel}'
+                          : '${segment.continuesBefore ? '↑ ' : ''}${event.title}${segment.continuesAfter ? ' ↓' : ''}',
+                      maxLines: constraints.maxHeight >= 44 ? 3 : 1,
+                      overflow: TextOverflow.clip,
+                      style: TextStyle(
+                        color: foreground,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        height: 1.25,
+                      ),
+                    ),
                   ),
-                ),
+                  if (segment.continuesAfter && constraints.maxHeight >= 44)
+                    Positioned(
+                      right: 4,
+                      bottom: 2,
+                      child: Text('↓', style: TextStyle(color: foreground)),
+                    ),
+                ],
               ),
             ),
           ),

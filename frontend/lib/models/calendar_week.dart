@@ -16,6 +16,10 @@ bool sameCalendarDay(DateTime a, DateTime b) =>
 String calendarTime(DateTime value) =>
     '${value.hour.toString().padLeft(2, '0')}:${value.minute.toString().padLeft(2, '0')}';
 
+String calendarDateTime(DateTime value) =>
+    '${calendarWeekdays[value.weekday - 1]}, ${value.day} '
+    '${calendarMonths[value.month - 1]} ${value.year} ${calendarTime(value)}';
+
 const calendarMonths = [
   'Jan',
   'Feb',

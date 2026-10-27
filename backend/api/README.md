@@ -51,7 +51,7 @@ Google event data out of SQLite, and offers no arbitrary MCP calls.
 supports one-off timed/all-day events and color IDs 1–11, validates times, and reads back changes.
 See the [event editing contract](../../docs/calendar-mcp.md#one-off-event-editing)
 for payloads, recurrence restrictions and recovery from an unconfirmed write.
-Flutter provides weekly display and same-day timed-event editing. Calendar chat
+Flutter provides weekly display and timed-event editing, including cross-day intervals. Calendar chat
 control remains subsequent work. Keep this
 integration disabled on public deployments until application access control is
 specified; the loopback guard is for the local demo only.

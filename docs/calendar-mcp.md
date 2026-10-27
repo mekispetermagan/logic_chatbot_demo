@@ -254,6 +254,17 @@ confirmed that live editing and deletion also work (2026-10-27). These are manua
 checks; automated write tests continue to use mocked MCP responses.
 
 
+## Timed-event display and editing
+
+Flutter includes timed events overlapping the selected week, splits cross-day
+intervals into daily display segments, and keeps all segments linked to the
+original Google event. Continuation arrows distinguish an actual midnight start
+from a continuation; midnight ends are exclusive. Tooltips and details show the
+full start/end dates and times in Europe/Budapest. The editor accepts independent
+start/end dates and requires end after start. Unchanged intervals are omitted
+from PATCH requests. All-day events remain excluded from the GUI; backend support
+for all-day payloads is unchanged.
+
 ## Controlled testing assumptions
 
 Local tests use the dedicated `logic.engine.demo@gmail.com` account and calendar.

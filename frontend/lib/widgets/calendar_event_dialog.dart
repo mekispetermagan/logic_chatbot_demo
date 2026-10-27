@@ -31,7 +31,8 @@ class _CalendarEventDialogState extends State<CalendarEventDialog> {
   final _description = TextEditingController();
   final _location = TextEditingController();
   late _Mode _mode;
-  late DateTime _date;
+  late DateTime _startDate;
+  late DateTime _endDate;
   late TimeOfDay _start;
   late TimeOfDay _end;
   int _importance = 0;
@@ -50,12 +51,11 @@ class _CalendarEventDialogState extends State<CalendarEventDialog> {
   void _resetDraft() {
     final event = widget.event;
     final start = event?.start ?? widget.initialStart!;
-    final endMinutes = (start.hour * 60 + start.minute + 60).clamp(0, 1439);
-    _date = DateTime(start.year, start.month, start.day);
+    final end = event?.end ?? start.add(const Duration(hours: 1));
+    _startDate = DateTime(start.year, start.month, start.day);
+    _endDate = DateTime(end.year, end.month, end.day);
     _start = TimeOfDay(hour: start.hour, minute: start.minute);
-    _end = event == null
-        ? TimeOfDay(hour: endMinutes ~/ 60, minute: endMinutes % 60)
-        : TimeOfDay(hour: event.end.hour, minute: event.end.minute);
+    _end = TimeOfDay(hour: end.hour, minute: end.minute);
     _title.text = event?.title ?? '';
     _description.text = event?.description ?? '';
     _location.text = event?.location ?? '';
@@ -75,24 +75,25 @@ class _CalendarEventDialogState extends State<CalendarEventDialog> {
   bool get _timesChanged {
     final event = widget.event;
     return event == null ||
-        !sameCalendarDay(_date, event.start) ||
+        !sameCalendarDay(_startDate, event.start) ||
+        !sameCalendarDay(_endDate, event.end) ||
         _start.hour != event.start.hour ||
         _start.minute != event.start.minute ||
         _end.hour != event.end.hour ||
         _end.minute != event.end.minute;
   }
 
-  tz.TZDateTime _resolve(TimeOfDay time) {
+  tz.TZDateTime _resolve(DateTime date, TimeOfDay time) {
     final value = tz.TZDateTime(
       budapest,
-      _date.year,
-      _date.month,
-      _date.day,
+      date.year,
+      date.month,
+      date.day,
       time.hour,
       time.minute,
     );
     bool sameWall(DateTime candidate) =>
-        sameCalendarDay(candidate, _date) &&
+        sameCalendarDay(candidate, date) &&
         candidate.hour == time.hour &&
         candidate.minute == time.minute;
     if (!sameWall(value)) {
@@ -125,10 +126,10 @@ class _CalendarEventDialogState extends State<CalendarEventDialog> {
       fields['colorId'] = calendarImportanceColorId(_importance);
     }
     if (_timesChanged) {
-      final start = _resolve(_start);
-      final end = _resolve(_end);
+      final start = _resolve(_startDate, _start);
+      final end = _resolve(_endDate, _end);
       if (!end.isAfter(start)) {
-        throw const FormatException('End must be after start on the same day.');
+        throw const FormatException('End must be after start.');
       }
       fields['start'] = {
         'dateTime': start.toIso8601String(),
@@ -184,14 +185,22 @@ class _CalendarEventDialogState extends State<CalendarEventDialog> {
     }
   }
 
-  Future<void> _pickDate() async {
+  Future<void> _pickDate(bool start) async {
     final value = await showDatePicker(
       context: context,
-      initialDate: _date,
+      initialDate: start ? _startDate : _endDate,
       firstDate: DateTime(1),
       lastDate: DateTime(9999, 12, 31),
     );
-    if (value != null && mounted) setState(() => _date = value);
+    if (value != null && mounted) {
+      setState(() {
+        if (start) {
+          _startDate = value;
+        } else {
+          _endDate = value;
+        }
+      });
+    }
   }
 
   Future<void> _pickTime(bool start) async {
@@ -272,13 +281,9 @@ class _CalendarEventDialogState extends State<CalendarEventDialog> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '${calendarWeekdays[event.start.weekday - 1]}, ${event.start.day} ${calendarMonths[event.start.month - 1]} ${event.start.year}',
-            ),
+            Text('Start: ${calendarDateTime(event.start)}'),
             const SizedBox(height: 8),
-            Text(
-              '${calendarTime(event.start)}–${calendarTime(event.end)} · $calendarTimeZone',
-            ),
+            Text('End: ${calendarDateTime(event.end)} · $calendarTimeZone'),
             if (event.location.isNotEmpty) ...[
               const SizedBox(height: 16),
               const Text('Location'),
@@ -329,14 +334,22 @@ class _CalendarEventDialogState extends State<CalendarEventDialog> {
                   : null,
             ),
             const SizedBox(height: 8),
-            OutlinedButton.icon(
-              key: const ValueKey('calendar-date'),
-              onPressed: _busy || _unconfirmed ? null : _pickDate,
-              icon: const Icon(Icons.calendar_today_outlined),
-              label: Text(
-                '${_date.day} ${calendarMonths[_date.month - 1]} ${_date.year}',
+            for (final start in [true, false])
+              OutlinedButton.icon(
+                key: ValueKey(
+                  start ? 'calendar-start-date' : 'calendar-end-date',
+                ),
+                onPressed: _busy || _unconfirmed
+                    ? null
+                    : () => _pickDate(start),
+                icon: const Icon(Icons.calendar_today_outlined),
+                label: Text(
+                  '${start ? 'Start date' : 'End date'}: '
+                  '${(start ? _startDate : _endDate).day} '
+                  '${calendarMonths[(start ? _startDate : _endDate).month - 1]} '
+                  '${(start ? _startDate : _endDate).year}',
+                ),
               ),
-            ),
             Row(
               children: [
                 Expanded(
