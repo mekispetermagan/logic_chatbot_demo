@@ -254,5 +254,25 @@
   {
     "input": "Make event #3 green",
     "translation": "Set importance of #3 to normal."
+  },
+  {
+    "input": "Schedule a 90-minute Workshop on Monday or Tuesday morning and a two-hour Review on Monday morning, on different days. Prefer the earliest possible Workshop, then the earliest Review.",
+    "translation": "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"], on different dates, choosing earliest in listed order."
+  },
+  {
+    "input": "Schedule two events together on different days",
+    "translation": "Schedule events jointly [event; event], on different dates."
+  },
+  {
+    "input": "Free Thursday from 10 am to 11 am, moving only normal events",
+    "translation": "Free window interval from thursday at 10:00 to thursday at 11:00, moving up to normal."
+  },
+  {
+    "input": "Can you free Thursday morning if important events may move?",
+    "translation": "Can window thursday morning be freed, moving up to important?"
+  },
+  {
+    "input": "What is the minimum movement cost of freeing Thursday 10 am to 11 am, allowing normal events to move?",
+    "translation": "What is the minimum movement cost to free window interval from thursday at 10:00 to thursday at 11:00, moving up to normal?"
   }
 ]

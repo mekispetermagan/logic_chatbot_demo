@@ -41,6 +41,201 @@ def run_engine(text=None, events=(), prior=None, action=None, ctx=CTX):
 
 
 class CalendarLanguageTests(unittest.TestCase):
+    def test_joint_backtracks_and_preserves_fixed_events(self):
+        result = run_engine('Schedule events jointly ['
+            'event lasting 90 minutes within any of [monday morning; tuesday morning] with title "Workshop"; '
+            'event lasting 120 minutes within monday morning with title "Review"'
+            '], on different dates, choosing earliest in listed order.', [event()])
+        self.assertEqual(result['status'], 'review', result)
+        self.assertEqual([p['type'] for p in result['plan']], ['create', 'create'])
+        by_title = {p['fields']['summary']: p['fields'] for p in result['plan']}
+        self.assertEqual(by_title['Workshop']['start'], micros('2026-10-27T09:00:00+01:00'))
+        self.assertEqual(by_title['Review']['start'], micros('2026-10-26T09:00:00+01:00'))
+        self.assertEqual(len({p['handle'] for p in result['plan']}), 2)
+
+    def test_joint_backtracks_without_distinct_dates(self):
+        result = run_engine('Schedule events jointly ['
+            'event lasting 60 minutes within thursday morning; '
+            'event lasting 120 minutes within starting at thursday at 09:00'
+            '], choosing earliest in listed order.')
+        self.assertEqual(result['status'], 'review', result)
+        self.assertEqual(result['plan'][0]['fields']['start'], micros('2026-10-29T11:00:00+01:00'))
+        self.assertEqual(result['plan'][1]['fields']['start'], micros('2026-10-29T09:00:00+01:00'))
+
+    def test_joint_material_choices_are_explicit(self):
+        result = run_engine('Schedule events jointly ['
+            'event lasting 60 minutes within thursday morning; '
+            'event lasting 60 minutes within thursday morning].')
+        self.assertEqual(result['status'], 'clarify', result)
+        self.assertEqual(result['question']['key'], '0.plan')
+        self.assertEqual(result['plan'], [])
+        self.assertGreater(len(result['question']['options']), 1)
+        result = run_engine(prior=result, action={'type': 'answer', 'key': '0.plan', 'value': 0})
+        self.assertEqual(result['status'], 'review', result)
+        self.assertEqual(len(result['plan']), 2)
+
+    def test_joint_missing_list_and_fields_resume_atomically(self):
+        result = run_engine('Schedule events jointly unspecified, choosing earliest in listed order.')
+        self.assertEqual(result['question']['key'], '0.items')
+        result = run_engine(prior=result, action={'type': 'answer', 'key': '0.items', 'value':
+            '[event lasting 60 minutes within thursday morning with title unspecified; '
+            'event lasting 60 minutes within friday morning]'})
+        self.assertEqual(result['question']['key'], '0.items.0.fields.title')
+        self.assertEqual(result['plan'], [])
+        result = run_engine(prior=result, action={'type': 'answer', 'key': result['question']['key'], 'value': 'Workshop'})
+        self.assertEqual(result['status'], 'review', result)
+        self.assertEqual(result['plan'][0]['fields']['summary'], 'Workshop')
+
+    def test_joint_infeasible_and_hypothetical_leave_world_unchanged(self):
+        task = '[event lasting 120 minutes within thursday morning; event lasting 120 minutes within thursday morning]'
+        result = run_engine('Schedule events jointly '+task+'.')
+        self.assertEqual(result['status'], 'error', result)
+        self.assertEqual(result['plan'], [])
+        result = run_engine('Can events '+task+' be scheduled jointly?')
+        self.assertEqual(result['status'], 'answered', result)
+        self.assertIn('false', result['feedback'][0])
+        self.assertEqual(result['plan'], [])
+        result = run_engine('Can events [event lasting 30 minutes within thursday morning; '
+                            'event lasting 30 minutes within thursday morning] be scheduled jointly?')
+        self.assertEqual(result['status'], 'answered', result)
+        self.assertIn('true', result['feedback'][0])
+        self.assertEqual(result['plan'], [])
+
+    def test_free_window_moves_and_does_not_create_reservation(self):
+        result = run_engine('Free window interval from thursday at 10:00 to thursday at 11:00, '
+            'moving up to normal.', [event(start='10:00', end='11:00')])
+        self.assertEqual(result['status'], 'clarify', result)
+        self.assertEqual(result['question']['key'], '0.plan')
+        result = run_engine(prior=result, action={'type': 'answer', 'key': '0.plan', 'value': 0})
+        self.assertEqual(result['status'], 'review', result)
+        self.assertEqual(len(result['plan']), 1)
+        self.assertEqual(result['plan'][0]['type'], 'update')
+        self.assertEqual(len(result['work']['current']), 1)
+        self.assertEqual(result['work']['nextHandle'], 1)
+        self.assertEqual(set(result['plan'][0]['fields']), {'start', 'end'})
+
+    def test_free_window_permission_protection_and_envelopes(self):
+        source = 'Free window interval from thursday at 10:00 to thursday at 11:00'
+        result = run_engine(source+'.', [event(start='10:00', end='11:00')])
+        self.assertEqual(result['question']['key'], '0.threshold')
+        for suffix, events in [(', moving up to none.', [event(start='10:00', end='11:00')]),
+                (', moving up to critical, protecting [#0].', [event(start='10:00', end='11:00')]),
+                (', moving up to critical.', [event(start='10:00', end='11:00', recurringEventId='r')])]:
+            result = run_engine(source+suffix, events)
+            self.assertEqual(result['status'], 'error', result)
+            self.assertEqual(result['plan'], [])
+        result = run_engine('Free window thursday morning, moving up to critical.', [event()])
+        self.assertEqual(result['status'], 'error', result)
+        self.assertEqual(result['plan'], [])
+
+    def test_free_window_relocation_chain_and_weighted_cost(self):
+        events = [event('a', '09:00', '10:00', '5'), event('b', '10:00', '11:00')]
+        result = run_engine('Free window interval from thursday at 09:00 to thursday at 10:00, '
+                            'moving up to important.', events)
+        self.assertEqual(result['status'], 'review', result)
+        self.assertEqual(len(result['plan']), 2)
+        self.assertEqual(result['plan'][0]['eventId'], 'a')
+        self.assertEqual(result['plan'][0]['fields']['start'], micros('2026-10-29T10:00:00+01:00'))
+        result = run_engine('What is the minimum movement cost to free window interval '
+                            'from thursday at 09:00 to thursday at 10:00, moving up to important?', events)
+        self.assertEqual(result['status'], 'answered', result)
+        self.assertIn('5.0', result['feedback'][0])
+        self.assertEqual(result['plan'], [])
+
+    def test_free_window_noop_and_hypothetical(self):
+        result = run_engine('Free window thursday morning.')
+        self.assertEqual(result['status'], 'review', result)
+        self.assertEqual(result['plan'], [])
+        result = run_engine('Can window thursday morning be freed, moving up to normal?', [event()])
+        self.assertEqual(result['status'], 'answered', result)
+        self.assertIn('false', result['feedback'][0])
+        self.assertEqual(result['plan'], [])
+        result = run_engine('Free window unspecified.')
+        self.assertEqual(result['question']['key'], '0.window')
+
+    def test_joint_alternatives_do_not_merge_adjacent_windows(self):
+        result = run_engine('Can events [event lasting 120 minutes within any of ['
+            'interval from thursday at 09:00 to thursday at 10:00; '
+            'interval from thursday at 10:00 to thursday at 11:00]; '
+            'event lasting 30 minutes within friday morning] be scheduled jointly?')
+        self.assertEqual(result['status'], 'answered', result)
+        self.assertIn('false', result['feedback'][0])
+
+    def test_joint_missing_window_and_clock_choice_remain_clarifications(self):
+        result = run_engine('Schedule events jointly [event lasting 30 minutes; '
+            'event lasting 30 minutes within friday morning], choosing earliest in listed order.')
+        self.assertEqual(result['question']['key'], '0.items.0.window')
+        result = run_engine(prior=result, action={'type': 'answer', 'key': result['question']['key'],
+            'value': 'any of [monday morning; tuesday morning]'})
+        self.assertEqual(result['status'], 'review', result)
+        result = run_engine('Schedule events jointly [event lasting 30 minutes within '
+            'starting at thursday at one of [05:00, 17:00]; '
+            'event lasting 30 minutes within friday morning], choosing earliest in listed order.')
+        self.assertEqual(result['status'], 'clarify', result)
+        self.assertTrue(result['question']['key'].endswith('.start.clock'))
+        self.assertEqual(len(result['question']['options']), 2)
+        self.assertEqual(result['plan'], [])
+
+    def test_joint_respects_exact_occupancy_and_initial_values(self):
+        result = run_engine('Schedule events jointly [event lasting 30 minutes within thursday morning '
+            'with location "Office" and description "Notes" and importance critical; '
+            'event lasting 30 minutes within friday morning], choosing earliest in listed order.',
+            [event(start='09:00', end='10:02')])
+        self.assertEqual(result['status'], 'review', result)
+        fields = result['plan'][0]['fields']
+        self.assertEqual(fields['start'], micros('2026-10-29T10:05:00+01:00'))
+        self.assertEqual(fields['location'], 'Office')
+        self.assertEqual(fields['description'], 'Notes')
+        self.assertEqual(fields['colorId'], '11')
+        self.assertEqual(fields['summary'], '')
+
+    def test_joint_cross_day_distinct_start_dates_and_boundary_scope(self):
+        result = run_engine('Schedule events jointly [event lasting 120 minutes within '
+            'interval from monday at 23:00 to tuesday at 01:00; '
+            'event lasting 30 minutes within starting at tuesday at 01:00], '
+            'on different dates, choosing earliest in listed order.')
+        self.assertEqual(result['status'], 'review', result)
+        self.assertEqual(len(result['plan']), 2)
+        result = run_engine('Schedule events jointly [event lasting 120 minutes within '
+            'starting at sunday at 23:00; event lasting 30 minutes within monday morning], '
+            'choosing earliest in listed order.')
+        self.assertEqual(result['status'], 'error', result)
+        self.assertEqual(result['plan'], [])
+
+    def test_joint_revise_invalidates_previous_schedule_choice(self):
+        result = run_engine('Schedule events jointly [event lasting 60 minutes within thursday morning; '
+            'event lasting 60 minutes within friday morning], choosing earliest in listed order.')
+        self.assertEqual(result['status'], 'review', result)
+        result = run_engine(prior=result, action={'type': 'revise', 'key': '0.items.0.duration', 'value': 120})
+        self.assertEqual(result['status'], 'review', result)
+        self.assertEqual(result['plan'][0]['fields']['end']-result['plan'][0]['fields']['start'], 120*60*1000000)
+
+    def test_joint_resource_limit_is_not_infeasibility(self):
+        result = run_engine('Schedule events jointly [event lasting unspecified within thursday morning; '
+            'event lasting 30 minutes within friday morning], choosing earliest in listed order.')
+        self.assertEqual(result['status'], 'clarify', result)
+        result['work']['nodesUsed'] = 100000
+        result = run_engine(prior=result, action={'type': 'answer', 'key': '0.items.0.duration', 'value': 30})
+        self.assertEqual(result['status'], 'limited', result)
+        self.assertNotIn('No complete', result['message'])
+        self.assertEqual(result['plan'], [])
+
+    def test_free_window_explicit_protection_hole_and_resource_limit(self):
+        result = run_engine('Free window thursday morning, protecting unspecified.')
+        self.assertEqual(result['question']['key'], '0.protected')
+        result = run_engine('Free window interval from thursday at 09:00 to thursday at 10:00.', [event()])
+        result['work']['nodesUsed'] = 100000
+        result = run_engine(prior=result, action={'type': 'answer', 'key': '0.threshold', 'value': 0})
+        self.assertEqual(result['status'], 'limited', result)
+        self.assertEqual(result['plan'], [])
+
+    def test_free_window_exact_occupancy_blocks_noop(self):
+        result = run_engine('Can window interval from thursday at 10:00 to thursday at 10:05 '
+            'be freed, moving up to none?', [event(end='10:02')])
+        self.assertEqual(result['status'], 'answered', result)
+        self.assertIn('false', result['feedback'][0])
+        self.assertEqual(result['plan'], [])
+
     def test_atomic_defaults_and_reference_chain(self):
         result = run_engine('Create event from thursday at 09:00 to thursday at 10:00. '
                             'Set title of it to "Meeting". Set location of it to "". '
@@ -322,6 +517,31 @@ class CalendarDialogueTests(unittest.IsolatedAsyncioTestCase):
 
     async def start(self, text):
         return await self.act('start', text=text, timeMin=START, timeMax=END)
+
+    async def test_joint_review_accept_and_google_identity_mapping(self):
+        result = await self.start('Schedule events jointly [event lasting 30 minutes within '
+            'thursday morning with title "One"; event lasting 30 minutes within friday morning '
+            'with title "Two"], choosing earliest in listed order.')
+        self.assertEqual(result['status'], 'review', result)
+        self.assertEqual(self.google.calls, [])
+        result = await self.act('accept')
+        self.assertEqual(result['status'], 'answered', result)
+        self.assertEqual(len(self.google.calls), 2)
+        self.assertEqual(len(set(result['eventHandles'].values())), 2)
+        self.assertEqual({e['summary'] for e in self.google.stored.values()}, {'One', 'Two'})
+
+    async def test_free_review_accept_without_reservation(self):
+        self.google.stored['a'] = event()
+        result = await self.start('Free window interval from thursday at 09:00 to thursday at 10:00, '
+            'moving up to normal.')
+        self.assertEqual(result['status'], 'review', result)
+        self.assertEqual(self.google.calls, [])
+        result = await self.act('accept')
+        self.assertEqual(result['status'], 'answered', result)
+        self.assertEqual(len(self.google.stored), 1)
+        result = await self.start('Schedule event lasting 60 minutes within starting at thursday at 09:00.')
+        self.assertEqual(result['status'], 'review', result)
+        self.assertEqual([p['type'] for p in result['plan']], ['create'])
 
     async def test_review_then_accept_create_and_persistent_handle(self):
         result = await self.start('Schedule event lasting 30 minutes within thursday morning.')

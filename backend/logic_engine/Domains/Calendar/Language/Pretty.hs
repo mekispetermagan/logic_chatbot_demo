@@ -44,6 +44,12 @@ conditionText c=case c of
 optionsText(Options t p order)=", moving up to "++slotText (\i->if i<0 then "none" else importanceText i) t++", protecting "++slotText (\rs->"["++intercalate ", " (map refText rs)++"]") p++", choosing "++if order then "preserve original order" else "ask"
 parameters t=" lasting "++slotText durationText(duration t)++" within "++slotText windowText(window t)
 taskText t=parameters t++" with "++intercalate " and " [k++" "++slotText (if k=="importance" then importanceText.read else quoted) (maybe(Known def) id (lookup k(fields t)))|(k,def)<-[("title",""),("location",""),("description",""),("importance","0")]]
+jointWindowText (SingleWindow w)=slotText windowText w
+jointWindowText (AnyWindows ws)="any of ["++intercalate "; " (map (slotText windowText) ws)++"]"
+jointItemText (JointItem d w fs)="event lasting "++slotText durationText d++" within "++slotText jointWindowText w++
+ (if null fs then "" else " with "++intercalate " and " [f++" "++slotText (if f=="importance" then importanceText.read else quoted) v|(f,v)<-fs])
+jointListText xs=slotText (\items->"["++intercalate "; " (map jointItemText items)++"]") xs
+jointOptionsText different earliest=(if different then ", on different dates" else "")++", choosing "++if earliest then "earliest in listed order" else "ask"
 sentenceText s=body++if isQuestion s then "?" else "."
  where
  body=case s of
@@ -53,6 +59,11 @@ sentenceText s=body++if isQuestion s then "?" else "."
   SetText k r v->"set "++k++" of "++rtext r++" to "++slotText quoted v
   SetImportance r v->"set importance of "++rtext r++" to "++slotText importanceText v
   SetInterval r a b->"set interval of "++rtext r++" from "++m a++" to "++m b
+  JointSchedule xs d e->"schedule events jointly "++jointListText xs++jointOptionsText d e
+  JointPossible xs d e->"can events "++jointListText xs++" be scheduled jointly"++jointOptionsText d e
+  FreeWindow w o->"free window "++slotText windowText w++optionsText o
+  FreePossible w o->"can window "++slotText windowText w++" be freed"++optionsText o
+  FreeCost w o->"what is the minimum movement cost to free window "++slotText windowText w++optionsText o
   Schedule t->"schedule event"++taskText t
   Insert t o->"make room for event"++taskText t++optionsText o
   Repair d o->"remove clashes on "++dateSlot d++optionsText o

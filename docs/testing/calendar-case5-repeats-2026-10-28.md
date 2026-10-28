@@ -47,3 +47,8 @@ The original punctuation omission is **intermittent, not consistently reproducib
 Five initial setup invocations failed before any model submission. They were rerun using absolute run-directory paths and are not counted as translation attempts. No follow-up model response was resubmitted or given a repair prompt.
 
 All five temporary calendars were deleted and absence verified. Temporary OAuth copies were removed. Production calendar data, database, agent sessions, prompts, grammar and application code were unchanged.
+
+
+## Medium-reasoning follow-up
+
+A subsequent [ten-repeat medium-reasoning experiment](calendar-case5-medium-repeats-2026-10-28.md) completed 10/10 attempts under unchanged instructions and fixtures. It is recorded separately and does not replace these low-effort observations.

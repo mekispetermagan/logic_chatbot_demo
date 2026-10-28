@@ -173,7 +173,7 @@ class CalendarDialogue:
             # whole subprocess is interrupted; never claim unfinished effects.
             work = state.get('work')
             completed = (work or {}).get('completed', 0)
-            mutations = {'Create', 'Delete', 'SetText', 'SetImportance', 'SetInterval',
+            mutations = {'Create', 'CreateWithFields', 'JointSchedule', 'FreeWindow', 'Delete', 'SetText', 'SetImportance', 'SetInterval',
                          'Schedule', 'Insert', 'Repair'}
             mutating = any(s.get('tag') in mutations for s in (work or {}).get('sentences', []))
             return {'status': 'prefix' if completed and mutating else 'limited',

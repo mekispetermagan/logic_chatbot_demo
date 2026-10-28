@@ -15,7 +15,7 @@ engine-maintainer contract, not translator prompt material. Not every part of
 this document belongs in an agent prompt; the translator receives syntax and its
 role instructions, while Haskell owns evaluation and planning.
 
-The language accepts the three task families in the shared domain specification,
+The language accepts the five task families in the shared domain specification,
 primitive mutations, and the questions below. Calendar `Undo`, `Atomically`,
 general quantified commands, arbitrary optimization expressions and other
 unlisted extensions are unsupported. Clarification prompts are ordinary English,
@@ -256,7 +256,8 @@ but adds no successful mention, matching the other domains' convention.
 ### 1.5 Layer 3 task commands
 
 ```ebnf
-conceptual-command = schedule-command | insertion-command | repair-command ;
+conceptual-command = schedule-command | insertion-command | repair-command
+                   | joint-command | free-command ;
 schedule-command = "schedule event", task-body ;
 insertion-command = "make room for event", task-body, movement-options ;
 repair-command = "remove clashes", [ "on", date-slot ], movement-options ;
@@ -664,7 +665,7 @@ implicit description syntax.
 quantifier = "every" | "some" ;
 conceptual-question = derived-question | selection-question
                     | availability-question | conflict-question
-                    | planning-question ;
+                    | planning-question | joint-question | free-question ;
 derived-question = "what is the duration of", event-slot
                  | "what is the gap between", event-slot, "and", event-slot ;
 selection-question = "which events match", event-condition
@@ -759,6 +760,79 @@ Use end-exclusive boundaries when processing simultaneous starts/ends. Recompute
 exact-original witnesses and disclose discrepancies as specified in Section 3.2.
 For free intervals use interval union/complement, not an LLM-generated list.
 
+### Joint scheduling and freeing a window
+
+```ebnf
+joint-command = "schedule events jointly", joint-list-slot, joint-options ;
+joint-list-slot = "unspecified"
+                | "[", joint-item, ";", joint-item, { ";", joint-item }, "]" ;
+joint-item = "event", [ "lasting", duration-slot ],
+             [ "within", joint-window-slot ],
+             [ "with", initial-field, { "and", initial-field } ] ;
+joint-window-slot = "unspecified" | window-slot
+                  | "any of", "[", window-slot, { ";", window-slot }, "]" ;
+joint-options = [ ", on different dates" ],
+                [ ", choosing", ("ask" | "earliest in listed order") ] ;
+free-command = "free window", free-window-slot, movement-options ;
+free-window-slot = "unspecified" | "selected week"
+                 | date-slot, [ period ], [ lower-bound ], [ upper-bound ]
+                 | "interval from", moment-slot, "to", moment-slot ;
+joint-question = "can events", joint-list-slot,
+                 "be scheduled jointly", joint-options ;
+free-question = "can window", free-window-slot, "be freed", movement-options
+              | "what is the minimum movement cost to free window",
+                free-window-slot, movement-options ;
+```
+
+`joint-list-slot` contains 2–16 items. Semicolons separate event items and permitted
+alternative windows; commas retain their existing option/reference-list meanings.
+`any of` is permission to choose a window, unlike unresolved clock `one of`.
+An event must fit inside one alternative, not their merged union. Fields keep the
+existing unique title–location–description–importance order and defaults. Omitted
+duration/window and explicit field holes require clarification. Different dates means
+different Budapest start dates. Existing events stay fixed. List order alone confers
+no priority; omitted choosing means ask about material schedule choices.
+
+Clarification keys are sentence-prefixed: `.items` for a missing list (a controlled
+list supplied as text), `.items.I.duration`, `.items.I.window`,
+`.items.I.window.single`, `.items.I.window.alternatives.J`, and
+`.items.I.fields.FIELD` for item parameters. An unresolved window accepts a single
+window or `any of [...]` as text. Nested date/clock/occurrence/rounding questions use
+the existing typed forms. Resolve every item's requirements before planning; expose
+`.plan` for a required complete-schedule choice. New handles are distinct, allocated
+in item order and committed only with the complete result. No partial creations occur.
+
+The joint engine enumerates five-minute candidates inside each separate allowed
+window, respecting fixed starts, scope and both models of existing occupancy.
+It searches complete assignments in item/start order with backtracking, checking
+mutual clashes and any different-date requirement. For explicit earliest-in-listed-order,
+the first complete assignment proves lexicographic minimality; a greedy prefix does not.
+Without that policy it displays up to 64 complete checked alternatives for an explicit
+choice; enumeration order is not a preference. A feasibility question may use any
+checked complete witness and asks no irrelevant witness-choice question. No witness
+plus exhausted search proves infeasibility; a resource limit without a witness means
+unresolved, not infeasible. Existing candidate/check/node budgets apply.
+
+Freeing uses the existing bounded-window resolution, protection, movement-permission,
+weighted optimization and tie clarification mechanisms. `starting at` is rejected as
+a free window because it supplies no end. Resolve the window and explicit protections
+before a no-op shortcut. Movement permission is required only when movement is needed.
+The solver excludes exact or normalized placements intersecting the forbidden window,
+considers relocation chains across all eligible events, and independently checks the
+resulting changed-event clash constraints. It introduces no synthetic event or identity.
+The result passes through the existing review/diff/cloud-verification flow. Questions
+return witnesses/costs with no mutations. Resource exhaustion never proves optimality.
+
+```text
+Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning] with title "Workshop"; event lasting 120 minutes within monday morning with title "Review"], on different dates, choosing earliest in listed order.
+Schedule events jointly [event; event], on different dates.
+Free window interval from thursday at 10:00 to thursday at 11:00, moving up to normal.
+Free window thursday morning, moving up to important, protecting [#4].
+Can events [event lasting 60 minutes within monday morning; event lasting 60 minutes within tuesday morning] be scheduled jointly, on different dates?
+Can window thursday morning be freed, moving up to normal?
+What is the minimum movement cost to free window interval from thursday at 10:00 to thursday at 11:00, moving up to important?
+```
+
 ### 3.5 Planning questions reuse the task solvers
 
 ```ebnf
@@ -771,7 +845,7 @@ planning-question = "can an event", placement-parameters,
 ```
 
 Examples follow the exact clause order: the feasibility form places `fit` after
-its placement parameters. These are the same three task families, not additional
+its placement parameters. These are the supported task families, not additional
 scheduling objectives or hypothetical programs.
 
 ```text

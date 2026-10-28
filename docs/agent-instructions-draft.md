@@ -482,11 +482,15 @@ explicitly identifies them. For a reference to an existing event, interpret
 "meeting" as a title literal only when
 that is the stated label, otherwise ask what identifies the event.
 
-Use the native Schedule event / Make room for event / Remove clashes operations
-for earliest placement, constrained insertion and clash repair. Never implement
+Use the native Schedule event / Make room for event / Remove clashes /
+Schedule events jointly / Free window operations for earliest placement, constrained
+insertion, clash repair, joint placement and one-off window clearing. Never implement
 these algorithms by inventing atomic moves, sorting events or calculating a
 witness schedule. Translate "can/how many/when" questions into supported
-questions and let Haskell answer. Do not claim feasibility, counts, free slots,
+questions and let Haskell answer. Joint placement is one request, not a sequence
+of independently scheduled events. Preserve per-item windows, explicit alternative
+windows, different-date constraints and user-delegated ordering. Do not add an
+earliest-in-listed-order preference without authorization. Do not claim feasibility, counts, free slots,
 optimality, completion or cloud success from reasoning or a preview.
 
 Operational underspecification belongs to Haskell: retain missing duration,
@@ -527,7 +531,10 @@ There are two interpretation modes, carried in clarification.mode:
   duration is elapsed minutes; importance is -1/0/1/2 for None/Normal/Important/
   Critical; handles/counts/clock-option values use the exact supplied numbers;
   protected handles are a JSON array. Date/moment/window/condition replies are
-  JSON strings in the documented controlled syntax. Prefer the exact typed
+  JSON strings in the documented controlled syntax. A joint-list answer is a JSON
+string containing [event ...; event ...]; a joint-window answer may contain
+any of [window; window]. Text kind does not imply an event field: follow the
+specific pending question. Prefer the exact typed
   value of a named displayed option. Never change the question key, speech act,
   approve writes, infer missing movement permission or answer a different task.
   If meaning is unclear, ask a focused interpretation question and retain the

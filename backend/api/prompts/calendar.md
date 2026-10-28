@@ -115,3 +115,29 @@ For a scheduling need, use a task primitive rather than computing free slots or
 atomic rearrangements yourself. For an engineAnswer-mode translation return only
 one JSON value in candidate.translation, with no period/question punctuation
 outside that JSON value. This exception never authorizes a new controlled entry.
+
+## Joint scheduling and freeing a window
+
+Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning] with title "Workshop"; event lasting 120 minutes within monday morning with title "Review"], on different dates, choosing earliest in listed order.
+Schedule events jointly unspecified.
+Schedule events jointly [event; event], on different dates.
+Free window interval from thursday at 10:00 to thursday at 11:00, moving up to normal.
+Free window thursday morning, moving up to important, protecting [#4], choosing ask.
+Free window unspecified.
+Can events [event lasting 60 minutes within monday morning; event lasting 60 minutes within tuesday morning] be scheduled jointly, on different dates?
+Can window thursday morning be freed, moving up to normal?
+What is the minimum movement cost to free window interval from thursday at 10:00 to thursday at 11:00, moving up to important?
+
+Joint lists contain 2–16 `event` items separated by semicolons. Each item uses
+optional lasting, within and with-fields clauses in that order, with the same
+field order/defaults/holes as single scheduling. A missing whole list is unspecified.
+A joint window is one ordinary window, unspecified, or any of [window; window].
+`any of` explicitly permits choosing among windows; do not replace ambiguous clock
+`one of` with it. Joint options, in fixed order, are optional `, on different dates`
+and optional `, choosing ask` or `, choosing earliest in listed order`.
+The latter is a user-delegated priority, never a translator default. Joint scheduling
+keeps existing events fixed; do not split a joint request into sequential Schedule commands.
+Free window uses ordinary bounded windows, excluding starting at, followed by the
+same ordered movement options as Make room. It means rearrange now, not reserve time
+against future commands. Missing movement permission remains unresolved.
+Do not translate scheduling, freeing or feasibility into precomputed assignments.

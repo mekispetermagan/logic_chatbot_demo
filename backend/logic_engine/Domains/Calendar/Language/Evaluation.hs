@@ -15,6 +15,7 @@ import Domains.Calendar.Language.State
 import Domains.Calendar.Language.Resolution
 import Domains.Calendar.Language.Pretty
 import Domains.Calendar.Language.Queries(query,intervalText)
+import Domains.Calendar.Language.Parser (parseJointList,parseJointWindow)
 import Domains.Calendar.Language.Planning
 
 replace e=modify(\w->w{current=e:filter((/=handle e).handle)(current w)})
@@ -38,7 +39,7 @@ runSentence :: String -> Sentence -> Eval String
 runSentence k s=do
  result<-runSentenceBody k s
  es<-gets current;c<-gets context
- let planning=case s of Schedule _->True;Insert _ _->True;Repair _ _->True;Feasible _ _->True;MinimumCost _ _->True;RepairPossible _ _->True;_->False
+ let planning=case s of JointSchedule {}->True;JointPossible {}->True;FreeWindow {}->True;FreePossible {}->True;FreeCost {}->True;Schedule _->True;Insert _ _->True;Repair _ _->True;Feasible _ _->True;MinimumCost _ _->True;RepairPossible _ _->True;_->False
      fixed=["#"++show(handle e)|e<-es,not(movablePlacement c e(normalized e))]
  pure(result++if planning && not(null fixed) then "\nFixed because normalization leaves the date/period envelope: "++intercalate ", " fixed++". Original exact intervals are retained; explicit correction is available." else "")
 runSentenceBody k s=case s of
@@ -57,6 +58,11 @@ runSentenceBody k s=case s of
  SetInterval r a b->do
   e<-resolveRef(k++".subject")r;editable e;x<-resolveMoment False(k++".start")a;y<-resolveMoment True(k++".end")b
   (lo,hi)<-normalizeAssignment k x y;replace e{start=lo,end=hi};pure "Interval assigned; overlaps are permitted for explicit assignments."
+ JointSchedule xs d e->joint k xs d e False
+ JointPossible xs d e->joint k xs d e True
+ FreeWindow w o->freeWindowPlan k w o False False
+ FreePossible w o->freeWindowPlan k w o True False
+ FreeCost w o->freeWindowPlan k w o True True
  Schedule t->placement k t Nothing False False
  Insert t opts->placement k t(Just opts)False False
  Repair d opts->repair k d opts False
@@ -128,3 +134,79 @@ choosePlan k o hypothetical minimumCost old new=do
 movementLevel k slot hypothetical = if not hypothetical then importanceValue k slot True else do
  n<-valueAt k slot "What maximum importance should I consider movable for this calculation?" "importance" [(if i<0 then "None" else importanceName i,toJSON i)|i<-[-1..2]]
  if n>=(-1) && n<=2 then pure n else need k "Choose None, Normal, Important or Critical for this hypothetical calculation." "importance" [(if i<0 then "None" else importanceName i,toJSON i)|i<-[-1..2]]
+
+-- A clearing task adds a constraint, never a synthetic persisted event.
+freeWindowPlan k slot o hypothetical minimumCost=do
+ (a,b,_)<-resolveWindow False(k++".window")slot
+ prot<-resolveProtected(k++".protected")(protected o)
+ es<-gets current;c<-gets context
+ let clear e=not(overlaps(interval e)(a,b)||overlaps(interval(normalized e))(a,b))
+ if all clear es then pure(if hypothetical then "true; minimum movement cost is 0; the window is already free." else "The window is already free; no changes needed.")
+ else do
+  level<-movementLevel(k++".threshold")(threshold o)hypothetical
+  let can=[handle e|e<-es,importance e<=level,handle e `notElem` prot,not(recurring e)]
+  solveAvoid [(a,b)] k es can [] Nothing(weekStart c,weekEnd c,Nothing)
+  choosePlan k o hypothetical minimumCost es Nothing
+
+-- Search in input-item/start order. The first complete assignment is therefore
+-- the lexicographic earliest solution, with backtracking rather than greedy commits.
+joint k slot different earliest hypothetical=do
+ items<-exprValue(k++".items")slot (\xs->"["++intercalate "; " (map jointItemText xs)++"]") parseJointList
+   "Which events should be scheduled jointly? Enter [event ...; event ...]." "text"
+ when(length items<2||length items>16)(invalid "Joint scheduling requires between two and sixteen events.")
+ n<-gets nextHandle
+ when(toInteger n+toInteger(length items)>=toInteger(maxBound::Int))(invalid "Handle allocation exhausted.")
+ old<-gets current;c<-gets context
+ specifications<-forM (zip[0::Int ..]items)$ \(i,JointItem dur win fs)->do
+  let key=k++".items."++show i
+  d<-resolveDuration(key++".duration")dur
+  w<-exprValue(key++".window")win jointWindowText parseJointWindow
+    "What windows may this event use? For example monday morning or any of [monday morning; tuesday morning]." "text"
+  bounds<-case w of
+   SingleWindow x->(:[]) <$> resolveWindow True(key++".window.single")x
+   AnyWindows xs->do
+    when(null xs)(invalid "At least one alternative window is required.")
+    mapM(\(j,x)->resolveWindow True(key++".window.alternatives."++show j)x)(zip[0::Int ..]xs)
+  effective<-forM bounds$ \(a,b,f)->case f of
+   Just t | t `mod` tick/=0->do (u,_)<-normalizeAssignment(key++".fixed")t(t+d);pure(a,b,Just u)
+   _->pure(a,b,f)
+  template<-resolveFields(key++".fields")(Task Missing Missing fs)(Event(n+i)Nothing "" "" "" (Just "10") 0 d False False False)
+  pure(template,effective)
+ cached<-gets bestFor
+ unless(cached==k)$ do
+  modify(\w->w{bestFor=k,bestPlans=[],bestScore=Nothing,searchIncomplete=False})
+  domains<-forM specifications$ \(template,effective)->do
+   let d=end template
+       starts=nub(sortOn id [t|(a,b,f)<-effective,t<-maybe[ceilTick a,ceilTick a+tick..b-d](:[])f,t>=a,t+d<=b,t `mod` tick==0])
+   ps<-forM starts$ \t->do
+    charge "candidate"
+    let e=template{start=t,end=t+d}
+    good<-and <$> forM old(\o->charge "check">>charge "check">>pure(not(bothClash e o)))
+    pure[e|good,inScope c e]
+   pure(concat ps)
+  let cap=if earliest||hypothetical then 1 else 64
+      walk assigned []=modify(\w->w{bestPlans=bestPlans w++[old++reverse assigned]})
+      walk assigned (ps:rest)=forM_ ps$ \p->do
+       count<-gets(length.bestPlans)
+       when(count<cap)$ do
+        charge "node"
+        good<-and <$> forM assigned(\q->charge "check">>charge "check">>pure(not(bothClash p q) && (not different || localDate c(start p)/=localDate c(start q))))
+        when good(walk(p:assigned)rest)
+  catchError(walk [] domains)(\e->case e of Limited _->modify(\w->w{searchIncomplete=True});_->throwError e)
+ ps<-gets bestPlans;limited<-gets searchIncomplete
+ if null ps then
+  if limited then throwError(Limited "Joint search limit reached; feasibility unresolved.")
+  else if hypothetical then pure "false; exhaustive joint search found no complete assignment."
+  else invalid "No complete joint schedule exists within the stated windows and distinct-date constraints; nothing changed."
+ else do
+  let describe es=intercalate "\n"["#"++show(handle e)++" "++quoted(title e)++" "++intervalText c e|e<-sortOn handle es,handle e>=n]
+  if hypothetical then pure("true; checked complete joint witness, existing events unchanged:\n"++describe(head ps))
+  else do
+   i<-if earliest||length ps==1 && not limited then pure 0 else valueAt(k++".plan")Missing
+      (if limited then "Search limit reached. Choose a checked complete joint schedule; the list is not exhaustive." else "Choose a complete joint schedule (up to 64 examples; list order is not a preference).") "choice"
+      [(describe es,toJSON j)|(j,es)<-zip[0::Int ..]ps]
+   when(i<0||i>=length ps)(invalid "Choose a listed joint schedule.")
+   let chosen=ps!!i
+   modify(\w->w{current=chosen,nextHandle=n+length items})
+   forM_ [e|e<-chosen,handle e>=n](\e->remember e [])
+   pure((if earliest then "Complete lexicographic earliest joint schedule in listed order." else "Complete joint schedule selected.")++" Existing events remain fixed.\n"++describe chosen)

@@ -28,6 +28,8 @@ examples =
       , [Plain "Make room for event lasting 60 minutes within starting at thursday at 09:00, moving up to normal."]
       , [Plain "Make room for event lasting 90 minutes within thursday afternoon, moving up to important, protecting [", Reference "the event with title \"Meeting\"", Plain "], choosing preserve original order."]
       , [Plain "Remove clashes on thursday, moving up to normal."]
+      , [Plain "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"], on different dates, choosing earliest in listed order."]
+      , [Plain "Free window interval from thursday at 10:00 to thursday at 11:00, moving up to normal."]
       ])
   , ("Conceptual questions",
       [ [Plain "What is the duration of ", Reference "the event with importance critical", Plain "?"]
@@ -43,5 +45,8 @@ examples =
       , [Plain "Can an event lasting 90 minutes within thursday afternoon fit, moving up to normal?"]
       , [Plain "What is the minimum movement cost to fit an event lasting 90 minutes within thursday afternoon, moving up to normal?"]
       , [Plain "Can clashes on thursday be removed, moving up to normal?"]
+      , [Plain "Can events [event lasting 60 minutes within monday morning; event lasting 60 minutes within tuesday morning] be scheduled jointly, on different dates?"]
+      , [Plain "Can window thursday morning be freed, moving up to normal?"]
+      , [Plain "What is the minimum movement cost to free window interval from thursday at 10:00 to thursday at 11:00, moving up to important?"]
       ])
   ]

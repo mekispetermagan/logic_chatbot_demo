@@ -12,7 +12,15 @@ assert label condition = unless condition (error label)
 main :: IO ()
 main = do
   let examples =
-        [ "Create event from thursday at 09:00 to friday at 10:00."
+        [ "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning] with title \"Workshop\"; event lasting 60 minutes within monday morning], on different dates, choosing earliest in listed order."
+        , "Schedule events jointly unspecified."
+        , "Schedule events jointly [event; event], on different dates."
+        , "Free window thursday morning, moving up to normal, protecting [it], choosing preserve original order."
+        , "Free window unspecified."
+        , "Can events [event within unspecified; event] be scheduled jointly, choosing ask?"
+        , "Can window thursday morning be freed, moving up to important?"
+        , "What is the minimum movement cost to free window selected week, moving up to critical?"
+        , "Create event from thursday at 09:00 to friday at 10:00."
         , "Set title of it to \"\". Set importance of #0 to normal. Delete #0."
         , "Set location of the unique event with title \"Meeting\" and importance important and start date thursday to \"Office\"."
         , "Create event from friday at 11:00 to friday at 11:15 with title \"Laundry machine mechanic\" and location \"Home\" and description \"Repair\" and importance critical."
@@ -40,11 +48,13 @@ main = do
     Right ast -> case parseEntry (entryText ast) of
       Left message -> error (entryText ast ++ ": " ++ message)
       Right ast' -> assert ("canonical formatting: " ++ source) (entryText ast' == entryText ast)
-  forM_ ["Create event from unspecified to unspecified with title \"x\" and title \"y\".",
+  forM_ ["Schedule events jointly [event].", "Free window starting at thursday at 09:00.", "Create event from unspecified to unspecified with title \"x\" and title \"y\".",
          "Create event from unspecified to unspecified with importance critical and title \"x\".",
          "Create event from unspecified to unspecified with.", "Undo.", "Delete #01.", "Create event from thursday at 24:00 to thursday at 25:00.",
          "Schedule event with title \"x\" and title \"y\".", "How many events match true.", "Create event from monday at ١٠:٠٠ to monday at 11:00."] $ \source ->
     assert ("invalid syntax accepted: " ++ source) (case parseEntries source of Left _ -> True; _ -> False)
+  assert "joint window answers consume the whole value" (parseJointWindow "monday morning; event within friday morning" == Nothing)
+  assert "joint list answers cannot smuggle preferences" (parseJointList "[event; event], choosing earliest in listed order" == Nothing)
   assert "half ticks round down" (roundTime (2*tick + tick `div` 2) == 2*tick)
   assert "above half rounds up" (roundTime (2*tick + tick `div` 2 + 1) == 3*tick)
   assert "scope choices before effects" (case parseEntries "Delete #0. Does #1 satisfy true or true and true?" of Right xs -> length xs == 2; _ -> False)

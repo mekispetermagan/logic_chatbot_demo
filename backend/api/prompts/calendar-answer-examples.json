@@ -148,5 +148,21 @@
     },
     "input": "yes",
     "translation": "true"
+  },
+  {
+    "question": {
+      "kind": "text",
+      "prompt": "Which events should be scheduled jointly? Enter [event ...; event ...]."
+    },
+    "input": "A one-hour review on Thursday morning and a half-hour planning session on Friday afternoon",
+    "translation": "\"[event lasting 60 minutes within thursday morning with title \\\"Review\\\"; event lasting 30 minutes within friday afternoon with title \\\"Planning\\\"]\""
+  },
+  {
+    "question": {
+      "kind": "text",
+      "prompt": "What windows may this event use? For example monday morning or any of [monday morning; tuesday morning]."
+    },
+    "input": "Either Monday morning or Tuesday afternoon",
+    "translation": "\"any of [monday morning; tuesday afternoon]\""
   }
 ]

@@ -40,12 +40,15 @@ placements e True=do
    pure[p|t/=start n,movablePlacement c e p]
   pure(e:concat xs)
 solve :: String -> [Event] -> [Int] -> [Int] -> Maybe Event -> (Instant,Instant,Maybe Instant) -> Eval ()
-solve cacheKey old canMove targets new bounds=do
+solve cacheKey old canMove targets new bounds=solveAvoid [] cacheKey old canMove targets new bounds
+solveAvoid forbidden cacheKey old canMove targets new bounds=do
  cached<-gets bestFor
  unless(cached==cacheKey)$ do
   modify(\w->w{bestPlans=[],bestScore=Nothing,bestFor=cacheKey,searchIncomplete=False})
   let newId=handle <$> new
-  ds<-mapM(\e->do ps<-placements e(handle e `elem` canMove && not(recurring e));pure(e,ps))old
+      changed e=case filter((==handle e).handle)old of [o]->interval o/=interval e;_->True
+      required a b=requiredPairs newId targets old a b || (not(null forbidden) && (changed a || changed b))
+  ds<-mapM(\e->do ps<-placements e(handle e `elem` canMove && not(recurring e));pure(e,[p|p<-ps,all (\w->not(overlaps(interval p)w || overlaps(interval(normalized p))w)) forbidden]))old
   allDomains<-case new of
    Nothing->pure ds
    Just e->do
@@ -61,8 +64,8 @@ solve cacheKey old canMove targets new bounds=do
         pure(case filter((==handle e).handle)old of
           [prior]->interval prior==interval e || (handle e `elem` canMove && start e/=start(normalized prior) && start e `mod` tick==0 && movablePlacement ctx prior e && end e-start e==end(normalized prior)-start(normalized prior))
           _->case new of Just template->let (lo,hi,fixed)=bounds in handle e==handle template && inScope ctx e && start e>=lo && end e<=hi && maybe True(==start e)fixed && start e `mod` tick==0 && end e-start e==end template-start template;_->False))
-       pairsValid<-and <$> forM [(a,b)|(i,a)<-zip[0::Int ..]assigned,b<-drop(i+1)assigned] (\(a,b)->do charge "check";charge "check";pure(not(requiredPairs newId targets old a b)||not(bothClash a b)))
-       when(valid && pairsValid)$ do
+       pairsValid<-and <$> forM [(a,b)|(i,a)<-zip[0::Int ..]assigned,b<-drop(i+1)assigned] (\(a,b)->do charge "check";charge "check";pure(not(required a b)||not(bothClash a b)))
+       when(valid && pairsValid && all (\e->all (\w->not(overlaps(interval e)w || overlaps(interval(normalized e))w)) forbidden) assigned)$ do
         let score=(movementCost old assigned,maybe 0 (\e->start(head[p|p<-assigned,handle p==handle e]))new)
         prior<-gets bestScore
         case prior of
@@ -72,7 +75,7 @@ solve cacheKey old canMove targets new bounds=do
                 | otherwise->pure()
       walk assigned ((_,ps):rest)=forM_ ps$ \p->do
        charge "node"
-       good<-and <$> forM assigned(\q->do charge "check";charge "check";pure(not(requiredPairs newId targets old p q) || not(bothClash p q)))
+       good<-and <$> forM assigned(\q->do charge "check";charge "check";pure(not(required p q) || not(bothClash p q)))
        let cost=movementCost old(p:assigned)
        incumbent<-gets bestScore
        when(good && maybe True(\(best,_)->cost<=best)incumbent)(walk(p:assigned)rest)

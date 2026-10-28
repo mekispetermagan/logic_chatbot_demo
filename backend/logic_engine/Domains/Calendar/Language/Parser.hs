@@ -1,6 +1,6 @@
 {-# LANGUAGE NoMonomorphismRestriction, FlexibleContexts #-}
 {-# LANGUAGE FlexibleContexts #-}
-module Domains.Calendar.Language.Parser (parseEntries,parseEntry) where
+module Domains.Calendar.Language.Parser (parseEntries,parseEntry,parseJointList,parseJointWindow) where
 import Control.Applicative ((<|>))
 import Control.Monad (guard,void)
 import Data.Char (isAlphaNum,toLower)
@@ -88,8 +88,28 @@ creationFields=do
   ensure (length names==length(nub names)) "Creation fields must not be repeated.";ensure (names==sortFields names) "Creation fields must be ordered title, location, description, importance.";pure fs
   where field=((,) <$> textField <*> slot quoted) <|> ((,) "importance" . fmapSlot show <$> (word "importance" *> slot importance))
 fmapSlot f (Known x)=Known(f x);fmapSlot _ Missing=Missing
+jointWindow=(AnyWindows <$> (phrase "any of" *> between (symbol "[") (symbol "]") (sepBy1 (slot windowValue) (symbol ";"))))
+  <|> (SingleWindow . Known <$> windowValue)
+jointItem=JointItem <$> (word "event" *> option Missing (word "lasting" *> slot durationValue))
+  <*> option Missing (word "within" *> slot jointWindow) <*> creationFields
+jointList=do
+ xs<-between (symbol "[") (symbol "]") (sepBy1 jointItem (symbol ";"))
+ ensure (length xs>=2 && length xs<=16) "Joint scheduling requires between two and sixteen events.";pure xs
+jointOptions=(,) <$> option False (True <$ (symbol "," *> phrase "on different dates"))
+  <*> option False (symbol "," *> word "choosing" *> choiceWords [("ask",False),("earliest in listed order",True)])
+jointSentence constructor=do
+ xs<-slot jointList;(different,earliest)<-jointOptions;pure(constructor xs different earliest)
+freeWindow=do
+ w<-slot windowValue
+ ensure (case w of Known (Starting _)->False;_->True) "A free window needs an end; starting at is not a bounded window.";pure w
+parseJointList text=case parseEntry ("schedule events jointly "++text++".") of
+ Right [JointSchedule (Known xs) False False]->Just xs;_->Nothing
+parseJointWindow text=case parseEntry ("schedule events jointly [event within "++text++"; event].") of
+ Right [JointSchedule (Known [JointItem Missing (Known w) [], JointItem Missing Missing []]) False False]->Just w;_->Nothing
 command=choice
-  [ createSentence <$> (phrase "create event from" *> slot moment) <*> (word "to" *> slot moment) <*> creationFields
+  [ phrase "schedule events jointly" *> jointSentence JointSchedule
+  , FreeWindow <$> (phrase "free window" *> freeWindow) <*> options
+  , createSentence <$> (phrase "create event from" *> slot moment) <*> (word "to" *> slot moment) <*> creationFields
   , Delete <$> (word "delete" *> slot ref)
   , SetText <$> (word "set" *> textField <* word "of") <*> slot ref <*> (word "to" *> slot quoted)
   , SetImportance <$> (phrase "set importance of" *> slot ref) <*> (word "to" *> slot importance)
@@ -98,7 +118,10 @@ command=choice
   , Insert <$> (phrase "make room for event" *> task) <*> options
   , Repair <$> (phrase "remove clashes" *> option Missing (word "on" *> dateSlot)) <*> options ]
 question=choice
-  [ Exists <$> (word "does" *> slot (char '#' *> integer) <* word "exist")
+  [ do phrase "can events";xs<-slot jointList;phrase "be scheduled jointly";(d,e)<-jointOptions;pure(JointPossible xs d e)
+  , FreePossible <$> (phrase "can window" *> freeWindow <* phrase "be freed") <*> options
+  , FreeCost <$> (phrase "what is the minimum movement cost to free window" *> freeWindow) <*> options
+  , Exists <$> (word "does" *> slot (char '#' *> integer) <* word "exist")
   , Query <$> (phrase "what is the" *> slot (choiceWords [(x,x)|x<-["title","location","description","importance","start","end","interval"]]) <* word "of") <*> slot ref
   , Check <$> (word "does" *> slot ref) <*> (word "satisfy" *> condition)
   , DurationOf <$> (phrase "what is the duration of" *> slot ref)
