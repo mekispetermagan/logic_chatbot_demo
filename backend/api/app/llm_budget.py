@@ -6,6 +6,7 @@ from .database import Database
 from .schemas import LlmBudget, LlmUsage
 
 MODEL = "gpt-6-luna"
+REASONING_EFFORT = "medium"
 MAX_INPUT_TOKENS = 20_000
 MAX_OUTPUT_TOKENS = 2_000
 NANO_PER_USD = 1_000_000_000

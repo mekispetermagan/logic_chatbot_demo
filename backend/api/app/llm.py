@@ -8,7 +8,7 @@ from uuid import uuid4
 
 import httpx
 
-from .llm_budget import (MODEL, MAX_INPUT_TOKENS, MAX_OUTPUT_TOKENS, MAX_REQUEST_NANO,
+from .llm_budget import (MODEL, REASONING_EFFORT, MAX_INPUT_TOKENS, MAX_OUTPUT_TOKENS, MAX_REQUEST_NANO,
                          NANO_PER_USD, LlmBudgetLedger)
 from .schemas import LlmUsage, InterpretationCandidate
 from .agent_context import InterpreterWorld
@@ -184,7 +184,7 @@ class LlmTranslator:
                     response = None
                     response = self.post(client, 'generation',
                                          {**count_body, 'store': False, 'service_tier': 'default',
-                                          'reasoning': {'effort': 'low'},
+                                          'reasoning': {'effort': REASONING_EFFORT},
                                           'max_output_tokens': MAX_OUTPUT_TOKENS}, headers,
                                          {**context, 'reservationId': reservation})
                     response.raise_for_status()

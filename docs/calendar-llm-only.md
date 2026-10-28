@@ -33,7 +33,7 @@ symbolic engine internals are excluded.
 ## Implemented backend and tool contract
 
 The separate `calendar-llm-only` agent uses the configured `gpt-6-luna` model,
-low reasoning effort, no environment, no subagents and no code execution. It
+medium reasoning effort, no environment, no subagents and no code execution. It
 receives this project's shared domain specification and its own role/transport
 instructions. The Calendar translator also receives the same shared domain
 specification, plus its grammar and translation instructions. No solver recipe,

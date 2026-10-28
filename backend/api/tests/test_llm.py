@@ -67,7 +67,7 @@ class LlmTests(unittest.TestCase):
         self.assertEqual(body['max_output_tokens'], MAX_OUTPUT_TOKENS)
         self.assertEqual(body['service_tier'], 'default')
         self.assertFalse(body['store'])
-        self.assertEqual(body['reasoning']['effort'], 'low')
+        self.assertEqual(body['reasoning']['effort'], 'medium')
         self.assertTrue(body['text']['format']['strict'])
         # Reservation must be durably committed before generation starts.
         with Database(self.settings.database_path).connection() as connection:

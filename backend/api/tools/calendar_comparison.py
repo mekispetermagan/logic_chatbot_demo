@@ -26,6 +26,7 @@ from app.config import Settings
 from app.calendar_mcp import CalendarMcp, DEMO_CALENDAR_ID
 from app.main import create_app
 from app.agent_usage import AgentUsageReconciler
+from app.llm_budget import MODEL, REASONING_EFFORT
 
 START = '2026-10-26T00:00:00+01:00'
 END = '2026-11-02T00:00:00+01:00'
@@ -207,7 +208,7 @@ def run(directory,case,mode,action=None):
             if normalize(initial)!=expected_fixture:
                 raise RuntimeError('Fixture readback mismatch; no model request was sent')
             save(folder/'manifest.json',{'case':case,'mode':mode,'request':CASES[case]['request'],
-                'clock':FROZEN,'model':'gpt-6-luna','reasoning':'low',
+                'clock':FROZEN,'model':MODEL,'reasoning':REASONING_EFFORT,
                 'startedAt':datetime.now(timezone.utc).isoformat(),
                 'fixture':normalize(initial),'freshDatabase':True})
         path='/calendar/dialogue' if mode=='symbolic' else '/calendar/llm-only/dialogue'

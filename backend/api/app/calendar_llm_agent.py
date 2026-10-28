@@ -6,7 +6,7 @@ from jsonschema import Draft202012Validator, ValidationError
 
 from .agent_llm import AgentTranslator
 from .calendar_mcp import CalendarError, DEMO_CALENDAR_ID
-from .llm_budget import MODEL
+from .llm_budget import MODEL, REASONING_EFFORT
 
 DOMAIN = 'calendar-llm-only'
 READS = {'calendar_list_events': 'list-events', 'calendar_get_event': 'get-event'}
@@ -59,7 +59,7 @@ execution independently of your response. Do not include credentials in text.
 """
         return {'name': 'Logic Chatbot — Calendar LLM-only', 'model': MODEL,
                 'instructions': responsibilities+'\n# Calendar domain specification\n'+rules,
-                'reasoning': {'effort': 'low'}, 'service_tier': 'default',
+                'reasoning': {'effort': REASONING_EFFORT}, 'service_tier': 'default',
                 'tools': self.tools, 'multi_agent': {'enabled': False},
                 'text': {'format': {'type': 'json_schema', 'schema': RESULT_SCHEMA}}}
 

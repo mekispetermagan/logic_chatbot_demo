@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 from .llm import PROMPTS, RESPONSE_SCHEMA
-from .llm_budget import MODEL
+from .llm_budget import MODEL, REASONING_EFFORT
 
 INSTRUCTIONS_PATH = Path(__file__).resolve().parents[3] / 'docs' / 'agent-instructions-draft.md'
 
@@ -48,7 +48,7 @@ def configuration_for(domain: str) -> dict:
                         f'{example["input"]} => {example["translation"]}' for example in examples))
     return {
         'name': f'Logic Chatbot — {domain.title()}', 'model': MODEL,
-        'instructions': instructions, 'reasoning': {'effort': 'low'},
+        'instructions': instructions, 'reasoning': {'effort': REASONING_EFFORT},
         'service_tier': 'default', 'tools': [], 'multi_agent': {'enabled': False},
         'text': {'format': {'type': 'json_schema', 'schema': RESPONSE_SCHEMA}},
     }

@@ -486,6 +486,11 @@ class AgentTests(unittest.TestCase):
         self.offer('Please color a cell', base='/conversations/' + another['conversationId'])
         self.assertEqual(len(self.sessions), 3)
         self.assertEqual(len(self.agents), 2)
+        for domain in ('objects', 'network', 'cellular', 'calendar'):
+            with self.subTest(domain=domain):
+                config = configuration_for(domain)
+                self.assertEqual(config['model'], 'gpt-6-luna')
+                self.assertEqual(config['reasoning'], {'effort': 'medium'})
         self.assertEqual(self.client.get(self.base).json()['proposal'], first['proposal'])
         network, objects = configuration_for('network'), configuration_for('objects')
         self.assertIn('Network operations', network['instructions'])
@@ -525,6 +530,20 @@ class AgentTests(unittest.TestCase):
             row = connection.execute('SELECT * FROM llm_sessions').fetchone()
             self.assertEqual(row['session_id'], 'session_1')
             self.assertEqual(connection.execute('SELECT COUNT(*) FROM chat_messages').fetchone()[0], 5)
+
+    def test_medium_reasoning_updates_legacy_agent_and_rotates_session(self):
+        current = configuration_for('network')
+        legacy = {**current, 'reasoning': {'effort': 'low'}}
+        with patch('app.agent_llm.configuration_for', return_value=legacy):
+            first = self.offer()
+        self.review(first, 'reject')
+        before = self.snapshots()
+        second = self.offer('Please make a colorful edit')
+        self.assertIsNotNone(second['proposal'])
+        self.assertEqual(len(self.agents), 1)
+        self.assertEqual(len(self.sessions), 2)
+        self.assertEqual(self.agents['agent_0']['reasoning'], {'effort': 'medium'})
+        self.assertEqual(self.snapshots(), before)
 
     def test_clarification_and_parser_failures_use_same_session_and_do_not_apply(self):
         self.status, self.question, self.translation = 'clarification', 'Do you mean isolated nodes?', 'Create object with color red and pattern -sw on B2.'

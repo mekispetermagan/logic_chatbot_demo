@@ -116,7 +116,7 @@ class CalendarLlmOnlyTests(unittest.TestCase):
         from app.agent_instructions import configuration_for
         rules=(Path(__file__).resolve().parents[3]/'docs/calendar-domain.md').read_text()
         self.assertIn(rules,config['instructions']);self.assertIn(rules,configuration_for('calendar')['instructions'])
-        self.assertIn('(importance + 1)^2',config['instructions']);self.assertEqual(config['reasoning'],{'effort':'low'});self.assertEqual(len(config['tools']),4)
+        self.assertIn('(importance + 1)^2',config['instructions']);self.assertEqual(config['reasoning'],{'effort':'medium'});self.assertEqual(len(config['tools']),4)
     def test_wrong_semantic_plan_is_not_corrected_and_needs_exact_approval(self):
         self.provider.queue=[([self.change(colorId='11')],{'kind':'answer','text':'Agent reply.'})]
         s=self.message('Make the meeting normal.');self.assertEqual(s['status'],'review');self.assertEqual(self.calendar.calls,[])

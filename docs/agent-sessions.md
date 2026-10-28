@@ -111,7 +111,7 @@ next LLM request.
 
 On the first LLM use of each domain, FastAPI creates a saved agent and stores its
 ID and assembled configuration hash in `llm_agents`. The configuration fixes
-the model to `gpt-6-luna`, uses low reasoning and Standard service tier, and
+the model to `gpt-6-luna`, uses medium reasoning and Standard service tier, and
 constrains final text to the existing proposal JSON schema. No tools, subagents,
 hosted sandbox or web search are enabled in this stage.
 
@@ -121,6 +121,11 @@ session for affected conversations. Existing world, salience, chat, proposal,
 Undo and cost histories in SQLite remain intact. Instructions are not uploaded
 on every chat request. Dashboard edits are not a substitute for updating the
 versioned local source.
+
+Reasoning effort is set app-wide by `REASONING_EFFORT` in
+`backend/api/app/llm_budget.py`. Both transports and the Calendar LLM-only agent
+use it. Restart FastAPI after changing it; saved agents adopt the new
+configuration lazily on their next request, with session rotation as above.
 
 ## Sessions and state
 

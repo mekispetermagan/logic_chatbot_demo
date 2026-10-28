@@ -119,7 +119,7 @@ one question requiring an unsupported logical or arithmetic combination. The
 translator neither answers it itself nor substitutes a weaker intermediate query.
 
 In the optional `responses` transport, FastAPI uses HTTPX and the OpenAI Responses API with strict structured JSON,
-`gpt-6-luna`, Standard (`default`) service tier, low reasoning, no tools,
+`gpt-6-luna`, Standard (`default`) service tier, medium reasoning, no tools,
 `store: false`, and no automatic retries or previous response IDs. Input is
 counted with `/v1/responses/input_tokens`, including instructions and schema,
 before generation. The complete input limit is 20,000 tokens and the output
