@@ -118,15 +118,15 @@ def export(directory):
             'initialEvents':read('initial.json'),'finalEvents':read('final.json'),
             'messages':read('public.json')['messages'],
             'actions':[json.loads(l)['action'] for l in (folder/'api.jsonl').read_text().splitlines()]})
-    target=ROOT/'docs/testing/calendar-comparison-2026-10-28-evidence.json'
+    target=ROOT/'docs/testing/archive/calendar-comparison-2026-10-28-evidence.json'
     target.write_text(json.dumps({'frozenNow':'2026-10-28T08:00:00+01:00','runs':runs,'excluded':excluded},indent=2,ensure_ascii=False)+'\n')
     print('Exported',target)
     for r in runs:print(r['case'],r['mode'],r['checks']['finalStateMatches'],r['usage'])
 
 def render_report(directory=DEFAULT_DIRECTORY):
     import re
-    evidence=json.loads((ROOT/'docs/testing/calendar-comparison-2026-10-28-evidence.json').read_text())
-    report=ROOT/'docs/testing/calendar-comparison-2026-10-28.md'
+    evidence=json.loads((ROOT/'docs/testing/archive/calendar-comparison-2026-10-28-evidence.json').read_text())
+    report=ROOT/'docs/testing/archive/calendar-comparison-2026-10-28.md'
     text=report.read_text()
     names={'symbolic':'Hybrid','llm-only':'LLM-only'}
     fields=['turns','input_tokens','cached_tokens','output_tokens','total_tokens']

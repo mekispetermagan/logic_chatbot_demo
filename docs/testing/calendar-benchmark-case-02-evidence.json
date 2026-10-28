@@ -1,0 +1,3013 @@
+{
+  "case": 2,
+  "specification": {
+    "name": "Edit several fields",
+    "level": "Simple",
+    "events": [
+      {
+        "day": 5,
+        "title": "Budget review",
+        "start": "14:00",
+        "end": "14:30",
+        "importance": 0,
+        "location": "Room A",
+        "description": "Draft"
+      }
+    ],
+    "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+  },
+  "runs": [
+    {
+      "case": 2,
+      "repetition": 1,
+      "mode": "symbolic",
+      "stopReason": "transport_or_partial_result",
+      "lastStage": "initial",
+      "status": "prefix",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20853,
+        "output_tokens": 334,
+        "total_tokens": 21187,
+        "cached_tokens": 0,
+        "reasoning_tokens": 183
+      },
+      "durationSeconds": 51.44,
+      "finishedAt": "2026-10-28T16:14:45.732080+00:00",
+      "success": false,
+      "failureCategory": "translation_reference_after_rename",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": false,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 1,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "startedAt": "2026-10-28T16:14:16.899806+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "initialIds": [
+        "f2e71fdd9ff247c388a2339d2e882ce6"
+      ],
+      "finalIds": [
+        "f2e71fdd9ff247c388a2339d2e882ce6"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0de53a88ca57e0a1006ae21f5e13b4819aba107102171eaed7",
+          "turnId": "turn_0de53a88ca57e0a1006ae21f61e014819aaf7a09a581646948",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20853,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 334,
+            "output_tokens_details": {
+              "reasoning_tokens": 183
+            },
+            "total_tokens": 21187
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). No matching event.\nset title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\""
+        }
+      ],
+      "feedback": [
+        "set title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\""
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of the event with title \"Budget review\" to \"Room B\". Set description of the event with title \"Budget review\" to \"Quarterly figures\". Set importance of the event with title \"Budget review\" to critical.",
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of the event with title \"Budget review\" to \"Room B\". Set description of the event with title \"Budget review\" to \"Quarterly figures\". Set importance of the event with title \"Budget review\" to critical."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "prefix"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 2,
+      "mode": "symbolic",
+      "stopReason": "transport_or_partial_result",
+      "lastStage": "initial",
+      "status": "prefix",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20853,
+        "output_tokens": 206,
+        "total_tokens": 21059,
+        "cached_tokens": 0,
+        "reasoning_tokens": 67
+      },
+      "durationSeconds": 50.924,
+      "finishedAt": "2026-10-28T16:15:36.880756+00:00",
+      "success": false,
+      "failureCategory": "translation_reference_after_rename",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": false,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 2,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "startedAt": "2026-10-28T16:15:09.550045+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "initialIds": [
+        "0aeff2fdd4d94f5e94805e8bbafb8a69"
+      ],
+      "finalIds": [
+        "0aeff2fdd4d94f5e94805e8bbafb8a69"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0f389c954df2378c006ae21f9241e08199a7699e4390ac7312",
+          "turnId": "turn_0f389c954df2378c006ae21f96029081999d7be9556e679fa5",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20853,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 206,
+            "output_tokens_details": {
+              "reasoning_tokens": 67
+            },
+            "total_tokens": 21059
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). No matching event.\nset title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\""
+        }
+      ],
+      "feedback": [
+        "set title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\""
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of the event with title \"Budget review\" to \"Room B\". Set description of the event with title \"Budget review\" to \"Quarterly figures\". Set importance of the event with title \"Budget review\" to critical.",
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of the event with title \"Budget review\" to \"Room B\". Set description of the event with title \"Budget review\" to \"Quarterly figures\". Set importance of the event with title \"Budget review\" to critical."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "prefix"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 3,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20853,
+        "output_tokens": 279,
+        "total_tokens": 21132,
+        "cached_tokens": 0,
+        "reasoning_tokens": 164
+      },
+      "durationSeconds": 252.679,
+      "finishedAt": "2026-10-28T16:30:52.813565+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 3,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "operatorHash": "b4f2a696822b7030f4b72982d01c4e07e011fedebcc90239aba234a89e9aa79e",
+        "startedAt": "2026-10-28T16:28:26.825756+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "initialIds": [
+        "8dcbb839abc94b18bac58e180b3ce9b6"
+      ],
+      "finalIds": [
+        "8dcbb839abc94b18bac58e180b3ce9b6"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0f5b64732a6c2f3e006ae222ba4d548199b9427402d8b43f3b",
+          "turnId": "turn_0f5b64732a6c2f3e006ae222bdc0848199880ed00b96a3569f",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20853,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 279,
+            "output_tokens_details": {
+              "reasoning_tokens": 164
+            },
+            "total_tokens": 21132
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nset title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\"\nset location of it to \"Room B\".\nSet location of #0 to \"Room B\"\nset description of it to \"Quarterly figures\".\nSet description of #0 to \"Quarterly figures\"\nset importance of it to critical.\nSet importance to critical"
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "set title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\"",
+        "set location of it to \"Room B\".\nSet location of #0 to \"Room B\"",
+        "set description of it to \"Quarterly figures\".\nSet description of #0 to \"Quarterly figures\"",
+        "set importance of it to critical.\nSet importance to critical"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of it to \"Room B\". Set description of it to \"Quarterly figures\". Set importance of it to critical.",
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of it to \"Room B\". Set description of it to \"Quarterly figures\". Set importance of it to critical."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 4,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20853,
+        "output_tokens": 280,
+        "total_tokens": 21133,
+        "cached_tokens": 0,
+        "reasoning_tokens": 157
+      },
+      "durationSeconds": 175.33,
+      "finishedAt": "2026-10-28T16:39:50.187544+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 4,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:37:08.308039+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "initialIds": [
+        "rrrbc2ehbecbat7h4996u04brc"
+      ],
+      "finalIds": [
+        "rrrbc2ehbecbat7h4996u04brc"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0dd73283f1dd5219006ae224c8c2608199947937c25b82916d",
+          "turnId": "turn_0dd73283f1dd5219006ae224cd74ec8199b201fd77c8d50cfd",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20853,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 280,
+            "output_tokens_details": {
+              "reasoning_tokens": 157
+            },
+            "total_tokens": 21133
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nset title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\"\nset location of it to \"Room B\".\nSet location of #0 to \"Room B\"\nset description of it to \"Quarterly figures\".\nSet description of #0 to \"Quarterly figures\"\nset importance of it to critical.\nSet importance to critical"
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "set title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\"",
+        "set location of it to \"Room B\".\nSet location of #0 to \"Room B\"",
+        "set description of it to \"Quarterly figures\".\nSet description of #0 to \"Quarterly figures\"",
+        "set importance of it to critical.\nSet importance to critical"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of it to \"Room B\". Set description of it to \"Quarterly figures\". Set importance of it to critical.",
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of it to \"Room B\". Set description of it to \"Quarterly figures\". Set importance of it to critical."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 5,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20853,
+        "output_tokens": 299,
+        "total_tokens": 21152,
+        "cached_tokens": 0,
+        "reasoning_tokens": 181
+      },
+      "durationSeconds": 144.635,
+      "finishedAt": "2026-10-28T16:48:35.672735+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 5,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:46:23.897508+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "initialIds": [
+        "gjliu7ha2d0mdrgb39brfjfqcg"
+      ],
+      "finalIds": [
+        "gjliu7ha2d0mdrgb39brfjfqcg"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_077c6a35260eb4d3006ae226ebbdbc819bb3452ccc6d5acc0c",
+          "turnId": "turn_077c6a35260eb4d3006ae226f00f30819b888b46e3780dff06",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20853,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 299,
+            "output_tokens_details": {
+              "reasoning_tokens": 181
+            },
+            "total_tokens": 21152
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nset title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\"\nset location of it to \"Room B\".\nSet location of #0 to \"Room B\"\nset description of it to \"Quarterly figures\".\nSet description of #0 to \"Quarterly figures\"\nset importance of it to critical.\nSet importance to critical"
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "set title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\"",
+        "set location of it to \"Room B\".\nSet location of #0 to \"Room B\"",
+        "set description of it to \"Quarterly figures\".\nSet description of #0 to \"Quarterly figures\"",
+        "set importance of it to critical.\nSet importance to critical"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of it to \"Room B\". Set description of it to \"Quarterly figures\". Set importance of it to critical.",
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of it to \"Room B\". Set description of it to \"Quarterly figures\". Set importance of it to critical."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 6,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20853,
+        "output_tokens": 327,
+        "total_tokens": 21180,
+        "cached_tokens": 0,
+        "reasoning_tokens": 204
+      },
+      "durationSeconds": 144.157,
+      "finishedAt": "2026-10-28T16:51:00.668487+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 6,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:48:50.477441+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "initialIds": [
+        "1bbdtrgp3ioeikgqdj4enuphas"
+      ],
+      "finalIds": [
+        "1bbdtrgp3ioeikgqdj4enuphas"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_096282bcdbb6b8f2006ae227817ccc819abd607ac62e1dd377",
+          "turnId": "turn_096282bcdbb6b8f2006ae22784eab4819ab2e92c8a2f953c05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20853,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 327,
+            "output_tokens_details": {
+              "reasoning_tokens": 204
+            },
+            "total_tokens": 21180
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nset title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\"\nset location of it to \"Room B\".\nSet location of #0 to \"Room B\"\nset description of it to \"Quarterly figures\".\nSet description of #0 to \"Quarterly figures\"\nset importance of it to critical.\nSet importance to critical"
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "set title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\"",
+        "set location of it to \"Room B\".\nSet location of #0 to \"Room B\"",
+        "set description of it to \"Quarterly figures\".\nSet description of #0 to \"Quarterly figures\"",
+        "set importance of it to critical.\nSet importance to critical"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of it to \"Room B\". Set description of it to \"Quarterly figures\". Set importance of it to critical.",
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of it to \"Room B\". Set description of it to \"Quarterly figures\". Set importance of it to critical."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 7,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20853,
+        "output_tokens": 260,
+        "total_tokens": 21113,
+        "cached_tokens": 0,
+        "reasoning_tokens": 141
+      },
+      "durationSeconds": 39.039,
+      "finishedAt": "2026-10-28T17:22:03.193783+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 7,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:21:27.171031+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "initialIds": [
+        "3ktfsh5qqmp415l4qh2ueqhjsg"
+      ],
+      "finalIds": [
+        "3ktfsh5qqmp415l4qh2ueqhjsg"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_05320d68b99182d9006ae22f1b4804819b9983838241f30028",
+          "turnId": "turn_05320d68b99182d9006ae22f1f3984819ba7e9434b3419d6b7",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20853,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 260,
+            "output_tokens_details": {
+              "reasoning_tokens": 141
+            },
+            "total_tokens": 21113
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nset title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\"\nset location of it to \"Room B\".\nSet location of #0 to \"Room B\"\nset description of it to \"Quarterly figures\".\nSet description of #0 to \"Quarterly figures\"\nset importance of it to critical.\nSet importance to critical"
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "set title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\"",
+        "set location of it to \"Room B\".\nSet location of #0 to \"Room B\"",
+        "set description of it to \"Quarterly figures\".\nSet description of #0 to \"Quarterly figures\"",
+        "set importance of it to critical.\nSet importance to critical"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of it to \"Room B\". Set description of it to \"Quarterly figures\". Set importance of it to critical.",
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of it to \"Room B\". Set description of it to \"Quarterly figures\". Set importance of it to critical."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 8,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20853,
+        "output_tokens": 303,
+        "total_tokens": 21156,
+        "cached_tokens": 0,
+        "reasoning_tokens": 187
+      },
+      "durationSeconds": 32.69,
+      "finishedAt": "2026-10-28T17:22:36.014923+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 8,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:22:06.131735+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "initialIds": [
+        "etj3hjno231mtklso0ndq5tclg"
+      ],
+      "finalIds": [
+        "etj3hjno231mtklso0ndq5tclg"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_02b3ba6ec049ede4006ae22f40f8c48199a9768027774adac2",
+          "turnId": "turn_02b3ba6ec049ede4006ae22f443ab48199bbec418fca9a8cab",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20853,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 303,
+            "output_tokens_details": {
+              "reasoning_tokens": 187
+            },
+            "total_tokens": 21156
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nset title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\"\nset location of it to \"Room B\".\nSet location of #0 to \"Room B\"\nset description of it to \"Quarterly figures\".\nSet description of #0 to \"Quarterly figures\"\nset importance of it to critical.\nSet importance to critical"
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "set title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\"",
+        "set location of it to \"Room B\".\nSet location of #0 to \"Room B\"",
+        "set description of it to \"Quarterly figures\".\nSet description of #0 to \"Quarterly figures\"",
+        "set importance of it to critical.\nSet importance to critical"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of it to \"Room B\". Set description of it to \"Quarterly figures\". Set importance of it to critical.",
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of it to \"Room B\". Set description of it to \"Quarterly figures\". Set importance of it to critical."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 9,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20853,
+        "output_tokens": 325,
+        "total_tokens": 21178,
+        "cached_tokens": 0,
+        "reasoning_tokens": 187
+      },
+      "durationSeconds": 36.995,
+      "finishedAt": "2026-10-28T17:24:47.568821+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 9,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:24:12.932773+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "initialIds": [
+        "qeg4vferac0791miosiul0st8o"
+      ],
+      "finalIds": [
+        "qeg4vferac0791miosiul0st8o"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_03a299acce790d58006ae22fbf62c08198aaab4b0f6317fd32",
+          "turnId": "turn_03a299acce790d58006ae22fc2f4b48198a77d3bf5e9c64b5d",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20853,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 325,
+            "output_tokens_details": {
+              "reasoning_tokens": 187
+            },
+            "total_tokens": 21178
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nset title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\"\nset location of it to \"Room B\".\nSet location of #0 to \"Room B\"\nset description of it to \"Quarterly figures\".\nSet description of #0 to \"Quarterly figures\"\nset importance of it to critical.\nSet importance to critical"
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "set title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\"",
+        "set location of it to \"Room B\".\nSet location of #0 to \"Room B\"",
+        "set description of it to \"Quarterly figures\".\nSet description of #0 to \"Quarterly figures\"",
+        "set importance of it to critical.\nSet importance to critical"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of it to \"Room B\". Set description of it to \"Quarterly figures\". Set importance of it to critical.",
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of it to \"Room B\". Set description of it to \"Quarterly figures\". Set importance of it to critical."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 10,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20853,
+        "output_tokens": 254,
+        "total_tokens": 21107,
+        "cached_tokens": 0,
+        "reasoning_tokens": 134
+      },
+      "durationSeconds": 33.315,
+      "finishedAt": "2026-10-28T17:25:21.018579+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 10,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:24:50.450010+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "initialIds": [
+        "pknacfq3bpdk5vcmd24frkem4o"
+      ],
+      "finalIds": [
+        "pknacfq3bpdk5vcmd24frkem4o"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_00c72e2b2c83791e006ae22fe5af64819abd1270e777c15b0c",
+          "turnId": "turn_00c72e2b2c83791e006ae22feaf6e0819ab081c203f5923d2c",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20853,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 254,
+            "output_tokens_details": {
+              "reasoning_tokens": 134
+            },
+            "total_tokens": 21107
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nset title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\"\nset location of it to \"Room B\".\nSet location of #0 to \"Room B\"\nset description of it to \"Quarterly figures\".\nSet description of #0 to \"Quarterly figures\"\nset importance of it to critical.\nSet importance to critical"
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "set title of the event with title \"Budget review\" to \"Board review\".\nSet title of #0 to \"Board review\"",
+        "set location of it to \"Room B\".\nSet location of #0 to \"Room B\"",
+        "set description of it to \"Quarterly figures\".\nSet description of #0 to \"Quarterly figures\"",
+        "set importance of it to critical.\nSet importance to critical"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of it to \"Room B\". Set description of it to \"Quarterly figures\". Set importance of it to critical.",
+        "Set title of the event with title \"Budget review\" to \"Board review\". Set location of it to \"Room B\". Set description of it to \"Quarterly figures\". Set importance of it to critical."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 1,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 48657,
+        "output_tokens": 396,
+        "total_tokens": 49053,
+        "cached_tokens": 31002,
+        "reasoning_tokens": 37
+      },
+      "durationSeconds": 67.878,
+      "finishedAt": "2026-10-28T16:13:54.159991+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 1,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "startedAt": "2026-10-28T16:12:56.346677+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "initialIds": [
+        "5335ab3864124b63b0eb59be761f67ae"
+      ],
+      "finalIds": [
+        "5335ab3864124b63b0eb59be761f67ae"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_04fc8db0f2fc75d5006ae21f0e97ac819bb50e0bdc117d366d",
+          "turnId": "turn_04fc8db0f2fc75d5006ae21f12b980819b8786a31be334b977",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 48657,
+            "input_tokens_details": {
+              "cached_tokens": 31002
+            },
+            "output_tokens": 396,
+            "output_tokens_details": {
+              "reasoning_tokens": 37
+            },
+            "total_tokens": 49053
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Updated the Thursday, November 5 event (14:00–14:30) from “Budget review” to “Board review,” set its location to “Room B” and description to “Quarterly figures,” and marked it Critical. Calendar verified the update."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 2,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 64958,
+        "output_tokens": 543,
+        "total_tokens": 65501,
+        "cached_tokens": 47144,
+        "reasoning_tokens": 138
+      },
+      "durationSeconds": 91.2,
+      "finishedAt": "2026-10-28T16:17:08.331656+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 2,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "startedAt": "2026-10-28T16:16:05.553115+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "initialIds": [
+        "da7651fc3d344817af48c6cd7e27ac5e"
+      ],
+      "finalIds": [
+        "da7651fc3d344817af48c6cd7e27ac5e"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0a034c298b48d3fb006ae21fce9e9481999c048530f9ff36e8",
+          "turnId": "turn_0a034c298b48d3fb006ae21fd25da481999f67d873e1d634cf",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 64958,
+            "input_tokens_details": {
+              "cached_tokens": 47144
+            },
+            "output_tokens": 543,
+            "output_tokens_details": {
+              "reasoning_tokens": 138
+            },
+            "total_tokens": 65501
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Updated the matching event on Thursday, November 5, 2026 (14:00–14:30 Budapest time): renamed it to “Board review,” changed the location to “Room B,” set the description to “Quarterly figures,” and marked it Critical. The Calendar tool verified the changes; the time was unchanged."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 3,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 97813,
+        "output_tokens": 738,
+        "total_tokens": 98551,
+        "cached_tokens": 79749,
+        "reasoning_tokens": 139
+      },
+      "durationSeconds": 182.464,
+      "finishedAt": "2026-10-28T16:20:10.981166+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 3,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "startedAt": "2026-10-28T16:17:35.890486+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "initialIds": [
+        "462f482d55d34740bdaa2965ae34be37"
+      ],
+      "finalIds": [
+        "462f482d55d34740bdaa2965ae34be37"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0ea2b09db1e3d427006ae22027bb04819a906648cbaf6d6f86",
+          "turnId": "turn_0ea2b09db1e3d427006ae2202c7ff4819a895a6425284ef740",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 97813,
+            "input_tokens_details": {
+              "cached_tokens": 79749
+            },
+            "output_tokens": 738,
+            "output_tokens_details": {
+              "reasoning_tokens": 139
+            },
+            "total_tokens": 98551
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Updated and verified: “Budget review” is now “Board review,” at Room B, with description “Quarterly figures” and Critical importance. It remains scheduled for Thursday, November 5, 2026, 14:00–14:30 Budapest time."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 4,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 113218,
+        "output_tokens": 671,
+        "total_tokens": 113889,
+        "cached_tokens": 95225,
+        "reasoning_tokens": 176
+      },
+      "durationSeconds": 201.576,
+      "finishedAt": "2026-10-28T16:43:12.824750+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 4,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:40:07.272607+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "initialIds": [
+        "44i1151l4c09dguodbm71lejio"
+      ],
+      "finalIds": [
+        "44i1151l4c09dguodbm71lejio"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_03d64b95f1c26f08006ae22581ae3c81988667aa194662d1ec",
+          "turnId": "turn_03d64b95f1c26f08006ae225893c8c8198b0ba10a070f055c9",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 113218,
+            "input_tokens_details": {
+              "cached_tokens": 95225
+            },
+            "output_tokens": 671,
+            "output_tokens_details": {
+              "reasoning_tokens": 176
+            },
+            "total_tokens": 113889
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Updated and verified the Thursday, November 5 event: “Budget review” is now “Board review,” at Room B, with description “Quarterly figures” and Critical importance. Its 14:00–14:30 time is unchanged."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 5,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 97836,
+        "output_tokens": 719,
+        "total_tokens": 98555,
+        "cached_tokens": 79769,
+        "reasoning_tokens": 175
+      },
+      "durationSeconds": 176.568,
+      "finishedAt": "2026-10-28T16:46:10.181453+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 5,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:43:26.556499+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "initialIds": [
+        "d0l62rmun3e87dvmn4i8hntk5g"
+      ],
+      "finalIds": [
+        "d0l62rmun3e87dvmn4i8hntk5g"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_071b0224a651bf5b006ae226456d8481988c256beec8c8897e",
+          "turnId": "turn_071b0224a651bf5b006ae226491b388198952cb6f0fa6e27d1",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 97836,
+            "input_tokens_details": {
+              "cached_tokens": 79769
+            },
+            "output_tokens": 719,
+            "output_tokens_details": {
+              "reasoning_tokens": 175
+            },
+            "total_tokens": 98555
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Updated and verified: “Budget review” is now “Board review,” with location “Room B,” description “Quarterly figures,” and Critical importance. Its time remains Thursday, November 5, 14:00–14:30 Budapest time."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 6,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 97741,
+        "output_tokens": 703,
+        "total_tokens": 98444,
+        "cached_tokens": 79738,
+        "reasoning_tokens": 124
+      },
+      "durationSeconds": 181.568,
+      "finishedAt": "2026-10-28T16:54:02.965634+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 6,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:51:13.159398+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "initialIds": [
+        "4dkuta57vmp4n1cml2f7352698"
+      ],
+      "finalIds": [
+        "4dkuta57vmp4n1cml2f7352698"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_00607929574584c3006ae2281a20548199b165a1798947bbe5",
+          "turnId": "turn_00607929574584c3006ae2281f50148199abf440591bde83c9",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 97741,
+            "input_tokens_details": {
+              "cached_tokens": 79738
+            },
+            "output_tokens": 703,
+            "output_tokens_details": {
+              "reasoning_tokens": 124
+            },
+            "total_tokens": 98444
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Updated the event on Thursday, November 5, 14:00–14:30 Budapest time. It is now “Board review,” at “Room B,” with description “Quarterly figures,” and Critical importance. The calendar verified the changes."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 7,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 48635,
+        "output_tokens": 437,
+        "total_tokens": 49072,
+        "cached_tokens": 31009,
+        "reasoning_tokens": 81
+      },
+      "durationSeconds": 48.101,
+      "finishedAt": "2026-10-28T17:21:24.017942+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 7,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:20:39.067485+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "initialIds": [
+        "vimcn2dopngc0jnkkkoar0tkck"
+      ],
+      "finalIds": [
+        "vimcn2dopngc0jnkkkoar0tkck"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_07d093bbcc02e120006ae22eeda1488198985dbdf92cd659b3",
+          "turnId": "turn_07d093bbcc02e120006ae22ef212f481988f3c330646e85a05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 48635,
+            "input_tokens_details": {
+              "cached_tokens": 31009
+            },
+            "output_tokens": 437,
+            "output_tokens_details": {
+              "reasoning_tokens": 81
+            },
+            "total_tokens": 49072
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Updated the Thursday, November 5 event. “Budget review” is now “Board review,” with location “Room B,” description “Quarterly figures,” and Critical importance. The event remains at 14:00–14:30. The calendar tool verified the changes."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 8,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 48788,
+        "output_tokens": 503,
+        "total_tokens": 49291,
+        "cached_tokens": 31050,
+        "reasoning_tokens": 138
+      },
+      "durationSeconds": 46.904,
+      "finishedAt": "2026-10-28T17:23:23.021866+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 8,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:22:38.744396+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "initialIds": [
+        "mn2rd9n74r08p1d1pghe1c9trc"
+      ],
+      "finalIds": [
+        "mn2rd9n74r08p1d1pghe1c9trc"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_08021db977d63252006ae22f62a4c88198b7abb29fab6712b2",
+          "turnId": "turn_08021db977d63252006ae22f6973a48198966203835ef6d5d2",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 48788,
+            "input_tokens_details": {
+              "cached_tokens": 31050
+            },
+            "output_tokens": 503,
+            "output_tokens_details": {
+              "reasoning_tokens": 138
+            },
+            "total_tokens": 49291
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Updated and verified the event on Thursday, November 5, 2026: “Budget review” is now “Board review,” with location “Room B,” description “Quarterly figures,” and Critical importance. Its 14:00–14:30 time is unchanged."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 9,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 48787,
+        "output_tokens": 561,
+        "total_tokens": 49348,
+        "cached_tokens": 31032,
+        "reasoning_tokens": 140
+      },
+      "durationSeconds": 47.246,
+      "finishedAt": "2026-10-28T17:24:10.404993+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 9,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:23:26.123855+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "initialIds": [
+        "pcnqvjfqskd23aouvus8jsspng"
+      ],
+      "finalIds": [
+        "pcnqvjfqskd23aouvus8jsspng"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_09a23da4e2433359006ae22f92a034819897f7699d2f29e3d8",
+          "turnId": "turn_09a23da4e2433359006ae22f96560481988404dcedbd1d8789",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 48787,
+            "input_tokens_details": {
+              "cached_tokens": 31032
+            },
+            "output_tokens": 561,
+            "output_tokens_details": {
+              "reasoning_tokens": 140
+            },
+            "total_tokens": 49348
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Updated the event. “Budget review” is now “Board review,” with location “Room B,” description “Quarterly figures,” and Critical importance. Its Thursday, Nov 5, 14:00–14:30 Budapest time remains unchanged. The calendar verified the update."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 2,
+      "repetition": 10,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 48770,
+        "output_tokens": 532,
+        "total_tokens": 49302,
+        "cached_tokens": 31013,
+        "reasoning_tokens": 122
+      },
+      "durationSeconds": 52.76,
+      "finishedAt": "2026-10-28T17:26:13.885147+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 2,
+        "repetition": 10,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:25:23.469928+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Budget review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 0,
+          "location": "Room A",
+          "description": "Draft"
+        }
+      ],
+      "expected": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "actual": [
+        {
+          "title": "Board review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 2,
+          "location": "Room B",
+          "description": "Quarterly figures"
+        }
+      ],
+      "initialIds": [
+        "j2rsaceu05qi4oj6glnt1e68a0"
+      ],
+      "finalIds": [
+        "j2rsaceu05qi4oj6glnt1e68a0"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_092a64d3b2f0d03f006ae23007e824819b95afa308d4060c43",
+          "turnId": "turn_092a64d3b2f0d03f006ae2300d09f0819b85194a1b038ab9e2",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 48770,
+            "input_tokens_details": {
+              "cached_tokens": 31013
+            },
+            "output_tokens": 532,
+            "output_tokens_details": {
+              "reasoning_tokens": 122
+            },
+            "total_tokens": 49302
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Updated the event for Thursday, November 5, 14:00–14:30 Budapest time. It is now “Board review,” at Room B, with description “Quarterly figures” and Critical importance. The Calendar update was verified."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Rename \"Budget review\" to \"Board review\", change its location to \"Room B\" and its description to \"Quarterly figures\", and make it critical.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    }
+  ]
+}

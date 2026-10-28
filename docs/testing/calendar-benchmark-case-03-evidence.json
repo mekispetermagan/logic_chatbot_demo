@@ -1,0 +1,3859 @@
+{
+  "case": 3,
+  "specification": {
+    "name": "Count critical events and overlapping pairs",
+    "level": "Simple",
+    "events": [
+      {
+        "day": 5,
+        "title": "A",
+        "start": "09:00",
+        "end": "10:00",
+        "importance": 2,
+        "location": "",
+        "description": ""
+      },
+      {
+        "day": 5,
+        "title": "B",
+        "start": "09:30",
+        "end": "10:30",
+        "importance": 2,
+        "location": "",
+        "description": ""
+      },
+      {
+        "day": 5,
+        "title": "C",
+        "start": "09:45",
+        "end": "10:15",
+        "importance": 0,
+        "location": "",
+        "description": ""
+      }
+    ],
+    "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+  },
+  "runs": [
+    {
+      "case": 3,
+      "repetition": 1,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21035,
+        "output_tokens": 159,
+        "total_tokens": 21194,
+        "cached_tokens": 0,
+        "reasoning_tokens": 66
+      },
+      "durationSeconds": 51.087,
+      "finishedAt": "2026-10-28T16:14:07.933168+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 1,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "startedAt": "2026-10-28T16:13:41.092051+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "9fc30e29c5a64e0bb53de70dbeb291fe",
+        "fc5a03aeb5d347debf10a9cac984c1cd",
+        "105fe976ce03407787a413cfb670d094"
+      ],
+      "finalIds": [
+        "9fc30e29c5a64e0bb53de70dbeb291fe",
+        "fc5a03aeb5d347debf10a9cac984c1cd",
+        "105fe976ce03407787a413cfb670d094"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0ef7edb42202b01b006ae21f38b97c81999884f7cd81a56903",
+          "turnId": "turn_0ef7edb42202b01b006ae21f3ee32881999345edd346f2b53a",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21035,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 159,
+            "output_tokens_details": {
+              "reasoning_tokens": 66
+            },
+            "total_tokens": 21194
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nhow many events match (importance is critical and overlaps thursday)?\n2\nhow many overlaps occur within thursday, counting pairs?\n3"
+        }
+      ],
+      "feedback": [
+        "how many events match (importance is critical and overlaps thursday)?\n2",
+        "how many overlaps occur within thursday, counting pairs?\n3"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?",
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?"
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 2,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21035,
+        "output_tokens": 198,
+        "total_tokens": 21233,
+        "cached_tokens": 0,
+        "reasoning_tokens": 109
+      },
+      "durationSeconds": 205.662,
+      "finishedAt": "2026-10-28T16:20:49.307865+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 2,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "startedAt": "2026-10-28T16:20:05.529924+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "051e346d72504d7ababee4f5bd8072cc",
+        "dfc3230275e54a8592bc0647ffa4076a",
+        "cdadca49639c49418f526ef267962203"
+      ],
+      "finalIds": [
+        "051e346d72504d7ababee4f5bd8072cc",
+        "dfc3230275e54a8592bc0647ffa4076a",
+        "cdadca49639c49418f526ef267962203"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_03c37f8b0fce1be2006ae220c24c4c81999df0eacf31a1e989",
+          "turnId": "turn_03c37f8b0fce1be2006ae220c6a9948199b5c775dd2aa21b12",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21035,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 198,
+            "output_tokens_details": {
+              "reasoning_tokens": 109
+            },
+            "total_tokens": 21233
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nhow many events match (importance is critical and overlaps thursday)?\n2\nhow many overlaps occur within thursday, counting pairs?\n3"
+        }
+      ],
+      "feedback": [
+        "how many events match (importance is critical and overlaps thursday)?\n2",
+        "how many overlaps occur within thursday, counting pairs?\n3"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?",
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?"
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 3,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21035,
+        "output_tokens": 160,
+        "total_tokens": 21195,
+        "cached_tokens": 0,
+        "reasoning_tokens": 68
+      },
+      "durationSeconds": 298.636,
+      "finishedAt": "2026-10-28T16:31:37.115031+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 3,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "operatorHash": "b4f2a696822b7030f4b72982d01c4e07e011fedebcc90239aba234a89e9aa79e",
+        "startedAt": "2026-10-28T16:30:36.752421+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "7acea88d3b5647e38ecf17b0086cc951",
+        "2f4c6ecd590741b79827ed561073bef9",
+        "3cf0edaa10ee44929163e3f8910da46a"
+      ],
+      "finalIds": [
+        "7acea88d3b5647e38ecf17b0086cc951",
+        "2f4c6ecd590741b79827ed561073bef9",
+        "3cf0edaa10ee44929163e3f8910da46a"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_08dbcf345d8035f4006ae2233cb55c8199865bc73ba3510c8f",
+          "turnId": "turn_08dbcf345d8035f4006ae223418a2c81998e4b42003ee3c0db",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21035,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 160,
+            "output_tokens_details": {
+              "reasoning_tokens": 68
+            },
+            "total_tokens": 21195
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nhow many events match (importance is critical and overlaps thursday)?\n2\nhow many overlaps occur within thursday, counting pairs?\n3"
+        }
+      ],
+      "feedback": [
+        "how many events match (importance is critical and overlaps thursday)?\n2",
+        "how many overlaps occur within thursday, counting pairs?\n3"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?",
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?"
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 4,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21035,
+        "output_tokens": 216,
+        "total_tokens": 21251,
+        "cached_tokens": 0,
+        "reasoning_tokens": 126
+      },
+      "durationSeconds": 85.864,
+      "finishedAt": "2026-10-28T16:41:16.469591+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 4,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:40:08.065380+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "a5r49a99ltacqd2tt12idi0tus",
+        "3bfekcdo5aaup83l71k9ttpb4k",
+        "9bf38jtugvca1s8bnb4a8g48vk"
+      ],
+      "finalIds": [
+        "a5r49a99ltacqd2tt12idi0tus",
+        "3bfekcdo5aaup83l71k9ttpb4k",
+        "9bf38jtugvca1s8bnb4a8g48vk"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_054c450acf186c0e006ae22575795c819a8cadbaeb69815c92",
+          "turnId": "turn_054c450acf186c0e006ae225794da8819aa7481d26c859f847",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21035,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 216,
+            "output_tokens_details": {
+              "reasoning_tokens": 126
+            },
+            "total_tokens": 21251
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nhow many events match (importance is critical and overlaps thursday)?\n2\nhow many overlaps occur within thursday, counting pairs?\n3"
+        }
+      ],
+      "feedback": [
+        "how many events match (importance is critical and overlaps thursday)?\n2",
+        "how many overlaps occur within thursday, counting pairs?\n3"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?",
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?"
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 5,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21035,
+        "output_tokens": 189,
+        "total_tokens": 21224,
+        "cached_tokens": 0,
+        "reasoning_tokens": 95
+      },
+      "durationSeconds": 88.265,
+      "finishedAt": "2026-10-28T16:42:46.198447+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 5,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:41:34.359216+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "vkb6shiv7pmsrutgptu8fgdhmk",
+        "lj9p1r9meie911mk2k2g1sbldg",
+        "29eolg969fm3mnffs63ukj2duo"
+      ],
+      "finalIds": [
+        "vkb6shiv7pmsrutgptu8fgdhmk",
+        "lj9p1r9meie911mk2k2g1sbldg",
+        "29eolg969fm3mnffs63ukj2duo"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0754f55236b7fd24006ae225cdb3f4819aaf47d2e5f64bceb2",
+          "turnId": "turn_0754f55236b7fd24006ae225d1cdbc819a81f2dbbd468e9c12",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21035,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 189,
+            "output_tokens_details": {
+              "reasoning_tokens": 95
+            },
+            "total_tokens": 21224
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nhow many events match (importance is critical and overlaps thursday)?\n2\nhow many overlaps occur within thursday, counting pairs?\n3"
+        }
+      ],
+      "feedback": [
+        "how many events match (importance is critical and overlaps thursday)?\n2",
+        "how many overlaps occur within thursday, counting pairs?\n3"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?",
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?"
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 6,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21035,
+        "output_tokens": 193,
+        "total_tokens": 21228,
+        "cached_tokens": 0,
+        "reasoning_tokens": 97
+      },
+      "durationSeconds": 85.11,
+      "finishedAt": "2026-10-28T16:47:14.880934+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 6,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:46:06.090672+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "oiejl56hrnv1o8ih2kd0k3eb1c",
+        "gbufk48bc02vkifk0imulej5k0",
+        "pojk5jvmn1f6r6t8lu7s4k0hko"
+      ],
+      "finalIds": [
+        "oiejl56hrnv1o8ih2kd0k3eb1c",
+        "gbufk48bc02vkifk0imulej5k0",
+        "pojk5jvmn1f6r6t8lu7s4k0hko"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0e5ca552b9773432006ae226ddadec819bb755bfecbf61e90f",
+          "turnId": "turn_0e5ca552b9773432006ae226e3998c819ba135ef8bc72b51c8",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21035,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 193,
+            "output_tokens_details": {
+              "reasoning_tokens": 97
+            },
+            "total_tokens": 21228
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nhow many events match (importance is critical and overlaps thursday)?\n2\nhow many overlaps occur within thursday, counting pairs?\n3"
+        }
+      ],
+      "feedback": [
+        "how many events match (importance is critical and overlaps thursday)?\n2",
+        "how many overlaps occur within thursday, counting pairs?\n3"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?",
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?"
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 7,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21035,
+        "output_tokens": 205,
+        "total_tokens": 21240,
+        "cached_tokens": 0,
+        "reasoning_tokens": 84
+      },
+      "durationSeconds": 75.512,
+      "finishedAt": "2026-10-28T16:48:31.236135+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 7,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:47:29.574403+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "kub7uq4mfl9d82lo239j256bfc",
+        "855daoloqq7tek1mbvsr5102c4",
+        "k3493nre3vt0l162pf0dnfdmm8"
+      ],
+      "finalIds": [
+        "kub7uq4mfl9d82lo239j256bfc",
+        "855daoloqq7tek1mbvsr5102c4",
+        "k3493nre3vt0l162pf0dnfdmm8"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_02d291855b66e70b006ae227307f7081999de26b7521eeb935",
+          "turnId": "turn_02d291855b66e70b006ae22732e23c8199bd0ac9104ab57abb",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21035,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 205,
+            "output_tokens_details": {
+              "reasoning_tokens": 84
+            },
+            "total_tokens": 21240
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nhow many events match (importance is critical and overlaps thursday)?\n2\nhow many overlaps occur within thursday, counting pairs?\n3"
+        }
+      ],
+      "feedback": [
+        "how many events match (importance is critical and overlaps thursday)?\n2",
+        "how many overlaps occur within thursday, counting pairs?\n3"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?",
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?"
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 8,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21035,
+        "output_tokens": 187,
+        "total_tokens": 21222,
+        "cached_tokens": 0,
+        "reasoning_tokens": 95
+      },
+      "durationSeconds": 82.344,
+      "finishedAt": "2026-10-28T16:52:44.417458+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 8,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:51:39.948042+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "t5dq40apk4v5jha9glmp2jfqdc",
+        "opju49j3uk4s7s0ce4p63njme4",
+        "lt6bbhaf13n3rf5usghvn87q1o"
+      ],
+      "finalIds": [
+        "t5dq40apk4v5jha9glmp2jfqdc",
+        "opju49j3uk4s7s0ce4p63njme4",
+        "lt6bbhaf13n3rf5usghvn87q1o"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0ec301d2f19682e8006ae22826a674819aa9e241979cb256ab",
+          "turnId": "turn_0ec301d2f19682e8006ae228324eb8819a90709cc0529381fa",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21035,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 187,
+            "output_tokens_details": {
+              "reasoning_tokens": 95
+            },
+            "total_tokens": 21222
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nhow many events match (importance is critical and overlaps thursday)?\n2\nhow many overlaps occur within thursday, counting pairs?\n3"
+        }
+      ],
+      "feedback": [
+        "how many events match (importance is critical and overlaps thursday)?\n2",
+        "how many overlaps occur within thursday, counting pairs?\n3"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?",
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?"
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 9,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21035,
+        "output_tokens": 168,
+        "total_tokens": 21203,
+        "cached_tokens": 0,
+        "reasoning_tokens": 80
+      },
+      "durationSeconds": 86.697,
+      "finishedAt": "2026-10-28T16:54:12.316262+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 9,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:53:01.958352+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "n1akh0vdameu3rnbn2s4du2cg0",
+        "va3j783oipe7ahuvtuicq2i99s",
+        "cvfse1jfbhi8tjdb1srommkv6k"
+      ],
+      "finalIds": [
+        "n1akh0vdameu3rnbn2s4du2cg0",
+        "va3j783oipe7ahuvtuicq2i99s",
+        "cvfse1jfbhi8tjdb1srommkv6k"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_034bcbe24900dd32006ae228812e0c819b96999588ac74b201",
+          "turnId": "turn_034bcbe24900dd32006ae228849fb4819bbc5aba80bd6c2bed",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21035,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 168,
+            "output_tokens_details": {
+              "reasoning_tokens": 80
+            },
+            "total_tokens": 21203
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nhow many events match (importance is critical and overlaps thursday)?\n2\nhow many overlaps occur within thursday, counting pairs?\n3"
+        }
+      ],
+      "feedback": [
+        "how many events match (importance is critical and overlaps thursday)?\n2",
+        "how many overlaps occur within thursday, counting pairs?\n3"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?",
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?"
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 10,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21035,
+        "output_tokens": 194,
+        "total_tokens": 21229,
+        "cached_tokens": 0,
+        "reasoning_tokens": 102
+      },
+      "durationSeconds": 25.258,
+      "finishedAt": "2026-10-28T17:22:16.716561+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 10,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:21:56.042501+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "r13cib29rc6ff27dksc9g7mu78",
+        "inb81s3uh4n63h4jgm0os63n4o",
+        "9jo9n9ttspo0psl6ee1lgi3v0o"
+      ],
+      "finalIds": [
+        "r13cib29rc6ff27dksc9g7mu78",
+        "inb81s3uh4n63h4jgm0os63n4o",
+        "9jo9n9ttspo0psl6ee1lgi3v0o"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_051bf018de535b29006ae22f373c44819896d5fbbd9ffa0009",
+          "turnId": "turn_051bf018de535b29006ae22f3a5c788198b8fce9a89a24f96f",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21035,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 194,
+            "output_tokens_details": {
+              "reasoning_tokens": 102
+            },
+            "total_tokens": 21229
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nhow many events match (importance is critical and overlaps thursday)?\n2\nhow many overlaps occur within thursday, counting pairs?\n3"
+        }
+      ],
+      "feedback": [
+        "how many events match (importance is critical and overlaps thursday)?\n2",
+        "how many overlaps occur within thursday, counting pairs?\n3"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?",
+        "How many events match importance is critical and overlaps thursday? How many overlaps occur within thursday, counting pairs?"
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 1,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 32091,
+        "output_tokens": 497,
+        "total_tokens": 32588,
+        "cached_tokens": 15158,
+        "reasoning_tokens": 241
+      },
+      "durationSeconds": 95.489,
+      "finishedAt": "2026-10-28T16:15:43.638351+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 1,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "startedAt": "2026-10-28T16:15:11.049885+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "683420b70f7b420a8b354c87ce89a3c0",
+        "6aca2d2d676941c6a0c5f64a12e95511",
+        "d163df69161146b88d9876ea6a5bc7bb"
+      ],
+      "finalIds": [
+        "683420b70f7b420a8b354c87ce89a3c0",
+        "6aca2d2d676941c6a0c5f64a12e95511",
+        "d163df69161146b88d9876ea6a5bc7bb"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_08c50fed10c42d80006ae21f9638a48198b37016423ba9bedb",
+          "turnId": "turn_08c50fed10c42d80006ae21f99b410819886bd1b459141c7c8",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 32091,
+            "input_tokens_details": {
+              "cached_tokens": 15158
+            },
+            "output_tokens": 497,
+            "output_tokens_details": {
+              "reasoning_tokens": 241
+            },
+            "total_tokens": 32588
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "On Thursday, November 5, 2026, there are **2 critical events** (A and B, both starting that day) and **3 overlapping event pairs** (A–B, A–C, and B–C). The events are all within Thursday, and their exact times already fall on five-minute boundaries, so normalization does not change these counts."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 2,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 32231,
+        "output_tokens": 965,
+        "total_tokens": 33196,
+        "cached_tokens": 15158,
+        "reasoning_tokens": 688
+      },
+      "durationSeconds": 99.341,
+      "finishedAt": "2026-10-28T16:17:23.237523+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 2,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "startedAt": "2026-10-28T16:16:45.603658+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "98087cc17f7943ae98c8540917080f2d",
+        "97e745002a544427b43a7a5b5dbfa615",
+        "fcae2602a4714953bd19338fc8909c95"
+      ],
+      "finalIds": [
+        "98087cc17f7943ae98c8540917080f2d",
+        "97e745002a544427b43a7a5b5dbfa615",
+        "fcae2602a4714953bd19338fc8909c95"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_07c456fb84530af1006ae21ff636d8819a84e90eb3759dad66",
+          "turnId": "turn_07c456fb84530af1006ae21ff8e790819a9f538e5b4a6c5869",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 32231,
+            "input_tokens_details": {
+              "cached_tokens": 15158
+            },
+            "output_tokens": 965,
+            "output_tokens_details": {
+              "reasoning_tokens": 688
+            },
+            "total_tokens": 33196
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "Thursday is November 5, 2026. There are 2 critical events. There are 3 overlapping event pairs: A–B, A–C, and B–C. The critical-event count is 2 whether “on Thursday” means starts that day, is fully within it, or overlaps it; all three events are Thursday events, and A and B are critical."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 3,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 31966,
+        "output_tokens": 357,
+        "total_tokens": 32323,
+        "cached_tokens": 15158,
+        "reasoning_tokens": 129
+      },
+      "durationSeconds": 80.735,
+      "finishedAt": "2026-10-28T16:38:16.537006+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 3,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:37:14.285310+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "1o2jvfhndkvoa5vtim4kaj9c30",
+        "baecm9c8ik4s0s57kdjdgoqqc4",
+        "a03pl80gr3hc0ga0jdphubjo2k"
+      ],
+      "finalIds": [
+        "1o2jvfhndkvoa5vtim4kaj9c30",
+        "baecm9c8ik4s0s57kdjdgoqqc4",
+        "a03pl80gr3hc0ga0jdphubjo2k"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0d362cfac6395aeb006ae224d0672c819aa7d46cc0d8bf3fee",
+          "turnId": "turn_0d362cfac6395aeb006ae224d40fe8819a8dd60a4071d2c32d",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31966,
+            "input_tokens_details": {
+              "cached_tokens": 15158
+            },
+            "output_tokens": 357,
+            "output_tokens_details": {
+              "reasoning_tokens": 129
+            },
+            "total_tokens": 32323
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "On Thursday, November 5, 2026, there are **2 critical events** (A and B). There are **3 overlapping event pairs**: A–B, A–C, and B–C. Each pair overlaps for a positive duration."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 4,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 32075,
+        "output_tokens": 472,
+        "total_tokens": 32547,
+        "cached_tokens": 15158,
+        "reasoning_tokens": 253
+      },
+      "durationSeconds": 92.527,
+      "finishedAt": "2026-10-28T16:39:49.814905+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 4,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:38:36.500493+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "ogvqvt5icpot63u7h56jfh6vkk",
+        "j2nrqj4apvl78ca988vbtsfu1k",
+        "gd98ibbvcptaeo85ofqd5ssv20"
+      ],
+      "finalIds": [
+        "ogvqvt5icpot63u7h56jfh6vkk",
+        "j2nrqj4apvl78ca988vbtsfu1k",
+        "gd98ibbvcptaeo85ofqd5ssv20"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0d81148400571eeb006ae2252abe7081989a0220aac12a0971",
+          "turnId": "turn_0d81148400571eeb006ae2252e45e48198884befc028ac6935",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 32075,
+            "input_tokens_details": {
+              "cached_tokens": 15158
+            },
+            "output_tokens": 472,
+            "output_tokens_details": {
+              "reasoning_tokens": 253
+            },
+            "total_tokens": 32547
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "There are **2 critical events** on Thursday. There are **3 overlapping event pairs**: A–B, A–C, and B–C. (A and B are Critical; C is Normal.)"
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 5,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 32067,
+        "output_tokens": 804,
+        "total_tokens": 32871,
+        "cached_tokens": 15158,
+        "reasoning_tokens": 527
+      },
+      "durationSeconds": 83.849,
+      "finishedAt": "2026-10-28T16:44:11.556023+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 5,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:43:05.143316+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "duej2scfmcoljeakmh2njbau9g",
+        "647uvru3nnv2evofs9pu14lfj0",
+        "o55d5biq65pg1h7ba83gu3imm0"
+      ],
+      "finalIds": [
+        "duej2scfmcoljeakmh2njbau9g",
+        "647uvru3nnv2evofs9pu14lfj0",
+        "o55d5biq65pg1h7ba83gu3imm0"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0089400bee5f18a5006ae2262fc74c819bb6fe77551bd98f0c",
+          "turnId": "turn_0089400bee5f18a5006ae22633a080819ba0405a667b519f8e",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 32067,
+            "input_tokens_details": {
+              "cached_tokens": 15158
+            },
+            "output_tokens": 804,
+            "output_tokens_details": {
+              "reasoning_tokens": 527
+            },
+            "total_tokens": 32871
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "There are **2 critical events** on Thursday, November 5, 2026. All three timed events in the selected week occur wholly on Thursday, so the count is the same whether “on Thursday” means starting that day or overlapping it.\n\nThere are **3 overlapping event pairs**: A–B, A–C, and B–C."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 6,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 32155,
+        "output_tokens": 769,
+        "total_tokens": 32924,
+        "cached_tokens": 15158,
+        "reasoning_tokens": 519
+      },
+      "durationSeconds": 96.604,
+      "finishedAt": "2026-10-28T16:45:49.114472+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 6,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:44:29.788591+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "6qqrv1nu04g63oh9276j1qbvhs",
+        "rpfn5orn1pjclm80fdonli583s",
+        "0o3sm8tvfjdt4k03q3cjiu8dqg"
+      ],
+      "finalIds": [
+        "6qqrv1nu04g63oh9276j1qbvhs",
+        "rpfn5orn1pjclm80fdonli583s",
+        "0o3sm8tvfjdt4k03q3cjiu8dqg"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0ac368bbff8337ff006ae2268b2e4481988e624df44c1edc46",
+          "turnId": "turn_0ac368bbff8337ff006ae22690a47081989e75e7fbd7fa3f98",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 32155,
+            "input_tokens_details": {
+              "cached_tokens": 15158
+            },
+            "output_tokens": 769,
+            "output_tokens_details": {
+              "reasoning_tokens": 519
+            },
+            "total_tokens": 32924
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "Thursday is November 5, 2026. There are **2 critical events** (A and B) and **3 overlapping event pairs** (A–B, A–C, and B–C). The counts are the same using exact or five-minute-normalized times."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 7,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 32161,
+        "output_tokens": 676,
+        "total_tokens": 32837,
+        "cached_tokens": 15158,
+        "reasoning_tokens": 395
+      },
+      "durationSeconds": 79.828,
+      "finishedAt": "2026-10-28T16:49:52.057065+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 7,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:48:47.223403+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "q1krmktitfbi4u3gcnh00pjkbc",
+        "sqotkos3d67bbk3383869ppqp4",
+        "3paujcqt6kg9j1umecprkpttdo"
+      ],
+      "finalIds": [
+        "q1krmktitfbi4u3gcnh00pjkbc",
+        "sqotkos3d67bbk3383869ppqp4",
+        "3paujcqt6kg9j1umecprkpttdo"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_02328876aae7e0f4006ae227870b708199a95c7968a3aaa291",
+          "turnId": "turn_02328876aae7e0f4006ae2278a618c81999c47d89fb1279de2",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 32161,
+            "input_tokens_details": {
+              "cached_tokens": 15158
+            },
+            "output_tokens": 676,
+            "output_tokens_details": {
+              "reasoning_tokens": 395
+            },
+            "total_tokens": 32837
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "For Thursday, November 5, 2026, there are **2 critical events** (A and B; color ID 11) and **3 overlapping event pairs** (A–B, A–C, and B–C). The counts are the same whether Thursday membership means starting that day or overlapping it. Exact and normalized intervals give the same results."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 8,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 32188,
+        "output_tokens": 815,
+        "total_tokens": 33003,
+        "cached_tokens": 15158,
+        "reasoning_tokens": 562
+      },
+      "durationSeconds": 88.825,
+      "finishedAt": "2026-10-28T16:51:21.437455+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 8,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:50:07.961391+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "v1qnu9vtmobm3httlktbdoit4o",
+        "dui3p10hl8hkkgr4t6f5buepp0",
+        "t8le6sl7f2gtuuiqm4bc8u7jl4"
+      ],
+      "finalIds": [
+        "v1qnu9vtmobm3httlktbdoit4o",
+        "dui3p10hl8hkkgr4t6f5buepp0",
+        "t8le6sl7f2gtuuiqm4bc8u7jl4"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0b6760c460f6361e006ae227d6f6d48199917ad3c03d1834fd",
+          "turnId": "turn_0b6760c460f6361e006ae227dcee6481998c54d93260c5d896",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 32188,
+            "input_tokens_details": {
+              "cached_tokens": 15158
+            },
+            "output_tokens": 815,
+            "output_tokens_details": {
+              "reasoning_tokens": 562
+            },
+            "total_tokens": 33003
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "There are **2 critical events** on Thursday, November 5, 2026. There are **3 overlapping event pairs** that day. All three events start on Thursday and are fully contained within it, so the critical-event count is the same whether “on Thursday” means starting on or occurring within Thursday."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 9,
+      "mode": "llm-only",
+      "stopReason": "unexpected_or_repeated_clarification",
+      "lastStage": "initial",
+      "status": "clarification",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 32065,
+        "output_tokens": 963,
+        "total_tokens": 33028,
+        "cached_tokens": 15158,
+        "reasoning_tokens": 689
+      },
+      "durationSeconds": 38.136,
+      "finishedAt": "2026-10-28T17:21:14.420384+00:00",
+      "success": false,
+      "failureCategory": "unexpected_or_repeated_clarification",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": false,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 9,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:20:41.744579+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "aq24bqtki7vv7ad2tjsinbvdms",
+        "btdjvtap5gusd95krkjlklbmvk",
+        "lgin5a5khqe6nvqun12suog81k"
+      ],
+      "finalIds": [
+        "aq24bqtki7vv7ad2tjsinbvdms",
+        "btdjvtap5gusd95krkjlklbmvk",
+        "lgin5a5khqe6nvqun12suog81k"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0d4f505c0e321f9e006ae22eef4e708199918139252000821f",
+          "turnId": "turn_0d4f505c0e321f9e006ae22ef3b50881999ae557feeb774b52",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 32065,
+            "input_tokens_details": {
+              "cached_tokens": 15158
+            },
+            "output_tokens": 963,
+            "output_tokens_details": {
+              "reasoning_tokens": 689
+            },
+            "total_tokens": 33028
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "For Thursday, 5 November 2026, there are **3 overlapping event pairs**: A–B, A–C, and B–C. There are **2 critical events** under each likely interpretation of “on Thursday” because both critical events (A and B) are wholly on Thursday. Which meaning should I use for the critical-event count: events that start Thursday, events wholly within Thursday, or events that overlap Thursday?"
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 3,
+      "repetition": 10,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 32195,
+        "output_tokens": 750,
+        "total_tokens": 32945,
+        "cached_tokens": 15158,
+        "reasoning_tokens": 472
+      },
+      "durationSeconds": 36.758,
+      "finishedAt": "2026-10-28T17:21:51.281819+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctAnswer": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 3,
+        "repetition": 10,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:21:18.640929+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "A",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "B",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "C",
+          "start": "2026-11-05T09:45:00+01:00",
+          "end": "2026-11-05T10:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "ku8481vua4athaogo6eg0lv67k",
+        "pabos6g89in46069tpk5a8tg8k",
+        "1h89rh93lbn86dmarrkb9h8vi8"
+      ],
+      "finalIds": [
+        "ku8481vua4athaogo6eg0lv67k",
+        "pabos6g89in46069tpk5a8tg8k",
+        "1h89rh93lbn86dmarrkb9h8vi8"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0becaf38195183d3006ae22f12beac8198b5d3986b1c2e9fbf",
+          "turnId": "turn_0becaf38195183d3006ae22f1686388198a7ed33aac649bed3",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 32195,
+            "input_tokens_details": {
+              "cached_tokens": 15158
+            },
+            "output_tokens": 750,
+            "output_tokens_details": {
+              "reasoning_tokens": 472
+            },
+            "total_tokens": 32945
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?"
+        },
+        {
+          "role": "machine",
+          "text": "On Thursday, November 5, 2026, there are **2 critical events** and **3 overlapping event pairs**. The critical events are A and B; the overlapping pairs are A–B, A–C, and B–C. All three events are contained within Thursday, so the critical-event count is the same whether “on Thursday” means starting that day or intersecting it."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "How many critical events are there on Thursday, and how many overlapping event pairs are there on Thursday?",
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    }
+  ]
+}

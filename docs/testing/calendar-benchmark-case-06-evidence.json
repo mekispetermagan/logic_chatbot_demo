@@ -1,0 +1,3015 @@
+{
+  "case": 6,
+  "specification": {
+    "name": "Free a straightforward interval",
+    "level": "Moderate",
+    "events": [
+      {
+        "day": 5,
+        "title": "Administration",
+        "start": "09:00",
+        "end": "09:30",
+        "importance": 0,
+        "location": "",
+        "description": ""
+      }
+    ],
+    "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+    "threshold": 0
+  },
+  "runs": [
+    {
+      "case": 6,
+      "repetition": 1,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20789,
+        "output_tokens": 173,
+        "total_tokens": 20962,
+        "cached_tokens": 0,
+        "reasoning_tokens": 75
+      },
+      "durationSeconds": 75.73,
+      "finishedAt": "2026-10-28T16:15:58.679801+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 1,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "startedAt": "2026-10-28T16:15:07.785261+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "f8b73fbfa6ed4afba61237df273fe472"
+      ],
+      "finalIds": [
+        "f8b73fbfa6ed4afba61237df273fe472"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0d0f3613a20c7190006ae21f912690819aa5642fdee39176f1",
+          "turnId": "turn_0d0f3613a20c7190006ae21f94f3e0819a8308f4fb998f16e7",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20789,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 173,
+            "output_tokens_details": {
+              "reasoning_tokens": 75
+            },
+            "total_tokens": 20962
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nfree window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal.",
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 2,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20789,
+        "output_tokens": 229,
+        "total_tokens": 21018,
+        "cached_tokens": 0,
+        "reasoning_tokens": 111
+      },
+      "durationSeconds": 78.418,
+      "finishedAt": "2026-10-28T16:17:17.316657+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 2,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "startedAt": "2026-10-28T16:16:25.657596+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "1213ec4afdd44bbf80e2f9e062a6a2a8"
+      ],
+      "finalIds": [
+        "1213ec4afdd44bbf80e2f9e062a6a2a8"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0b863876f30da24f006ae21fdde46481998bd57561b5a6e4e2",
+          "turnId": "turn_0b863876f30da24f006ae21fe144bc819984d1b4bd89fe2802",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20789,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 229,
+            "output_tokens_details": {
+              "reasoning_tokens": 111
+            },
+            "total_tokens": 21018
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nfree window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal.",
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 3,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20789,
+        "output_tokens": 191,
+        "total_tokens": 20980,
+        "cached_tokens": 0,
+        "reasoning_tokens": 68
+      },
+      "durationSeconds": 167.27,
+      "finishedAt": "2026-10-28T16:39:41.962814+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 3,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:37:09.562976+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "3l1n4opto2nlsl1v36oukr7430"
+      ],
+      "finalIds": [
+        "3l1n4opto2nlsl1v36oukr7430"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0aba8ad7626ccdd4006ae224c91ed4819ab1cebbcdf2b49888",
+          "turnId": "turn_0aba8ad7626ccdd4006ae224cc1360819a93d1a233628d0c0a",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20789,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 191,
+            "output_tokens_details": {
+              "reasoning_tokens": 68
+            },
+            "total_tokens": 20980
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nfree window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal.",
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 4,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20789,
+        "output_tokens": 195,
+        "total_tokens": 20984,
+        "cached_tokens": 0,
+        "reasoning_tokens": 93
+      },
+      "durationSeconds": 162.379,
+      "finishedAt": "2026-10-28T16:42:25.130279+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 4,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:39:57.945519+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "r65ej9nrpmsb2ejgcaqj9ke2mo"
+      ],
+      "finalIds": [
+        "r65ej9nrpmsb2ejgcaqj9ke2mo"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_07fc240eb09ad87d006ae2256e3100819a850cbde26e51117e",
+          "turnId": "turn_07fc240eb09ad87d006ae22571a69c819a8e0677156cf91f6f",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20789,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 195,
+            "output_tokens_details": {
+              "reasoning_tokens": 93
+            },
+            "total_tokens": 20984
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nfree window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal.",
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 5,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20789,
+        "output_tokens": 134,
+        "total_tokens": 20923,
+        "cached_tokens": 0,
+        "reasoning_tokens": 30
+      },
+      "durationSeconds": 155.206,
+      "finishedAt": "2026-10-28T16:51:39.432267+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 5,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:49:15.359274+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "5t2m8vkamsttk8fnlngn1nuj34"
+      ],
+      "finalIds": [
+        "5t2m8vkamsttk8fnlngn1nuj34"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_01fd76da9e09f095006ae2279ac8a88199947184ecf10b007c",
+          "turnId": "turn_01fd76da9e09f095006ae227a08ec481998d14e967459e2ead",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20789,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 134,
+            "output_tokens_details": {
+              "reasoning_tokens": 30
+            },
+            "total_tokens": 20923
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nfree window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal.",
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 6,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20789,
+        "output_tokens": 168,
+        "total_tokens": 20957,
+        "cached_tokens": 0,
+        "reasoning_tokens": 69
+      },
+      "durationSeconds": null,
+      "finishedAt": null,
+      "recoveredAt": "2026-10-28T17:19:13.690062+00:00",
+      "shutdownRecovery": true,
+      "completionEvidence": "Persisted answered state and final MCP readback",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 6,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:51:50.368786+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "1m3mmkm10k2uqfofl0rarmpp9o"
+      ],
+      "finalIds": [
+        "1m3mmkm10k2uqfofl0rarmpp9o"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0997e442c6c7b001006ae228335270819897110b27b36b119c",
+          "turnId": "turn_0997e442c6c7b001006ae228382d488198972a0daa574326f7",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20789,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 168,
+            "output_tokens_details": {
+              "reasoning_tokens": 69
+            },
+            "total_tokens": 20957
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nfree window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal.",
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 7,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20789,
+        "output_tokens": 211,
+        "total_tokens": 21000,
+        "cached_tokens": 0,
+        "reasoning_tokens": 108
+      },
+      "durationSeconds": 32.074,
+      "finishedAt": "2026-10-28T17:22:56.891921+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 7,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:22:27.431109+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "7o5caoh4pis2pch3gtja6ncqrs"
+      ],
+      "finalIds": [
+        "7o5caoh4pis2pch3gtja6ncqrs"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0b4e83db6e28b385006ae22f567c3881989e03c66cbbb8dc87",
+          "turnId": "turn_0b4e83db6e28b385006ae22f5be8b48198a3b7c304f028bdfc",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20789,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 211,
+            "output_tokens_details": {
+              "reasoning_tokens": 108
+            },
+            "total_tokens": 21000
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nfree window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal.",
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 8,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20789,
+        "output_tokens": 178,
+        "total_tokens": 20967,
+        "cached_tokens": 0,
+        "reasoning_tokens": 68
+      },
+      "durationSeconds": 33.34,
+      "finishedAt": "2026-10-28T17:23:30.371258+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 8,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:22:59.843557+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "ces71v8q9eoi3s9jmpjveqt0tg"
+      ],
+      "finalIds": [
+        "ces71v8q9eoi3s9jmpjveqt0tg"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_09350eb364aef02d006ae22f7727ac819b8af68a925bced0ab",
+          "turnId": "turn_09350eb364aef02d006ae22f7b6f18819ba43f673222762579",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20789,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 178,
+            "output_tokens_details": {
+              "reasoning_tokens": 68
+            },
+            "total_tokens": 20967
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nfree window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal.",
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 9,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20789,
+        "output_tokens": 186,
+        "total_tokens": 20975,
+        "cached_tokens": 0,
+        "reasoning_tokens": 63
+      },
+      "durationSeconds": 34.472,
+      "finishedAt": "2026-10-28T17:25:49.061720+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 9,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:25:17.641067+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "7ssi5usbvicmmemid83028k2o4"
+      ],
+      "finalIds": [
+        "7ssi5usbvicmmemid83028k2o4"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_096ee139bfdc767e006ae2300014c0819ab0b3a0f40c087576",
+          "turnId": "turn_096ee139bfdc767e006ae230034f8c819a97f5cc6e439a7c16",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20789,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 186,
+            "output_tokens_details": {
+              "reasoning_tokens": 63
+            },
+            "total_tokens": 20975
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nfree window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal.",
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 10,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20789,
+        "output_tokens": 154,
+        "total_tokens": 20943,
+        "cached_tokens": 0,
+        "reasoning_tokens": 59
+      },
+      "durationSeconds": 33.141,
+      "finishedAt": "2026-10-28T17:26:22.312934+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 10,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:25:52.211419+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "h0pn3v4ijag2m81rrbohpvn44o"
+      ],
+      "finalIds": [
+        "h0pn3v4ijag2m81rrbohpvn44o"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_057d7a1a8a05c0eb006ae230235adc8198ac7d66c4fda5f31e",
+          "turnId": "turn_057d7a1a8a05c0eb006ae23027aa908198b23cde401aa59b82",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20789,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 154,
+            "output_tokens_details": {
+              "reasoning_tokens": 59
+            },
+            "total_tokens": 20943
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nfree window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.5\n#0 2026-11-05 09:30 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal.",
+        "Free window interval from thursday at 09:00 to thursday at 09:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 1,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 65779,
+        "output_tokens": 1102,
+        "total_tokens": 66881,
+        "cached_tokens": 47540,
+        "reasoning_tokens": 558
+      },
+      "durationSeconds": 85.554,
+      "finishedAt": "2026-10-28T16:14:42.732535+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 1,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "startedAt": "2026-10-28T16:13:28.654374+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "5bd4002f215c4c9bbeec590dbbb4efa0"
+      ],
+      "finalIds": [
+        "5bd4002f215c4c9bbeec590dbbb4efa0"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_090cc2674d7d3d1a006ae21f312a38819a9f4196881274ffe2",
+          "turnId": "turn_090cc2674d7d3d1a006ae21f33fefc819a9100120352483f4b",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 65779,
+            "input_tokens_details": {
+              "cached_tokens": 47540
+            },
+            "output_tokens": 1102,
+            "output_tokens_details": {
+              "reasoning_tokens": 558
+            },
+            "total_tokens": 66881
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday, November 5, 09:00–09:30 is now free. **Administration** moved from 09:00–09:30 to 09:30–10:00 Europe/Budapest, preserving its 30-minute duration. The move was the minimum required displacement: 30 minutes (weighted cost 0.5). Calendar confirmed the change on readback."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 2,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 98946,
+        "output_tokens": 1022,
+        "total_tokens": 99968,
+        "cached_tokens": 80628,
+        "reasoning_tokens": 418
+      },
+      "durationSeconds": 187.7,
+      "finishedAt": "2026-10-28T16:20:25.154815+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 2,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "startedAt": "2026-10-28T16:17:46.031718+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "927f8a6fe3cc496b87e13693ff8d47c1"
+      ],
+      "finalIds": [
+        "927f8a6fe3cc496b87e13693ff8d47c1"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0036f173b04383c4006ae2203251d88198a12f5c5c313822eb",
+          "turnId": "turn_0036f173b04383c4006ae22036b5dc819893e57308e07ce20e",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 98946,
+            "input_tokens_details": {
+              "cached_tokens": 80628
+            },
+            "output_tokens": 1022,
+            "output_tokens_details": {
+              "reasoning_tokens": 418
+            },
+            "total_tokens": 99968
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday, November 5, 09:00–09:30 is now free. The change was verified: Administration moved from 09:00–09:30 to 09:30–10:00 Europe/Budapest. This was the minimum permitted movement (30 minutes; weighted cost 0.5)."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 3,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 150087,
+        "output_tokens": 1324,
+        "total_tokens": 151411,
+        "cached_tokens": 131407,
+        "reasoning_tokens": 586
+      },
+      "durationSeconds": 296.693,
+      "finishedAt": "2026-10-28T16:31:37.744666+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 3,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "operatorHash": "b4f2a696822b7030f4b72982d01c4e07e011fedebcc90239aba234a89e9aa79e",
+        "startedAt": "2026-10-28T16:28:31.613318+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "a24fbcc175d045c8a4c4f7af47a44b3c"
+      ],
+      "finalIds": [
+        "a24fbcc175d045c8a4c4f7af47a44b3c"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0d311e0887aedad7006ae222d3d7648199a7bb4dce87bd6948",
+          "turnId": "turn_0d311e0887aedad7006ae222d739088199b4f635245f84c991",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 150087,
+            "input_tokens_details": {
+              "cached_tokens": 131407
+            },
+            "output_tokens": 1324,
+            "output_tokens_details": {
+              "reasoning_tokens": 586
+            },
+            "total_tokens": 151411
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday 09:00–09:30 is free. The Normal event “Administration” was moved from 09:00–09:30 to 09:30–10:00 on November 5. The 30-minute move is the minimum weighted-displacement solution (cost 0.5). Calendar confirmed the change."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 4,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 99864,
+        "output_tokens": 1318,
+        "total_tokens": 101182,
+        "cached_tokens": 81329,
+        "reasoning_tokens": 663
+      },
+      "durationSeconds": 222.012,
+      "finishedAt": "2026-10-28T16:46:07.806894+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 4,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:42:43.180325+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "u0td22j0ifomcb57s7p482k94g"
+      ],
+      "finalIds": [
+        "u0td22j0ifomcb57s7p482k94g"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_076d3ea02f53b31e006ae2261ed3088198ad9c1e2a266417dc",
+          "turnId": "turn_076d3ea02f53b31e006ae226246c148198ad60564eea99463e",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 99864,
+            "input_tokens_details": {
+              "cached_tokens": 81329
+            },
+            "output_tokens": 1318,
+            "output_tokens_details": {
+              "reasoning_tokens": 663
+            },
+            "total_tokens": 101182
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday 09:00–09:30 is clear. “Administration” was moved from 09:00–09:30 to 09:30–10:00 Europe/Budapest. The change was verified in Calendar. The 30-minute move is the minimum needed to clear the window; its weighted movement cost is 0.5 hours."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 5,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 82415,
+        "output_tokens": 1099,
+        "total_tokens": 83514,
+        "cached_tokens": 64159,
+        "reasoning_tokens": 533
+      },
+      "durationSeconds": 175.085,
+      "finishedAt": "2026-10-28T16:49:03.480599+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 5,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:46:24.070138+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "36g6jucgeftjs5ngeegjjrnb7c"
+      ],
+      "finalIds": [
+        "36g6jucgeftjs5ngeegjjrnb7c"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0e1d0691d44da6ca006ae226f3b17c8198b2e27bae2c21aa75",
+          "turnId": "turn_0e1d0691d44da6ca006ae226f76d70819895f836585ed69ae9",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 82415,
+            "input_tokens_details": {
+              "cached_tokens": 64159
+            },
+            "output_tokens": 1099,
+            "output_tokens_details": {
+              "reasoning_tokens": 533
+            },
+            "total_tokens": 83514
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday, November 5, from 09:00 to 09:30 is now free. “Administration” moved from 09:00–09:30 to 09:30–10:00 Budapest time. This is the minimum permitted displacement: 30 minutes, with weighted movement cost 0.5. The calendar update was verified."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 6,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 48938,
+        "output_tokens": 789,
+        "total_tokens": 49727,
+        "cached_tokens": 30998,
+        "reasoning_tokens": 296
+      },
+      "durationSeconds": 52.074,
+      "finishedAt": "2026-10-28T17:21:27.627070+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 6,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:20:38.279612+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "pqbti8gu6jrbvd464484r4cje0"
+      ],
+      "finalIds": [
+        "pqbti8gu6jrbvd464484r4cje0"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0dcdcfeb34207956006ae22eed6564819993daf4b1244d9fa4",
+          "turnId": "turn_0dcdcfeb34207956006ae22ef0cfb08199be870354ba7285f2",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 48938,
+            "input_tokens_details": {
+              "cached_tokens": 30998
+            },
+            "output_tokens": 789,
+            "output_tokens_details": {
+              "reasoning_tokens": 296
+            },
+            "total_tokens": 49727
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday, November 5, 09:00–09:30 is now free. The change was verified: **Administration** moved from 09:00–09:30 to 09:30–10:00 Budapest time."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 7,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 48871,
+        "output_tokens": 704,
+        "total_tokens": 49575,
+        "cached_tokens": 30977,
+        "reasoning_tokens": 225
+      },
+      "durationSeconds": 56.937,
+      "finishedAt": "2026-10-28T17:22:24.703249+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 7,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:21:30.610904+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "piprm0qllk5lt14cc5f52v4r1s"
+      ],
+      "finalIds": [
+        "piprm0qllk5lt14cc5f52v4r1s"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0fbb30fa572050b9006ae22f1f31348199843d3fd1575e93d2",
+          "turnId": "turn_0fbb30fa572050b9006ae22f24d7548199af077e8388a86ed2",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 48871,
+            "input_tokens_details": {
+              "cached_tokens": 30977
+            },
+            "output_tokens": 704,
+            "output_tokens_details": {
+              "reasoning_tokens": 225
+            },
+            "total_tokens": 49575
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday, November 5, 09:00–09:30 is now free. “Administration” was moved from 09:00–09:30 to 09:30–10:00 Budapest time. Calendar verified the update."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 8,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 49095,
+        "output_tokens": 994,
+        "total_tokens": 50089,
+        "cached_tokens": 30995,
+        "reasoning_tokens": 488
+      },
+      "durationSeconds": 50.668,
+      "finishedAt": "2026-10-28T17:24:21.133228+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 8,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:23:32.912854+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "c2f09lotrm9vrmg29k9de98uks"
+      ],
+      "finalIds": [
+        "c2f09lotrm9vrmg29k9de98uks"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0711cecf6f5537fd006ae22f98dc70819888b2738cf894201d",
+          "turnId": "turn_0711cecf6f5537fd006ae22f9d22308198baccecf491d1be2a",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 49095,
+            "input_tokens_details": {
+              "cached_tokens": 30995
+            },
+            "output_tokens": 994,
+            "output_tokens_details": {
+              "reasoning_tokens": 488
+            },
+            "total_tokens": 50089
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday 5 November 2026, 09:00–09:30 is now free. **Administration** was moved from 09:00–09:30 to 09:30–10:00 Budapest time. The move preserves its 30-minute duration and has weighted displacement cost 0.5. Calendar verified the update."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 9,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 49123,
+        "output_tokens": 918,
+        "total_tokens": 50041,
+        "cached_tokens": 31058,
+        "reasoning_tokens": 442
+      },
+      "durationSeconds": 53.266,
+      "finishedAt": "2026-10-28T17:25:14.498249+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 9,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:24:23.844876+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "kk770a58gc1l8m2t7162bitp9s"
+      ],
+      "finalIds": [
+        "kk770a58gc1l8m2t7162bitp9s"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_06f55f178518efa3006ae22fcbb1d0819ab58a4bbfa08a1d19",
+          "turnId": "turn_06f55f178518efa3006ae22fcefb78819ab579bdaec7f8a739",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 49123,
+            "input_tokens_details": {
+              "cached_tokens": 31058
+            },
+            "output_tokens": 918,
+            "output_tokens_details": {
+              "reasoning_tokens": 442
+            },
+            "total_tokens": 50041
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday, November 5, 09:00–09:30 is now free. “Administration” was moved from 09:00–09:30 to 09:30–10:00 Europe/Budapest, preserving its 30-minute duration. The calendar tool verified the change."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 6,
+      "repetition": 10,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 48971,
+        "output_tokens": 806,
+        "total_tokens": 49777,
+        "cached_tokens": 30975,
+        "reasoning_tokens": 279
+      },
+      "durationSeconds": 57.993,
+      "finishedAt": "2026-10-28T17:27:20.389884+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 6,
+        "repetition": 10,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:26:24.716090+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Administration",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "jq5s4ot2brbhu5nkr5jvr1s18c"
+      ],
+      "finalIds": [
+        "jq5s4ot2brbhu5nkr5jvr1s18c"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0d51fc734b2903b6006ae23044513c8199840a40b8452b09db",
+          "turnId": "turn_0d51fc734b2903b6006ae2304b52488199b2caafa650eb0428",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 48971,
+            "input_tokens_details": {
+              "cached_tokens": 30975
+            },
+            "output_tokens": 806,
+            "output_tokens_details": {
+              "reasoning_tokens": 279
+            },
+            "total_tokens": 49777
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday 09:00–09:30 is free. “Administration” was moved from 09:00–09:30 to 09:30–10:00 Budapest time. The event remains Normal with its 30-minute duration preserved. This is the minimum-cost move, with a weighted displacement cost of 0.5 hours. Calendar verified the update."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 09:00 to 09:30. You may move Normal events.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    }
+  ]
+}

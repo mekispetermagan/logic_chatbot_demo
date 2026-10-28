@@ -291,9 +291,9 @@ Total recorded application usage including this excluded attempt: **601,298 toke
 
 ## Evidence and reproduction
 
-Runner: [calendar_comparison.py](../../backend/api/tools/calendar_comparison.py).
-Independent checker: [calendar_comparison_check.py](../../backend/api/tools/calendar_comparison_check.py).
-Offline checker/accounting tests: [test_calendar_comparison.py](../../backend/api/tests/test_calendar_comparison.py).
+Runner: [calendar_comparison.py](../../../backend/api/tools/calendar_comparison.py).
+Independent checker: [calendar_comparison_check.py](../../../backend/api/tools/calendar_comparison_check.py).
+Offline checker/accounting tests: [test_calendar_comparison.py](../../../backend/api/tests/test_calendar_comparison.py).
 
 <!-- EVIDENCE -->
 

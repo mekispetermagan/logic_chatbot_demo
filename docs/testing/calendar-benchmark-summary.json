@@ -1,0 +1,661 @@
+{
+  "protocol": {
+    "model": "gpt-6-luna",
+    "reasoning": "medium",
+    "weekStart": "2026-11-02T00:00:00+01:00",
+    "weekEnd": "2026-11-09T00:00:00+01:00",
+    "frozenNow": "2026-11-04T08:00:00+01:00",
+    "repetitions": 10,
+    "hashes": {
+      "backend/api/app/__init__.py": "64032174b3fb09d3603608e692e1f4db20379e47f7d2da0fbf7310e2d0bc6458",
+      "backend/api/app/agent_context.py": "ae344fcaa32e2e2071eb3fa3d91946bde97ad3cdefccf0d1e3ad54ca0e577d84",
+      "backend/api/app/agent_instructions.py": "305e81825f3974528f1a7be4ff16080482a73810fab8d8491d8bec4ef39b4c9d",
+      "backend/api/app/agent_llm.py": "e383e8f412564896db842253de022c6d0fbab95dfcfd5ff64190d666d099d863",
+      "backend/api/app/agent_store.py": "acb2c1508c0ad0d7b04ee5fa0405e1000110905776f9413247c9249321bbee89",
+      "backend/api/app/agent_usage.py": "b7992700a1e92185f90eba4db9b9c883584487a3c87b4106f821a4a3135707e5",
+      "backend/api/app/agents.py": "5fef8efd6ceaf01bf3a780d9aa8b93af4d8199712ad07ab21c634ed2d11e19a1",
+      "backend/api/app/calendar_dialogue.py": "42674e1c5e1452e10b5d3afdb7bc83e92d93e1fd9995a4bff5009092a9f7c7e8",
+      "backend/api/app/calendar_events.py": "3531781d13bfb1c42dcfaf9eecbd930768fcc841ce309635afadb6427c8799a6",
+      "backend/api/app/calendar_interpreter.py": "9227c7ea5e95f18d75fee81d1e8203865fdf4a09e9a13d21f9005e58aa8d6aa2",
+      "backend/api/app/calendar_llm_agent.py": "c34df1ba9bb59cd3ba6eb2c4de076bf857c18d394e732aa012c7c74be3a3ea9e",
+      "backend/api/app/calendar_llm_dialogue.py": "9f6897308555284ed1e182aa5e6f30eaf1c5ab5cec4403a570b4f8316d811618",
+      "backend/api/app/calendar_llm_routes.py": "0d8fea59d5fc121d529cc27fc2e888b96ca440fb73193fa8656ed1488823a955",
+      "backend/api/app/calendar_mcp.py": "a86e052c5b85e161843a57b358db3bcb7d69cac2fc10b3c5e9dc3e6454c68b8d",
+      "backend/api/app/calendar_routes.py": "2e5769c9c84ad0651cbf576b6408cb874d1499b33215e937a5a67107cb2a64a6",
+      "backend/api/app/cellular_migration.py": "b4c74adb457f1343b747ac0ca2daf707412b9ba33610ddacb12e85c6de81626f",
+      "backend/api/app/config.py": "c1e1fc6216de21a975a47187b9251925df20298530517939fc2498c98ab1f7ce",
+      "backend/api/app/database.py": "9511b040aaa0b8564c32b157f95d4feaebefd4925108fb71d0f5577492c1fb65",
+      "backend/api/app/engine.py": "606499c41e2a9e0108ad71eee530af70685a7d1a4b98193d3b893e64f2bebc62",
+      "backend/api/app/language_help.py": "00168ea4982bd41a8eecdf2bcd02c4ad9c39bd9de1dbec2baa3623b77d408307",
+      "backend/api/app/llm.py": "76cf5879215f544492cbf6e6f498d6c62599c216788c313bb8c7050ae9d4e92f",
+      "backend/api/app/llm_budget.py": "731c79fe72606a278fee3734ffd771658b4e0209356e21452c379e9a02852b63",
+      "backend/api/app/llm_transcript.py": "b740bda9abcaf519e957b5fb859ac1de59086e76b3c231d62b9cba805b61f194",
+      "backend/api/app/main.py": "b4a47f89d4fb56988ffb9e031ae6fbc13572fb56049a8ee8f60415806ca690a1",
+      "backend/api/app/repository.py": "fc41132f5e4f173e355ea21197add3b631a9a8bee89c9d53d7b65088cd5f7630",
+      "backend/api/app/routes.py": "cb22a0c0c11da436af5565f62fa182f46a2c70e1cee407b82db42b0afb8b3a8f",
+      "backend/api/app/schemas.py": "908e347257311e2dcf2745d32da03dea18edb74a70804caa66d4c4c6f2b278f6",
+      "backend/api/app/service.py": "dc42870fe21f990e045d79d915b4b49a94c12e501d78bd5c33e7973255efc039",
+      "backend/api/prompts/calendar-answer-examples.json": "5084c33842c6fc5b2288076a29f1ba51c4bcbd4d1e52be2eb5f919f3e41d4b67",
+      "backend/api/prompts/calendar-examples.json": "3a3b3bc873e504f272f798466c2d07f2e43830ff748ec2a8b5f7f37afda18897",
+      "backend/api/prompts/calendar.md": "f08f3c1a9e8627d77e52715231ba4704e9b7503dc4ac2c75aeb63b7b3ad27d10",
+      "backend/api/prompts/examples.json": "95317210e7ec9c8a6a1b23ca64e5acd9006d6a426ba1908de17add14061a18ea",
+      "backend/api/prompts/network.md": "3def080f88b1bb7f9b180b159c945ea4ff1acfe9effffc00bfcd7e9a974e5e86",
+      "backend/api/prompts/objects.md": "997b9c9b7c76f7cf2102597da40930870742b041d075a9fb04b0933abdeb23f7",
+      "backend/api/prompts/shared.md": "aba8d44fe20683a47c721589ec2f6776b94c32dbc76ff776b91f7efd0fa8d969",
+      "backend/api/tools/calendar_benchmark.py": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+      "backend/api/tools/calendar_benchmark_cases.py": "fef6658cddac6c83eec35bf368ff365f9ddbdc11661ec04f417d3278be99d0aa",
+      "backend/api/tools/calendar_comparison.py": "17647cc6d9d8e1ff047df02bb9ceb8a5c918c6afd8a2c1b9bdcf4035edbc1a58",
+      "backend/logic_engine/bin/logic-engine-editor": "d70c154b4ee6cd2f3a3e5f672c8cd0d8ef2ebbf40c4137963ceef8a84a275fba",
+      "docs/agent-instructions-draft.md": "c710ab84a7f7cda345076edf2eda7ba02b77d20901ed8deec5c2a4b8187e01a3",
+      "docs/calendar-domain.md": "da0b4695526995e8f8c39225647a00f095d058d437558e4063678f7ce2087d65"
+    },
+    "gitCommit": "ebdb048a238c067de8c66c1e5f952f913f4b52a9"
+  },
+  "attempts": 240,
+  "statistics": {
+    "1-symbolic": {
+      "attempts": 10,
+      "successes": 9,
+      "failures": 1,
+      "accountedSuccesses": 9,
+      "mean_input_tokens": 20916,
+      "mean_output_tokens": 140.88888888888889,
+      "mean_total_tokens": 21056.88888888889,
+      "sd_total": 12.434271635729658,
+      "min_total": 21037,
+      "max_total": 21077
+    },
+    "1-llm-only": {
+      "attempts": 10,
+      "successes": 10,
+      "failures": 0,
+      "accountedSuccesses": 10,
+      "mean_input_tokens": 79363,
+      "mean_output_tokens": 731.9,
+      "mean_total_tokens": 80094.9,
+      "sd_total": 17382.566198796874,
+      "min_total": 66400,
+      "max_total": 100513
+    },
+    "2-symbolic": {
+      "attempts": 10,
+      "successes": 8,
+      "failures": 2,
+      "accountedSuccesses": 8,
+      "mean_input_tokens": 20853,
+      "mean_output_tokens": 290.875,
+      "mean_total_tokens": 21143.875,
+      "sd_total": 27.398839912876394,
+      "min_total": 21107,
+      "max_total": 21180
+    },
+    "2-llm-only": {
+      "attempts": 10,
+      "successes": 10,
+      "failures": 0,
+      "accountedSuccesses": 10,
+      "mean_input_tokens": 71520.3,
+      "mean_output_tokens": 580.3,
+      "mean_total_tokens": 72100.6,
+      "sd_total": 26879.363960728933,
+      "min_total": 49053,
+      "max_total": 113889
+    },
+    "3-symbolic": {
+      "attempts": 10,
+      "successes": 10,
+      "failures": 0,
+      "accountedSuccesses": 10,
+      "mean_input_tokens": 21035,
+      "mean_output_tokens": 186.9,
+      "mean_total_tokens": 21221.9,
+      "sd_total": 18.99970760008924,
+      "min_total": 21194,
+      "max_total": 21251
+    },
+    "3-llm-only": {
+      "attempts": 10,
+      "successes": 9,
+      "failures": 1,
+      "accountedSuccesses": 9,
+      "mean_input_tokens": 32125.444444444445,
+      "mean_output_tokens": 678.3333333333334,
+      "mean_total_tokens": 32803.77777777778,
+      "sd_total": 268.6050901313012,
+      "min_total": 32323,
+      "max_total": 33196
+    },
+    "4-symbolic": {
+      "attempts": 10,
+      "successes": 3,
+      "failures": 7,
+      "accountedSuccesses": 3,
+      "mean_input_tokens": 35518.333333333336,
+      "mean_output_tokens": 902.3333333333334,
+      "mean_total_tokens": 36420.666666666664,
+      "sd_total": 12917.582604083991,
+      "min_total": 21507,
+      "max_total": 44103
+    },
+    "4-llm-only": {
+      "attempts": 10,
+      "successes": 9,
+      "failures": 1,
+      "accountedSuccesses": 9,
+      "mean_input_tokens": 87889.44444444444,
+      "mean_output_tokens": 967.5555555555555,
+      "mean_total_tokens": 88857,
+      "sd_total": 24120.46964716898,
+      "min_total": 67297,
+      "max_total": 120042
+    },
+    "5-symbolic": {
+      "attempts": 10,
+      "successes": 9,
+      "failures": 1,
+      "accountedSuccesses": 9,
+      "mean_input_tokens": 20930,
+      "mean_output_tokens": 258.77777777777777,
+      "mean_total_tokens": 21188.777777777777,
+      "sd_total": 53.45974601926616,
+      "min_total": 21140,
+      "max_total": 21293
+    },
+    "5-llm-only": {
+      "attempts": 10,
+      "successes": 10,
+      "failures": 0,
+      "accountedSuccesses": 10,
+      "mean_input_tokens": 115584.6,
+      "mean_output_tokens": 3085.2,
+      "mean_total_tokens": 118669.8,
+      "sd_total": 44130.134556282006,
+      "min_total": 90366,
+      "max_total": 226157
+    },
+    "6-symbolic": {
+      "attempts": 10,
+      "successes": 10,
+      "failures": 0,
+      "accountedSuccesses": 10,
+      "mean_input_tokens": 20789,
+      "mean_output_tokens": 181.9,
+      "mean_total_tokens": 20970.9,
+      "sd_total": 27.278196421317887,
+      "min_total": 20923,
+      "max_total": 21018
+    },
+    "6-llm-only": {
+      "attempts": 10,
+      "successes": 10,
+      "failures": 0,
+      "accountedSuccesses": 10,
+      "mean_input_tokens": 74208.9,
+      "mean_output_tokens": 1007.6,
+      "mean_total_tokens": 75216.5,
+      "sd_total": 34075.636765061994,
+      "min_total": 49575,
+      "max_total": 151411
+    },
+    "7-symbolic": {
+      "attempts": 10,
+      "successes": 9,
+      "failures": 1,
+      "accountedSuccesses": 9,
+      "mean_input_tokens": 20895,
+      "mean_output_tokens": 173.22222222222223,
+      "mean_total_tokens": 21068.222222222223,
+      "sd_total": 18.45791007791631,
+      "min_total": 21042,
+      "max_total": 21104
+    },
+    "7-llm-only": {
+      "attempts": 10,
+      "successes": 8,
+      "failures": 2,
+      "accountedSuccesses": 8,
+      "mean_input_tokens": 101984.875,
+      "mean_output_tokens": 2284.625,
+      "mean_total_tokens": 104269.5,
+      "sd_total": 41624.069163337284,
+      "min_total": 70092,
+      "max_total": 194220
+    },
+    "8-symbolic": {
+      "attempts": 10,
+      "successes": 7,
+      "failures": 3,
+      "accountedSuccesses": 7,
+      "mean_input_tokens": 20751,
+      "mean_output_tokens": 396.2857142857143,
+      "mean_total_tokens": 21147.285714285714,
+      "sd_total": 215.2159491345954,
+      "min_total": 20962,
+      "max_total": 21505
+    },
+    "8-llm-only": {
+      "attempts": 10,
+      "successes": 10,
+      "failures": 0,
+      "accountedSuccesses": 10,
+      "mean_input_tokens": 66840.8,
+      "mean_output_tokens": 1177.4,
+      "mean_total_tokens": 68018.2,
+      "sd_total": 5230.457209673187,
+      "min_total": 66135,
+      "max_total": 82898
+    },
+    "9-symbolic": {
+      "attempts": 10,
+      "successes": 10,
+      "failures": 0,
+      "accountedSuccesses": 10,
+      "mean_input_tokens": 21025,
+      "mean_output_tokens": 181.8,
+      "mean_total_tokens": 21206.8,
+      "sd_total": 18.054239268259284,
+      "min_total": 21176,
+      "max_total": 21237
+    },
+    "9-llm-only": {
+      "attempts": 10,
+      "successes": 9,
+      "failures": 1,
+      "accountedSuccesses": 9,
+      "mean_input_tokens": 39642.88888888889,
+      "mean_output_tokens": 603.4444444444445,
+      "mean_total_tokens": 40246.333333333336,
+      "sd_total": 9267.715630078428,
+      "min_total": 32304,
+      "max_total": 50452
+    },
+    "10-symbolic": {
+      "attempts": 10,
+      "successes": 0,
+      "failures": 10,
+      "accountedSuccesses": 0,
+      "mean_input_tokens": null,
+      "mean_output_tokens": null,
+      "mean_total_tokens": null,
+      "sd_total": null,
+      "min_total": null,
+      "max_total": null
+    },
+    "10-llm-only": {
+      "attempts": 10,
+      "successes": 9,
+      "failures": 1,
+      "accountedSuccesses": 9,
+      "mean_input_tokens": 105254.77777777778,
+      "mean_output_tokens": 1938.4444444444443,
+      "mean_total_tokens": 107193.22222222222,
+      "sd_total": 39655.72989738613,
+      "min_total": 72484,
+      "max_total": 183707
+    },
+    "11-symbolic": {
+      "attempts": 10,
+      "successes": 10,
+      "failures": 0,
+      "accountedSuccesses": 10,
+      "mean_input_tokens": 21297,
+      "mean_output_tokens": 313.2,
+      "mean_total_tokens": 21610.2,
+      "sd_total": 68.83442291308745,
+      "min_total": 21521,
+      "max_total": 21726
+    },
+    "11-llm-only": {
+      "attempts": 10,
+      "successes": 8,
+      "failures": 2,
+      "accountedSuccesses": 8,
+      "mean_input_tokens": 145404.125,
+      "mean_output_tokens": 4578.625,
+      "mean_total_tokens": 149982.75,
+      "sd_total": 19818.912091737024,
+      "min_total": 128455,
+      "max_total": 180133
+    },
+    "12-symbolic": {
+      "attempts": 10,
+      "successes": 10,
+      "failures": 0,
+      "accountedSuccesses": 10,
+      "mean_input_tokens": 66795.2,
+      "mean_output_tokens": 896.2,
+      "mean_total_tokens": 67691.4,
+      "sd_total": 254.8019710372046,
+      "min_total": 67322,
+      "max_total": 68185
+    },
+    "12-llm-only": {
+      "attempts": 10,
+      "successes": 8,
+      "failures": 2,
+      "accountedSuccesses": 8,
+      "mean_input_tokens": 239514.25,
+      "mean_output_tokens": 3865.75,
+      "mean_total_tokens": 243380,
+      "sd_total": 61301.138055154755,
+      "min_total": 188688,
+      "max_total": 364331
+    }
+  },
+  "sumOfCaseMeans": {
+    "symbolic": {
+      "successes": 95,
+      "failures": 25,
+      "sd_total": null,
+      "min_total": null,
+      "max_total": null,
+      "mean_input_tokens": null,
+      "mean_output_tokens": null,
+      "mean_total_tokens": null
+    },
+    "llm-only": {
+      "successes": 110,
+      "failures": 10,
+      "sd_total": null,
+      "min_total": null,
+      "max_total": null,
+      "mean_input_tokens": 1159333.4055555556,
+      "mean_output_tokens": 21499.17777777778,
+      "mean_total_tokens": 1180832.5833333333
+    }
+  },
+  "operatorCorrection": {
+    "timestamp": "2026-10-28T16:26:28.344208+00:00",
+    "changedFiles": [
+      "backend/api/tools/calendar_benchmark.py"
+    ],
+    "oldOperatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a",
+    "newOperatorHash": "b4f2a696822b7030f4b72982d01c4e07e011fedebcc90239aba234a89e9aa79e",
+    "applicationAndPromptHashesUnchanged": true,
+    "affectedAttempts": [
+      {
+        "case": 4,
+        "repetition": 2,
+        "mode": "symbolic",
+        "countedAsFailure": true,
+        "replaced": false
+      },
+      {
+        "case": 4,
+        "repetition": 1,
+        "mode": "symbolic",
+        "countedAsFailure": true,
+        "replaced": false
+      }
+    ],
+    "explanation": "Handle the approved reference/threshold response when asked by the translator as well as the engine. Earlier incomplete attempts retained, not retried.",
+    "additionalKnownQuestionStopsFound": [
+      {
+        "case": 4,
+        "repetition": 5,
+        "mode": "symbolic",
+        "countedAsFailure": true,
+        "replaced": false
+      },
+      {
+        "case": 4,
+        "repetition": 9,
+        "mode": "symbolic",
+        "countedAsFailure": true,
+        "replaced": false
+      }
+    ],
+    "remainingOperatorLimitation": "The controller still stopped when two candidates accompanied the known reference question. These two attempts also required only the predefined afternoon answer.",
+    "postRunAssessmentAt": "2026-10-28T17:55:38.286206+00:00"
+  },
+  "fixtureSetupChange": {
+    "timestamp": "2026-10-28T16:36:41.505947+00:00",
+    "oldOperatorHash": "b4f2a696822b7030f4b72982d01c4e07e011fedebcc90239aba234a89e9aa79e",
+    "newOperatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+    "applicationPromptAndTaskHashesUnchanged": true,
+    "completedBeforeChange": 45,
+    "explanation": "Unmeasured fixture resets use Google REST with MCP readback. All task execution remains unchanged."
+  },
+  "calendarReuse": {
+    "sourceCase": 3,
+    "destinationCase": 8,
+    "calendarId": "6ca77f9892414775ad9890a3bb1128f5a92b778d55353f77fd2a426aa9d5c92f@group.calendar.google.com"
+  },
+  "cleanup": {
+    "calendars": [
+      {
+        "calendarId": "50c2733a160414764c0e45614cb54ebc3b404b2512c6418da0d716584b27fab1@group.calendar.google.com",
+        "aliases": [
+          "case-01"
+        ],
+        "verified": true,
+        "method": "CalendarList showDeleted with acknowledged deletion",
+        "verifiedAt": "2026-10-28T17:56:57.906534+00:00"
+      },
+      {
+        "calendarId": "6dfc63bda72e55ec230b6c2fccf81a12ae5a36fee668c5554e49449cfa545a75@group.calendar.google.com",
+        "aliases": [
+          "case-02"
+        ],
+        "verified": true,
+        "method": "CalendarList showDeleted with acknowledged deletion",
+        "verifiedAt": "2026-10-28T17:57:00.126882+00:00"
+      },
+      {
+        "calendarId": "6ca77f9892414775ad9890a3bb1128f5a92b778d55353f77fd2a426aa9d5c92f@group.calendar.google.com",
+        "aliases": [
+          "case-03",
+          "case-08"
+        ],
+        "verified": true,
+        "method": "CalendarList showDeleted with acknowledged deletion",
+        "verifiedAt": "2026-10-28T17:57:02.170083+00:00"
+      },
+      {
+        "calendarId": "c592025bd5553941cb70197eeb73a2abe6f60ba4f1c5dc4f7f4e23e90c917461@group.calendar.google.com",
+        "aliases": [
+          "case-04"
+        ],
+        "verified": true,
+        "method": "CalendarList showDeleted with acknowledged deletion",
+        "verifiedAt": "2026-10-28T17:57:04.321606+00:00"
+      },
+      {
+        "calendarId": "3061b705f2448983479364ec815e919db4126ed3a73316ee9adffcde75cfd28b@group.calendar.google.com",
+        "aliases": [
+          "case-05"
+        ],
+        "verified": true,
+        "method": "CalendarList showDeleted with acknowledged deletion",
+        "verifiedAt": "2026-10-28T17:57:06.593105+00:00"
+      },
+      {
+        "calendarId": "76e9d1cdccdae73e94549dbc7b1994ac267622b25b74cb5a944ea4e5c7fbc439@group.calendar.google.com",
+        "aliases": [
+          "case-06"
+        ],
+        "verified": true,
+        "method": "CalendarList showDeleted with acknowledged deletion",
+        "verifiedAt": "2026-10-28T17:57:08.165244+00:00"
+      },
+      {
+        "calendarId": "9101e18fce4589214fd57b22204c0a53ba131572298dae4f5d4c3a97fbd20bae@group.calendar.google.com",
+        "aliases": [
+          "case-07"
+        ],
+        "verified": true,
+        "method": "CalendarList showDeleted with acknowledged deletion",
+        "verifiedAt": "2026-10-28T17:57:09.953980+00:00"
+      },
+      {
+        "calendarId": "112f8ce818de7f1467a40e98758c3d4f81761704c580e1442a5242abc5f8dfe9@group.calendar.google.com",
+        "aliases": [
+          "case-09"
+        ],
+        "verified": true,
+        "method": "CalendarList showDeleted with acknowledged deletion",
+        "verifiedAt": "2026-10-28T17:57:12.251781+00:00"
+      },
+      {
+        "calendarId": "9dbf6b280bf910853d3459a161bce6753c74166ecf0a71c6d415416d21382960@group.calendar.google.com",
+        "aliases": [
+          "case-10"
+        ],
+        "verified": true,
+        "method": "CalendarList showDeleted with acknowledged deletion",
+        "verifiedAt": "2026-10-28T17:57:14.225120+00:00"
+      },
+      {
+        "calendarId": "cc12067ac1f143f1ba950ab96aee6384583afb4ddae6c74bdc6d86db2424830f@group.calendar.google.com",
+        "aliases": [
+          "case-11"
+        ],
+        "verified": true,
+        "method": "CalendarList showDeleted with acknowledged deletion",
+        "verifiedAt": "2026-10-28T17:57:16.811974+00:00"
+      },
+      {
+        "calendarId": "8ab4d3a62ddfc264775182b178275712a95b1361621806eceb2a3a5c172e0c31@group.calendar.google.com",
+        "aliases": [
+          "case-12"
+        ],
+        "verified": true,
+        "method": "CalendarList showDeleted with acknowledged deletion",
+        "verifiedAt": "2026-10-28T17:57:18.656498+00:00"
+      }
+    ],
+    "uniqueCalendars": 11,
+    "primaryCalendarPresent": true,
+    "temporaryCredentialCopiesRemoved": true,
+    "verifiedAt": "2026-10-28T17:57:18.775405+00:00"
+  },
+  "shutdownRecovery": {
+    "timestamp": "2026-10-28T17:19:08.121189+00:00",
+    "recoveredCompleted": [
+      {
+        "case": 6,
+        "repetition": 6,
+        "mode": "symbolic",
+        "statusAtShutdown": "answered"
+      }
+    ],
+    "interruptedSubmitted": [
+      {
+        "case": 1,
+        "repetition": 6,
+        "mode": "symbolic",
+        "statusAtShutdown": "interpreting"
+      },
+      {
+        "case": 4,
+        "repetition": 6,
+        "mode": "llm-only",
+        "statusAtShutdown": "running"
+      },
+      {
+        "case": 5,
+        "repetition": 5,
+        "mode": "symbolic",
+        "statusAtShutdown": "interpretation"
+      },
+      {
+        "case": 7,
+        "repetition": 5,
+        "mode": "symbolic",
+        "statusAtShutdown": "clarify"
+      },
+      {
+        "case": 9,
+        "repetition": 8,
+        "mode": "llm-only",
+        "statusAtShutdown": "running"
+      },
+      {
+        "case": 10,
+        "repetition": 4,
+        "mode": "llm-only",
+        "statusAtShutdown": "applying"
+      },
+      {
+        "case": 11,
+        "repetition": 4,
+        "mode": "llm-only",
+        "statusAtShutdown": "applying"
+      },
+      {
+        "case": 12,
+        "repetition": 3,
+        "mode": "llm-only",
+        "statusAtShutdown": "running"
+      }
+    ],
+    "setupOnly": [
+      {
+        "case": 2,
+        "repetition": 7,
+        "mode": "llm-only",
+        "proof": "Zero durable request intents, zero sessions, no messages. No LLM input submitted.",
+        "archived": "shutdown-setup-only/case-02-repeat-07-llm-only"
+      },
+      {
+        "case": 3,
+        "repetition": 9,
+        "mode": "llm-only",
+        "proof": "Zero durable request intents, zero sessions, no messages. No LLM input submitted.",
+        "archived": "shutdown-setup-only/case-03-repeat-09-llm-only"
+      },
+      {
+        "case": 6,
+        "repetition": 6,
+        "mode": "llm-only",
+        "proof": "Zero durable request intents, zero sessions, no messages. No LLM input submitted.",
+        "archived": "shutdown-setup-only/case-06-repeat-06-llm-only"
+      }
+    ],
+    "damagedFiles": [
+      "case-01/repeat-06-symbolic/initial.json",
+      "case-01/repeat-06-symbolic/manifest.json",
+      "case-01/repeat-06-symbolic/empty-state.json",
+      "case-02/repeat-07-llm-only/initial.json",
+      "case-02/repeat-07-llm-only/manifest.json",
+      "case-02/repeat-07-llm-only/empty-state.json",
+      "case-03/repeat-09-llm-only/initial.json",
+      "case-03/repeat-09-llm-only/manifest.json",
+      "case-03/repeat-09-llm-only/empty-state.json",
+      "case-04/repeat-06-llm-only/empty-state.json",
+      "case-06/repeat-06-llm-only/initial.json",
+      "case-06/repeat-06-llm-only/manifest.json",
+      "case-06/repeat-06-llm-only/empty-state.json",
+      "case-06/repeat-06-symbolic/accounting.json",
+      "case-06/repeat-06-symbolic/usage.json",
+      "case-06/repeat-06-symbolic/provider-turns.json",
+      "case-06/repeat-06-symbolic/final.json",
+      "case-06/repeat-06-symbolic/stages.json",
+      "case-06/repeat-06-symbolic/result.json",
+      "case-12/repeat-03-llm-only/stages.json"
+    ]
+  },
+  "checkpointPolicy": {
+    "writer": "atomic replace + file/directory fsync",
+    "suiteHash": "125ca1d5418c6e36a7a65a37cd71c1df765cb919b76f030c5a5637e09c44b77e",
+    "applicationPromptsFixturesAndRunnerUnchanged": true
+  },
+  "verification": {
+    "attempts": 240,
+    "slotsUniqueAndComplete": true,
+    "successfulUsageComplete": true,
+    "uniqueProviderTurns": 333,
+    "unavailableProviderTurns": 1,
+    "independentStatisticsMatch": true,
+    "frozenApplicationPromptAndTaskHashesMatch": true,
+    "movementPermissionChecksPassed": true,
+    "checkedExistingMovements": 144,
+    "credentialScanPassed": true,
+    "reportFilesScanned": 34,
+    "offlineTestsPassed": 22,
+    "successes": {
+      "symbolic": 95,
+      "llm-only": 110
+    }
+  }
+}

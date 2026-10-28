@@ -2,7 +2,7 @@
 
 Run from backend/api with .env exported. All cloud event operations use the real
 MCP adapter. Only isolated-calendar provisioning uses the Google REST API.
-See docs/testing/calendar-comparison-2026-10-28.md for the completed experiment.
+See docs/testing/archive/calendar-comparison-2026-10-28.md for the completed experiment.
 """
 from __future__ import annotations
 

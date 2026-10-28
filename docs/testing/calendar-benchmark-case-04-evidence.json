@@ -1,0 +1,3832 @@
+{
+  "case": 4,
+  "specification": {
+    "name": "Ambiguous reference",
+    "level": "Moderate",
+    "events": [
+      {
+        "day": 5,
+        "title": "Project review",
+        "start": "09:00",
+        "end": "09:30",
+        "importance": 0,
+        "location": "",
+        "description": ""
+      },
+      {
+        "day": 5,
+        "title": "Project review",
+        "start": "14:00",
+        "end": "14:30",
+        "importance": 1,
+        "location": "",
+        "description": ""
+      }
+    ],
+    "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+    "reference": "The afternoon one."
+  },
+  "runs": [
+    {
+      "case": 4,
+      "repetition": 1,
+      "mode": "symbolic",
+      "stopReason": "interpretation_requires_supervision",
+      "lastStage": "initial",
+      "status": "interpretation",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20940,
+        "output_tokens": 594,
+        "total_tokens": 21534,
+        "cached_tokens": 0,
+        "reasoning_tokens": 490
+      },
+      "durationSeconds": 72.95,
+      "finishedAt": "2026-10-28T16:16:17.267096+00:00",
+      "success": false,
+      "failureCategory": "operator_known_clarification_not_answered",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": false,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": false
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 1,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "startedAt": "2026-10-28T16:15:42.932795+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "b02e82168efe4b42857e708a49b9184d",
+        "19f9891b8595468990e6d07dbdbbb6da"
+      ],
+      "finalIds": [
+        "b02e82168efe4b42857e708a49b9184d",
+        "19f9891b8595468990e6d07dbdbbb6da"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_00c42b01401a8837006ae21fb4e474819b822f4cb5706835e2",
+          "turnId": "turn_00c42b01401a8837006ae21fbc5dc0819ba918b1fdb1cb13db",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20940,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 594,
+            "output_tokens_details": {
+              "reasoning_tokens": 490
+            },
+            "total_tokens": 21534
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "Translation needs clarification or repair; nothing was applied."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 2,
+      "mode": "symbolic",
+      "stopReason": "interpretation_requires_supervision",
+      "lastStage": "initial",
+      "status": "interpretation",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20940,
+        "output_tokens": 361,
+        "total_tokens": 21301,
+        "cached_tokens": 0,
+        "reasoning_tokens": 273
+      },
+      "durationSeconds": 72.094,
+      "finishedAt": "2026-10-28T16:17:29.638774+00:00",
+      "success": false,
+      "failureCategory": "operator_known_clarification_not_answered",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": false,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": false
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 2,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "startedAt": "2026-10-28T16:16:58.065093+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "92564b37e7fd4d8dac79a24d2e5b088a",
+        "86e66609164a49c7991082be2cd9847f"
+      ],
+      "finalIds": [
+        "92564b37e7fd4d8dac79a24d2e5b088a",
+        "86e66609164a49c7991082be2cd9847f"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0cd5c8ff2630e3d8006ae21fff6a788199ba114a408e7ba7f6",
+          "turnId": "turn_0cd5c8ff2630e3d8006ae220031eb08199a19a08e5fe73fcb0",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20940,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 361,
+            "output_tokens_details": {
+              "reasoning_tokens": 273
+            },
+            "total_tokens": 21301
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "Translation needs clarification or repair; nothing was applied."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 3,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "error",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 42882,
+        "output_tokens": 952,
+        "total_tokens": 43834,
+        "cached_tokens": 20937,
+        "reasoning_tokens": 756
+      },
+      "durationSeconds": 121.836,
+      "finishedAt": "2026-10-28T16:38:57.521609+00:00",
+      "success": false,
+      "failureCategory": "translation_unbound_pronoun",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 3,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:37:13.138845+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "bp48kpmksmdld6p9nk6a5of34c",
+        "cvl07t65hgnhni8eddrn7jpf20"
+      ],
+      "finalIds": [
+        "bp48kpmksmdld6p9nk6a5of34c",
+        "cvl07t65hgnhni8eddrn7jpf20"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0fd45b8b3924ebed006ae224cb33688198a170de4f4e64f7c3",
+          "turnId": "turn_0fd45b8b3924ebed006ae224cece788198bd49317adda9973f",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20940,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 489,
+            "output_tokens_details": {
+              "reasoning_tokens": 397
+            },
+            "total_tokens": 21429
+          }
+        },
+        {
+          "sessionId": "sess_0fd45b8b3924ebed006ae224cb33688198a170de4f4e64f7c3",
+          "turnId": "turn_0fd45b8b3924ebed006ae224ec15f4819887e1c5dd2b4b3dee",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21942,
+            "input_tokens_details": {
+              "cached_tokens": 20937
+            },
+            "output_tokens": 463,
+            "output_tokens_details": {
+              "reasoning_tokens": 359
+            },
+            "total_tokens": 22405
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "Translation needs clarification or repair; nothing was applied."
+        },
+        {
+          "role": "user",
+          "text": "The afternoon one."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). No event antecedent for it."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Set interval of it from thursday at 15:00 to thursday at 15:30.",
+        "Set interval of it from thursday at 15:00 to thursday at 15:30."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "answerInterpretation",
+          "text": "The afternoon one.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "error"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 4,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 42970,
+        "output_tokens": 1133,
+        "total_tokens": 44103,
+        "cached_tokens": 20937,
+        "reasoning_tokens": 932
+      },
+      "durationSeconds": 213.784,
+      "finishedAt": "2026-10-28T16:42:32.082253+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 4,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:39:13.719540+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "svde8r5u6akf0mcb627eqh3f0s",
+        "cdf788cbatnrsfjur26ecspu8o"
+      ],
+      "finalIds": [
+        "svde8r5u6akf0mcb627eqh3f0s",
+        "cdf788cbatnrsfjur26ecspu8o"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_07d8cf7fd49432c1006ae225447fcc8199944c765b87ecf538",
+          "turnId": "turn_07d8cf7fd49432c1006ae22547f9e0819983e59fb12476bd28",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20940,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 553,
+            "output_tokens_details": {
+              "reasoning_tokens": 453
+            },
+            "total_tokens": 21493
+          }
+        },
+        {
+          "sessionId": "sess_07d8cf7fd49432c1006ae225447fcc8199944c765b87ecf538",
+          "turnId": "turn_07d8cf7fd49432c1006ae225698b688199b759807a0d750016",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 22030,
+            "input_tokens_details": {
+              "cached_tokens": 20937
+            },
+            "output_tokens": 580,
+            "output_tokens_details": {
+              "reasoning_tokens": 479
+            },
+            "total_tokens": 22610
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "Translation needs clarification or repair; nothing was applied."
+        },
+        {
+          "role": "user",
+          "text": "The afternoon one."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nset interval of the event with title \"Project review\" and importance important from thursday at 15:00 to thursday at 15:30.\nInterval assigned; overlaps are permitted for explicit assignments."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "set interval of the event with title \"Project review\" and importance important from thursday at 15:00 to thursday at 15:30.\nInterval assigned; overlaps are permitted for explicit assignments."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Set interval of the event with title \"Project review\" and importance important from thursday at 15:00 to thursday at 15:30.",
+        "Set interval of the event with title \"Project review\" and importance important from thursday at 15:00 to thursday at 15:30."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "answerInterpretation",
+          "text": "The afternoon one.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 5,
+      "mode": "symbolic",
+      "stopReason": "interpretation_requires_supervision",
+      "lastStage": "initial",
+      "status": "interpretation",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20940,
+        "output_tokens": 798,
+        "total_tokens": 21738,
+        "cached_tokens": 0,
+        "reasoning_tokens": 584
+      },
+      "durationSeconds": 58.957,
+      "finishedAt": "2026-10-28T16:50:44.755978+00:00",
+      "success": false,
+      "failureCategory": "operator_known_clarification_not_answered",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": false,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": false
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 5,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:49:59.356724+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "0vdqkbbmiuao0ptpndqakkb9f0",
+        "ed2m7mh9c7jdouql02k33pk0e0"
+      ],
+      "finalIds": [
+        "0vdqkbbmiuao0ptpndqakkb9f0",
+        "ed2m7mh9c7jdouql02k33pk0e0"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0f4ece8420ee1aea006ae227c5246881998944730c59090e48",
+          "turnId": "turn_0f4ece8420ee1aea006ae227c8290c8199ab227522b85124e6",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20940,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 798,
+            "output_tokens_details": {
+              "reasoning_tokens": 584
+            },
+            "total_tokens": 21738
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Set interval of the event with title \"Project review\" and importance normal from thursday at 15:00 to thursday at 15:30.",
+        "Set interval of the event with title \"Project review\" and importance important from thursday at 15:00 to thursday at 15:30."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 6,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 42645,
+        "output_tokens": 1007,
+        "total_tokens": 43652,
+        "cached_tokens": 20937,
+        "reasoning_tokens": 810
+      },
+      "durationSeconds": 193.605,
+      "finishedAt": "2026-10-28T16:53:59.504507+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 6,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:51:03.521964+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "6vk8ntnpn6gdc4paf55voh6d00",
+        "lvq4u5emg9liulu353a84tfv6o"
+      ],
+      "finalIds": [
+        "6vk8ntnpn6gdc4paf55voh6d00",
+        "lvq4u5emg9liulu353a84tfv6o"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_06b29e6886488c02006ae228041fec819ba707ab5fcd973f02",
+          "turnId": "turn_06b29e6886488c02006ae22807f9a0819b863335ee6e2423c0",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20940,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 266,
+            "output_tokens_details": {
+              "reasoning_tokens": 179
+            },
+            "total_tokens": 21206
+          }
+        },
+        {
+          "sessionId": "sess_06b29e6886488c02006ae228041fec819ba707ab5fcd973f02",
+          "turnId": "turn_06b29e6886488c02006ae228202ac4819bb91de3793884e4ac",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21705,
+            "input_tokens_details": {
+              "cached_tokens": 20937
+            },
+            "output_tokens": 741,
+            "output_tokens_details": {
+              "reasoning_tokens": 631
+            },
+            "total_tokens": 22446
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "Translation needs clarification or repair; nothing was applied."
+        },
+        {
+          "role": "user",
+          "text": "The afternoon one."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nset interval of the event with title \"Project review\" and importance important from thursday at 15:00 to thursday at 15:30.\nInterval assigned; overlaps are permitted for explicit assignments."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "set interval of the event with title \"Project review\" and importance important from thursday at 15:00 to thursday at 15:30.\nInterval assigned; overlaps are permitted for explicit assignments."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Set interval of the event with title \"Project review\" and importance important from thursday at 15:00 to thursday at 15:30.",
+        "Set interval of the event with title \"Project review\" and importance important from thursday at 15:00 to thursday at 15:30."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "answerInterpretation",
+          "text": "The afternoon one.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 7,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20940,
+        "output_tokens": 567,
+        "total_tokens": 21507,
+        "cached_tokens": 0,
+        "reasoning_tokens": 464
+      },
+      "durationSeconds": 44.706,
+      "finishedAt": "2026-10-28T17:22:32.070076+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 7,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:21:52.406240+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "kah74hllauh5h2581l08j255cg",
+        "g9jsltp3dbqj94duua0nnl1euo"
+      ],
+      "finalIds": [
+        "kah74hllauh5h2581l08j255cg",
+        "g9jsltp3dbqj94duua0nnl1euo"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0570d432bd698dea006ae22f347bf4819ba8adac47fa1001b8",
+          "turnId": "turn_0570d432bd698dea006ae22f399be8819bb65bcd7b4a5e256a",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20940,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 567,
+            "output_tokens_details": {
+              "reasoning_tokens": 464
+            },
+            "total_tokens": 21507
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Which event do you mean?"
+        },
+        {
+          "role": "user",
+          "text": "0"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nset interval of the event with title \"Project review\" from thursday at 15:00 to thursday at 15:30.\nInterval assigned; overlaps are permitted for explicit assignments."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "set interval of the event with title \"Project review\" from thursday at 15:00 to thursday at 15:30.\nInterval assigned; overlaps are permitted for explicit assignments."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Set interval of the event with title \"Project review\" from thursday at 15:00 to thursday at 15:30.",
+        "Set interval of the event with title \"Project review\" from thursday at 15:00 to thursday at 15:30."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.subject.choice",
+          "value": 0,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 8,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "error",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 42931,
+        "output_tokens": 947,
+        "total_tokens": 43878,
+        "cached_tokens": 20937,
+        "reasoning_tokens": 763
+      },
+      "durationSeconds": 50.25,
+      "finishedAt": "2026-10-28T17:23:22.422411+00:00",
+      "success": false,
+      "failureCategory": "translation_unbound_pronoun",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 8,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:22:35.458027+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "rasmpsuea8b0faf7oae4la5bpo",
+        "dad57agckummdddkvpbqh4a4a8"
+      ],
+      "finalIds": [
+        "rasmpsuea8b0faf7oae4la5bpo",
+        "dad57agckummdddkvpbqh4a4a8"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0f8aaece3088d3ad006ae22f5ed9c4819a8df5c4e5d748a07a",
+          "turnId": "turn_0f8aaece3088d3ad006ae22f6273a8819a90906d63bcf7f144",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20940,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 508,
+            "output_tokens_details": {
+              "reasoning_tokens": 422
+            },
+            "total_tokens": 21448
+          }
+        },
+        {
+          "sessionId": "sess_0f8aaece3088d3ad006ae22f5ed9c4819a8df5c4e5d748a07a",
+          "turnId": "turn_0f8aaece3088d3ad006ae22f7cdeb0819aabcce746b9534837",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21991,
+            "input_tokens_details": {
+              "cached_tokens": 20937
+            },
+            "output_tokens": 439,
+            "output_tokens_details": {
+              "reasoning_tokens": 341
+            },
+            "total_tokens": 22430
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "Translation needs clarification or repair; nothing was applied."
+        },
+        {
+          "role": "user",
+          "text": "The afternoon one."
+        },
+        {
+          "role": "machine",
+          "text": "LLM translation failed (agent turn: HTTP 409); nothing was applied.\nLLM translation failed (agent turn: HTTP 409); nothing was applied."
+        },
+        {
+          "role": "user",
+          "text": "The afternoon one."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). No event antecedent for it."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Set interval of it from thursday at 15:00 to thursday at 15:30.",
+        "Set interval of it from thursday at 15:00 to thursday at 15:30."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "answerInterpretation",
+          "text": "The afternoon one.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "answerInterpretation",
+          "text": "The afternoon one.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "error"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 9,
+      "mode": "symbolic",
+      "stopReason": "interpretation_requires_supervision",
+      "lastStage": "initial",
+      "status": "interpretation",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20940,
+        "output_tokens": 432,
+        "total_tokens": 21372,
+        "cached_tokens": 0,
+        "reasoning_tokens": 222
+      },
+      "durationSeconds": 22.873,
+      "finishedAt": "2026-10-28T17:25:55.220903+00:00",
+      "success": false,
+      "failureCategory": "operator_known_clarification_not_answered",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": false,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": false
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 9,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:25:36.000064+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "bbrlar1a9pja1b7qsgrqcn6jro",
+        "mniemt7b0pfdfoket7k4c5jjks"
+      ],
+      "finalIds": [
+        "bbrlar1a9pja1b7qsgrqcn6jro",
+        "mniemt7b0pfdfoket7k4c5jjks"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0a03cb22c0af29b9006ae2301375ac8199b17b9968cf21bb66",
+          "turnId": "turn_0a03cb22c0af29b9006ae23017748c8199b8b05446851b12f5",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20940,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 432,
+            "output_tokens_details": {
+              "reasoning_tokens": 222
+            },
+            "total_tokens": 21372
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Set interval of the event with title \"Project review\" and importance normal from thursday at 15:00 to thursday at 15:30.",
+        "Set interval of the event with title \"Project review\" and importance important from thursday at 15:00 to thursday at 15:30."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 10,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "error",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 42908,
+        "output_tokens": 1170,
+        "total_tokens": 44078,
+        "cached_tokens": 20937,
+        "reasoning_tokens": 959
+      },
+      "durationSeconds": 40.565,
+      "finishedAt": "2026-10-28T17:26:35.927327+00:00",
+      "success": false,
+      "failureCategory": "translation_unbound_pronoun",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 10,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:25:58.523894+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "cvdnmkqk44ch32v0q3e5f680ls",
+        "tesjp0ukdj6g1if1k2fqfgooic"
+      ],
+      "finalIds": [
+        "cvdnmkqk44ch32v0q3e5f680ls",
+        "tesjp0ukdj6g1if1k2fqfgooic"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_048d5b4283e28c6f006ae23028f40481998fbcd787bb950c2f",
+          "turnId": "turn_048d5b4283e28c6f006ae2302ba8e081999215ff0bdeeb84a5",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20940,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 511,
+            "output_tokens_details": {
+              "reasoning_tokens": 399
+            },
+            "total_tokens": 21451
+          }
+        },
+        {
+          "sessionId": "sess_048d5b4283e28c6f006ae23028f40481998fbcd787bb950c2f",
+          "turnId": "turn_048d5b4283e28c6f006ae2303cbccc8199bf4278992a8e0733",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21968,
+            "input_tokens_details": {
+              "cached_tokens": 20937
+            },
+            "output_tokens": 659,
+            "output_tokens_details": {
+              "reasoning_tokens": 560
+            },
+            "total_tokens": 22627
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "Translation needs clarification or repair; nothing was applied."
+        },
+        {
+          "role": "user",
+          "text": "The afternoon one."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). No event antecedent for it."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Set interval of it from thursday at 15:00 to thursday at 15:30.",
+        "Set interval of it from thursday at 15:00 to thursday at 15:30."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "answerInterpretation",
+          "text": "The afternoon one.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "error"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 1,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 84074,
+        "output_tokens": 907,
+        "total_tokens": 84981,
+        "cached_tokens": 65256,
+        "reasoning_tokens": 378
+      },
+      "durationSeconds": 106.11,
+      "finishedAt": "2026-10-28T16:15:04.138007+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 1,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "startedAt": "2026-10-28T16:13:35.893920+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "09782a96b7a740d0bc833000aae72449",
+        "6e0b7c1c36db4cb29f6e77abaac5d4ee"
+      ],
+      "finalIds": [
+        "09782a96b7a740d0bc833000aae72449",
+        "6e0b7c1c36db4cb29f6e77abaac5d4ee"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_012c5c16203b2329006ae21f35778c819bbdbe0bb872d4ad6e",
+          "turnId": "turn_012c5c16203b2329006ae21f38af84819b949210c610bbdd63",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31531,
+            "input_tokens_details": {
+              "cached_tokens": 15156
+            },
+            "output_tokens": 334,
+            "output_tokens_details": {
+              "reasoning_tokens": 105
+            },
+            "total_tokens": 31865
+          }
+        },
+        {
+          "sessionId": "sess_012c5c16203b2329006ae21f35778c819bbdbe0bb872d4ad6e",
+          "turnId": "turn_012c5c16203b2329006ae21f54d1b8819b83c5534e39c697a5",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 52543,
+            "input_tokens_details": {
+              "cached_tokens": 50100
+            },
+            "output_tokens": 573,
+            "output_tokens_details": {
+              "reasoning_tokens": 273
+            },
+            "total_tokens": 53116
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "There are two “Project review” events on Thursday, November 5: one from 09:00–09:30 and one from 14:00–14:30. Which one should I move to 15:00–15:30?"
+        },
+        {
+          "role": "user",
+          "text": "The afternoon one."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Moved the afternoon “Project review” on Thursday, November 5, from 14:00–14:30 to 15:00–15:30 Europe/Budapest. Calendar verified the change."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "The afternoon one.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 2,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 84044,
+        "output_tokens": 873,
+        "total_tokens": 84917,
+        "cached_tokens": 65268,
+        "reasoning_tokens": 338
+      },
+      "durationSeconds": 261.655,
+      "finishedAt": "2026-10-28T16:21:51.535989+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 2,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "startedAt": "2026-10-28T16:19:13.157188+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "2d4284e0114e4b7687ad89be4370c5f7",
+        "0ade9adce760408baf4172088c0b0aab"
+      ],
+      "finalIds": [
+        "2d4284e0114e4b7687ad89be4370c5f7",
+        "0ade9adce760408baf4172088c0b0aab"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0bcae73f9fcfdedb006ae2209e39c8819896db30a9aca721b6",
+          "turnId": "turn_0bcae73f9fcfdedb006ae220a83f308198be4f82544fc229cd",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31509,
+            "input_tokens_details": {
+              "cached_tokens": 15156
+            },
+            "output_tokens": 381,
+            "output_tokens_details": {
+              "reasoning_tokens": 145
+            },
+            "total_tokens": 31890
+          }
+        },
+        {
+          "sessionId": "sess_0bcae73f9fcfdedb006ae2209e39c8819896db30a9aca721b6",
+          "turnId": "turn_0bcae73f9fcfdedb006ae220d970ec8198ba44010708346fae",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 52535,
+            "input_tokens_details": {
+              "cached_tokens": 50112
+            },
+            "output_tokens": 492,
+            "output_tokens_details": {
+              "reasoning_tokens": 193
+            },
+            "total_tokens": 53027
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "There are two events titled “Project review” in the selected week: Thursday, Nov 5, 09:00–09:30 (Normal) and Thursday, Nov 5, 14:00–14:30 (Important). Which one should I move to 15:00–15:30?"
+        },
+        {
+          "role": "user",
+          "text": "The afternoon one."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Moved the afternoon “Project review” on Thursday, Nov 5 from 14:00–14:30 to 15:00–15:30 Budapest time. The calendar confirmed the update."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "The afternoon one.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 3,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 118154,
+        "output_tokens": 1338,
+        "total_tokens": 119492,
+        "cached_tokens": 98851,
+        "reasoning_tokens": 699
+      },
+      "durationSeconds": 376.773,
+      "finishedAt": "2026-10-28T16:32:58.739350+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 3,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "operatorHash": "b4f2a696822b7030f4b72982d01c4e07e011fedebcc90239aba234a89e9aa79e",
+        "startedAt": "2026-10-28T16:29:32.511680+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "823c2c1279304c2f98a34d18fce8536a",
+        "13ef48eabee1464eb08bc74741f9e7d3"
+      ],
+      "finalIds": [
+        "823c2c1279304c2f98a34d18fce8536a",
+        "13ef48eabee1464eb08bc74741f9e7d3"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_094b88c57c867557006ae223096cf88199a1b30e373fee22a1",
+          "turnId": "turn_094b88c57c867557006ae22329dce48199bb77c78c1ac50508",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 46938,
+            "input_tokens_details": {
+              "cached_tokens": 30525
+            },
+            "output_tokens": 554,
+            "output_tokens_details": {
+              "reasoning_tokens": 276
+            },
+            "total_tokens": 47492
+          }
+        },
+        {
+          "sessionId": "sess_094b88c57c867557006ae223096cf88199a1b30e373fee22a1",
+          "turnId": "turn_094b88c57c867557006ae22367382c8199b1b8837cc8f43d05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 71216,
+            "input_tokens_details": {
+              "cached_tokens": 68326
+            },
+            "output_tokens": 784,
+            "output_tokens_details": {
+              "reasoning_tokens": 423
+            },
+            "total_tokens": 72000
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "I found two events titled “Project review” on Thursday, November 5: one from 09:00–09:30 and one from 14:00–14:30 (Europe/Budapest). Which one should I move to 15:00–15:30? The requested time is currently clear of both events."
+        },
+        {
+          "role": "user",
+          "text": "The afternoon one."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Moved the afternoon “Project review” on Thursday, November 5 from 14:00–14:30 to 15:00–15:30 Europe/Budapest. The calendar verified the update."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "The afternoon one.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 4,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 118389,
+        "output_tokens": 937,
+        "total_tokens": 119326,
+        "cached_tokens": 99516,
+        "reasoning_tokens": 301
+      },
+      "durationSeconds": 227.154,
+      "finishedAt": "2026-10-28T16:46:20.050481+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 4,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:42:49.681019+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "s9s6370aeju8irinoqbl4dspi4",
+        "j7ccltnbqnjs2lrprku86suv6g"
+      ],
+      "finalIds": [
+        "s9s6370aeju8irinoqbl4dspi4",
+        "j7ccltnbqnjs2lrprku86suv6g"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_01c7889670baabe9006ae226223658819a93d8c578e2a93544",
+          "turnId": "turn_01c7889670baabe9006ae226276a48819a9ce6434a32b1d6ff",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31450,
+            "input_tokens_details": {
+              "cached_tokens": 15156
+            },
+            "output_tokens": 412,
+            "output_tokens_details": {
+              "reasoning_tokens": 129
+            },
+            "total_tokens": 31862
+          }
+        },
+        {
+          "sessionId": "sess_01c7889670baabe9006ae226223658819a93d8c578e2a93544",
+          "turnId": "turn_01c7889670baabe9006ae2266457f8819a9bbcb4f039dd846a",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 86939,
+            "input_tokens_details": {
+              "cached_tokens": 84360
+            },
+            "output_tokens": 525,
+            "output_tokens_details": {
+              "reasoning_tokens": 172
+            },
+            "total_tokens": 87464
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "There are two “Project review” events on Thursday, November 5, so I need to know which one to move to 15:00–15:30 (Europe/Budapest): the 09:00–09:30 event (ID `s9s6370aeju8irinoqbl4dspi4`) or the 14:00–14:30 event (ID `j7ccltnbqnjs2lrprku86suv6g`)? No changes have been proposed yet."
+        },
+        {
+          "role": "user",
+          "text": "The afternoon one."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Moved the afternoon “Project review” to Thursday, November 5, 15:00–15:30 Europe/Budapest. Calendar readback confirms the updated time."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "The afternoon one.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 5,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 118920,
+        "output_tokens": 1122,
+        "total_tokens": 120042,
+        "cached_tokens": 99890,
+        "reasoning_tokens": 471
+      },
+      "durationSeconds": 204.157,
+      "finishedAt": "2026-10-28T16:49:45.019964+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 5,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:46:31.479442+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "0eddq268m04t9m6sem11v60ti4",
+        "1jbts8rab9ijht3f5qth2vv7eo"
+      ],
+      "finalIds": [
+        "0eddq268m04t9m6sem11v60ti4",
+        "1jbts8rab9ijht3f5qth2vv7eo"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0d6ed291c75770f7006ae226fe54c88199a400ac2c4cfe9634",
+          "turnId": "turn_0d6ed291c75770f7006ae22702f408819984ffc00272c09eac",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31558,
+            "input_tokens_details": {
+              "cached_tokens": 15156
+            },
+            "output_tokens": 425,
+            "output_tokens_details": {
+              "reasoning_tokens": 175
+            },
+            "total_tokens": 31983
+          }
+        },
+        {
+          "sessionId": "sess_0d6ed291c75770f7006ae226fe54c88199a400ac2c4cfe9634",
+          "turnId": "turn_0d6ed291c75770f7006ae2273ce204819995b32c6eb7f2cb7a",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 87362,
+            "input_tokens_details": {
+              "cached_tokens": 84734
+            },
+            "output_tokens": 697,
+            "output_tokens_details": {
+              "reasoning_tokens": 296
+            },
+            "total_tokens": 88059
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "There are two in-scope events titled “Project review” on Thursday, November 5 (Budapest time): one at 09:00–09:30, Normal importance, and one at 14:00–14:30, Important importance. Which one should I move to 15:00–15:30?"
+        },
+        {
+          "role": "user",
+          "text": "The afternoon one."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Moved the Important “Project review” from Thursday, November 5, 14:00–14:30 to 15:00–15:30 (Europe/Budapest). The update was approved and verified."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "The afternoon one.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 6,
+      "mode": "llm-only",
+      "stopReason": "power_loss_interruption",
+      "lastStage": "initial",
+      "status": "running",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 205772,
+        "output_tokens": 998,
+        "total_tokens": 206770,
+        "cached_tokens": 189344,
+        "reasoning_tokens": 357
+      },
+      "durationSeconds": null,
+      "finishedAt": null,
+      "recoveredAt": "2026-10-28T17:19:12.040422+00:00",
+      "shutdownRecovery": true,
+      "completionEvidence": null,
+      "success": false,
+      "failureCategory": "power_loss_interruption",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": false,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": false
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 6,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:54:15.037614+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "3rrbunja7dhicqii05rpqao890",
+        "5oso11f4odbao6pthigvfkoi64"
+      ],
+      "finalIds": [
+        "3rrbunja7dhicqii05rpqao890",
+        "5oso11f4odbao6pthigvfkoi64"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0eb75e10749bfa37006ae228d46ebc819b9b68fd9a777cdb6d",
+          "turnId": "turn_0eb75e10749bfa37006ae228d8cf48819b87d24041ed7959e2",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 205772,
+            "input_tokens_details": {
+              "cached_tokens": 189344
+            },
+            "output_tokens": 998,
+            "output_tokens_details": {
+              "reasoning_tokens": 357
+            },
+            "total_tokens": 206770
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 7,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 67156,
+        "output_tokens": 945,
+        "total_tokens": 68101,
+        "cached_tokens": 48332,
+        "reasoning_tokens": 453
+      },
+      "durationSeconds": 71.628,
+      "finishedAt": "2026-10-28T17:21:47.211361+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 7,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:20:40.045997+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "2pr1q13k1vv6lmnsb83kv7bvi8",
+        "6p9g1qd6d0hc8a7k55hg2qro9c"
+      ],
+      "finalIds": [
+        "2pr1q13k1vv6lmnsb83kv7bvi8",
+        "6p9g1qd6d0hc8a7k55hg2qro9c"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0d954b5d1d480a27006ae22eee2590819b995e7fe2c7e75622",
+          "turnId": "turn_0d954b5d1d480a27006ae22ef1c034819b90a078dc5c30542e",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31543,
+            "input_tokens_details": {
+              "cached_tokens": 15156
+            },
+            "output_tokens": 495,
+            "output_tokens_details": {
+              "reasoning_tokens": 270
+            },
+            "total_tokens": 32038
+          }
+        },
+        {
+          "sessionId": "sess_0d954b5d1d480a27006ae22eee2590819b995e7fe2c7e75622",
+          "turnId": "turn_0d954b5d1d480a27006ae22f0c34f0819b99f50209c166e904",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 35613,
+            "input_tokens_details": {
+              "cached_tokens": 33176
+            },
+            "output_tokens": 450,
+            "output_tokens_details": {
+              "reasoning_tokens": 183
+            },
+            "total_tokens": 36063
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "There are two “Project review” events on Thursday, November 5: one at 09:00–09:30 and one at 14:00–14:30. Which one should I move to 15:00–15:30?"
+        },
+        {
+          "role": "user",
+          "text": "The afternoon one."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Moved the afternoon “Project review” on Thursday, November 5 from 14:00–14:30 to 15:00–15:30 Europe/Budapest. The update was verified."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "The afternoon one.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 8,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 67052,
+        "output_tokens": 1051,
+        "total_tokens": 68103,
+        "cached_tokens": 48200,
+        "reasoning_tokens": 533
+      },
+      "durationSeconds": 65.803,
+      "finishedAt": "2026-10-28T17:24:28.355958+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 8,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:23:25.889117+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "8uouvdbcnm43a5e3ec2t5b5k5c",
+        "k0qhkitqa5jtch20hmp1qqtpoo"
+      ],
+      "finalIds": [
+        "8uouvdbcnm43a5e3ec2t5b5k5c",
+        "k0qhkitqa5jtch20hmp1qqtpoo"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_03d32f740537528f006ae22f9238848198888f24e222d2d574",
+          "turnId": "turn_03d32f740537528f006ae22f9764748198822e610ac9c8a057",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31517,
+            "input_tokens_details": {
+              "cached_tokens": 15156
+            },
+            "output_tokens": 400,
+            "output_tokens_details": {
+              "reasoning_tokens": 162
+            },
+            "total_tokens": 31917
+          }
+        },
+        {
+          "sessionId": "sess_03d32f740537528f006ae22f9238848198888f24e222d2d574",
+          "turnId": "turn_03d32f740537528f006ae22fab66908198b205baf96691f5fc",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 35535,
+            "input_tokens_details": {
+              "cached_tokens": 33044
+            },
+            "output_tokens": 651,
+            "output_tokens_details": {
+              "reasoning_tokens": 371
+            },
+            "total_tokens": 36186
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "There are two “Project review” events on Thursday, November 5. Which one should I move to 15:00–15:30 Budapest time?\n\n- 09:00–09:30 (Normal)\n- 14:00–14:30 (Important)"
+        },
+        {
+          "role": "user",
+          "text": "The afternoon one."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Moved the afternoon “Project review” from Thursday, November 5, 14:00–14:30 to 15:00–15:30 Budapest time. The Calendar update was verified."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "The afternoon one.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 9,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 66654,
+        "output_tokens": 800,
+        "total_tokens": 67454,
+        "cached_tokens": 48024,
+        "reasoning_tokens": 282
+      },
+      "durationSeconds": 63.802,
+      "finishedAt": "2026-10-28T17:25:32.241826+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 9,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:24:31.621975+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "8u46fdbh8ai3tu86hcagtgdlt4",
+        "k3f4uc8mcl9h43eelirth40p6g"
+      ],
+      "finalIds": [
+        "8u46fdbh8ai3tu86hcagtgdlt4",
+        "k3f4uc8mcl9h43eelirth40p6g"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0d678ccbaba4da81006ae22fd4401c819bbc69373b78dccc52",
+          "turnId": "turn_0d678ccbaba4da81006ae22fd7a850819b8364af5d51519228",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31450,
+            "input_tokens_details": {
+              "cached_tokens": 15156
+            },
+            "output_tokens": 300,
+            "output_tokens_details": {
+              "reasoning_tokens": 53
+            },
+            "total_tokens": 31750
+          }
+        },
+        {
+          "sessionId": "sess_0d678ccbaba4da81006ae22fd4401c819bbc69373b78dccc52",
+          "turnId": "turn_0d678ccbaba4da81006ae22feb1008819b8821259d9743ac6d",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 35204,
+            "input_tokens_details": {
+              "cached_tokens": 32868
+            },
+            "output_tokens": 500,
+            "output_tokens_details": {
+              "reasoning_tokens": 229
+            },
+            "total_tokens": 35704
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "There are two “Project review” events in the selected week: Thursday, Nov 5, 09:00–09:30 (Normal) and Thursday, Nov 5, 14:00–14:30 (Important). Which one should I move to Thursday, Nov 5, 15:00–15:30?"
+        },
+        {
+          "role": "user",
+          "text": "The afternoon one."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Moved the afternoon “Project review” to Thursday, Nov 5, 15:00–15:30 Europe/Budapest. Calendar verified the change."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "The afternoon one.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 4,
+      "repetition": 10,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 66562,
+        "output_tokens": 735,
+        "total_tokens": 67297,
+        "cached_tokens": 48059,
+        "reasoning_tokens": 244
+      },
+      "durationSeconds": 73.74,
+      "finishedAt": "2026-10-28T17:27:49.755636+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "referenceClarified": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 4,
+        "repetition": 10,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Move \"Project review\" to Thursday, 15:00–15:30.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:26:39.145593+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T14:00:00+01:00",
+          "end": "2026-11-05T14:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Project review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T09:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Project review",
+          "start": "2026-11-05T15:00:00+01:00",
+          "end": "2026-11-05T15:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "up00t4ad1bpa03t08h3o419c08",
+        "etsks086bfcrm78fdiaqqsetmc"
+      ],
+      "finalIds": [
+        "up00t4ad1bpa03t08h3o419c08",
+        "etsks086bfcrm78fdiaqqsetmc"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_099442b6b213aa7a006ae2305303c4819aa1ae28efa20441a2",
+          "turnId": "turn_099442b6b213aa7a006ae2305893d8819aaf8bbf5810348730",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31482,
+            "input_tokens_details": {
+              "cached_tokens": 15156
+            },
+            "output_tokens": 316,
+            "output_tokens_details": {
+              "reasoning_tokens": 82
+            },
+            "total_tokens": 31798
+          }
+        },
+        {
+          "sessionId": "sess_099442b6b213aa7a006ae2305303c4819aa1ae28efa20441a2",
+          "turnId": "turn_099442b6b213aa7a006ae2307958f4819abde4fd430153db8e",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 35080,
+            "input_tokens_details": {
+              "cached_tokens": 32903
+            },
+            "output_tokens": 419,
+            "output_tokens_details": {
+              "reasoning_tokens": 162
+            },
+            "total_tokens": 35499
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30."
+        },
+        {
+          "role": "machine",
+          "text": "There are two “Project review” events in the selected week: Thursday, November 5, 09:00–09:30 (Normal) and 14:00–14:30 (Important). Which one should I move to 15:00–15:30 Budapest time?"
+        },
+        {
+          "role": "user",
+          "text": "The afternoon one."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Moved the afternoon “Project review” on Thursday, November 5, from 14:00–14:30 to 15:00–15:30 Budapest time. The calendar update was verified."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Move \"Project review\" to Thursday, 15:00–15:30.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "The afternoon one.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    }
+  ]
+}

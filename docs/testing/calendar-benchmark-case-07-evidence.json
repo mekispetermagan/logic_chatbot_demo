@@ -1,0 +1,3987 @@
+{
+  "case": 7,
+  "specification": {
+    "name": "Minimum weighted clash repair",
+    "level": "Complex",
+    "events": [
+      {
+        "day": 5,
+        "title": "Preparation",
+        "start": "09:00",
+        "end": "10:00",
+        "importance": 0,
+        "location": "",
+        "description": ""
+      },
+      {
+        "day": 5,
+        "title": "Customer meeting",
+        "start": "09:30",
+        "end": "10:30",
+        "importance": 1,
+        "location": "",
+        "description": ""
+      }
+    ],
+    "request": "Remove the clashes on Thursday with the least total weighted movement.",
+    "threshold": 1
+  },
+  "runs": [
+    {
+      "case": 7,
+      "repetition": 1,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20895,
+        "output_tokens": 177,
+        "total_tokens": 21072,
+        "cached_tokens": 0,
+        "reasoning_tokens": 85
+      },
+      "durationSeconds": 74.6,
+      "finishedAt": "2026-10-28T16:15:23.444020+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 1,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "startedAt": "2026-10-28T16:14:34.059919+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "8b83fecdd3d3492cab3f0eae74a6f35c",
+        "81520b2bbbe543e681d8506524573dd4"
+      ],
+      "finalIds": [
+        "81520b2bbbe543e681d8506524573dd4",
+        "8b83fecdd3d3492cab3f0eae74a6f35c"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_05e6410fae50e370006ae21f6fdbcc819aba015f17a720afe0",
+          "turnId": "turn_05e6410fae50e370006ae21f7544ac819a8265ead6297c18b2",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20895,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 177,
+            "output_tokens_details": {
+              "reasoning_tokens": 85
+            },
+            "total_tokens": 21072
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "1"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nremove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#1 2026-11-05 10:30 Europe/Budapest (UTC+01:00) – 2026-11-05 11:30 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "remove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#1 2026-11-05 10:30 Europe/Budapest (UTC+01:00) – 2026-11-05 11:30 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Remove clashes on thursday.",
+        "Remove clashes on thursday."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.threshold",
+          "value": 1,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 2,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20895,
+        "output_tokens": 152,
+        "total_tokens": 21047,
+        "cached_tokens": 0,
+        "reasoning_tokens": 67
+      },
+      "durationSeconds": 185.12,
+      "finishedAt": "2026-10-28T16:39:58.782260+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 2,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:37:08.538541+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "lbhvb6g3roqf2k2rvl7ttqrvkk",
+        "ep1j36pfdolnblkujg1g4rdbo8"
+      ],
+      "finalIds": [
+        "ep1j36pfdolnblkujg1g4rdbo8",
+        "lbhvb6g3roqf2k2rvl7ttqrvkk"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0d7763ee116129de006ae224c80ea4819aab2ba97d09d035d7",
+          "turnId": "turn_0d7763ee116129de006ae224cc78dc819a9a4dcc4176c49321",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20895,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 152,
+            "output_tokens_details": {
+              "reasoning_tokens": 67
+            },
+            "total_tokens": 21047
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "1"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nremove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#1 2026-11-05 10:30 Europe/Budapest (UTC+01:00) – 2026-11-05 11:30 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "remove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#1 2026-11-05 10:30 Europe/Budapest (UTC+01:00) – 2026-11-05 11:30 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Remove clashes on thursday.",
+        "Remove clashes on thursday."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.threshold",
+          "value": 1,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 3,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20895,
+        "output_tokens": 183,
+        "total_tokens": 21078,
+        "cached_tokens": 0,
+        "reasoning_tokens": 102
+      },
+      "durationSeconds": 181.247,
+      "finishedAt": "2026-10-28T16:43:00.699978+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 3,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:40:17.170170+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "dt673nosv4bqrg96cv1lgqpf68",
+        "j90cj3elg044r58mo23e5fv1ok"
+      ],
+      "finalIds": [
+        "j90cj3elg044r58mo23e5fv1ok",
+        "dt673nosv4bqrg96cv1lgqpf68"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_065e90ee8c3d01fe006ae2257f6dac8198a58b02c3397c7e48",
+          "turnId": "turn_065e90ee8c3d01fe006ae2258384248198889d41289943d6b2",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20895,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 183,
+            "output_tokens_details": {
+              "reasoning_tokens": 102
+            },
+            "total_tokens": 21078
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "1"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nremove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#0 2026-11-05 10:30 Europe/Budapest (UTC+01:00) – 2026-11-05 11:30 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "remove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#0 2026-11-05 10:30 Europe/Budapest (UTC+01:00) – 2026-11-05 11:30 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Remove clashes on thursday.",
+        "Remove clashes on thursday."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.threshold",
+          "value": 1,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 4,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20895,
+        "output_tokens": 209,
+        "total_tokens": 21104,
+        "cached_tokens": 0,
+        "reasoning_tokens": 126
+      },
+      "durationSeconds": 172.284,
+      "finishedAt": "2026-10-28T16:53:24.454174+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 4,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:50:46.786179+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "p39e3ls8pci5128rokfogk06b8",
+        "pncj058mjnsv8p0k9vsd3lebts"
+      ],
+      "finalIds": [
+        "pncj058mjnsv8p0k9vsd3lebts",
+        "p39e3ls8pci5128rokfogk06b8"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0ee6530d7c3139de006ae227f619688198b86572c1af03f78b",
+          "turnId": "turn_0ee6530d7c3139de006ae227f9b3108198a5e04cdefc24d70f",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20895,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 209,
+            "output_tokens_details": {
+              "reasoning_tokens": 126
+            },
+            "total_tokens": 21104
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "1"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nremove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#0 2026-11-05 10:30 Europe/Budapest (UTC+01:00) – 2026-11-05 11:30 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "remove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#0 2026-11-05 10:30 Europe/Budapest (UTC+01:00) – 2026-11-05 11:30 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Remove clashes on thursday.",
+        "Remove clashes on thursday."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.threshold",
+          "value": 1,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 5,
+      "mode": "symbolic",
+      "stopReason": "power_loss_interruption",
+      "lastStage": "initial",
+      "status": "clarify",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20895,
+        "output_tokens": 172,
+        "total_tokens": 21067,
+        "cached_tokens": 0,
+        "reasoning_tokens": 93
+      },
+      "durationSeconds": null,
+      "finishedAt": null,
+      "recoveredAt": "2026-10-28T17:19:15.830779+00:00",
+      "shutdownRecovery": true,
+      "completionEvidence": null,
+      "success": false,
+      "failureCategory": "power_loss_interruption",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": false,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": false
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 5,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:53:39.538480+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "shfk2fc1u86i1n2mj2conrlpgo",
+        "jeg8nck69s6qo1h58akgi7ps90"
+      ],
+      "finalIds": [
+        "shfk2fc1u86i1n2mj2conrlpgo",
+        "jeg8nck69s6qo1h58akgi7ps90"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0c944ed57869b861006ae228a80b988198aa6442656eae4373",
+          "turnId": "turn_0c944ed57869b861006ae228ac41348198a198f7fe17910c39",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20895,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 172,
+            "output_tokens_details": {
+              "reasoning_tokens": 93
+            },
+            "total_tokens": 21067
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        }
+      ],
+      "feedback": [],
+      "question": {
+        "key": "0.threshold",
+        "kind": "importance",
+        "options": [
+          [
+            "None",
+            -1
+          ],
+          [
+            "normal",
+            0
+          ],
+          [
+            "important",
+            1
+          ],
+          [
+            "critical",
+            2
+          ]
+        ],
+        "prompt": "What maximum importance may be moved? None, Normal, Important or Critical?"
+      },
+      "validationFailures": [],
+      "translations": [
+        "Remove clashes on thursday.",
+        "Remove clashes on thursday."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 6,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20895,
+        "output_tokens": 174,
+        "total_tokens": 21069,
+        "cached_tokens": 0,
+        "reasoning_tokens": 100
+      },
+      "durationSeconds": 35.579,
+      "finishedAt": "2026-10-28T17:23:14.808671+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 6,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:22:42.385103+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "tqktrc50n41plmh7vhno66dntg",
+        "g1iib2k5fg1mcp87sppfd9rpk4"
+      ],
+      "finalIds": [
+        "g1iib2k5fg1mcp87sppfd9rpk4",
+        "tqktrc50n41plmh7vhno66dntg"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0f503f66c8ca1a81006ae22f6578cc8198a6784f0b4a4c834d",
+          "turnId": "turn_0f503f66c8ca1a81006ae22f6a2f948198ad3b5caa1d4a2282",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20895,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 174,
+            "output_tokens_details": {
+              "reasoning_tokens": 100
+            },
+            "total_tokens": 21069
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "1"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nremove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#1 2026-11-05 10:30 Europe/Budapest (UTC+01:00) – 2026-11-05 11:30 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "remove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#1 2026-11-05 10:30 Europe/Budapest (UTC+01:00) – 2026-11-05 11:30 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Remove clashes on thursday.",
+        "Remove clashes on thursday."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.threshold",
+          "value": 1,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 7,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20895,
+        "output_tokens": 177,
+        "total_tokens": 21072,
+        "cached_tokens": 0,
+        "reasoning_tokens": 92
+      },
+      "durationSeconds": 37.709,
+      "finishedAt": "2026-10-28T17:23:52.636006+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 7,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:23:18.801986+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "cm1ugq9uo958vr2hllqf7ksvg4",
+        "2cotnjvn2ur4iunpsvfjmsus8s"
+      ],
+      "finalIds": [
+        "2cotnjvn2ur4iunpsvfjmsus8s",
+        "cm1ugq9uo958vr2hllqf7ksvg4"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_07ab5e3f5f21c375006ae22f89dbbc81999d2d463a594ca47a",
+          "turnId": "turn_07ab5e3f5f21c375006ae22f8d45008199aa5a36339c39070d",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20895,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 177,
+            "output_tokens_details": {
+              "reasoning_tokens": 92
+            },
+            "total_tokens": 21072
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "1"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nremove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#1 2026-11-05 10:30 Europe/Budapest (UTC+01:00) – 2026-11-05 11:30 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "remove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#1 2026-11-05 10:30 Europe/Budapest (UTC+01:00) – 2026-11-05 11:30 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Remove clashes on thursday.",
+        "Remove clashes on thursday."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.threshold",
+          "value": 1,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 8,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20895,
+        "output_tokens": 161,
+        "total_tokens": 21056,
+        "cached_tokens": 0,
+        "reasoning_tokens": 89
+      },
+      "durationSeconds": 41.834,
+      "finishedAt": "2026-10-28T17:27:09.779959+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 8,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:26:31.661988+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "vophar2frqjoln0ri5903ivkog",
+        "km6i4vn2u9kjlbqgsps8ukgop4"
+      ],
+      "finalIds": [
+        "km6i4vn2u9kjlbqgsps8ukgop4",
+        "vophar2frqjoln0ri5903ivkog"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0435b4cb9f5e502a006ae2304b1e4c81989cce581e870e609a",
+          "turnId": "turn_0435b4cb9f5e502a006ae2304efa30819889b66b64171b34e0",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20895,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 161,
+            "output_tokens_details": {
+              "reasoning_tokens": 89
+            },
+            "total_tokens": 21056
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "1"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nremove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#1 2026-11-05 10:30 Europe/Budapest (UTC+01:00) – 2026-11-05 11:30 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "remove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#1 2026-11-05 10:30 Europe/Budapest (UTC+01:00) – 2026-11-05 11:30 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Remove clashes on thursday.",
+        "Remove clashes on thursday."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.threshold",
+          "value": 1,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 9,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20895,
+        "output_tokens": 147,
+        "total_tokens": 21042,
+        "cached_tokens": 0,
+        "reasoning_tokens": 64
+      },
+      "durationSeconds": 34.432,
+      "finishedAt": "2026-10-28T17:27:44.396859+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 9,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:27:13.061648+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "b349l1t459n9jumhtqp2k3ccb8",
+        "m8k4r0ohfdqt5ij46h4vb79npg"
+      ],
+      "finalIds": [
+        "m8k4r0ohfdqt5ij46h4vb79npg",
+        "b349l1t459n9jumhtqp2k3ccb8"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0c7bf193475710e2006ae23073c9f48198b42133c0e62d6171",
+          "turnId": "turn_0c7bf193475710e2006ae230787bd08198ae2ae4d0f8503b3d",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20895,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 147,
+            "output_tokens_details": {
+              "reasoning_tokens": 64
+            },
+            "total_tokens": 21042
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "1"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nremove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#0 2026-11-05 10:30 Europe/Budapest (UTC+01:00) – 2026-11-05 11:30 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "remove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#0 2026-11-05 10:30 Europe/Budapest (UTC+01:00) – 2026-11-05 11:30 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Remove clashes on thursday.",
+        "Remove clashes on thursday."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.threshold",
+          "value": 1,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 10,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20895,
+        "output_tokens": 179,
+        "total_tokens": 21074,
+        "cached_tokens": 0,
+        "reasoning_tokens": 97
+      },
+      "durationSeconds": 36.34,
+      "finishedAt": "2026-10-28T17:31:17.325406+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 10,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:30:44.604104+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "nspjimj5f062iuk1cavusrtces",
+        "0g2o9cp9vvu7knvltqvdfm4mg8"
+      ],
+      "finalIds": [
+        "0g2o9cp9vvu7knvltqvdfm4mg8",
+        "nspjimj5f062iuk1cavusrtces"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_090b40ca281ecd95006ae231479510819ab6b6d3fd22708237",
+          "turnId": "turn_090b40ca281ecd95006ae2314c6c70819a8c7b5dff95eb0cdd",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20895,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 179,
+            "output_tokens_details": {
+              "reasoning_tokens": 97
+            },
+            "total_tokens": 21074
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "1"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nremove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#1 2026-11-05 10:30 Europe/Budapest (UTC+01:00) – 2026-11-05 11:30 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "remove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#1 2026-11-05 10:30 Europe/Budapest (UTC+01:00) – 2026-11-05 11:30 Europe/Budapest (UTC+01:00) (was 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Remove clashes on thursday.",
+        "Remove clashes on thursday."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.threshold",
+          "value": 1,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 1,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 191200,
+        "output_tokens": 3020,
+        "total_tokens": 194220,
+        "cached_tokens": 167031,
+        "reasoning_tokens": 1844
+      },
+      "durationSeconds": 286.302,
+      "finishedAt": "2026-10-28T16:20:09.931199+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 1,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "startedAt": "2026-10-28T16:16:12.408723+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "3976336598134fe8b53cfcc7be66c035",
+        "f077a4c42e7e4b4390846cd6dc0e1a1e"
+      ],
+      "finalIds": [
+        "f077a4c42e7e4b4390846cd6dc0e1a1e",
+        "3976336598134fe8b53cfcc7be66c035"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_04022fb804dbd054006ae21fd3ed588198a5d5f8708cf4f4a7",
+          "turnId": "turn_04022fb804dbd054006ae21fd7bf64819898c026a60ffb47c2",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31418,
+            "input_tokens_details": {
+              "cached_tokens": 15138
+            },
+            "output_tokens": 349,
+            "output_tokens_details": {
+              "reasoning_tokens": 92
+            },
+            "total_tokens": 31767
+          }
+        },
+        {
+          "sessionId": "sess_04022fb804dbd054006ae21fd3ed588198a5d5f8708cf4f4a7",
+          "turnId": "turn_04022fb804dbd054006ae21ff01a388198b33ef6503ca1d3ca",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 159782,
+            "input_tokens_details": {
+              "cached_tokens": 151893
+            },
+            "output_tokens": 2671,
+            "output_tokens_details": {
+              "reasoning_tokens": 1752
+            },
+            "total_tokens": 162453
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "On Thursday, November 5, **Preparation** (09:00–10:00, Normal) clashes with **Customer meeting** (09:30–10:30, Important). To find the least weighted movement, what is the maximum importance you allow me to move: **None**, **Normal**, **Important** (allows Normal and Important), or **Critical** (allows all three levels)?"
+        },
+        {
+          "role": "user",
+          "text": "Normal and Important events may move."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday’s clash is resolved, and the minimum weighted movement is now in place. **Preparation** moved from 09:00–10:00 to 10:30–11:30; **Customer meeting** is at 09:30–10:30. The events are adjacent, with no overlap. The movement cost is **1.5 weighted hours** (90 minutes × Normal’s weight 1). Both updates were verified in Calendar. I corrected an earlier, higher-cost change before completing the task."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal and Important events may move.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 3,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 2,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 122807,
+        "output_tokens": 2725,
+        "total_tokens": 125532,
+        "cached_tokens": 102624,
+        "reasoning_tokens": 1904
+      },
+      "durationSeconds": 367.787,
+      "finishedAt": "2026-10-28T16:32:49.197204+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 2,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "operatorHash": "b4f2a696822b7030f4b72982d01c4e07e011fedebcc90239aba234a89e9aa79e",
+        "startedAt": "2026-10-28T16:29:36.746729+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "165b6dda96874ad39544e70e1df56d9d",
+        "6e7ed6b6e4884a0582ddba43264bf191"
+      ],
+      "finalIds": [
+        "6e7ed6b6e4884a0582ddba43264bf191",
+        "165b6dda96874ad39544e70e1df56d9d"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_04fb718a01a18805006ae2230d93dc81999d6b776172249925",
+          "turnId": "turn_04fb718a01a18805006ae22311b51881998f8e778003f3db53",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 48419,
+            "input_tokens_details": {
+              "cached_tokens": 31506
+            },
+            "output_tokens": 942,
+            "output_tokens_details": {
+              "reasoning_tokens": 552
+            },
+            "total_tokens": 49361
+          }
+        },
+        {
+          "sessionId": "sess_04fb718a01a18805006ae2230d93dc81999d6b776172249925",
+          "turnId": "turn_04fb718a01a18805006ae2234f35e88199b23e359ee4904f3d",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 74388,
+            "input_tokens_details": {
+              "cached_tokens": 71118
+            },
+            "output_tokens": 1783,
+            "output_tokens_details": {
+              "reasoning_tokens": 1352
+            },
+            "total_tokens": 76171
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday, November 5 has one clash: Preparation (09:00–10:00, Normal) overlaps Customer meeting (09:30–10:30, Important). To find the minimum weighted movement, what is the highest importance level I may move: Normal (Preparation only), Important (either event), Critical, or None?"
+        },
+        {
+          "role": "user",
+          "text": "Normal and Important events may move."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday’s clash is resolved. Preparation moved from 09:00–10:00 to 10:30–11:30; Customer meeting remains 09:30–10:30. The events are now adjacent, and the weighted movement cost is 1.5 (90 minutes × Normal weight 1). This is the minimum: moving Customer meeting to 10:00 would cost 2, while reversing their order by moving Preparation to 10:30 costs 1.5. The calendar change was verified."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal and Important events may move.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 3,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 104238,
+        "output_tokens": 1860,
+        "total_tokens": 106098,
+        "cached_tokens": 84660,
+        "reasoning_tokens": 1139
+      },
+      "durationSeconds": 221.634,
+      "finishedAt": "2026-10-28T16:46:43.174701+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 3,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:43:14.391455+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "e0h3n5leg34l8veek781po3ok0",
+        "h33frk510jef1v3dghaoa5u45o"
+      ],
+      "finalIds": [
+        "h33frk510jef1v3dghaoa5u45o",
+        "e0h3n5leg34l8veek781po3ok0"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0952c0c4f2cd5776006ae2263c7e2c8199a1c447f904e975a9",
+          "turnId": "turn_0952c0c4f2cd5776006ae22640d2f88199b16098b805c38fa3",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31474,
+            "input_tokens_details": {
+              "cached_tokens": 15138
+            },
+            "output_tokens": 1115,
+            "output_tokens_details": {
+              "reasoning_tokens": 770
+            },
+            "total_tokens": 32589
+          }
+        },
+        {
+          "sessionId": "sess_0952c0c4f2cd5776006ae2263c7e2c8199a1c447f904e975a9",
+          "turnId": "turn_0952c0c4f2cd5776006ae2267ecd2481998d0faed8acfd0f65",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 72764,
+            "input_tokens_details": {
+              "cached_tokens": 69522
+            },
+            "output_tokens": 745,
+            "output_tokens_details": {
+              "reasoning_tokens": 369
+            },
+            "total_tokens": 73509
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday is Nov 5. The in-scope events clash from 09:30 to 10:00: Preparation (09:00–10:00, Normal) and Customer meeting (09:30–10:30, Important). Their exact and five-minute normalized times match. Both are Thursday morning events, so any automatic move must stay within 09:00–12:00 and preserve the one-hour duration.\n\nWhat is the maximum importance I may move: None, Normal, Important, or Critical? With Normal permission, the least-cost repair is to move Preparation to 10:30–11:30, at weighted movement cost 1.5 (90 minutes × weight 1). If no events may move, the clash cannot be removed under that permission."
+        },
+        {
+          "role": "user",
+          "text": "Normal and Important events may move."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday’s clash is removed. Preparation moved from 09:00–10:00 to 10:30–11:30 on Nov 5. It now begins exactly when Customer meeting ends, so the events are adjacent and do not clash. The 90-minute start shift has weighted movement cost 1.5. The Calendar update was verified."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal and Important events may move.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 4,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 103472,
+        "output_tokens": 1914,
+        "total_tokens": 105386,
+        "cached_tokens": 84109,
+        "reasoning_tokens": 1147
+      },
+      "durationSeconds": 227.82,
+      "finishedAt": "2026-10-28T16:50:31.602449+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 4,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:46:56.624324+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "l489ln10v53gf30uaihstv38fc",
+        "c7oms3mflvn170l42ofcqp4o70"
+      ],
+      "finalIds": [
+        "c7oms3mflvn170l42ofcqp4o70",
+        "l489ln10v53gf30uaihstv38fc"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_09a2940409412b64006ae22719a79081998f5d08962915b8a0",
+          "turnId": "turn_09a2940409412b64006ae2271df2808199ba2c26851a078a0c",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31484,
+            "input_tokens_details": {
+              "cached_tokens": 15138
+            },
+            "output_tokens": 975,
+            "output_tokens_details": {
+              "reasoning_tokens": 642
+            },
+            "total_tokens": 32459
+          }
+        },
+        {
+          "sessionId": "sess_09a2940409412b64006ae22719a79081998f5d08962915b8a0",
+          "turnId": "turn_09a2940409412b64006ae2276183788199b3ac85ef0f4155b5",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 71988,
+            "input_tokens_details": {
+              "cached_tokens": 68971
+            },
+            "output_tokens": 939,
+            "output_tokens_details": {
+              "reasoning_tokens": 505
+            },
+            "total_tokens": 72927
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday, November 5, has one clash: **Preparation** (09:00–10:00, Normal) overlaps **Customer meeting** (09:30–10:30, Important). Both events are in the affected set. What is the maximum importance you authorize me to move: **None**, **Normal**, **Important**, or **Critical**?\n\nIf you authorize **Normal**, the least weighted repair is to move Preparation to **10:30–11:30**. That is a 90-minute start shift with weighted cost **1.5**; moving Customer meeting instead would cost at least **2**. I’ll keep the current intervals unchanged until you choose the movement limit."
+        },
+        {
+          "role": "user",
+          "text": "Normal and Important events may move."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday’s clash has been removed. **Preparation** moved from **09:00–10:00** to **10:30–11:30** on November 5; **Customer meeting** remains **09:30–10:30**. They are now adjacent, with no overlap.\n\nThe weighted movement cost is **1.5**: a 90-minute start shift for a Normal event (weight 1). This is the minimum-cost repair: moving the Important event requires at least a 30-minute shift, costing 2. The calendar update was verified."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal and Important events may move.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 5,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 68675,
+        "output_tokens": 2272,
+        "total_tokens": 70947,
+        "cached_tokens": 48789,
+        "reasoning_tokens": 1633
+      },
+      "durationSeconds": 88.137,
+      "finishedAt": "2026-10-28T17:22:03.210275+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 5,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:20:39.758973+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "ebd4rfpi51u1am8meqmnh4kg78",
+        "pacih9h0609g44j0e99pubrgt0"
+      ],
+      "finalIds": [
+        "pacih9h0609g44j0e99pubrgt0",
+        "ebd4rfpi51u1am8meqmnh4kg78"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_01c86d12f02bf645006ae22eee6c14819b81e61d38dc47eb00",
+          "turnId": "turn_01c86d12f02bf645006ae22ef3df78819baea27d5512402a40",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31457,
+            "input_tokens_details": {
+              "cached_tokens": 15138
+            },
+            "output_tokens": 1098,
+            "output_tokens_details": {
+              "reasoning_tokens": 794
+            },
+            "total_tokens": 32555
+          }
+        },
+        {
+          "sessionId": "sess_01c86d12f02bf645006ae22eee6c14819b81e61d38dc47eb00",
+          "turnId": "turn_01c86d12f02bf645006ae22f14739c819badf98d5617572bf2",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 37218,
+            "input_tokens_details": {
+              "cached_tokens": 33651
+            },
+            "output_tokens": 1174,
+            "output_tokens_details": {
+              "reasoning_tokens": 839
+            },
+            "total_tokens": 38392
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday is November 5, 2026. The in-scope events clash from 09:30 to 10:00: Preparation (09:00–10:00, Normal) and Customer meeting (09:30–10:30, Important). What is the maximum importance you permit me to move: None, Normal, Important, or Critical? Normal is sufficient for the least-cost repair: move Preparation to 10:30–11:30, with weighted movement cost 1.5 (90 minutes × Normal weight 1)."
+        },
+        {
+          "role": "user",
+          "text": "Normal and Important events may move."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday’s clash has been removed. Preparation moved from 09:00–10:00 to 10:30–11:30; the Important Customer meeting remains 09:30–10:30. The events are now adjacent and do not overlap. The weighted movement cost is 1.5 hours (90 minutes × Normal weight 1), the minimum among permitted repairs. Calendar verified the update."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal and Important events may move.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 6,
+      "mode": "llm-only",
+      "stopReason": "transport_or_partial_result",
+      "lastStage": "initial",
+      "status": "suspended",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 81849,
+        "output_tokens": 853,
+        "total_tokens": 82702,
+        "cached_tokens": 64899,
+        "reasoning_tokens": 323
+      },
+      "durationSeconds": 35.764,
+      "finishedAt": "2026-10-28T17:22:39.109915+00:00",
+      "success": false,
+      "failureCategory": "transport_or_partial_result",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": false,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": false
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 6,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:22:06.573001+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "lan0bigi9ti5rmclck2d6ugo2o",
+        "u5mombk4qnaftq4helkk5ph4a8"
+      ],
+      "finalIds": [
+        "lan0bigi9ti5rmclck2d6ugo2o",
+        "u5mombk4qnaftq4helkk5ph4a8"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0ce90b51ff6f2d73006ae22f4273d4819bb9fa7f7f4dadd619",
+          "turnId": "turn_0ce90b51ff6f2d73006ae22f471b30819b8e6f748a16020ef6",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 81849,
+            "input_tokens_details": {
+              "cached_tokens": 64899
+            },
+            "output_tokens": 853,
+            "output_tokens_details": {
+              "reasoning_tokens": 323
+            },
+            "total_tokens": 82702
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Agent connection interrupted; resume or cancel. Input and confirmed writes will not be replayed."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "suspended"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 7,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 68693,
+        "output_tokens": 1923,
+        "total_tokens": 70616,
+        "cached_tokens": 49123,
+        "reasoning_tokens": 1274
+      },
+      "durationSeconds": 74.567,
+      "finishedAt": "2026-10-28T17:25:07.301142+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 7,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:23:55.970492+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "0f0ckjc9ra86l6kfqoduldvhrk",
+        "cclcsgfe9ru5au10duc2nn1jk4"
+      ],
+      "finalIds": [
+        "cclcsgfe9ru5au10duc2nn1jk4",
+        "0f0ckjc9ra86l6kfqoduldvhrk"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0fa91324a4928a63006ae22fb1941c819bb66a4cd5308a7bc8",
+          "turnId": "turn_0fa91324a4928a63006ae22fb5571c819b8d63ed84333b3279",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31455,
+            "input_tokens_details": {
+              "cached_tokens": 15138
+            },
+            "output_tokens": 1427,
+            "output_tokens_details": {
+              "reasoning_tokens": 1082
+            },
+            "total_tokens": 32882
+          }
+        },
+        {
+          "sessionId": "sess_0fa91324a4928a63006ae22fb1941c819bb66a4cd5308a7bc8",
+          "turnId": "turn_0fa91324a4928a63006ae22fd82060819ba1be7146e39fdced",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 37238,
+            "input_tokens_details": {
+              "cached_tokens": 33985
+            },
+            "output_tokens": 496,
+            "output_tokens_details": {
+              "reasoning_tokens": 192
+            },
+            "total_tokens": 37734
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday, November 5 has two in-scope events, both with matching exact and five-minute intervals: Preparation (09:00–10:00, Normal) and Customer meeting (09:30–10:30, Important). They clash from 09:30 to 10:00.\n\nThe least-cost repair I found is to move Preparation to 10:30–11:30 within its Thursday morning envelope. That shifts its start by 1.5 hours and has weighted cost 1.5. Keeping Preparation in place and moving Customer meeting to 10:00 would cost 2, so it is more expensive. No event has been changed.\n\nWhat is the maximum importance you permit me to move: None, Normal, Important, or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "Normal and Important events may move."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "The Thursday clash has been removed. Preparation moved from 09:00–10:00 to 10:30–11:30 on November 5. Customer meeting remains 09:30–10:30, so the events are now adjacent and do not overlap.\n\nThe move was 1.5 hours for a Normal event, with weighted movement cost 1.5. Calendar verified the update and read back the new interval."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal and Important events may move.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 8,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 67943,
+        "output_tokens": 2149,
+        "total_tokens": 70092,
+        "cached_tokens": 48187,
+        "reasoning_tokens": 1486
+      },
+      "durationSeconds": 80.437,
+      "finishedAt": "2026-10-28T17:26:27.835140+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 8,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:25:10.934215+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "ps7sv93vbqtsjnfjn5t6huhtfo",
+        "1t7sicel4385jt4k90llgngdf8"
+      ],
+      "finalIds": [
+        "1t7sicel4385jt4k90llgngdf8",
+        "ps7sv93vbqtsjnfjn5t6huhtfo"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_017aa2fcae017db4006ae22ffaa6dc81989f8d71f2302f5a60",
+          "turnId": "turn_017aa2fcae017db4006ae23000a8d88198ad4833cdf3fad334",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31467,
+            "input_tokens_details": {
+              "cached_tokens": 15138
+            },
+            "output_tokens": 485,
+            "output_tokens_details": {
+              "reasoning_tokens": 194
+            },
+            "total_tokens": 31952
+          }
+        },
+        {
+          "sessionId": "sess_017aa2fcae017db4006ae22ffaa6dc81989f8d71f2302f5a60",
+          "turnId": "turn_017aa2fcae017db4006ae230133c388198b1163cab59c7d9e2",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 36476,
+            "input_tokens_details": {
+              "cached_tokens": 33049
+            },
+            "output_tokens": 1664,
+            "output_tokens_details": {
+              "reasoning_tokens": 1292
+            },
+            "total_tokens": 38140
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "On Thursday, November 5, **Preparation** (09:00–10:00, Normal) overlaps **Customer meeting** (09:30–10:30, Important). Removing this clash requires moving at least one event. What is the maximum importance you authorize me to move?\n\n- **None** — no existing events may move.\n- **Normal** — only Normal events, such as Preparation.\n- **Important** — Normal or Important events, including Customer meeting.\n- **Critical** — events of any importance."
+        },
+        {
+          "role": "user",
+          "text": "Normal and Important events may move."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "The Thursday clash has been removed. **Preparation** moved from 09:00–10:00 to 10:30–11:30 on November 5, Europe/Budapest; **Customer meeting** remains 09:30–10:30. The events now meet at an adjacent endpoint and do not overlap.\n\nThis is the minimum weighted movement: moving Preparation by 90 minutes costs **1.5** (Normal weight 1); moving Customer meeting by 30 minutes would cost **2** (Important weight 4). The change was verified in Calendar."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal and Important events may move.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 9,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 88851,
+        "output_tokens": 2414,
+        "total_tokens": 91265,
+        "cached_tokens": 67856,
+        "reasoning_tokens": 1677
+      },
+      "durationSeconds": 85.471,
+      "finishedAt": "2026-10-28T17:29:09.952911+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 9,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:27:47.519956+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "d198qv7ge8ns9ocob3gqtit36s",
+        "2iuvtjk2rqv876183rg7kdnp34"
+      ],
+      "finalIds": [
+        "2iuvtjk2rqv876183rg7kdnp34",
+        "d198qv7ge8ns9ocob3gqtit36s"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0093e4dbdccbd0f9006ae2309719a08198955a1f5f913dc6de",
+          "turnId": "turn_0093e4dbdccbd0f9006ae2309c21ac8198b6e18e95204158b9",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31462,
+            "input_tokens_details": {
+              "cached_tokens": 15138
+            },
+            "output_tokens": 965,
+            "output_tokens_details": {
+              "reasoning_tokens": 681
+            },
+            "total_tokens": 32427
+          }
+        },
+        {
+          "sessionId": "sess_0093e4dbdccbd0f9006ae2309719a08198955a1f5f913dc6de",
+          "turnId": "turn_0093e4dbdccbd0f9006ae230b9c9708198b788a9baaabeea4a",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 57389,
+            "input_tokens_details": {
+              "cached_tokens": 52718
+            },
+            "output_tokens": 1449,
+            "output_tokens_details": {
+              "reasoning_tokens": 996
+            },
+            "total_tokens": 58838
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday, November 5 has a clash: Preparation (09:00–10:00, Normal) overlaps Customer meeting (09:30–10:30, Important). Both are in scope and have one-hour durations. What is the maximum importance you authorize me to move: None, Normal, Important, or Critical? If you authorize moving Normal events, the least-cost repair is to move Preparation to 10:30–11:30 (weighted movement cost 1.5); higher thresholds would not improve that result."
+        },
+        {
+          "role": "user",
+          "text": "Normal and Important events may move."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday’s clash is resolved. Preparation moved from 09:00–10:00 to 10:30–11:30; Customer meeting remains 09:30–10:30. The events are now adjacent and do not overlap. The weighted movement cost is 1.5 (90 minutes × Normal weight 1), the minimum under your permission for Normal and Important events. The Calendar update was verified."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal and Important events may move.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    },
+    {
+      "case": 7,
+      "repetition": 10,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 66981,
+        "output_tokens": 1203,
+        "total_tokens": 68184,
+        "cached_tokens": 48090,
+        "reasoning_tokens": 572
+      },
+      "durationSeconds": 90.845,
+      "finishedAt": "2026-10-28T17:30:40.884929+00:00",
+      "success": false,
+      "failureCategory": "incorrect_answer_or_final_state",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 7,
+        "repetition": 10,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Remove the clashes on Thursday with the least total weighted movement.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:29:13.333574+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T09:30:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T10:30:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Preparation",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Customer meeting",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "3ad7r4o6r5iikjb4hvtj2k3guo",
+        "383m1pd8tok5goslnj4miun1bo"
+      ],
+      "finalIds": [
+        "3ad7r4o6r5iikjb4hvtj2k3guo",
+        "383m1pd8tok5goslnj4miun1bo"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0a503a3fd11f7cf4006ae230ed1da4819bbfeac41e574a86c8",
+          "turnId": "turn_0a503a3fd11f7cf4006ae230f30590819b8ca5ba30fd724159",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31445,
+            "input_tokens_details": {
+              "cached_tokens": 15138
+            },
+            "output_tokens": 398,
+            "output_tokens_details": {
+              "reasoning_tokens": 121
+            },
+            "total_tokens": 31843
+          }
+        },
+        {
+          "sessionId": "sess_0a503a3fd11f7cf4006ae230ed1da4819bbfeac41e574a86c8",
+          "turnId": "turn_0a503a3fd11f7cf4006ae2311dd140819ba5daebbf142ba200",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 35536,
+            "input_tokens_details": {
+              "cached_tokens": 32952
+            },
+            "output_tokens": 805,
+            "output_tokens_details": {
+              "reasoning_tokens": 451
+            },
+            "total_tokens": 36341
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "On Thursday, November 5, 2026, **Preparation** (09:00–10:00, Normal) and **Customer meeting** (09:30–10:30, Important) overlap from 09:30 to 10:00. To remove the clash, what is the highest importance level you allow me to move: **Normal** (Normal events only), **Important** (Normal and Important events), or **Critical** (all levels)?"
+        },
+        {
+          "role": "user",
+          "text": "Normal and Important events may move."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "The Thursday clash is removed. **Preparation** remains 09:00–10:00, and **Customer meeting** moved from 09:30–10:30 to 10:00–11:00 on November 5, 2026. The change was verified in Calendar. Its weighted movement cost is 2 (30 minutes × Important weight 4); this is the minimum because Preparation cannot move earlier within its morning bounds."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Remove the clashes on Thursday with the least total weighted movement.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal and Important events may move.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 1,
+      "remoteCancellation": []
+    }
+  ]
+}

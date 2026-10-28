@@ -1,0 +1,4313 @@
+{
+  "case": 5,
+  "specification": {
+    "name": "Make room with limited permission",
+    "level": "Moderate",
+    "events": [
+      {
+        "day": 6,
+        "title": "Team meeting",
+        "start": "09:00",
+        "end": "09:45",
+        "importance": 1,
+        "location": "",
+        "description": ""
+      },
+      {
+        "day": 6,
+        "title": "Mechanic",
+        "start": "11:00",
+        "end": "11:30",
+        "importance": 0,
+        "location": "",
+        "description": ""
+      }
+    ],
+    "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+    "threshold": 0
+  },
+  "runs": [
+    {
+      "case": 5,
+      "repetition": 1,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20930,
+        "output_tokens": 221,
+        "total_tokens": 21151,
+        "cached_tokens": 0,
+        "reasoning_tokens": 116
+      },
+      "durationSeconds": 89.011,
+      "finishedAt": "2026-10-28T16:14:47.355842+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 1,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "startedAt": "2026-10-28T16:13:36.666072+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "edcd51b9c2274aa6bf0263d868f6719b",
+        "b3e0e1d91dc748dbb59754ded858effb"
+      ],
+      "finalIds": [
+        "edcd51b9c2274aa6bf0263d868f6719b",
+        "987956afd3cd4b05a67579a528f2ae7c",
+        "b3e0e1d91dc748dbb59754ded858effb"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_096509f4b0e52ec8006ae21f34855c819b8b85f5c89db60b94",
+          "turnId": "turn_096509f4b0e52ec8006ae21f394bb8819bb8cf34d5f052fcca",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20930,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 221,
+            "output_tokens_details": {
+              "reasoning_tokens": 116
+            },
+            "total_tokens": 21151
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "0"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nmake room for event lasting 90 minutes within friday morning with title \"Videoconference\" and location \"\" and description \"\" and importance normal, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.25\n#0 2026-11-06 11:15 Europe/Budapest (UTC+01:00) – 2026-11-06 11:45 Europe/Budapest (UTC+01:00) (was 2026-11-06 11:00 Europe/Budapest (UTC+01:00) – 2026-11-06 11:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.25)\n#2 2026-11-06 09:45 Europe/Budapest (UTC+01:00) – 2026-11-06 11:15 Europe/Budapest (UTC+01:00) (new)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "make room for event lasting 90 minutes within friday morning with title \"Videoconference\" and location \"\" and description \"\" and importance normal, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.25\n#0 2026-11-06 11:15 Europe/Budapest (UTC+01:00) – 2026-11-06 11:45 Europe/Budapest (UTC+01:00) (was 2026-11-06 11:00 Europe/Budapest (UTC+01:00) – 2026-11-06 11:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.25)\n#2 2026-11-06 09:45 Europe/Budapest (UTC+01:00) – 2026-11-06 11:15 Europe/Budapest (UTC+01:00) (new)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Make room for event lasting 90 minutes within friday morning with title \"Videoconference\".",
+        "Make room for event lasting 90 minutes within friday morning with title \"Videoconference\"."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.threshold",
+          "value": 0,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 2,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20930,
+        "output_tokens": 256,
+        "total_tokens": 21186,
+        "cached_tokens": 0,
+        "reasoning_tokens": 152
+      },
+      "durationSeconds": 366.214,
+      "finishedAt": "2026-10-28T16:32:49.644955+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 2,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "operatorHash": "b4f2a696822b7030f4b72982d01c4e07e011fedebcc90239aba234a89e9aa79e",
+        "startedAt": "2026-10-28T16:30:21.255084+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "adb7ac164e2d41a59b8b3d05bc8a6ed6",
+        "50d5e8af4d984c08a82df95465527565"
+      ],
+      "finalIds": [
+        "adb7ac164e2d41a59b8b3d05bc8a6ed6",
+        "ff50865656264e0b99aca2bb90274dbe",
+        "50d5e8af4d984c08a82df95465527565"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0dc71f76a3bae66e006ae2232e0974819986031baec6140972",
+          "turnId": "turn_0dc71f76a3bae66e006ae22332c2a08199898ca9f2474d7708",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20930,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 256,
+            "output_tokens_details": {
+              "reasoning_tokens": 152
+            },
+            "total_tokens": 21186
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "0"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nmake room for event lasting 90 minutes within friday morning with title \"Videoconference\" and location \"\" and description \"\" and importance normal, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.25\n#0 2026-11-06 11:15 Europe/Budapest (UTC+01:00) – 2026-11-06 11:45 Europe/Budapest (UTC+01:00) (was 2026-11-06 11:00 Europe/Budapest (UTC+01:00) – 2026-11-06 11:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.25)\n#2 2026-11-06 09:45 Europe/Budapest (UTC+01:00) – 2026-11-06 11:15 Europe/Budapest (UTC+01:00) (new)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "make room for event lasting 90 minutes within friday morning with title \"Videoconference\" and location \"\" and description \"\" and importance normal, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.25\n#0 2026-11-06 11:15 Europe/Budapest (UTC+01:00) – 2026-11-06 11:45 Europe/Budapest (UTC+01:00) (was 2026-11-06 11:00 Europe/Budapest (UTC+01:00) – 2026-11-06 11:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.25)\n#2 2026-11-06 09:45 Europe/Budapest (UTC+01:00) – 2026-11-06 11:15 Europe/Budapest (UTC+01:00) (new)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Make room for event lasting 90 minutes within friday morning with title \"Videoconference\".",
+        "Make room for event lasting 90 minutes within friday morning with title \"Videoconference\"."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.threshold",
+          "value": 0,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 3,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20930,
+        "output_tokens": 363,
+        "total_tokens": 21293,
+        "cached_tokens": 0,
+        "reasoning_tokens": 221
+      },
+      "durationSeconds": 229.063,
+      "finishedAt": "2026-10-28T16:40:44.801019+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 3,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:37:15.226157+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "v7rre0gud24qhgo9d2m1r2k12g",
+        "sci4qej6hmnb4c9i79ehodfh70"
+      ],
+      "finalIds": [
+        "v7rre0gud24qhgo9d2m1r2k12g",
+        "0ddbc439befc47cf9a19f74622816c6b",
+        "sci4qej6hmnb4c9i79ehodfh70"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0cf2acaaa51debe2006ae224cac724819ab3d97c0c4df07935",
+          "turnId": "turn_0cf2acaaa51debe2006ae224d0857c819ab693475cae73728b",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20930,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 363,
+            "output_tokens_details": {
+              "reasoning_tokens": 221
+            },
+            "total_tokens": 21293
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "0"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nmake room for event lasting 90 minutes within friday morning with title \"Videoconference\" and location \"\" and description \"\" and importance normal, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.25\n#0 2026-11-06 11:15 Europe/Budapest (UTC+01:00) – 2026-11-06 11:45 Europe/Budapest (UTC+01:00) (was 2026-11-06 11:00 Europe/Budapest (UTC+01:00) – 2026-11-06 11:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.25)\n#2 2026-11-06 09:45 Europe/Budapest (UTC+01:00) – 2026-11-06 11:15 Europe/Budapest (UTC+01:00) (new)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "make room for event lasting 90 minutes within friday morning with title \"Videoconference\" and location \"\" and description \"\" and importance normal, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.25\n#0 2026-11-06 11:15 Europe/Budapest (UTC+01:00) – 2026-11-06 11:45 Europe/Budapest (UTC+01:00) (was 2026-11-06 11:00 Europe/Budapest (UTC+01:00) – 2026-11-06 11:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.25)\n#2 2026-11-06 09:45 Europe/Budapest (UTC+01:00) – 2026-11-06 11:15 Europe/Budapest (UTC+01:00) (new)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Make room for event lasting 90 minutes within friday morning with title \"Videoconference\".",
+        "Make room for event lasting 90 minutes within friday morning with title \"Videoconference\"."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.threshold",
+          "value": 0,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 4,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20930,
+        "output_tokens": 333,
+        "total_tokens": 21263,
+        "cached_tokens": 0,
+        "reasoning_tokens": 227
+      },
+      "durationSeconds": 212.427,
+      "finishedAt": "2026-10-28T16:53:32.018170+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 4,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:50:14.479703+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "eaeph5r1j5pu45ptvblibck2e0",
+        "jiqehi7p3qfv1iqc0bkkgltu4g"
+      ],
+      "finalIds": [
+        "eaeph5r1j5pu45ptvblibck2e0",
+        "ea8fe8c033034523a428e2874e0c6cde",
+        "jiqehi7p3qfv1iqc0bkkgltu4g"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0f2546d55f8009fe006ae227d55e38819ba5de2d822852bfdb",
+          "turnId": "turn_0f2546d55f8009fe006ae227dd6db0819bafb177b24d2be356",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20930,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 333,
+            "output_tokens_details": {
+              "reasoning_tokens": 227
+            },
+            "total_tokens": 21263
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "0"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nmake room for event lasting 90 minutes within friday morning with title \"Videoconference\" and location \"\" and description \"\" and importance normal, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.25\n#1 2026-11-06 11:15 Europe/Budapest (UTC+01:00) – 2026-11-06 11:45 Europe/Budapest (UTC+01:00) (was 2026-11-06 11:00 Europe/Budapest (UTC+01:00) – 2026-11-06 11:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.25)\n#2 2026-11-06 09:45 Europe/Budapest (UTC+01:00) – 2026-11-06 11:15 Europe/Budapest (UTC+01:00) (new)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "make room for event lasting 90 minutes within friday morning with title \"Videoconference\" and location \"\" and description \"\" and importance normal, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.25\n#1 2026-11-06 11:15 Europe/Budapest (UTC+01:00) – 2026-11-06 11:45 Europe/Budapest (UTC+01:00) (was 2026-11-06 11:00 Europe/Budapest (UTC+01:00) – 2026-11-06 11:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.25)\n#2 2026-11-06 09:45 Europe/Budapest (UTC+01:00) – 2026-11-06 11:15 Europe/Budapest (UTC+01:00) (new)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Make room for event lasting 90 minutes within friday morning with title \"Videoconference\".",
+        "Make room for event lasting 90 minutes within friday morning with title \"Videoconference\"."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.threshold",
+          "value": 0,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 5,
+      "mode": "symbolic",
+      "stopReason": "power_loss_interruption",
+      "lastStage": "initial",
+      "status": "interpretation",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20930,
+        "output_tokens": 187,
+        "total_tokens": 21117,
+        "cached_tokens": 0,
+        "reasoning_tokens": 96
+      },
+      "durationSeconds": null,
+      "finishedAt": null,
+      "recoveredAt": "2026-10-28T17:19:13.680813+00:00",
+      "shutdownRecovery": true,
+      "completionEvidence": null,
+      "success": false,
+      "failureCategory": "power_loss_interruption",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": false,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": false
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 5,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:53:50.721481+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "gpb33qckvc30c93vchpl2f6h3s",
+        "n899ulco5ghjgl1csoptt18s50"
+      ],
+      "finalIds": [
+        "gpb33qckvc30c93vchpl2f6h3s",
+        "n899ulco5ghjgl1csoptt18s50"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_02a4e7363fe8a4cd006ae228af4df4819ab93e15b34fec9c2a",
+          "turnId": "turn_02a4e7363fe8a4cd006ae228b57048819aa7cdc6620f83673a",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20930,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 187,
+            "output_tokens_details": {
+              "reasoning_tokens": 96
+            },
+            "total_tokens": 21117
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 6,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20930,
+        "output_tokens": 237,
+        "total_tokens": 21167,
+        "cached_tokens": 0,
+        "reasoning_tokens": 142
+      },
+      "durationSeconds": 43.833,
+      "finishedAt": "2026-10-28T17:24:45.043811+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 6,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:24:06.333329+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "84s6sm4dn8pmkdl04co4690hfg",
+        "d1e5e37fbt3hjj280gpfacb8f0"
+      ],
+      "finalIds": [
+        "84s6sm4dn8pmkdl04co4690hfg",
+        "7426888be95743f794dddc8c230b0f1d",
+        "d1e5e37fbt3hjj280gpfacb8f0"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0d84b5524677f77d006ae22fb94d948199be4606158f8b43f6",
+          "turnId": "turn_0d84b5524677f77d006ae22fbd34b081998eb48e5b9cff206a",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20930,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 237,
+            "output_tokens_details": {
+              "reasoning_tokens": 142
+            },
+            "total_tokens": 21167
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "0"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nmake room for event lasting 90 minutes within friday morning with title \"Videoconference\" and location \"\" and description \"\" and importance normal, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.25\n#1 2026-11-06 11:15 Europe/Budapest (UTC+01:00) – 2026-11-06 11:45 Europe/Budapest (UTC+01:00) (was 2026-11-06 11:00 Europe/Budapest (UTC+01:00) – 2026-11-06 11:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.25)\n#2 2026-11-06 09:45 Europe/Budapest (UTC+01:00) – 2026-11-06 11:15 Europe/Budapest (UTC+01:00) (new)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "make room for event lasting 90 minutes within friday morning with title \"Videoconference\" and location \"\" and description \"\" and importance normal, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.25\n#1 2026-11-06 11:15 Europe/Budapest (UTC+01:00) – 2026-11-06 11:45 Europe/Budapest (UTC+01:00) (was 2026-11-06 11:00 Europe/Budapest (UTC+01:00) – 2026-11-06 11:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.25)\n#2 2026-11-06 09:45 Europe/Budapest (UTC+01:00) – 2026-11-06 11:15 Europe/Budapest (UTC+01:00) (new)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Make room for event lasting 90 minutes within friday morning with title \"Videoconference\".",
+        "Make room for event lasting 90 minutes within friday morning with title \"Videoconference\"."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.threshold",
+          "value": 0,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 7,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20930,
+        "output_tokens": 256,
+        "total_tokens": 21186,
+        "cached_tokens": 0,
+        "reasoning_tokens": 149
+      },
+      "durationSeconds": 44.26,
+      "finishedAt": "2026-10-28T17:25:29.416829+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 7,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:24:49.773203+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "nlscquu4dsoa09cp0pejf7r8qo",
+        "c0k02af50v4p8hvfj248h6iud4"
+      ],
+      "finalIds": [
+        "nlscquu4dsoa09cp0pejf7r8qo",
+        "0114fa06ceb14f92b47082127db4dfab",
+        "c0k02af50v4p8hvfj248h6iud4"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0c86c254abc952ea006ae22fe580e08198908da23670f933ff",
+          "turnId": "turn_0c86c254abc952ea006ae22fea6b6881989ec692be5fb68340",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20930,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 256,
+            "output_tokens_details": {
+              "reasoning_tokens": 149
+            },
+            "total_tokens": 21186
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "0"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nmake room for event lasting 90 minutes within friday morning with title \"Videoconference\" and location \"\" and description \"\" and importance normal, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.25\n#0 2026-11-06 11:15 Europe/Budapest (UTC+01:00) – 2026-11-06 11:45 Europe/Budapest (UTC+01:00) (was 2026-11-06 11:00 Europe/Budapest (UTC+01:00) – 2026-11-06 11:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.25)\n#2 2026-11-06 09:45 Europe/Budapest (UTC+01:00) – 2026-11-06 11:15 Europe/Budapest (UTC+01:00) (new)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "make room for event lasting 90 minutes within friday morning with title \"Videoconference\" and location \"\" and description \"\" and importance normal, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.25\n#0 2026-11-06 11:15 Europe/Budapest (UTC+01:00) – 2026-11-06 11:45 Europe/Budapest (UTC+01:00) (was 2026-11-06 11:00 Europe/Budapest (UTC+01:00) – 2026-11-06 11:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.25)\n#2 2026-11-06 09:45 Europe/Budapest (UTC+01:00) – 2026-11-06 11:15 Europe/Budapest (UTC+01:00) (new)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Make room for event lasting 90 minutes within friday morning with title \"Videoconference\".",
+        "Make room for event lasting 90 minutes within friday morning with title \"Videoconference\"."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.threshold",
+          "value": 0,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 8,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20930,
+        "output_tokens": 234,
+        "total_tokens": 21164,
+        "cached_tokens": 0,
+        "reasoning_tokens": 135
+      },
+      "durationSeconds": 40.034,
+      "finishedAt": "2026-10-28T17:29:28.282746+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 8,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:28:53.580146+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "ls25ojhkrpa73ouuae0gsaij8c",
+        "4sj8hjdqfqin3qpq1ej4kmpf3k"
+      ],
+      "finalIds": [
+        "ls25ojhkrpa73ouuae0gsaij8c",
+        "81e5ce889a36417da3822a13d03ccd91",
+        "4sj8hjdqfqin3qpq1ej4kmpf3k"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0cbfa5e0f0c98b61006ae230d8768c819b9aa1501e911c400d",
+          "turnId": "turn_0cbfa5e0f0c98b61006ae230dd09b4819bb634b14475f55da0",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20930,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 234,
+            "output_tokens_details": {
+              "reasoning_tokens": 135
+            },
+            "total_tokens": 21164
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "0"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nmake room for event lasting 90 minutes within friday morning with title \"Videoconference\" and location \"\" and description \"\" and importance normal, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.25\n#0 2026-11-06 11:15 Europe/Budapest (UTC+01:00) – 2026-11-06 11:45 Europe/Budapest (UTC+01:00) (was 2026-11-06 11:00 Europe/Budapest (UTC+01:00) – 2026-11-06 11:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.25)\n#2 2026-11-06 09:45 Europe/Budapest (UTC+01:00) – 2026-11-06 11:15 Europe/Budapest (UTC+01:00) (new)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "make room for event lasting 90 minutes within friday morning with title \"Videoconference\" and location \"\" and description \"\" and importance normal, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.25\n#0 2026-11-06 11:15 Europe/Budapest (UTC+01:00) – 2026-11-06 11:45 Europe/Budapest (UTC+01:00) (was 2026-11-06 11:00 Europe/Budapest (UTC+01:00) – 2026-11-06 11:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.25)\n#2 2026-11-06 09:45 Europe/Budapest (UTC+01:00) – 2026-11-06 11:15 Europe/Budapest (UTC+01:00) (new)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Make room for event lasting 90 minutes within friday morning with title \"Videoconference\".",
+        "Make room for event lasting 90 minutes within friday morning with title \"Videoconference\"."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.threshold",
+          "value": 0,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 9,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20930,
+        "output_tokens": 210,
+        "total_tokens": 21140,
+        "cached_tokens": 0,
+        "reasoning_tokens": 113
+      },
+      "durationSeconds": 45.487,
+      "finishedAt": "2026-10-28T17:30:13.876615+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 9,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:29:32.983843+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "kl0n11ha6guoavfbc707438uac",
+        "tva0p1chmfg3q7ikc8so0akd6o"
+      ],
+      "finalIds": [
+        "kl0n11ha6guoavfbc707438uac",
+        "72588a947f5e483fba7bf78da084a80b",
+        "tva0p1chmfg3q7ikc8so0akd6o"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0e215838b3a353c8006ae230ffcb1c819aa7425e5f3a6cbb88",
+          "turnId": "turn_0e215838b3a353c8006ae23105ae1c819aac7d8e92a3fbf2d3",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20930,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 210,
+            "output_tokens_details": {
+              "reasoning_tokens": 113
+            },
+            "total_tokens": 21140
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "0"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nmake room for event lasting 90 minutes within friday morning with title \"Videoconference\" and location \"\" and description \"\" and importance normal, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.25\n#1 2026-11-06 11:15 Europe/Budapest (UTC+01:00) – 2026-11-06 11:45 Europe/Budapest (UTC+01:00) (was 2026-11-06 11:00 Europe/Budapest (UTC+01:00) – 2026-11-06 11:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.25)\n#2 2026-11-06 09:45 Europe/Budapest (UTC+01:00) – 2026-11-06 11:15 Europe/Budapest (UTC+01:00) (new)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "make room for event lasting 90 minutes within friday morning with title \"Videoconference\" and location \"\" and description \"\" and importance normal, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.25\n#1 2026-11-06 11:15 Europe/Budapest (UTC+01:00) – 2026-11-06 11:45 Europe/Budapest (UTC+01:00) (was 2026-11-06 11:00 Europe/Budapest (UTC+01:00) – 2026-11-06 11:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.25)\n#2 2026-11-06 09:45 Europe/Budapest (UTC+01:00) – 2026-11-06 11:15 Europe/Budapest (UTC+01:00) (new)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Make room for event lasting 90 minutes within friday morning with title \"Videoconference\".",
+        "Make room for event lasting 90 minutes within friday morning with title \"Videoconference\"."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.threshold",
+          "value": 0,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 10,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20930,
+        "output_tokens": 219,
+        "total_tokens": 21149,
+        "cached_tokens": 0,
+        "reasoning_tokens": 106
+      },
+      "durationSeconds": 38.998,
+      "finishedAt": "2026-10-28T17:34:22.373073+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 10,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:33:47.551554+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "6j4ao1bsqsmttq4s31d62to0p0",
+        "6fdel17q9nfja9sffb7vqn37i4"
+      ],
+      "finalIds": [
+        "6j4ao1bsqsmttq4s31d62to0p0",
+        "20893b9b79044a5191b375a223e0bf5d",
+        "6fdel17q9nfja9sffb7vqn37i4"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0a3dc32f02fd9e77006ae231fe305c8198b7f7960c9e296b0d",
+          "turnId": "turn_0a3dc32f02fd9e77006ae2320210b081988f0eacdfbce2569c",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20930,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 219,
+            "output_tokens_details": {
+              "reasoning_tokens": 106
+            },
+            "total_tokens": 21149
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "0"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nmake room for event lasting 90 minutes within friday morning with title \"Videoconference\" and location \"\" and description \"\" and importance normal, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.25\n#0 2026-11-06 11:15 Europe/Budapest (UTC+01:00) – 2026-11-06 11:45 Europe/Budapest (UTC+01:00) (was 2026-11-06 11:00 Europe/Budapest (UTC+01:00) – 2026-11-06 11:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.25)\n#2 2026-11-06 09:45 Europe/Budapest (UTC+01:00) – 2026-11-06 11:15 Europe/Budapest (UTC+01:00) (new)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "make room for event lasting 90 minutes within friday morning with title \"Videoconference\" and location \"\" and description \"\" and importance normal, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 0.25\n#0 2026-11-06 11:15 Europe/Budapest (UTC+01:00) – 2026-11-06 11:45 Europe/Budapest (UTC+01:00) (was 2026-11-06 11:00 Europe/Budapest (UTC+01:00) – 2026-11-06 11:30 Europe/Budapest (UTC+01:00); weight 1, cost 0.25)\n#2 2026-11-06 09:45 Europe/Budapest (UTC+01:00) – 2026-11-06 11:15 Europe/Budapest (UTC+01:00) (new)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Make room for event lasting 90 minutes within friday morning with title \"Videoconference\".",
+        "Make room for event lasting 90 minutes within friday morning with title \"Videoconference\"."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "clarify"
+        },
+        {
+          "type": "answer",
+          "text": null,
+          "key": "0.threshold",
+          "value": 0,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 1,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 112534,
+        "output_tokens": 3784,
+        "total_tokens": 116318,
+        "cached_tokens": 89882,
+        "reasoning_tokens": 2935
+      },
+      "durationSeconds": 197.477,
+      "finishedAt": "2026-10-28T16:18:05.034452+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 1,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "startedAt": "2026-10-28T16:15:38.795132+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "0482c617c14d4815bb7bcdd4b67b9202",
+        "c1f1931dcb674983b34f7d15261c7dbe"
+      ],
+      "finalIds": [
+        "0482c617c14d4815bb7bcdd4b67b9202",
+        "e0b4da4bacda4206a8150fa6ee6c7881",
+        "c1f1931dcb674983b34f7d15261c7dbe"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_009a8a640a5e7035006ae21fb3417c819a8656e76d16cd02c9",
+          "turnId": "turn_009a8a640a5e7035006ae21fba0210819aa5e7c9bd9a0330ec",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31492,
+            "input_tokens_details": {
+              "cached_tokens": 15132
+            },
+            "output_tokens": 2756,
+            "output_tokens_details": {
+              "reasoning_tokens": 2416
+            },
+            "total_tokens": 34248
+          }
+        },
+        {
+          "sessionId": "sess_009a8a640a5e7035006ae21fb3417c819a8656e76d16cd02c9",
+          "turnId": "turn_009a8a640a5e7035006ae21fedf1c0819a84269d425de86284",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 81042,
+            "input_tokens_details": {
+              "cached_tokens": 74750
+            },
+            "output_tokens": 1028,
+            "output_tokens_details": {
+              "reasoning_tokens": 519
+            },
+            "total_tokens": 82070
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Friday, November 6, morning is 09:00–12:00. Team meeting (Important) is 09:00–09:45, and Mechanic (Normal) is 11:00–11:30, so a 90-minute event cannot fit without a move. The least weighted movement I find is to move Mechanic 15 minutes later, to 11:15–11:45, and schedule Videoconference 09:45–11:15. That keeps both events within Friday morning and costs 0.25 weighted hours. What is the maximum importance level you allow me to move: None, Normal, Important, or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "Normal events only."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Videoconference is confirmed for Friday, November 6, 09:45–11:15 (Budapest time). Mechanic moved from 11:00–11:30 to 11:15–11:45; Team meeting remains 09:00–09:45. This is the earliest feasible start with the Team meeting unchanged, and the 15-minute Normal-event move has a weighted cost of 0.25 hours. Both changes were verified in Calendar."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal events only.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 2,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 221381,
+        "output_tokens": 4776,
+        "total_tokens": 226157,
+        "cached_tokens": 195437,
+        "reasoning_tokens": 3188
+      },
+      "durationSeconds": 469.661,
+      "finishedAt": "2026-10-28T16:25:55.262197+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 2,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "startedAt": "2026-10-28T16:21:02.360733+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "2ae802c40d7d43adbce2fff43cf8bc97",
+        "7599c927775346028f12fd43659badb6"
+      ],
+      "finalIds": [
+        "2ae802c40d7d43adbce2fff43cf8bc97",
+        "5c8825bf3cb148f5901ac828d6072337",
+        "7599c927775346028f12fd43659badb6"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_09cbd4474aaeb68b006ae220fb9008819bab91675d3d8919c5",
+          "turnId": "turn_09cbd4474aaeb68b006ae22101419c819bb514ef028b6df012",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31446,
+            "input_tokens_details": {
+              "cached_tokens": 15132
+            },
+            "output_tokens": 2051,
+            "output_tokens_details": {
+              "reasoning_tokens": 1701
+            },
+            "total_tokens": 33497
+          }
+        },
+        {
+          "sessionId": "sess_09cbd4474aaeb68b006ae220fb9008819bab91675d3d8919c5",
+          "turnId": "turn_09cbd4474aaeb68b006ae221494938819b8959f27b373bb9d9",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 189935,
+            "input_tokens_details": {
+              "cached_tokens": 180305
+            },
+            "output_tokens": 2725,
+            "output_tokens_details": {
+              "reasoning_tokens": 1487
+            },
+            "total_tokens": 192660
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Friday is November 6, 2026, and “morning” means 09:00–12:00 Budapest time. The 90-minute event can fit at 10:30–12:00 if “Mechanic” (Normal importance, currently 11:00–11:30) moves to 10:00–10:30. “Team meeting” (Important, 09:00–09:45) stays put. This is the minimum weighted movement I found: one hour for the Normal event, weighted cost 1; then 10:30 is the earliest start at that minimum cost. The resulting intervals are clash-free in both the normalized and exact models. What is the maximum importance level you authorize me to move: None, Normal, Important, or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "Normal events only."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Completed and verified the corrected schedule for Friday, November 6 (Budapest time):\n\n- **Team meeting:** 09:00–09:45, unchanged.\n- **Videoconference:** 09:45–11:15.\n- **Mechanic:** moved from 11:00–11:30 to 11:15–11:45.\n\nThe Normal event moves by 15 minutes, for weighted movement cost **0.25**. The meeting fixes the earliest possible start at 09:45; moving Mechanic by 15 minutes makes that start clash-free. The final calendar readback confirms all three intervals, with adjacent endpoints and no overlap.\n\nI initially submitted a higher-cost arrangement, then found and submitted this correction. The corrected changes executed and are verified."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal events only.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 4,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 3,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 147621,
+        "output_tokens": 3350,
+        "total_tokens": 150971,
+        "cached_tokens": 125526,
+        "reasoning_tokens": 2390
+      },
+      "durationSeconds": 285.74,
+      "finishedAt": "2026-10-28T16:45:31.261695+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 3,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:41:00.263263+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "ptieppm5q6rbnco211gc7jche4",
+        "lbhm7hg037ttiojjvsv7u9fj8k"
+      ],
+      "finalIds": [
+        "ptieppm5q6rbnco211gc7jche4",
+        "c07a8211f579465d96f2140354d36c99",
+        "lbhm7hg037ttiojjvsv7u9fj8k"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0089bc0c62cf56e2006ae225bb7224819888d1ba88e950a768",
+          "turnId": "turn_0089bc0c62cf56e2006ae225bfbaf4819899cfbc4626b832ad",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31381,
+            "input_tokens_details": {
+              "cached_tokens": 15132
+            },
+            "output_tokens": 1593,
+            "output_tokens_details": {
+              "reasoning_tokens": 1317
+            },
+            "total_tokens": 32974
+          }
+        },
+        {
+          "sessionId": "sess_0089bc0c62cf56e2006ae225bb7224819888d1ba88e950a768",
+          "turnId": "turn_0089bc0c62cf56e2006ae2260a21988198a71706b1e07ea50e",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 116240,
+            "input_tokens_details": {
+              "cached_tokens": 110394
+            },
+            "output_tokens": 1757,
+            "output_tokens_details": {
+              "reasoning_tokens": 1073
+            },
+            "total_tokens": 117997
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Friday is November 6, 2026. In the 09:00–12:00 morning window, **Team meeting** is Important (09:00–09:45) and **Mechanic** is Normal (11:00–11:30). Neither free gap fits 90 minutes, so making room requires moving an existing event. What maximum importance may I move: None, Normal, Important, or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "Normal events only."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Done. The changes were verified in Calendar.\n\n- **Videoconference:** Friday, November 6, 09:45–11:15 (Europe/Budapest), 90 minutes.\n- **Mechanic:** moved from 11:00–11:30 to 11:15–11:45, a 15-minute shift. Its weighted movement cost is 0.25 weighted hours.\n- **Team meeting:** remains at 09:00–09:45.\n\nWith the Important Team meeting fixed, 09:45 is the earliest possible start. Moving Mechanic to 11:15 is the least movement needed to clear the new event."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal events only.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 4,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 140531,
+        "output_tokens": 2151,
+        "total_tokens": 142682,
+        "cached_tokens": 119746,
+        "reasoning_tokens": 1175
+      },
+      "durationSeconds": 266.497,
+      "finishedAt": "2026-10-28T16:49:58.819510+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 4,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:45:48.101010+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "ham1i72ojvfigcica73q73e14o",
+        "8718v0ee87mem1vvpvo7bb4mg4"
+      ],
+      "finalIds": [
+        "ham1i72ojvfigcica73q73e14o",
+        "62170667f9664a84a2650d283c5a99ff",
+        "8718v0ee87mem1vvpvo7bb4mg4"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_00d811bd553955d5006ae226d3b1d0819aa988f87797bc997a",
+          "turnId": "turn_00d811bd553955d5006ae226d85648819a9bb81ddd67e7be25",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31474,
+            "input_tokens_details": {
+              "cached_tokens": 15132
+            },
+            "output_tokens": 679,
+            "output_tokens_details": {
+              "reasoning_tokens": 391
+            },
+            "total_tokens": 32153
+          }
+        },
+        {
+          "sessionId": "sess_00d811bd553955d5006ae226d3b1d0819aa988f87797bc997a",
+          "turnId": "turn_00d811bd553955d5006ae22715fb94819abf7530955f1fe63d",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 109057,
+            "input_tokens_details": {
+              "cached_tokens": 104614
+            },
+            "output_tokens": 1472,
+            "output_tokens_details": {
+              "reasoning_tokens": 784
+            },
+            "total_tokens": 110529
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Friday, November 6, 09:00–12:00 has two events: “Team meeting” (09:00–09:45, Important) and “Mechanic” (11:00–11:30, Normal). There is no 90-minute opening, so making room requires moving at least one existing event. What is the maximum importance I may move: None, Normal, Important, or Critical? This sets eligibility; I’ll then find the least weighted movement plan and earliest possible start."
+        },
+        {
+          "role": "user",
+          "text": "Normal events only."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Done. Calendar verified both changes for Friday, November 6 (Europe/Budapest):\n\n- Created “Videoconference” from 09:45 to 11:15.\n- Moved “Mechanic” from 11:00–11:30 to 11:15–11:45. This is a 15-minute displacement, with weighted movement cost 0.25 (Normal weight × 0.25 hours).\n\n“Team meeting” remains fixed at 09:00–09:45. The new event starts at the earliest possible time after it, and the move is the least weighted movement needed to fit the 90-minute event in Friday morning."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal events only.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 5,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 88957,
+        "output_tokens": 2623,
+        "total_tokens": 91580,
+        "cached_tokens": 67609,
+        "reasoning_tokens": 1820
+      },
+      "durationSeconds": 101.37,
+      "finishedAt": "2026-10-28T17:22:16.813042+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 5,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:20:40.734964+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "e5i9tpke2s0vogg6asqv3rnhk0",
+        "rj6jrl2mfjshvc3jljkb1t2j5c"
+      ],
+      "finalIds": [
+        "e5i9tpke2s0vogg6asqv3rnhk0",
+        "9cdb99bb61ed4a70a2606002e638dced",
+        "rj6jrl2mfjshvc3jljkb1t2j5c"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0288dce6ca03c4d1006ae22eef54588199b17880d7002a3474",
+          "turnId": "turn_0288dce6ca03c4d1006ae22ef40b288199809ac1c0907ff5aa",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31449,
+            "input_tokens_details": {
+              "cached_tokens": 15132
+            },
+            "output_tokens": 1714,
+            "output_tokens_details": {
+              "reasoning_tokens": 1382
+            },
+            "total_tokens": 33163
+          }
+        },
+        {
+          "sessionId": "sess_0288dce6ca03c4d1006ae22eef54588199b17880d7002a3474",
+          "turnId": "turn_0288dce6ca03c4d1006ae22f17a5d8819980ce0b5d05cdc2fc",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 57508,
+            "input_tokens_details": {
+              "cached_tokens": 52477
+            },
+            "output_tokens": 909,
+            "output_tokens_details": {
+              "reasoning_tokens": 438
+            },
+            "total_tokens": 58417
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Friday is November 6, 2026. The 09:00–12:00 morning window contains Team meeting (09:00–09:45, Important) and Mechanic (11:00–11:30, Normal). To fit Videoconference for 90 minutes with the least weighted movement, Mechanic would move 15 minutes later to 11:15–11:45; Videoconference could then start at 09:45 and end at 11:15. This is the minimum movement needed, with weighted cost 0.25 (15 minutes × Normal’s weight 1). May I move Normal events? You can answer None, Normal, Important, or Critical. This permission question is separate from approval of the specific Calendar changes."
+        },
+        {
+          "role": "user",
+          "text": "Normal events only."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Calendar changes were verified. On Friday, November 6 (Europe/Budapest), Videoconference is scheduled for 09:45–11:15. Mechanic moved from 11:00–11:30 to 11:15–11:45; Team meeting remains 09:00–09:45. The move is 15 minutes, with weighted cost 0.25, and this is the earliest start among minimum-cost schedules."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal events only.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 6,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 88543,
+        "output_tokens": 2827,
+        "total_tokens": 91370,
+        "cached_tokens": 67180,
+        "reasoning_tokens": 1961
+      },
+      "durationSeconds": 104.104,
+      "finishedAt": "2026-10-28T17:24:01.071819+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 6,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:22:22.329893+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "dp3e7ln76i4ukkkm35h095j4ns",
+        "uug3efdac86d8d2b421lk7mhns"
+      ],
+      "finalIds": [
+        "dp3e7ln76i4ukkkm35h095j4ns",
+        "00c0376ba8c34dac8f4f4c36daa38b7e",
+        "uug3efdac86d8d2b421lk7mhns"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0e932101b752236d006ae22f52a520819a9ed65c66f348625e",
+          "turnId": "turn_0e932101b752236d006ae22f574ff8819ab9d032f75e9b1a90",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31438,
+            "input_tokens_details": {
+              "cached_tokens": 15132
+            },
+            "output_tokens": 1264,
+            "output_tokens_details": {
+              "reasoning_tokens": 935
+            },
+            "total_tokens": 32702
+          }
+        },
+        {
+          "sessionId": "sess_0e932101b752236d006ae22f52a520819a9ed65c66f348625e",
+          "turnId": "turn_0e932101b752236d006ae22f7d17fc819aa3135430af9dbe52",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 57105,
+            "input_tokens_details": {
+              "cached_tokens": 52048
+            },
+            "output_tokens": 1563,
+            "output_tokens_details": {
+              "reasoning_tokens": 1026
+            },
+            "total_tokens": 58668
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Friday is November 6, 2026. The 90-minute event cannot fit in the 09:00–12:00 morning window while both existing events stay fixed: Team meeting is 09:00–09:45 (Important), and Mechanic is 11:00–11:30 (Normal).\n\nThe least-movement option I found is to place Videoconference at 09:45–11:15 and move Mechanic to 11:15–11:45, a 15-minute shift. Before I can propose that change, what is the maximum importance level you authorize me to move: Normal, Important, Critical, or none?"
+        },
+        {
+          "role": "user",
+          "text": "Normal events only."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Calendar changes were verified.\n\n- Created **Videoconference** for Friday, November 6, 09:45–11:15 (90 minutes, Europe/Budapest).\n- Moved **Mechanic** from 11:00–11:30 to 11:15–11:45. Its 15-minute movement has a weighted cost of **0.25 weighted hours** (Normal weight 1).\n- **Team meeting** remains at 09:00–09:45.\n\nThis is the minimum movement needed: with Team meeting fixed and Videoconference starting at the earliest feasible time, 09:45, Mechanic must move at least 15 minutes to avoid overlap."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal events only.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 7,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 88990,
+        "output_tokens": 2995,
+        "total_tokens": 91985,
+        "cached_tokens": 67315,
+        "reasoning_tokens": 2133
+      },
+      "durationSeconds": 109.488,
+      "finishedAt": "2026-10-28T17:27:19.044799+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 7,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:25:34.504541+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "d5e2qqj33t7blglhafsggu7gso",
+        "qdbvvgdlfmkd50h9i5t0oei7rs"
+      ],
+      "finalIds": [
+        "d5e2qqj33t7blglhafsggu7gso",
+        "01fe3aa19a3a438295d113efac8c08dc",
+        "qdbvvgdlfmkd50h9i5t0oei7rs"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_05b2173bec432d04006ae23012fe7c8199b4c3e3f7e8543a8c",
+          "turnId": "turn_05b2173bec432d04006ae2301857a48199a0dbbca679386a64",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31436,
+            "input_tokens_details": {
+              "cached_tokens": 15132
+            },
+            "output_tokens": 1340,
+            "output_tokens_details": {
+              "reasoning_tokens": 1047
+            },
+            "total_tokens": 32776
+          }
+        },
+        {
+          "sessionId": "sess_05b2173bec432d04006ae23012fe7c8199b4c3e3f7e8543a8c",
+          "turnId": "turn_05b2173bec432d04006ae2303b9eb88199b3c819c5accd2056",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 57554,
+            "input_tokens_details": {
+              "cached_tokens": 52183
+            },
+            "output_tokens": 1655,
+            "output_tokens_details": {
+              "reasoning_tokens": 1086
+            },
+            "total_tokens": 59209
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Friday, November 6, 09:00–12:00 is the requested window. The existing events are Team meeting (Important, 09:00–09:45) and Mechanic (Normal, 11:00–11:30). The free gaps are too short for 90 minutes, so making room requires moving at least one event. What is the maximum importance you authorize me to move: None, Normal, Important, or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "Normal events only."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "The changes were verified in Calendar. Videoconference is scheduled for Friday, November 6, 09:45–11:15. Mechanic moved from 11:00–11:30 to 11:15–11:45; Team meeting remains 09:00–09:45.\n\nThis is the least weighted movement plan, with a movement cost of 0.25 weighted hours. Since Team meeting is Important and your limit was Normal events only, it stayed in place; its 09:00–09:45 interval also makes 09:45 the earliest possible start for the new event."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal events only.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 8,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 88036,
+        "output_tokens": 2330,
+        "total_tokens": 90366,
+        "cached_tokens": 66989,
+        "reasoning_tokens": 1442
+      },
+      "durationSeconds": 89.026,
+      "finishedAt": "2026-10-28T17:28:48.162854+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 8,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:27:23.633396+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "6p5q4tr6v96nhkl82fb95h255k",
+        "8ksvb7ljg54iq153t0rm1ip3mg"
+      ],
+      "finalIds": [
+        "6p5q4tr6v96nhkl82fb95h255k",
+        "8d31e7cebe9c4104bf61032912fad358",
+        "8ksvb7ljg54iq153t0rm1ip3mg"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0f9f9832e7613e5c006ae2307fe80c81999f009324c6e3c397",
+          "turnId": "turn_0f9f9832e7613e5c006ae230833d2881998bfc976d6874fe9e",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31427,
+            "input_tokens_details": {
+              "cached_tokens": 15132
+            },
+            "output_tokens": 1315,
+            "output_tokens_details": {
+              "reasoning_tokens": 972
+            },
+            "total_tokens": 32742
+          }
+        },
+        {
+          "sessionId": "sess_0f9f9832e7613e5c006ae2307fe80c81999f009324c6e3c397",
+          "turnId": "turn_0f9f9832e7613e5c006ae230a41cc88199a98ba6b5e04410f6",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 56609,
+            "input_tokens_details": {
+              "cached_tokens": 51857
+            },
+            "output_tokens": 1015,
+            "output_tokens_details": {
+              "reasoning_tokens": 470
+            },
+            "total_tokens": 57624
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Friday morning means **November 6, 09:00–12:00**. The 90-minute event cannot fit while both existing events stay fixed. The least-movement plan I found keeps **Team meeting** (Important, 09:00–09:45) in place, schedules **Videoconference** at **09:45–11:15**, and moves **Mechanic** (Normal) from **11:00–11:30** to **11:15–11:45**. That is a 15-minute move with weighted cost 0.25, and 09:45 is the earliest start at that minimum cost. What is the maximum importance level of existing events you authorize me to move: **None, Normal, Important, or Critical**?"
+        },
+        {
+          "role": "user",
+          "text": "Normal events only."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Calendar changes are verified for Friday, November 6 (Europe/Budapest):\n\n- **Videoconference:** created for **09:45–11:15** (90 minutes).\n- **Mechanic:** moved from **11:00–11:30** to **11:15–11:45**. Its 15-minute start displacement has weighted cost **0.25**.\n- **Team meeting:** remains **09:00–09:45**.\n\nThis is the minimum weighted movement plan; **09:45** is the earliest start among plans with that cost. The proposed times are already on five-minute boundaries, so normalization does not change them."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal events only.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 9,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 89535,
+        "output_tokens": 2751,
+        "total_tokens": 92286,
+        "cached_tokens": 68121,
+        "reasoning_tokens": 2002
+      },
+      "durationSeconds": 113.717,
+      "finishedAt": "2026-10-28T17:32:07.675107+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 9,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:30:18.553894+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "fq3cj7uvp1s0v8nmjiueb5436c",
+        "ucfolt0nbliteks602saohjnhk"
+      ],
+      "finalIds": [
+        "fq3cj7uvp1s0v8nmjiueb5436c",
+        "16d8710922614ff1bfb5224dfa734404",
+        "ucfolt0nbliteks602saohjnhk"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_04f37a2bfe0fd4a3006ae2312ec810819997016809619771bf",
+          "turnId": "turn_04f37a2bfe0fd4a3006ae231387acc8199b2dfb977b3fc4815",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31427,
+            "input_tokens_details": {
+              "cached_tokens": 15132
+            },
+            "output_tokens": 2021,
+            "output_tokens_details": {
+              "reasoning_tokens": 1717
+            },
+            "total_tokens": 33448
+          }
+        },
+        {
+          "sessionId": "sess_04f37a2bfe0fd4a3006ae2312ec810819997016809619771bf",
+          "turnId": "turn_04f37a2bfe0fd4a3006ae23169a5548199bc5daba700bcee58",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 58108,
+            "input_tokens_details": {
+              "cached_tokens": 52989
+            },
+            "output_tokens": 730,
+            "output_tokens_details": {
+              "reasoning_tokens": 285
+            },
+            "total_tokens": 58838
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Friday morning is November 6, 09:00–12:00 Budapest time. The existing events are Team meeting (09:00–09:45, Important) and Mechanic (11:00–11:30, Normal). With permission to move Normal events, the minimum movement plan is to move Mechanic to 11:15–11:45 (15 minutes later; weighted movement cost 0.25 hours) and place Videoconference at 09:45–11:15, the earliest start among minimum-cost plans. What is the maximum importance level you permit me to move: None, Normal, Important, or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "Normal events only."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Done. Videoconference is scheduled for Friday, November 6, 09:45–11:15 Budapest time. Mechanic was moved from 11:00–11:30 to 11:15–11:45. The Normal event’s 15-minute move has a weighted cost of 0.25 hours; this gives the earliest start among minimum-movement plans. Both Calendar changes were verified."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal events only.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 5,
+      "repetition": 10,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 89718,
+        "output_tokens": 3265,
+        "total_tokens": 92983,
+        "cached_tokens": 68032,
+        "reasoning_tokens": 2438
+      },
+      "durationSeconds": 95.502,
+      "finishedAt": "2026-10-28T17:33:43.265274+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "movementPermissionEstablished": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 5,
+        "repetition": 10,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:32:12.207954+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:00:00+01:00",
+          "end": "2026-11-06T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Team meeting",
+          "start": "2026-11-06T09:00:00+01:00",
+          "end": "2026-11-06T09:45:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Videoconference",
+          "start": "2026-11-06T09:45:00+01:00",
+          "end": "2026-11-06T11:15:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Mechanic",
+          "start": "2026-11-06T11:15:00+01:00",
+          "end": "2026-11-06T11:45:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "3c3rapba07jtq8cp8hochhs65c",
+        "m75adjrej6km72f4fuemidb09o"
+      ],
+      "finalIds": [
+        "3c3rapba07jtq8cp8hochhs65c",
+        "226ab8f28e9649ff8547fd3cd275abcf",
+        "m75adjrej6km72f4fuemidb09o"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_046536b4fb43f95e006ae231a0a9588198b99e2a505fe725c2",
+          "turnId": "turn_046536b4fb43f95e006ae231a99080819890db95154d34b1d3",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31443,
+            "input_tokens_details": {
+              "cached_tokens": 15132
+            },
+            "output_tokens": 1753,
+            "output_tokens_details": {
+              "reasoning_tokens": 1440
+            },
+            "total_tokens": 33196
+          }
+        },
+        {
+          "sessionId": "sess_046536b4fb43f95e006ae231a0a9588198b99e2a505fe725c2",
+          "turnId": "turn_046536b4fb43f95e006ae231ca0e108198b1b7f13a9f307f14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 58275,
+            "input_tokens_details": {
+              "cached_tokens": 52900
+            },
+            "output_tokens": 1512,
+            "output_tokens_details": {
+              "reasoning_tokens": 998
+            },
+            "total_tokens": 59787
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start."
+        },
+        {
+          "role": "machine",
+          "text": "Friday is November 6, 2026. The 09:00–12:00 morning window contains **Team meeting** (09:00–09:45, Important) and **Mechanic** (11:00–11:30, Normal). A minimum-cost candidate appears to keep Team meeting in place, move Mechanic to 11:15–11:45, and schedule **Videoconference** for 09:45–11:15. That moves only a Normal event by 15 minutes. What is the maximum importance level you permit me to move: None, Normal, Important, or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "Normal events only."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "The changes were applied and verified. On Friday, November 6 (Budapest time):\n\n- **Videoconference:** 09:45–11:15 (90 minutes)\n- **Mechanic:** moved from 11:00–11:30 to 11:15–11:45\n- **Team meeting:** remains at 09:00–09:45\n\nThis is the minimum weighted movement: Mechanic moves 15 minutes, for a cost of 0.25 weighted hours. Videoconference starts at the earliest feasible time; it is adjacent to Team meeting, and Mechanic is adjacent to Videoconference."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Make room for a 90-minute event titled \"Videoconference\" on Friday morning, with the least weighted movement and then the earliest possible start.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "Normal events only.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    }
+  ]
+}

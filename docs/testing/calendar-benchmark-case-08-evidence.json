@@ -1,0 +1,2968 @@
+{
+  "case": 8,
+  "specification": {
+    "name": "Joint scheduling with backtracking",
+    "level": "Complex",
+    "events": [],
+    "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+  },
+  "runs": [
+    {
+      "case": 8,
+      "repetition": 1,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20751,
+        "output_tokens": 230,
+        "total_tokens": 20981,
+        "cached_tokens": 0,
+        "reasoning_tokens": 93
+      },
+      "durationSeconds": 42.107,
+      "finishedAt": "2026-10-28T17:24:06.528571+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 1,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:23:27.199392+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [],
+      "finalIds": [
+        "347fff3030574658a31d08e513aec9dd",
+        "75be65c64bdc43c1aeaaf54d74a10902"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0c15195d31be8359006ae22f926530819aa52694f4bb613648",
+          "turnId": "turn_0c15195d31be8359006ae22f958400819ab7d45099efc3a1f8",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20751,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 230,
+            "output_tokens_details": {
+              "reasoning_tokens": 93
+            },
+            "total_tokens": 20981
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nschedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.\nComplete lexicographic earliest joint schedule in listed order. Existing events remain fixed.\n#0 \"Workshop\" 2026-11-05 11:00 Europe/Budapest (UTC+01:00) – 2026-11-05 12:00 Europe/Budapest (UTC+01:00)\n#1 \"Review\" 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 11:00 Europe/Budapest (UTC+01:00)"
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.\nComplete lexicographic earliest joint schedule in listed order. Existing events remain fixed.\n#0 \"Workshop\" 2026-11-05 11:00 Europe/Budapest (UTC+01:00) – 2026-11-05 12:00 Europe/Budapest (UTC+01:00)\n#1 \"Review\" 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 11:00 Europe/Budapest (UTC+01:00)"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 2,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20751,
+        "output_tokens": 754,
+        "total_tokens": 21505,
+        "cached_tokens": 0,
+        "reasoning_tokens": 602
+      },
+      "durationSeconds": 44.953,
+      "finishedAt": "2026-10-28T17:24:51.568582+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 2,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:24:09.799617+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [],
+      "finalIds": [
+        "0f9491e53d264d74b0d6011e0e936337",
+        "50d9a93babbf4acda26ceea7372b4f6e"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_015f73a4af3be7e8006ae22fbc9360819aa571f488c7c16085",
+          "turnId": "turn_015f73a4af3be7e8006ae22fc1d2c0819aaa829e4e91f1b8cd",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20751,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 754,
+            "output_tokens_details": {
+              "reasoning_tokens": 602
+            },
+            "total_tokens": 21505
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nschedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.\nComplete lexicographic earliest joint schedule in listed order. Existing events remain fixed.\n#0 \"Workshop\" 2026-11-05 11:00 Europe/Budapest (UTC+01:00) – 2026-11-05 12:00 Europe/Budapest (UTC+01:00)\n#1 \"Review\" 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 11:00 Europe/Budapest (UTC+01:00)"
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.\nComplete lexicographic earliest joint schedule in listed order. Existing events remain fixed.\n#0 \"Workshop\" 2026-11-05 11:00 Europe/Budapest (UTC+01:00) – 2026-11-05 12:00 Europe/Budapest (UTC+01:00)\n#1 \"Review\" 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 11:00 Europe/Budapest (UTC+01:00)"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 3,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20751,
+        "output_tokens": 211,
+        "total_tokens": 20962,
+        "cached_tokens": 0,
+        "reasoning_tokens": 75
+      },
+      "durationSeconds": 35.274,
+      "finishedAt": "2026-10-28T17:27:36.116973+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 3,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:27:04.410800+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [],
+      "finalIds": [
+        "d9355946f9874a5e81b3767f02c447a5",
+        "979f076809304a698fc85fe7aa86f1f5"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0955957858ef8e7e006ae2306c1a7481988f02a42c339e7b49",
+          "turnId": "turn_0955957858ef8e7e006ae23072432081988e47319e7d17d8d5",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20751,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 211,
+            "output_tokens_details": {
+              "reasoning_tokens": 75
+            },
+            "total_tokens": 20962
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nschedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.\nComplete lexicographic earliest joint schedule in listed order. Existing events remain fixed.\n#0 \"Workshop\" 2026-11-05 11:00 Europe/Budapest (UTC+01:00) – 2026-11-05 12:00 Europe/Budapest (UTC+01:00)\n#1 \"Review\" 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 11:00 Europe/Budapest (UTC+01:00)"
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.\nComplete lexicographic earliest joint schedule in listed order. Existing events remain fixed.\n#0 \"Workshop\" 2026-11-05 11:00 Europe/Budapest (UTC+01:00) – 2026-11-05 12:00 Europe/Budapest (UTC+01:00)\n#1 \"Review\" 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 11:00 Europe/Budapest (UTC+01:00)"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 4,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20751,
+        "output_tokens": 216,
+        "total_tokens": 20967,
+        "cached_tokens": 0,
+        "reasoning_tokens": 97
+      },
+      "durationSeconds": 35.114,
+      "finishedAt": "2026-10-28T17:28:11.348251+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 4,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:27:38.556750+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [],
+      "finalIds": [
+        "8af66d372fab4f9fab88ccef82a54a61",
+        "f4476cdad272452d8932cbcab0648e1b"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_02c93a2e8caf2ee2006ae2308da278819bb8e376dee7100d37",
+          "turnId": "turn_02c93a2e8caf2ee2006ae2309172b8819b84d1b12e21d28408",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20751,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 216,
+            "output_tokens_details": {
+              "reasoning_tokens": 97
+            },
+            "total_tokens": 20967
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nschedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.\nComplete lexicographic earliest joint schedule in listed order. Existing events remain fixed.\n#0 \"Workshop\" 2026-11-05 11:00 Europe/Budapest (UTC+01:00) – 2026-11-05 12:00 Europe/Budapest (UTC+01:00)\n#1 \"Review\" 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 11:00 Europe/Budapest (UTC+01:00)"
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.\nComplete lexicographic earliest joint schedule in listed order. Existing events remain fixed.\n#0 \"Workshop\" 2026-11-05 11:00 Europe/Budapest (UTC+01:00) – 2026-11-05 12:00 Europe/Budapest (UTC+01:00)\n#1 \"Review\" 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 11:00 Europe/Budapest (UTC+01:00)"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 5,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20751,
+        "output_tokens": 529,
+        "total_tokens": 21280,
+        "cached_tokens": 0,
+        "reasoning_tokens": 395
+      },
+      "durationSeconds": 36.493,
+      "finishedAt": "2026-10-28T17:30:58.269360+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 5,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:30:24.511909+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [],
+      "finalIds": [
+        "6fa5958a0c1d4c5e8aff10814218368c",
+        "163748ffb3264d969df80bcc5e689498"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_05dc35af205f064a006ae231333a34819a81a7b6d9f7708fc7",
+          "turnId": "turn_05dc35af205f064a006ae231366c40819abbc86bd6189f4612",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20751,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 529,
+            "output_tokens_details": {
+              "reasoning_tokens": 395
+            },
+            "total_tokens": 21280
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nschedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.\nComplete lexicographic earliest joint schedule in listed order. Existing events remain fixed.\n#0 \"Workshop\" 2026-11-05 11:00 Europe/Budapest (UTC+01:00) – 2026-11-05 12:00 Europe/Budapest (UTC+01:00)\n#1 \"Review\" 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 11:00 Europe/Budapest (UTC+01:00)"
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.\nComplete lexicographic earliest joint schedule in listed order. Existing events remain fixed.\n#0 \"Workshop\" 2026-11-05 11:00 Europe/Budapest (UTC+01:00) – 2026-11-05 12:00 Europe/Budapest (UTC+01:00)\n#1 \"Review\" 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 11:00 Europe/Budapest (UTC+01:00)"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 6,
+      "mode": "symbolic",
+      "stopReason": "interpretation_requires_supervision",
+      "lastStage": "initial",
+      "status": "interpretation",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20751,
+        "output_tokens": 787,
+        "total_tokens": 21538,
+        "cached_tokens": 0,
+        "reasoning_tokens": 516
+      },
+      "durationSeconds": 33.88,
+      "finishedAt": "2026-10-28T17:31:32.259442+00:00",
+      "success": false,
+      "failureCategory": "interpretation_requires_supervision",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": false,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 6,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:31:00.706872+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [],
+      "initialIds": [],
+      "finalIds": [],
+      "turns": [
+        {
+          "sessionId": "sess_0e184c748ee90f75006ae23157b6f0819abd3fff2743d06301",
+          "turnId": "turn_0e184c748ee90f75006ae2315e3570819aa9e150416fb01ecf",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20751,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 787,
+            "output_tokens_details": {
+              "reasoning_tokens": 516
+            },
+            "total_tokens": 21538
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within interval from thursday at 09:00 to thursday at 11:00 with title \"Review\"], choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 7,
+      "mode": "symbolic",
+      "stopReason": "interpretation_requires_supervision",
+      "lastStage": "initial",
+      "status": "interpretation",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20751,
+        "output_tokens": 997,
+        "total_tokens": 21748,
+        "cached_tokens": 0,
+        "reasoning_tokens": 725
+      },
+      "durationSeconds": 25.312,
+      "finishedAt": "2026-10-28T17:34:10.754734+00:00",
+      "success": false,
+      "failureCategory": "interpretation_requires_supervision",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": false,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 7,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:33:47.841359+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [],
+      "initialIds": [],
+      "finalIds": [],
+      "turns": [
+        {
+          "sessionId": "sess_0d78512690c7f658006ae231feb4a08198946fbf11d85f2159",
+          "turnId": "turn_0d78512690c7f658006ae232017e9481988c795a2325b525d2",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20751,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 997,
+            "output_tokens_details": {
+              "reasoning_tokens": 725
+            },
+            "total_tokens": 21748
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within interval from thursday at 09:00 to thursday at 11:00 with title \"Review\"], choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 8,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20751,
+        "output_tokens": 553,
+        "total_tokens": 21304,
+        "cached_tokens": 0,
+        "reasoning_tokens": 409
+      },
+      "durationSeconds": 44.146,
+      "finishedAt": "2026-10-28T17:34:55.004810+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 8,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:34:12.874507+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [],
+      "finalIds": [
+        "2cb69b4dac3f418da78614dd2f4da1b5",
+        "37dd1cb5983648a29ea1abe46f7df734"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_00e228dc8b4dd089006ae23217fd48819b9225f772091bb2ba",
+          "turnId": "turn_00e228dc8b4dd089006ae232215a28819ba2e785ba0992b517",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20751,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 553,
+            "output_tokens_details": {
+              "reasoning_tokens": 409
+            },
+            "total_tokens": 21304
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nschedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.\nComplete lexicographic earliest joint schedule in listed order. Existing events remain fixed.\n#0 \"Workshop\" 2026-11-05 11:00 Europe/Budapest (UTC+01:00) – 2026-11-05 12:00 Europe/Budapest (UTC+01:00)\n#1 \"Review\" 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 11:00 Europe/Budapest (UTC+01:00)"
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.\nComplete lexicographic earliest joint schedule in listed order. Existing events remain fixed.\n#0 \"Workshop\" 2026-11-05 11:00 Europe/Budapest (UTC+01:00) – 2026-11-05 12:00 Europe/Budapest (UTC+01:00)\n#1 \"Review\" 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 11:00 Europe/Budapest (UTC+01:00)"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 9,
+      "mode": "symbolic",
+      "stopReason": "interpretation_requires_supervision",
+      "lastStage": "initial",
+      "status": "interpretation",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20751,
+        "output_tokens": 911,
+        "total_tokens": 21662,
+        "cached_tokens": 0,
+        "reasoning_tokens": 605
+      },
+      "durationSeconds": 29.696,
+      "finishedAt": "2026-10-28T17:37:26.881783+00:00",
+      "success": false,
+      "failureCategory": "interpretation_requires_supervision",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": false,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 9,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:36:59.559230+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [],
+      "initialIds": [],
+      "finalIds": [],
+      "turns": [
+        {
+          "sessionId": "sess_067af68ee2c53ba0006ae232be50f8819bbab155db9bd08f04",
+          "turnId": "turn_067af68ee2c53ba0006ae232c4db2c819bae884a93bc0094c7",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20751,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 911,
+            "output_tokens_details": {
+              "reasoning_tokens": 605
+            },
+            "total_tokens": 21662
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within interval from thursday at 09:00 to thursday at 11:00 with title \"Review\"], choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 10,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 20751,
+        "output_tokens": 281,
+        "total_tokens": 21032,
+        "cached_tokens": 0,
+        "reasoning_tokens": 165
+      },
+      "durationSeconds": 32.306,
+      "finishedAt": "2026-10-28T17:37:59.279179+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 10,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:37:29.079372+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [],
+      "finalIds": [
+        "a5702365d01f4181b5dd3b212229ffab",
+        "e66494872e2d4ec6a51d0a2446a1d243"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_04b0fd44947e62d2006ae232dc35588198b5998c8b95e80c4b",
+          "turnId": "turn_04b0fd44947e62d2006ae232dfaedc8198927ba16279932af3",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 20751,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 281,
+            "output_tokens_details": {
+              "reasoning_tokens": 165
+            },
+            "total_tokens": 21032
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Evaluation completed.\nschedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.\nComplete lexicographic earliest joint schedule in listed order. Existing events remain fixed.\n#0 \"Workshop\" 2026-11-05 11:00 Europe/Budapest (UTC+01:00) – 2026-11-05 12:00 Europe/Budapest (UTC+01:00)\n#1 \"Review\" 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 11:00 Europe/Budapest (UTC+01:00)"
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "feedback": [
+        "schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.\nComplete lexicographic earliest joint schedule in listed order. Existing events remain fixed.\n#0 \"Workshop\" 2026-11-05 11:00 Europe/Budapest (UTC+01:00) – 2026-11-05 12:00 Europe/Budapest (UTC+01:00)\n#1 \"Review\" 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 11:00 Europe/Budapest (UTC+01:00)"
+      ],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 60 minutes within thursday morning with title \"Workshop\"; event lasting 120 minutes within starting at thursday at 09:00 with title \"Review\"], choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 1,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 65404,
+        "output_tokens": 1205,
+        "total_tokens": 66609,
+        "cached_tokens": 46763,
+        "reasoning_tokens": 622
+      },
+      "durationSeconds": 65.844,
+      "finishedAt": "2026-10-28T17:23:24.322760+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 1,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:22:21.832645+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [],
+      "finalIds": [
+        "d2ed9c755283424da182bb2bf14a802f",
+        "b9d3999499dd476f89a3b3303f79d7d4"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0a2d9a5f3be0d37d006ae22f5265dc819b96e3b0a625fac17b",
+          "turnId": "turn_0a2d9a5f3be0d37d006ae22f566a64819b85d453b0af8cfa41",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 65404,
+            "input_tokens_details": {
+              "cached_tokens": 46763
+            },
+            "output_tokens": 1205,
+            "output_tokens_details": {
+              "reasoning_tokens": 622
+            },
+            "total_tokens": 66609
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Scheduled and verified both events for Thursday, November 5, 2026 (Budapest time). The week had no existing in-scope events. **Review:** 09:00–11:00. **Workshop:** 11:00–12:00, the earliest morning start that avoids overlapping the Review."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 2,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 65139,
+        "output_tokens": 1089,
+        "total_tokens": 66228,
+        "cached_tokens": 46612,
+        "reasoning_tokens": 459
+      },
+      "durationSeconds": 58.847,
+      "finishedAt": "2026-10-28T17:25:50.557192+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 2,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:24:54.546183+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [],
+      "finalIds": [
+        "d8eba45c0e5a406184172d0f167aeefe",
+        "b5aa7ee0e419458dbc9ac8625c72a218"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0c5b00fa14400093006ae22fea5d0c81998be0925881b38110",
+          "turnId": "turn_0c5b00fa14400093006ae22fee0ee481999f85218530cce54e",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 65139,
+            "input_tokens_details": {
+              "cached_tokens": 46612
+            },
+            "output_tokens": 1089,
+            "output_tokens_details": {
+              "reasoning_tokens": 459
+            },
+            "total_tokens": 66228
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Both events were created and verified for Thursday, November 5 (Budapest time):\n\n- Review: 09:00–11:00\n- Workshop: 11:00–12:00\n\nThe Workshop is at the earliest possible time within Thursday morning that avoids overlapping the Review."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 3,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 65167,
+        "output_tokens": 1113,
+        "total_tokens": 66280,
+        "cached_tokens": 46633,
+        "reasoning_tokens": 471
+      },
+      "durationSeconds": 69.931,
+      "finishedAt": "2026-10-28T17:27:00.638142+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 3,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:25:53.978522+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [],
+      "finalIds": [
+        "6be4ce4fc4204860800cbdfe368c4bad",
+        "c881ba76b0c54321b206a95d62fcad5d"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0186c53c588e0eea006ae23025cf98819a845794cafc7b707b",
+          "turnId": "turn_0186c53c588e0eea006ae2302a2078819a9ad1d1ea44110d5d",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 65167,
+            "input_tokens_details": {
+              "cached_tokens": 46633
+            },
+            "output_tokens": 1113,
+            "output_tokens_details": {
+              "reasoning_tokens": 471
+            },
+            "total_tokens": 66280
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Both events are confirmed for Thursday, November 5, 2026 (Europe/Budapest): Review, 09:00–11:00; Workshop, 11:00–12:00. This is the earliest feasible Workshop start given the fixed Review time, and the events do not overlap."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 4,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 81587,
+        "output_tokens": 1311,
+        "total_tokens": 82898,
+        "cached_tokens": 62855,
+        "reasoning_tokens": 689
+      },
+      "durationSeconds": 68.579,
+      "finishedAt": "2026-10-28T17:29:20.033615+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 4,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:28:14.570807+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [],
+      "finalIds": [
+        "09b52c4a909840199158c4521ba6a7e4",
+        "4c6a1adcad1d46f8b02c1a2562ca056c"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0210b5288612b4b0006ae230b2cce8819b8f063056ad050b69",
+          "turnId": "turn_0210b5288612b4b0006ae230b75454819b82d77de993ccb949",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 81587,
+            "input_tokens_details": {
+              "cached_tokens": 62855
+            },
+            "output_tokens": 1311,
+            "output_tokens_details": {
+              "reasoning_tokens": 689
+            },
+            "total_tokens": 82898
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Both events are confirmed for Thursday, November 5 (Europe/Budapest):\n\n- Workshop: 11:00–12:00\n- Review: 09:00–11:00\n\nThe calendar had no existing events in the selected week. Since the Review occupies 09:00–11:00 and the events cannot overlap, 11:00 is the earliest available Workshop start within Thursday morning. The events meet at 11:00 without overlapping."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 5,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 65154,
+        "output_tokens": 1215,
+        "total_tokens": 66369,
+        "cached_tokens": 46544,
+        "reasoning_tokens": 552
+      },
+      "durationSeconds": 61.548,
+      "finishedAt": "2026-10-28T17:30:21.692237+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 5,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:29:22.585260+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [],
+      "finalIds": [
+        "8c79324be7754d9a86dcbee965173ca9",
+        "9703e65c6f7240c59aba11201c8a154e"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_00cabf25c1e236b3006ae230f67f48819881badb7a5201364b",
+          "turnId": "turn_00cabf25c1e236b3006ae230fba8f8819887af6feb61a165b6",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 65154,
+            "input_tokens_details": {
+              "cached_tokens": 46544
+            },
+            "output_tokens": 1215,
+            "output_tokens_details": {
+              "reasoning_tokens": 552
+            },
+            "total_tokens": 66369
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Scheduled and verified for Thursday, November 5, in Europe/Budapest: Review, 09:00–11:00; Workshop, 11:00–12:00. The selected week had no existing in-scope events, and the two events are adjacent without overlap."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 6,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 65274,
+        "output_tokens": 1192,
+        "total_tokens": 66466,
+        "cached_tokens": 46642,
+        "reasoning_tokens": 533
+      },
+      "durationSeconds": 67.177,
+      "finishedAt": "2026-10-28T17:32:39.526145+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 6,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:31:34.318731+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [],
+      "finalIds": [
+        "a54e3606ef2c43999ba3634cafd955b0",
+        "5656029c8d3d49ed8be370a977a0bfdc"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0ac1658aa3d8b9fe006ae2317aa3a4819888b6286fadaff6fa",
+          "turnId": "turn_0ac1658aa3d8b9fe006ae2318989c48198bc1da2dc71751ef4",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 65274,
+            "input_tokens_details": {
+              "cached_tokens": 46642
+            },
+            "output_tokens": 1192,
+            "output_tokens_details": {
+              "reasoning_tokens": 533
+            },
+            "total_tokens": 66466
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Both events were created and verified for Thursday, November 5, 2026 (Europe/Budapest): Workshop, 11:00–12:00; Review, 09:00–11:00. The selected week had no other in-scope timed events. This is the earliest Workshop start that avoids the fixed Review interval while staying within Thursday morning."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 7,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 65345,
+        "output_tokens": 1229,
+        "total_tokens": 66574,
+        "cached_tokens": 46715,
+        "reasoning_tokens": 570
+      },
+      "durationSeconds": 65.73,
+      "finishedAt": "2026-10-28T17:33:45.342288+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 7,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:32:42.242857+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [],
+      "finalIds": [
+        "d5ec19442864457c8ece1ac7e0b0e881",
+        "61258972d6064d139a4426f10f20445b"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_02ae23f8b60d54ec006ae231be12a4819a9430188321a0897d",
+          "turnId": "turn_02ae23f8b60d54ec006ae231c9016c819ab13370dc37fd2974",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 65345,
+            "input_tokens_details": {
+              "cached_tokens": 46715
+            },
+            "output_tokens": 1229,
+            "output_tokens_details": {
+              "reasoning_tokens": 570
+            },
+            "total_tokens": 66574
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Both events were created and verified for Thursday, November 5, 2026 (Budapest time): Review, 09:00–11:00; Workshop, 11:00–12:00. With no other in-scope timed events that week, this is the earliest Workshop start that avoids overlap with the fixed 09:00 Review."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 8,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 65064,
+        "output_tokens": 1171,
+        "total_tokens": 66235,
+        "cached_tokens": 46530,
+        "reasoning_tokens": 524
+      },
+      "durationSeconds": 57.579,
+      "finishedAt": "2026-10-28T17:35:52.671979+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 8,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:34:57.578781+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [],
+      "finalIds": [
+        "2cbc70effadb4ebbac987cc815023fb1",
+        "c79506f797d449769b0e427962d6cc39"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0649489aceed0e0f006ae23244f5d88198837134aba7b378e3",
+          "turnId": "turn_0649489aceed0e0f006ae232489d3c81989d6ea525b4106572",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 65064,
+            "input_tokens_details": {
+              "cached_tokens": 46530
+            },
+            "output_tokens": 1171,
+            "output_tokens_details": {
+              "reasoning_tokens": 524
+            },
+            "total_tokens": 66235
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Both events are confirmed for Thursday, November 5 (Europe/Budapest):\n\n- Workshop: 11:00–12:00\n- Review: 09:00–11:00\n\nThe selected week had no listed events. The Review’s fixed 09:00–11:00 slot means 11:00 is the earliest nonoverlapping Workshop start within Thursday morning."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 9,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 65031,
+        "output_tokens": 1104,
+        "total_tokens": 66135,
+        "cached_tokens": 46504,
+        "reasoning_tokens": 516
+      },
+      "durationSeconds": 64.302,
+      "finishedAt": "2026-10-28T17:36:57.088354+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 9,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:35:55.535196+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [],
+      "finalIds": [
+        "e8de88f84a6240bc8d931b52eefff0cf",
+        "86e67d2b7907445ca79f5a761fbf262e"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0f84814d5e0a07a3006ae2327fb5cc819a8f015377b5727c8b",
+          "turnId": "turn_0f84814d5e0a07a3006ae23283f248819abadc7e963443175b",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 65031,
+            "input_tokens_details": {
+              "cached_tokens": 46504
+            },
+            "output_tokens": 1104,
+            "output_tokens_details": {
+              "reasoning_tokens": 516
+            },
+            "total_tokens": 66135
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Both events are confirmed for Thursday, November 5 (Europe/Budapest):\n\n- Review: 09:00–11:00\n- Workshop: 11:00–12:00\n\nThe selected week had no existing events. The Review’s fixed 09:00 start makes 11:00 the earliest Workshop start that fits the morning without overlap."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    },
+    {
+      "case": 8,
+      "repetition": 10,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 65243,
+        "output_tokens": 1145,
+        "total_tokens": 66388,
+        "cached_tokens": 46592,
+        "reasoning_tokens": 444
+      },
+      "durationSeconds": 62.164,
+      "finishedAt": "2026-10-28T17:39:01.534018+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 8,
+        "repetition": 10,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:38:01.818351+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T12:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [],
+      "finalIds": [
+        "c2f4d3b6f10b4331897ff43db32f1801",
+        "bf4f042e4a0743f1b60f8f9372fdb5da"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0215ad62c5a6aff4006ae232fd47dc8199bddca15ea9f4b47a",
+          "turnId": "turn_0215ad62c5a6aff4006ae23302f8308199a0fc6ff160a84b11",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 65243,
+            "input_tokens_details": {
+              "cached_tokens": 46592
+            },
+            "output_tokens": 1145,
+            "output_tokens_details": {
+              "reasoning_tokens": 444
+            },
+            "total_tokens": 66388
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Both events were created and verified for Thursday, November 5, 2026 (Europe/Budapest): Review, 09:00–11:00; Workshop, 11:00–12:00. The Workshop is at its earliest feasible start within Thursday morning."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule a 60-minute \"Workshop\" within Thursday morning and a 120-minute \"Review\" starting Thursday at 09:00. Prioritize the earliest possible Workshop start, then the earliest Review start.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 2,
+      "remoteCancellation": []
+    }
+  ]
+}

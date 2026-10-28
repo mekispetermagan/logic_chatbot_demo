@@ -1,0 +1,4398 @@
+{
+  "case": 10,
+  "specification": {
+    "name": "Joint scheduling across alternative days",
+    "level": "Very complex",
+    "events": [
+      {
+        "day": 4,
+        "title": "Existing meeting",
+        "start": "09:00",
+        "end": "09:30",
+        "importance": 1,
+        "location": "",
+        "description": ""
+      },
+      {
+        "day": 5,
+        "title": "Existing appointment",
+        "start": "09:00",
+        "end": "10:00",
+        "importance": 2,
+        "location": "",
+        "description": ""
+      }
+    ],
+    "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+  },
+  "runs": [
+    {
+      "case": 10,
+      "repetition": 1,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "limited",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21036,
+        "output_tokens": 317,
+        "total_tokens": 21353,
+        "cached_tokens": 0,
+        "reasoning_tokens": 145
+      },
+      "durationSeconds": 217.025,
+      "finishedAt": "2026-10-28T16:20:19.526681+00:00",
+      "success": false,
+      "failureCategory": "symbolic_search_limit",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 1,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "startedAt": "2026-10-28T16:19:10.538726+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "0a9a09a2a54b4210b724336cb390a046",
+        "bf2bc0b522ad4196b351cba475dd3cfe"
+      ],
+      "finalIds": [
+        "0a9a09a2a54b4210b724336cb390a046",
+        "bf2bc0b522ad4196b351cba475dd3cfe"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_048f815c4f0bd37f006ae2208ef57481999f79e681359ffa68",
+          "turnId": "turn_048f815c4f0bd37f006ae2209261848199a56af88d83e66315",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21036,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 317,
+            "output_tokens_details": {
+              "reasoning_tokens": 145
+            },
+            "total_tokens": 21353
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Joint search limit reached; feasibility unresolved."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "limited"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 2,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "limited",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21036,
+        "output_tokens": 275,
+        "total_tokens": 21311,
+        "cached_tokens": 0,
+        "reasoning_tokens": 101
+      },
+      "durationSeconds": 257.896,
+      "finishedAt": "2026-10-28T16:31:00.268841+00:00",
+      "success": false,
+      "failureCategory": "symbolic_search_limit",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 2,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "operatorHash": "b4f2a696822b7030f4b72982d01c4e07e011fedebcc90239aba234a89e9aa79e",
+        "startedAt": "2026-10-28T16:29:44.025031+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "e76b032543734ca98e85fffe4fff51cc",
+        "bdae77b4e52d4c538d386a78b0584423"
+      ],
+      "finalIds": [
+        "e76b032543734ca98e85fffe4fff51cc",
+        "bdae77b4e52d4c538d386a78b0584423"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0da45712b81152cd006ae22308f1d88199911a89f8352e803e",
+          "turnId": "turn_0da45712b81152cd006ae2230cd828819983a1da64bc181b18",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21036,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 275,
+            "output_tokens_details": {
+              "reasoning_tokens": 101
+            },
+            "total_tokens": 21311
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Joint search limit reached; feasibility unresolved."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "limited"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 3,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "limited",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21036,
+        "output_tokens": 347,
+        "total_tokens": 21383,
+        "cached_tokens": 0,
+        "reasoning_tokens": 172
+      },
+      "durationSeconds": 93.677,
+      "finishedAt": "2026-10-28T16:49:04.845311+00:00",
+      "success": false,
+      "failureCategory": "symbolic_search_limit",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 3,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:47:48.640843+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "dhfjem4aqahik3r4nntlkjtbg0",
+        "ens154t6m4dna48dn5smo33rc8"
+      ],
+      "finalIds": [
+        "dhfjem4aqahik3r4nntlkjtbg0",
+        "ens154t6m4dna48dn5smo33rc8"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0e318a08d799b017006ae227417bd08198b4e9213499958f26",
+          "turnId": "turn_0e318a08d799b017006ae2274579148198abdd64806f3af65b",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21036,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 347,
+            "output_tokens_details": {
+              "reasoning_tokens": 172
+            },
+            "total_tokens": 21383
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Joint search limit reached; feasibility unresolved."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "limited"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 4,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "limited",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21036,
+        "output_tokens": 393,
+        "total_tokens": 21429,
+        "cached_tokens": 0,
+        "reasoning_tokens": 212
+      },
+      "durationSeconds": 85.17,
+      "finishedAt": "2026-10-28T16:50:30.531966+00:00",
+      "success": false,
+      "failureCategory": "symbolic_search_limit",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 4,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:49:16.996217+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "jca875u7fd7flk6dlptce35ufo",
+        "f20f6pglg0a0tdg7j6652rj0rk"
+      ],
+      "finalIds": [
+        "jca875u7fd7flk6dlptce35ufo",
+        "f20f6pglg0a0tdg7j6652rj0rk"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0f9fc5ccb6d3d8e5006ae2279ac91c8199b390888dd63147d2",
+          "turnId": "turn_0f9fc5ccb6d3d8e5006ae227a1af708199b88c919647e2c37f",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21036,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 393,
+            "output_tokens_details": {
+              "reasoning_tokens": 212
+            },
+            "total_tokens": 21429
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Joint search limit reached; feasibility unresolved."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "limited"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 5,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "limited",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21036,
+        "output_tokens": 291,
+        "total_tokens": 21327,
+        "cached_tokens": 0,
+        "reasoning_tokens": 105
+      },
+      "durationSeconds": 26.007,
+      "finishedAt": "2026-10-28T17:22:33.975901+00:00",
+      "success": false,
+      "failureCategory": "symbolic_search_limit",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 5,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:22:12.993784+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "i80fftcq4hma2c4p2tde7kihd4",
+        "ng7v9bu3bsr5100hngsqkn72r8"
+      ],
+      "finalIds": [
+        "i80fftcq4hma2c4p2tde7kihd4",
+        "ng7v9bu3bsr5100hngsqkn72r8"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0f892033435f70ee006ae22f47f648819893467c36a754901c",
+          "turnId": "turn_0f892033435f70ee006ae22f4bd8e881988683c914c16bf5aa",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21036,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 291,
+            "output_tokens_details": {
+              "reasoning_tokens": 105
+            },
+            "total_tokens": 21327
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Joint search limit reached; feasibility unresolved."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "limited"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 6,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "limited",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21036,
+        "output_tokens": 273,
+        "total_tokens": 21309,
+        "cached_tokens": 0,
+        "reasoning_tokens": 95
+      },
+      "durationSeconds": 29.831,
+      "finishedAt": "2026-10-28T17:23:03.909210+00:00",
+      "success": false,
+      "failureCategory": "symbolic_search_limit",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 6,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:22:37.596542+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "2shfsj01qnps0h2r75rj98c1jk",
+        "03rshqgqmebs2c93mr594u4h7k"
+      ],
+      "finalIds": [
+        "2shfsj01qnps0h2r75rj98c1jk",
+        "03rshqgqmebs2c93mr594u4h7k"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0f4116498ad6512c006ae22f60610c819bb7a359b7d094b30d",
+          "turnId": "turn_0f4116498ad6512c006ae22f657854819ba0bb485a8df44d14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21036,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 273,
+            "output_tokens_details": {
+              "reasoning_tokens": 95
+            },
+            "total_tokens": 21309
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Joint search limit reached; feasibility unresolved."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "limited"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 7,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "limited",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21036,
+        "output_tokens": 333,
+        "total_tokens": 21369,
+        "cached_tokens": 0,
+        "reasoning_tokens": 137
+      },
+      "durationSeconds": 28.779,
+      "finishedAt": "2026-10-28T17:26:36.139665+00:00",
+      "success": false,
+      "failureCategory": "symbolic_search_limit",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 7,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:26:13.624115+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "2tuo3sjuo462dbbgjitaibtln8",
+        "tfalb0qip32067mlq3nf82i8v0"
+      ],
+      "finalIds": [
+        "2tuo3sjuo462dbbgjitaibtln8",
+        "tfalb0qip32067mlq3nf82i8v0"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0e272bbd2985dcc7006ae23039a0448199ad47780c1e659b58",
+          "turnId": "turn_0e272bbd2985dcc7006ae2303e974481999ae44f2e07954a01",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21036,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 333,
+            "output_tokens_details": {
+              "reasoning_tokens": 137
+            },
+            "total_tokens": 21369
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Joint search limit reached; feasibility unresolved."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "limited"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 8,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "limited",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21036,
+        "output_tokens": 336,
+        "total_tokens": 21372,
+        "cached_tokens": 0,
+        "reasoning_tokens": 157
+      },
+      "durationSeconds": 27.404,
+      "finishedAt": "2026-10-28T17:27:03.631648+00:00",
+      "success": false,
+      "failureCategory": "symbolic_search_limit",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 8,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:26:39.598291+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "kjbe27kjd622040dgsjm8oq0v4",
+        "sm13i4c1io2ejp1gg444ejvmj4"
+      ],
+      "finalIds": [
+        "kjbe27kjd622040dgsjm8oq0v4",
+        "sm13i4c1io2ejp1gg444ejvmj4"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0c3c9317ef871448006ae2305280e08198bab3ca65141632a2",
+          "turnId": "turn_0c3c9317ef871448006ae23055e5dc81989d115ee2df853d12",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21036,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 336,
+            "output_tokens_details": {
+              "reasoning_tokens": 157
+            },
+            "total_tokens": 21372
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Joint search limit reached; feasibility unresolved."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "limited"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 9,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "limited",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21036,
+        "output_tokens": 378,
+        "total_tokens": 21414,
+        "cached_tokens": 0,
+        "reasoning_tokens": 197
+      },
+      "durationSeconds": 27.535,
+      "finishedAt": "2026-10-28T17:30:42.496416+00:00",
+      "success": false,
+      "failureCategory": "symbolic_search_limit",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 9,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:30:20.042542+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "d9ngt067ibp9mgk81ns92hp220",
+        "nl36dbdqnlhc0fel85b3th69t4"
+      ],
+      "finalIds": [
+        "d9ngt067ibp9mgk81ns92hp220",
+        "nl36dbdqnlhc0fel85b3th69t4"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0e323e3e2836eaeb006ae2312f3c5c819a94af8549a661eaa8",
+          "turnId": "turn_0e323e3e2836eaeb006ae231334584819a8779c134b22c160c",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21036,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 378,
+            "output_tokens_details": {
+              "reasoning_tokens": 197
+            },
+            "total_tokens": 21414
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Joint search limit reached; feasibility unresolved."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "limited"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 10,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "limited",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21036,
+        "output_tokens": 325,
+        "total_tokens": 21361,
+        "cached_tokens": 0,
+        "reasoning_tokens": 146
+      },
+      "durationSeconds": 26.756,
+      "finishedAt": "2026-10-28T17:31:09.358046+00:00",
+      "success": false,
+      "failureCategory": "symbolic_search_limit",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": false,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 10,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:30:46.204301+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "jche1cr81ebgrihnb484g3t3qk",
+        "a77n14dk6rb2ps49u6g28lkq3g"
+      ],
+      "finalIds": [
+        "jche1cr81ebgrihnb484g3t3qk",
+        "a77n14dk6rb2ps49u6g28lkq3g"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0ab5943e5c1bf55b006ae23148d848819ba0b05153fc296e0a",
+          "turnId": "turn_0ab5943e5c1bf55b006ae2314b96bc819bb326607dd87098a9",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21036,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 325,
+            "output_tokens_details": {
+              "reasoning_tokens": 146
+            },
+            "total_tokens": 21361
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). Joint search limit reached; feasibility unresolved."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+        "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "limited"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 1,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 106396,
+        "output_tokens": 1753,
+        "total_tokens": 108149,
+        "cached_tokens": 84125,
+        "reasoning_tokens": 721
+      },
+      "durationSeconds": 154.34,
+      "finishedAt": "2026-10-28T16:16:42.183305+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 1,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "startedAt": "2026-10-28T16:14:32.912061+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "af5a2f50b016415eae6205f6e81eec0e",
+        "525b7d44950d4710845b7e138c4d5cee"
+      ],
+      "finalIds": [
+        "a821f776d3a34b5a9b7b717d9e2cf789",
+        "72606e495bf14c4aa7f59632ba256069",
+        "af5a2f50b016415eae6205f6e81eec0e",
+        "de51f57ac86e4e76bfb498c2a57930af",
+        "525b7d44950d4710845b7e138c4d5cee",
+        "ee164a7ca3154adf9b220e928ee8d78e"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0e03fcad61c10b1e006ae21f72731c819b904e7b43bd409eda",
+          "turnId": "turn_0e03fcad61c10b1e006ae21f75faec819b81a2de00779a5f6b",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 106396,
+            "input_tokens_details": {
+              "cached_tokens": 84125
+            },
+            "output_tokens": 1753,
+            "output_tokens_details": {
+              "reasoning_tokens": 721
+            },
+            "total_tokens": 108149
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "All four events were created and verified in Calendar. They are on distinct dates, in the requested listed-order priority, and fit their morning windows:\n\n- Workshop — Wednesday, November 4, 09:30–11:00. Its earliest eligible Wednesday slot follows the existing 09:00–09:30 meeting.\n- Review — Monday, November 2, 09:00–11:00.\n- Training — Thursday, November 5, 10:00–11:00. Its earliest eligible Thursday slot follows the existing 09:00–10:00 appointment.\n- Interview — Tuesday, November 3, 09:00–10:00."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 4,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 2,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 181328,
+        "output_tokens": 2379,
+        "total_tokens": 183707,
+        "cached_tokens": 158294,
+        "reasoning_tokens": 1179
+      },
+      "durationSeconds": 331.468,
+      "finishedAt": "2026-10-28T16:42:26.872550+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 2,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:37:12.158137+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "tk202uqpj9e73isblnvqf7895g",
+        "vbbia88nfadf32cpp83srm6jo4"
+      ],
+      "finalIds": [
+        "670ca4a2898d4f98afe9490dba6ed8be",
+        "62e45963680b41b6aec28ed9f52011ac",
+        "tk202uqpj9e73isblnvqf7895g",
+        "bd6f22302d884a2384861bf386566e8e",
+        "vbbia88nfadf32cpp83srm6jo4",
+        "b66de852603e451c9c32780fa17ac73d"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_03f83043263e51fd006ae224d07b8c81999d785f8fe4d7ebf9",
+          "turnId": "turn_03f83043263e51fd006ae224d3471481998d18653a10586893",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 181328,
+            "input_tokens_details": {
+              "cached_tokens": 158294
+            },
+            "output_tokens": 2379,
+            "output_tokens_details": {
+              "reasoning_tokens": 1179
+            },
+            "total_tokens": 183707
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "All four events were created and verified in Europe/Budapest time, on different dates:\n\n- Workshop — Wednesday, November 4, 09:30–11:00\n- Review — Monday, November 2, 09:00–11:00\n- Training — Thursday, November 5, 10:00–11:00\n- Interview — Tuesday, November 3, 09:00–10:00\n\nThis schedule prioritizes earliest starts in the listed order. Workshop starts after Wednesday’s existing 09:00–09:30 meeting; Training starts after Thursday’s existing 09:00–10:00 appointment."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 4,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 3,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 161958,
+        "output_tokens": 2333,
+        "total_tokens": 164291,
+        "cached_tokens": 140023,
+        "reasoning_tokens": 992
+      },
+      "durationSeconds": 301.969,
+      "finishedAt": "2026-10-28T16:47:30.193405+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 3,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:42:45.334941+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "odt4obc0hcmmg5hfo1ku3g2muk",
+        "3077hufvfcl6dqlms4bn373pjo"
+      ],
+      "finalIds": [
+        "827e2509d6254f00994a4d40c401f9df",
+        "297da46fe8ab4f09af225c678a5d8deb",
+        "odt4obc0hcmmg5hfo1ku3g2muk",
+        "c8ebc3b9b13444619da148a75a1fa623",
+        "3077hufvfcl6dqlms4bn373pjo",
+        "82451ae161c64988b07ac2e0c309ad2c"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0cf84bbea56412f6006ae226211544819b818f7d82baaef488",
+          "turnId": "turn_0cf84bbea56412f6006ae22625a6bc819bb7f0fad03f2634ea",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 161958,
+            "input_tokens_details": {
+              "cached_tokens": 140023
+            },
+            "output_tokens": 2333,
+            "output_tokens_details": {
+              "reasoning_tokens": 992
+            },
+            "total_tokens": 164291
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "All four events were created and verified in the selected week (Europe/Budapest), on different dates. This is the earliest-start schedule in the requested listed order that satisfies the date and availability constraints:\n\n- **Workshop:** Wednesday, November 4, 09:30–11:00. The existing meeting occupies 09:00–09:30.\n- **Review:** Monday, November 2, 09:00–11:00.\n- **Training:** Thursday, November 5, 10:00–11:00. The existing appointment occupies 09:00–10:00.\n- **Interview:** Tuesday, November 3, 09:00–10:00.\n\nThe new events are on Monday, Tuesday, Wednesday, and Thursday respectively."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 4,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 4,
+      "mode": "llm-only",
+      "stopReason": "power_loss_interruption",
+      "lastStage": "initial",
+      "status": "applying",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 191879,
+        "output_tokens": 2200,
+        "total_tokens": 194079,
+        "cached_tokens": 173481,
+        "reasoning_tokens": 976
+      },
+      "durationSeconds": null,
+      "finishedAt": null,
+      "recoveredAt": "2026-10-28T17:19:19.155295+00:00",
+      "shutdownRecovery": true,
+      "completionEvidence": null,
+      "success": false,
+      "failureCategory": "power_loss_interruption",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": false,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 4,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:50:43.524686+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "aa4ag0p6kfrkpf1s03mhlk4uj8",
+        "ofqjpoqkblsolgo0pj1pp5s7uc"
+      ],
+      "finalIds": [
+        "61c36a2768944c45a258be59f38f1e13",
+        "1c8f2f5c1e3a462cbc79f2ff92c636d8",
+        "aa4ag0p6kfrkpf1s03mhlk4uj8",
+        "c21a216a0647435cb1425cacfcc7a0f0",
+        "ofqjpoqkblsolgo0pj1pp5s7uc",
+        "b876acc234d1418c96378079236e3bcd"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_00074fb9c39fb7d3006ae227fbf1d48199a91b832af15b7e7a",
+          "turnId": "turn_00074fb9c39fb7d3006ae227ff6adc819998a15d95ae7eacb8",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 191879,
+            "input_tokens_details": {
+              "cached_tokens": 173481
+            },
+            "output_tokens": 2200,
+            "output_tokens_details": {
+              "reasoning_tokens": 976
+            },
+            "total_tokens": 194079
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        }
+      ],
+      "mcpWriteCount": 3,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 5,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 88552,
+        "output_tokens": 1671,
+        "total_tokens": 90223,
+        "cached_tokens": 66337,
+        "reasoning_tokens": 629
+      },
+      "durationSeconds": 92.798,
+      "finishedAt": "2026-10-28T17:22:07.866440+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 5,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:20:41.815398+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "ihf8qjt5a8t6anbankdpnojlnk",
+        "nclsarfr9es2mekbj5hb2effro"
+      ],
+      "finalIds": [
+        "f6f322152de94a419855f753bde5bd59",
+        "ccb8240daa9c4f2ca400e7d0f8b8c87e",
+        "ihf8qjt5a8t6anbankdpnojlnk",
+        "2cbe529d61534abd82ad70259a5dbdc1",
+        "nclsarfr9es2mekbj5hb2effro",
+        "b82ca058176f4d76ad2641c6b6a3c6f5"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0309dcf82f6290f4006ae22eefadac819aba31c2750960b2b9",
+          "turnId": "turn_0309dcf82f6290f4006ae22ef4e370819a845e8cdd2673017a",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 88552,
+            "input_tokens_details": {
+              "cached_tokens": 66337
+            },
+            "output_tokens": 1671,
+            "output_tokens_details": {
+              "reasoning_tokens": 629
+            },
+            "total_tokens": 90223
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "All four events were created and verified in the calendar, on different dates, with the earliest starts possible in the requested listed order:\n\n- Workshop — Wednesday, November 4, 09:30–11:00\n- Review — Monday, November 2, 09:00–11:00\n- Training — Thursday, November 5, 10:00–11:00\n- Interview — Tuesday, November 3, 09:00–10:00\n\nThe existing Wednesday 09:00–09:30 event and Thursday 09:00–10:00 event account for the later starts on those days. The four new events do not overlap one another or those existing events."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 4,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 6,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 89057,
+        "output_tokens": 1828,
+        "total_tokens": 90885,
+        "cached_tokens": 66674,
+        "reasoning_tokens": 801
+      },
+      "durationSeconds": 89.462,
+      "finishedAt": "2026-10-28T17:24:33.510433+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 6,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:23:07.307083+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "1vutoq6j81p7j8ofcoeuihupvg",
+        "k682mhhtoh75hromu5so9h0ceg"
+      ],
+      "finalIds": [
+        "f6b99fb1e04e4eacba0ffd5dc4f61c25",
+        "f1da11d42c314c0fbb93c05abb52c1df",
+        "1vutoq6j81p7j8ofcoeuihupvg",
+        "fb3dca86d21e41c39702ad60e84eb1e3",
+        "k682mhhtoh75hromu5so9h0ceg",
+        "e28645b03cc84eb1a68471cda34b236f"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_042cd34d1f0fab1f006ae22f8070b481999f2ba400f95fca0c",
+          "turnId": "turn_042cd34d1f0fab1f006ae22f8453a881999855a8e9eda6188c",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 89057,
+            "input_tokens_details": {
+              "cached_tokens": 66674
+            },
+            "output_tokens": 1828,
+            "output_tokens_details": {
+              "reasoning_tokens": 801
+            },
+            "total_tokens": 90885
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Created and verified all four events in Europe/Budapest time, each on a different date:\n\n- Review — Monday, November 2, 09:00–11:00\n- Interview — Tuesday, November 3, 09:00–10:00\n- Workshop — Wednesday, November 4, 09:30–11:00\n- Training — Thursday, November 5, 10:00–11:00\n\nThis is the earliest-start schedule in the listed order that fits the requested morning windows and different-date requirement. Workshop starts after Wednesday’s existing 09:00–09:30 meeting; Training starts after Thursday’s existing 09:00–10:00 appointment."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 4,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 7,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 89450,
+        "output_tokens": 1916,
+        "total_tokens": 91366,
+        "cached_tokens": 67022,
+        "reasoning_tokens": 925
+      },
+      "durationSeconds": 93.487,
+      "finishedAt": "2026-10-28T17:26:07.151821+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 7,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:24:37.995740+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "dp0cjni10v3ihg4c49got77gnk",
+        "p6t272j5j5l80idkge63u3qd9s"
+      ],
+      "finalIds": [
+        "987e06a45ed24226a965dbfc63d28f25",
+        "bf77520a37184ebc92dff81fbce3fc4a",
+        "dp0cjni10v3ihg4c49got77gnk",
+        "4d6ac0fe41ae49e6b770fe6f16098da4",
+        "p6t272j5j5l80idkge63u3qd9s",
+        "ceaf22c38c8648e484115963cfdb50f0"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_05b522394674bfad006ae22fda682c81988704fc9319ca6170",
+          "turnId": "turn_05b522394674bfad006ae22fdf1ecc8198a413955d1986e577",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 89450,
+            "input_tokens_details": {
+              "cached_tokens": 67022
+            },
+            "output_tokens": 1916,
+            "output_tokens_details": {
+              "reasoning_tokens": 925
+            },
+            "total_tokens": 91366
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "All four events were created and verified in Europe/Budapest time:\n\n- Workshop — Wednesday, November 4, 09:30–11:00\n- Review — Monday, November 2, 09:00–11:00\n- Training — Thursday, November 5, 10:00–11:00\n- Interview — Tuesday, November 3, 09:00–10:00\n\nThey start on different dates and follow the requested earliest-start priority in listed order. The existing Wednesday 09:00–09:30 meeting and Thursday 09:00–10:00 appointment determine the later starts on those days."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 4,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 8,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 70708,
+        "output_tokens": 1776,
+        "total_tokens": 72484,
+        "cached_tokens": 48606,
+        "reasoning_tokens": 753
+      },
+      "durationSeconds": 87.696,
+      "finishedAt": "2026-10-28T17:28:31.486477+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 8,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:27:07.890627+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "tsjs8om8sp91qkaovfgp8n815k",
+        "hf7bordqmd2mcrhe199fop9pmc"
+      ],
+      "finalIds": [
+        "279a263b12344388975cd3fcdd893ca8",
+        "68394ac843e8476192635725401f98ab",
+        "tsjs8om8sp91qkaovfgp8n815k",
+        "104da272bef8454db957db033162a8e8",
+        "hf7bordqmd2mcrhe199fop9pmc",
+        "be93235fa50c49caa556f69f8ec814c7"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0f549c1c3316cf5b006ae23070dbc4819998bd2a1c5d3be01b",
+          "turnId": "turn_0f549c1c3316cf5b006ae23074cf58819986b713b0179089ea",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 70708,
+            "input_tokens_details": {
+              "cached_tokens": 48606
+            },
+            "output_tokens": 1776,
+            "output_tokens_details": {
+              "reasoning_tokens": 753
+            },
+            "total_tokens": 72484
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "All four events were created and verified in the selected week, on different dates:\n\n- Workshop — Wednesday, November 4, 09:30–11:00\n- Review — Monday, November 2, 09:00–11:00\n- Training — Thursday, November 5, 10:00–11:00\n- Interview — Tuesday, November 3, 09:00–10:00\n\nThis is the earliest-start schedule in the requested listed order: Review and Interview occupy Monday and Tuesday, so Workshop must be Wednesday; different dates then place Training on Thursday. Wednesday’s existing meeting delays Workshop to 09:30, and Thursday’s existing appointment delays Training to 10:00. Existing events were left unchanged."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 4,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 9,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 89018,
+        "output_tokens": 1967,
+        "total_tokens": 90985,
+        "cached_tokens": 66616,
+        "reasoning_tokens": 929
+      },
+      "durationSeconds": 103.256,
+      "finishedAt": "2026-10-28T17:30:14.828967+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 9,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:28:36.103160+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "293g6kfm2tdu7rbof7eo3o1jho",
+        "pvalveul46hbr3sip3p9pnme3c"
+      ],
+      "finalIds": [
+        "b1bd0b1a102942158ee4e787f5b2d4a9",
+        "664dd8d46a82438cab94550c8e472ebf",
+        "293g6kfm2tdu7rbof7eo3o1jho",
+        "91dccf24befe4703b0cad79be2e3765e",
+        "pvalveul46hbr3sip3p9pnme3c",
+        "c9e75fb9e68844ecb2349bd32b020813"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_07a760226c485d2e006ae230c794fc819994927f32f7b80d20",
+          "turnId": "turn_07a760226c485d2e006ae230cc9b8c8199ad8b68533c0575ea",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 89018,
+            "input_tokens_details": {
+              "cached_tokens": 66616
+            },
+            "output_tokens": 1967,
+            "output_tokens_details": {
+              "reasoning_tokens": 929
+            },
+            "total_tokens": 90985
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "Created and verified all four events, each on a different date, in Europe/Budapest time:\n\n- Workshop — Wednesday, November 4, 09:30–11:00\n- Review — Monday, November 2, 09:00–11:00\n- Training — Thursday, November 5, 10:00–11:00\n- Interview — Tuesday, November 3, 09:00–10:00\n\nThis is the earliest-start schedule in the requested listed order that satisfies the different-dates requirement. Workshop starts after the existing Wednesday 09:00–09:30 meeting; Training starts after the existing Thursday 09:00–10:00 appointment. Existing events were left unchanged."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 4,
+      "remoteCancellation": []
+    },
+    {
+      "case": 10,
+      "repetition": 10,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 70826,
+        "output_tokens": 1823,
+        "total_tokens": 72649,
+        "cached_tokens": 48653,
+        "reasoning_tokens": 777
+      },
+      "durationSeconds": 92.52,
+      "finishedAt": "2026-10-28T17:32:41.966381+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 10,
+        "repetition": 10,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:31:12.952494+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Review",
+          "start": "2026-11-02T09:00:00+01:00",
+          "end": "2026-11-02T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Interview",
+          "start": "2026-11-03T09:00:00+01:00",
+          "end": "2026-11-03T10:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing meeting",
+          "start": "2026-11-04T09:00:00+01:00",
+          "end": "2026-11-04T09:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Workshop",
+          "start": "2026-11-04T09:30:00+01:00",
+          "end": "2026-11-04T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Existing appointment",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Training",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T11:00:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "lfm5t0b9u8ibjsks17f1njpq9c",
+        "sq10faqtl42sv4qrrsnf9oln74"
+      ],
+      "finalIds": [
+        "16e3020673654851923603ae9231483b",
+        "3566d00ad8144d0299af30e78f845584",
+        "lfm5t0b9u8ibjsks17f1njpq9c",
+        "277efd2447a44ff7a066a316bbb87bbd",
+        "sq10faqtl42sv4qrrsnf9oln74",
+        "e63eabf5ebd14c25afa0835ab50deb42"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0662bdf9382c8218006ae231646684819a8ed667cdc9c4ffdc",
+          "turnId": "turn_0662bdf9382c8218006ae23169bd04819abc4a527e8c201368",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 70826,
+            "input_tokens_details": {
+              "cached_tokens": 48653
+            },
+            "output_tokens": 1823,
+            "output_tokens_details": {
+              "reasoning_tokens": 777
+            },
+            "total_tokens": 72649
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning."
+        },
+        {
+          "role": "machine",
+          "text": "The agent proposed Calendar tool calls. Review and approve the exact list before execution. No writes in this list have run."
+        },
+        {
+          "role": "machine",
+          "text": "All approved primitive calls were read back and verified. This verifies execution, not the agent’s reasoning."
+        },
+        {
+          "role": "machine",
+          "text": "All four events were created and verified in Calendar (Europe/Budapest):\n\n- Workshop — Wednesday, 4 November, 09:30–11:00\n- Review — Monday, 2 November, 09:00–11:00\n- Training — Thursday, 5 November, 10:00–11:00\n- Interview — Tuesday, 3 November, 09:00–10:00\n\nThey start on four different dates and fit within their requested morning windows. The date assignments follow the earliest-start priority while allowing a complete schedule: Review requires Monday, Interview requires Tuesday, so Workshop must be Wednesday and Training Thursday. Existing events occupy Wednesday 09:00–09:30 and Thursday 09:00–10:00, making 09:30 and 10:00 the earliest available starts on those days."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Jointly schedule these events on different dates, prioritizing their earliest starts in this listed order: \"Workshop\", 90 minutes, Monday or Tuesday or Wednesday morning; \"Review\", 120 minutes, Monday morning; \"Training\", 60 minutes, Wednesday or Thursday morning; \"Interview\", 60 minutes, Tuesday morning.",
+          "key": null,
+          "value": null,
+          "status": "review"
+        },
+        {
+          "type": "accept",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 4,
+      "remoteCancellation": []
+    }
+  ]
+}

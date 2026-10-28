@@ -1,0 +1,3945 @@
+{
+  "case": 9,
+  "specification": {
+    "name": "Refuse insufficient movement permission",
+    "level": "Complex",
+    "events": [
+      {
+        "day": 5,
+        "title": "Anchor",
+        "start": "09:00",
+        "end": "10:00",
+        "importance": 2,
+        "location": "",
+        "description": ""
+      },
+      {
+        "day": 5,
+        "title": "Review",
+        "start": "10:00",
+        "end": "10:30",
+        "importance": 1,
+        "location": "",
+        "description": ""
+      },
+      {
+        "day": 5,
+        "title": "Administration",
+        "start": "11:00",
+        "end": "11:30",
+        "importance": 0,
+        "location": "",
+        "description": ""
+      }
+    ],
+    "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+    "threshold": 0
+  },
+  "runs": [
+    {
+      "case": 9,
+      "repetition": 1,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "error",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21025,
+        "output_tokens": 212,
+        "total_tokens": 21237,
+        "cached_tokens": 0,
+        "reasoning_tokens": 88
+      },
+      "durationSeconds": 114.987,
+      "finishedAt": "2026-10-28T16:16:02.455742+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 1,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "startedAt": "2026-10-28T16:14:41.461780+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "ded690e040ea422e9e4402c3d7390e5d",
+        "50ecb77ffe0c4dd0bbbbb0227de93d47",
+        "c1edab1062284fb0ad3b6835f0b310b9"
+      ],
+      "finalIds": [
+        "ded690e040ea422e9e4402c3d7390e5d",
+        "50ecb77ffe0c4dd0bbbbb0227de93d47",
+        "c1edab1062284fb0ad3b6835f0b310b9"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0e14549fcad11c0f006ae21f76b160819996fd736f939d0a15",
+          "turnId": "turn_0e14549fcad11c0f006ae21f7bf10c8199a995460a3cb47049",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21025,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 212,
+            "output_tokens_details": {
+              "reasoning_tokens": 88
+            },
+            "total_tokens": 21237
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). No solution exists within the stated grid, date/period and movement constraints. Revise a constraint explicitly."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal.",
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "error"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 2,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "error",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21025,
+        "output_tokens": 185,
+        "total_tokens": 21210,
+        "cached_tokens": 0,
+        "reasoning_tokens": 86
+      },
+      "durationSeconds": 309.043,
+      "finishedAt": "2026-10-28T16:31:46.776038+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 2,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "operatorHash": "b4f2a696822b7030f4b72982d01c4e07e011fedebcc90239aba234a89e9aa79e",
+        "startedAt": "2026-10-28T16:30:43.681372+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "04bca50ab3bc41f68417e772db23302e",
+        "413cb0a17ae1401fb0b341c317e959d1",
+        "d30340f81e8e4d5fb78ddbc6329c4726"
+      ],
+      "finalIds": [
+        "04bca50ab3bc41f68417e772db23302e",
+        "413cb0a17ae1401fb0b341c317e959d1",
+        "d30340f81e8e4d5fb78ddbc6329c4726"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_06c453d12987b2fd006ae223422fc0819a8885538198d7671b",
+          "turnId": "turn_06c453d12987b2fd006ae223483474819a807c44ada7a71461",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21025,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 185,
+            "output_tokens_details": {
+              "reasoning_tokens": 86
+            },
+            "total_tokens": 21210
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). No solution exists within the stated grid, date/period and movement constraints. Revise a constraint explicitly."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal.",
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "error"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 3,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "error",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21025,
+        "output_tokens": 185,
+        "total_tokens": 21210,
+        "cached_tokens": 0,
+        "reasoning_tokens": 87
+      },
+      "durationSeconds": 79.135,
+      "finishedAt": "2026-10-28T16:38:14.247388+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 3,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:37:13.326313+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "r68td1kfqge6joisqlcneokojc",
+        "d73t08cr8ucask3e68qtvn6bi8",
+        "3tnafsgh2sphevt4vfkjpkgru4"
+      ],
+      "finalIds": [
+        "r68td1kfqge6joisqlcneokojc",
+        "d73t08cr8ucask3e68qtvn6bi8",
+        "3tnafsgh2sphevt4vfkjpkgru4"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0ecf7fe677d9120b006ae224ca2b4c819a82311a3bf1751293",
+          "turnId": "turn_0ecf7fe677d9120b006ae224ccffc8819aa12303eadf8b4def",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21025,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 185,
+            "output_tokens_details": {
+              "reasoning_tokens": 87
+            },
+            "total_tokens": 21210
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). No solution exists within the stated grid, date/period and movement constraints. Revise a constraint explicitly."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal.",
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "error"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 4,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "error",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21025,
+        "output_tokens": 160,
+        "total_tokens": 21185,
+        "cached_tokens": 0,
+        "reasoning_tokens": 46
+      },
+      "durationSeconds": 89.743,
+      "finishedAt": "2026-10-28T16:43:06.188610+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 4,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:41:53.868063+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "73974ruapcjctb4berorl245f4",
+        "70a5sn0l2m0cdlujlnsh7u0400",
+        "o4i6f8srqnfjl805igmv12hugg"
+      ],
+      "finalIds": [
+        "73974ruapcjctb4berorl245f4",
+        "70a5sn0l2m0cdlujlnsh7u0400",
+        "o4i6f8srqnfjl805igmv12hugg"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0405f2b021132406006ae225e14094819baa3a11b43817f85e",
+          "turnId": "turn_0405f2b021132406006ae225e9d4e0819ba90da77ccbbc0125",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21025,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 160,
+            "output_tokens_details": {
+              "reasoning_tokens": 46
+            },
+            "total_tokens": 21185
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). No solution exists within the stated grid, date/period and movement constraints. Revise a constraint explicitly."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal.",
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "error"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 5,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "error",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21025,
+        "output_tokens": 182,
+        "total_tokens": 21207,
+        "cached_tokens": 0,
+        "reasoning_tokens": 88
+      },
+      "durationSeconds": 82.084,
+      "finishedAt": "2026-10-28T16:44:29.235116+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 5,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:43:20.554877+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "fco143ro9b0lfusrbq3bp0ogf0",
+        "3sut9aukj6sa0v4g4bbjudui38",
+        "9j91a0736qi32gcsk3qi3c2pf8"
+      ],
+      "finalIds": [
+        "fco143ro9b0lfusrbq3bp0ogf0",
+        "3sut9aukj6sa0v4g4bbjudui38",
+        "9j91a0736qi32gcsk3qi3c2pf8"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_06026bd3954e9ff8006ae2263a2fb48199928f8c82eafe7f1c",
+          "turnId": "turn_06026bd3954e9ff8006ae22640ab608199b884aeda82b3e106",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21025,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 182,
+            "output_tokens_details": {
+              "reasoning_tokens": 88
+            },
+            "total_tokens": 21207
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). No solution exists within the stated grid, date/period and movement constraints. Revise a constraint explicitly."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal.",
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "error"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 6,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "error",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21025,
+        "output_tokens": 174,
+        "total_tokens": 21199,
+        "cached_tokens": 0,
+        "reasoning_tokens": 57
+      },
+      "durationSeconds": 74.121,
+      "finishedAt": "2026-10-28T16:49:40.585162+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 6,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:48:44.685832+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "2rde7vo7r0plcbe55fv6l3ntfc",
+        "jvqs7um09abpngqqqb0jlo6lq4",
+        "4skgene4glrhkhgv7at0evvpvs"
+      ],
+      "finalIds": [
+        "2rde7vo7r0plcbe55fv6l3ntfc",
+        "jvqs7um09abpngqqqb0jlo6lq4",
+        "4skgene4glrhkhgv7at0evvpvs"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_07b71c99add0a600006ae2277c0dbc8199a41e02c23bf7a4c4",
+          "turnId": "turn_07b71c99add0a600006ae227805aec8199957bd9986f1fb6a1",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21025,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 174,
+            "output_tokens_details": {
+              "reasoning_tokens": 57
+            },
+            "total_tokens": 21199
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). No solution exists within the stated grid, date/period and movement constraints. Revise a constraint explicitly."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal.",
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "error"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 7,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "error",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21025,
+        "output_tokens": 175,
+        "total_tokens": 21200,
+        "cached_tokens": 0,
+        "reasoning_tokens": 81
+      },
+      "durationSeconds": 82.768,
+      "finishedAt": "2026-10-28T16:51:04.013791+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 7,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:49:59.104899+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "7lteo5qe1ija5651g5fqkf5jhs",
+        "131l0j27sju9tgtiieefk14hqc",
+        "ll41scggrlenunsg9nf6t4tihk"
+      ],
+      "finalIds": [
+        "7lteo5qe1ija5651g5fqkf5jhs",
+        "131l0j27sju9tgtiieefk14hqc",
+        "ll41scggrlenunsg9nf6t4tihk"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0b13e8fe44d2b351006ae227c53ffc819b8beda6e68bdbc6a3",
+          "turnId": "turn_0b13e8fe44d2b351006ae227c9d55c819b83be8ce52d7819d3",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21025,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 175,
+            "output_tokens_details": {
+              "reasoning_tokens": 81
+            },
+            "total_tokens": 21200
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). No solution exists within the stated grid, date/period and movement constraints. Revise a constraint explicitly."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal.",
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "error"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 8,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "error",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21025,
+        "output_tokens": 151,
+        "total_tokens": 21176,
+        "cached_tokens": 0,
+        "reasoning_tokens": 59
+      },
+      "durationSeconds": 29.537,
+      "finishedAt": "2026-10-28T17:21:05.543790+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 8,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:20:42.101005+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "6ottm66asqb5uj236d05cqfi0k",
+        "t29k80jqt9cjd4gni07a0958ig",
+        "t9m3re5m615rafhl25nqn4rhko"
+      ],
+      "finalIds": [
+        "6ottm66asqb5uj236d05cqfi0k",
+        "t29k80jqt9cjd4gni07a0958ig",
+        "t9m3re5m615rafhl25nqn4rhko"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_045eaf73644104b4006ae22eedecfc819b88e7a5c3593edce9",
+          "turnId": "turn_045eaf73644104b4006ae22ef2a504819baea7f76b2c360b73",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21025,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 151,
+            "output_tokens_details": {
+              "reasoning_tokens": 59
+            },
+            "total_tokens": 21176
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). No solution exists within the stated grid, date/period and movement constraints. Revise a constraint explicitly."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal.",
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "error"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 9,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "error",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21025,
+        "output_tokens": 199,
+        "total_tokens": 21224,
+        "cached_tokens": 0,
+        "reasoning_tokens": 98
+      },
+      "durationSeconds": 33.625,
+      "finishedAt": "2026-10-28T17:21:39.308343+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 9,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:21:11.638741+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "c3218cgl4gd605j3qivkcb6dh0",
+        "rh2d1g4qn5qeurgm69osmmmvv8",
+        "7l9qfkourd7fsnoa2j609vb9a0"
+      ],
+      "finalIds": [
+        "c3218cgl4gd605j3qivkcb6dh0",
+        "rh2d1g4qn5qeurgm69osmmmvv8",
+        "7l9qfkourd7fsnoa2j609vb9a0"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_05c7d4c0823f83fc006ae22f0abc00819a8657b5421c887d34",
+          "turnId": "turn_05c7d4c0823f83fc006ae22f0e79c8819abfdf4837ee424d9a",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21025,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 199,
+            "output_tokens_details": {
+              "reasoning_tokens": 98
+            },
+            "total_tokens": 21224
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). No solution exists within the stated grid, date/period and movement constraints. Revise a constraint explicitly."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal.",
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "error"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 10,
+      "mode": "symbolic",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "error",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 21025,
+        "output_tokens": 195,
+        "total_tokens": 21220,
+        "cached_tokens": 0,
+        "reasoning_tokens": 92
+      },
+      "durationSeconds": 31.004,
+      "finishedAt": "2026-10-28T17:23:42.641215+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 10,
+        "mode": "symbolic",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:23:18.874256+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "ues7lgumduho7bgq3dho6lo12g",
+        "129pfu92ubn64v7fbb8n3cse9o",
+        "1o94ljag8fr524nfntuvs8oqg8"
+      ],
+      "finalIds": [
+        "ues7lgumduho7bgq3dho6lo12g",
+        "129pfu92ubn64v7fbb8n3cse9o",
+        "1o94ljag8fr524nfntuvs8oqg8"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0548b33be1eb9fe9006ae22f8a7a5c819b8abad06a5529cf6a",
+          "turnId": "turn_0548b33be1eb9fe9006ae22f9031d4819b94a5fbdb1256b093",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 21025,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 195,
+            "output_tokens_details": {
+              "reasoning_tokens": 92
+            },
+            "total_tokens": 21220
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted."
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-11-02–2026-11-08 (Europe/Budapest). No solution exists within the stated grid, date/period and movement constraints. Revise a constraint explicitly."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal.",
+        "Free window interval from thursday at 10:00 to thursday at 10:30, moving up to normal."
+      ],
+      "actions": [
+        {
+          "type": "start",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "previewInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "interpretation"
+        },
+        {
+          "type": "acceptInterpretation",
+          "text": null,
+          "key": null,
+          "value": null,
+          "status": "error"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 1,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 49254,
+        "output_tokens": 671,
+        "total_tokens": 49925,
+        "cached_tokens": 31943,
+        "reasoning_tokens": 320
+      },
+      "durationSeconds": 137.442,
+      "finishedAt": "2026-10-28T16:18:20.188373+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 1,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "startedAt": "2026-10-28T16:17:06.402963+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "c6d693b1a0584ae8bead6b2a3dc5af3e",
+        "79da2084390849bdb00066ac15c22cba",
+        "263590afefe64ebfae13da0ef142cfce"
+      ],
+      "finalIds": [
+        "c6d693b1a0584ae8bead6b2a3dc5af3e",
+        "79da2084390849bdb00066ac15c22cba",
+        "263590afefe64ebfae13da0ef142cfce"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_029d97370c40f3a5006ae22009bba0819bac20307c81ebe39a",
+          "turnId": "turn_029d97370c40f3a5006ae2201088d4819bb1c3c6c91d98b7ae",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31949,
+            "input_tokens_details": {
+              "cached_tokens": 15156
+            },
+            "output_tokens": 522,
+            "output_tokens_details": {
+              "reasoning_tokens": 237
+            },
+            "total_tokens": 32471
+          }
+        },
+        {
+          "sessionId": "sess_029d97370c40f3a5006ae22009bba0819bac20307c81ebe39a",
+          "turnId": "turn_029d97370c40f3a5006ae2202f5174819b869bcfde60db704e",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 17305,
+            "input_tokens_details": {
+              "cached_tokens": 16787
+            },
+            "output_tokens": 149,
+            "output_tokens_details": {
+              "reasoning_tokens": 83
+            },
+            "total_tokens": 17454
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday is November 5, 2026. The 10:00–10:30 window is occupied by **Review** (10:00–10:30, Important; color ID 5). Your instruction permits moving Normal events only, so Review cannot be moved and the window cannot be cleared under the current constraint. **Anchor** ends at 10:00 and **Administration** starts at 11:00, so neither occupies the requested window. Would you like to authorize moving Important events as well?"
+        },
+        {
+          "role": "user",
+          "text": "No. Only Normal events may move."
+        },
+        {
+          "role": "machine",
+          "text": "Understood. With movement limited to Normal events, I can’t clear Thursday, November 5, 10:00–10:30: **Review** is Important and occupies the full window. No calendar changes were made."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "No. Only Normal events may move.",
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 2,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 31959,
+        "output_tokens": 509,
+        "total_tokens": 32468,
+        "cached_tokens": 15156,
+        "reasoning_tokens": 211
+      },
+      "durationSeconds": 226.373,
+      "finishedAt": "2026-10-28T16:22:07.561886+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 2,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "startedAt": "2026-10-28T16:21:17.748144+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00",
+        "operatorHash": "029113d021c2982d0d2a4336e9e98ed7d6e87cb0fc6e613d56238916bb2a035a"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "5f3d09f5b154439e99768a037d698e10",
+        "eab7b10faaa54015b3eb7ba70eb0431e",
+        "9df5ce332fac438aa406259502f71d2e"
+      ],
+      "finalIds": [
+        "5f3d09f5b154439e99768a037d698e10",
+        "eab7b10faaa54015b3eb7ba70eb0431e",
+        "9df5ce332fac438aa406259502f71d2e"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_02085cd7f3da8fee006ae2210a2c7c81988b505bae6f0140a3",
+          "turnId": "turn_02085cd7f3da8fee006ae2210e6e08819882211f2adb4a213c",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31959,
+            "input_tokens_details": {
+              "cached_tokens": 15156
+            },
+            "output_tokens": 509,
+            "output_tokens_details": {
+              "reasoning_tokens": 211
+            },
+            "total_tokens": 32468
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday is **November 5, 2026**. The requested window, 10:00–10:30 Europe/Budapest, is occupied by **Review** for that exact interval. Its color ID 5 indicates **Important**. Your permission allows moving Normal events only, so Review is not eligible to move. **The window cannot be freed under the current constraint; no changes were made.** Anchor ends at 10:00, and Administration starts at 11:00, so neither overlaps the requested window."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 3,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 31922,
+        "output_tokens": 479,
+        "total_tokens": 32401,
+        "cached_tokens": 15156,
+        "reasoning_tokens": 217
+      },
+      "durationSeconds": 104.728,
+      "finishedAt": "2026-10-28T16:39:59.837123+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 3,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:38:34.345740+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "5slfaucsbbk9rndt1uf6f2rouo",
+        "83tfc957pgammv9i9hk50hq2p4",
+        "kbllilp9ie5u008f4nljhpscjk"
+      ],
+      "finalIds": [
+        "5slfaucsbbk9rndt1uf6f2rouo",
+        "83tfc957pgammv9i9hk50hq2p4",
+        "kbllilp9ie5u008f4nljhpscjk"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_083e8fc7335fff9f006ae2252844d4819b9b40640c82608735",
+          "turnId": "turn_083e8fc7335fff9f006ae2252d839c819b81ef40b46589c850",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31922,
+            "input_tokens_details": {
+              "cached_tokens": 15156
+            },
+            "output_tokens": 479,
+            "output_tokens_details": {
+              "reasoning_tokens": 217
+            },
+            "total_tokens": 32401
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday, November 5, 10:00–10:30 (Budapest time) is occupied by **Review**. Its color ID 5 marks it Important, and your instruction permits moving Normal events only. So the window cannot be freed under the current movement limit; no changes were made. To proceed, revise the limit to allow moving Important events, or choose another window."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 4,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 31921,
+        "output_tokens": 383,
+        "total_tokens": 32304,
+        "cached_tokens": 15156,
+        "reasoning_tokens": 144
+      },
+      "durationSeconds": 94.864,
+      "finishedAt": "2026-10-28T16:41:35.816020+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 4,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:40:17.092363+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "iipovcbg7mgi0n4igo663kkqvk",
+        "f31iqlj3sr5tbrebam3akuhol8",
+        "4g16qic4mpb1f6vvfqu3olhkqk"
+      ],
+      "finalIds": [
+        "iipovcbg7mgi0n4igo663kkqvk",
+        "f31iqlj3sr5tbrebam3akuhol8",
+        "4g16qic4mpb1f6vvfqu3olhkqk"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_057f42d21b39ea87006ae2258d1568819ab62668acee403bed",
+          "turnId": "turn_057f42d21b39ea87006ae225957c10819a8a8b76f3267c3cfe",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31921,
+            "input_tokens_details": {
+              "cached_tokens": 15156
+            },
+            "output_tokens": 383,
+            "output_tokens_details": {
+              "reasoning_tokens": 144
+            },
+            "total_tokens": 32304
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday is 2026-11-05. The 10:00–10:30 window is occupied by **Review**, which is Important. Your permission allows moving Normal events only, so Review cannot be moved. The window cannot be freed under the stated constraint, and no changes were made."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 5,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 49508,
+        "output_tokens": 944,
+        "total_tokens": 50452,
+        "cached_tokens": 32001,
+        "reasoning_tokens": 609
+      },
+      "durationSeconds": 137.685,
+      "finishedAt": "2026-10-28T16:46:47.770457+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 5,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:44:47.684401+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "k0ndn5pv61g9pol4r5e6qcdb7c",
+        "iok55v3nndjot0dqgn0tpk5uug",
+        "e8s1aoo1js0n0qgs6tf1s2u8ok"
+      ],
+      "finalIds": [
+        "k0ndn5pv61g9pol4r5e6qcdb7c",
+        "iok55v3nndjot0dqgn0tpk5uug",
+        "e8s1aoo1js0n0qgs6tf1s2u8ok"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0ecea78b1c083f42006ae2269bd8ac819aa4412e0b18f9ef1b",
+          "turnId": "turn_0ecea78b1c083f42006ae226a10d30819ab3a23ac11bdde5cc",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 32007,
+            "input_tokens_details": {
+              "cached_tokens": 15156
+            },
+            "output_tokens": 724,
+            "output_tokens_details": {
+              "reasoning_tokens": 456
+            },
+            "total_tokens": 32731
+          }
+        },
+        {
+          "sessionId": "sess_0ecea78b1c083f42006ae2269bd8ac819aa4412e0b18f9ef1b",
+          "turnId": "turn_0ecea78b1c083f42006ae226e47b28819ab8a67eb2e5e820a8",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 17501,
+            "input_tokens_details": {
+              "cached_tokens": 16845
+            },
+            "output_tokens": 220,
+            "output_tokens_details": {
+              "reasoning_tokens": 153
+            },
+            "total_tokens": 17721
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "I can’t clear Thursday, November 5, 10:00–10:30 under the “Normal events only” limit. The event occupying that exact window is “Review,” which is Important (color ID 5), so it isn’t eligible to move. Would you like to allow moving Important events, or choose a different window?"
+        },
+        {
+          "role": "user",
+          "text": "No. Only Normal events may move."
+        },
+        {
+          "role": "machine",
+          "text": "Understood: only Normal events may move. “Review” is an Important event occupying Thursday, November 5, 10:00–10:30, so the window cannot be cleared with that restriction. No changes were made."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "No. Only Normal events may move.",
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 6,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 31972,
+        "output_tokens": 590,
+        "total_tokens": 32562,
+        "cached_tokens": 15156,
+        "reasoning_tokens": 333
+      },
+      "durationSeconds": 96.922,
+      "finishedAt": "2026-10-28T16:48:25.416264+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 6,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:47:05.099913+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "r3v346kte906h0bnk6hntk7uj4",
+        "p1vh8j14e1uvjo8j7mugeta5eg",
+        "g68lo0kekjba11leojcbi3dv5g"
+      ],
+      "finalIds": [
+        "r3v346kte906h0bnk6hntk7uj4",
+        "p1vh8j14e1uvjo8j7mugeta5eg",
+        "g68lo0kekjba11leojcbi3dv5g"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_051d7d3de4450bff006ae2272169a0819ba9a998f1b7f42fe3",
+          "turnId": "turn_051d7d3de4450bff006ae227270e68819b9f5a777934f240da",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31972,
+            "input_tokens_details": {
+              "cached_tokens": 15156
+            },
+            "output_tokens": 590,
+            "output_tokens_details": {
+              "reasoning_tokens": 333
+            },
+            "total_tokens": 32562
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday, November 5, 10:00–10:30 is occupied by “Review.” It is Important (color ID 5), so it is not eligible to move under your “Normal events only” limit. The window cannot be freed with that limit; no changes were made. To proceed, you could allow Important events to move."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 7,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 49207,
+        "output_tokens": 632,
+        "total_tokens": 49839,
+        "cached_tokens": 31922,
+        "reasoning_tokens": 304
+      },
+      "durationSeconds": 137.993,
+      "finishedAt": "2026-10-28T16:53:22.804415+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 7,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:51:20.600317+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "gcekcrlo0n3m38aara1a8m16ng",
+        "jkckg0nn8tvusel5ol2ivfdvhs",
+        "gcf5bocfdtnk6l1j51e12ddkes"
+      ],
+      "finalIds": [
+        "gcekcrlo0n3m38aara1a8m16ng",
+        "jkckg0nn8tvusel5ol2ivfdvhs",
+        "gcf5bocfdtnk6l1j51e12ddkes"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_04ed0d072389917f006ae228221600819ba0cc54f1c6d3475b",
+          "turnId": "turn_04ed0d072389917f006ae22827428c819bb0fe9f192009abd1",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31928,
+            "input_tokens_details": {
+              "cached_tokens": 15156
+            },
+            "output_tokens": 520,
+            "output_tokens_details": {
+              "reasoning_tokens": 257
+            },
+            "total_tokens": 32448
+          }
+        },
+        {
+          "sessionId": "sess_04ed0d072389917f006ae228221600819ba0cc54f1c6d3475b",
+          "turnId": "turn_04ed0d072389917f006ae228694058819ba23eecef417e1f03",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 17279,
+            "input_tokens_details": {
+              "cached_tokens": 16766
+            },
+            "output_tokens": 112,
+            "output_tokens_details": {
+              "reasoning_tokens": 47
+            },
+            "total_tokens": 17391
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday is November 5. The 10:00–10:30 window is occupied by **Review**, which is Important (color ID 5), so it cannot move under your “Normal events only” limit. Anchor ends at 10:00, and Administration starts at 11:00. Should I include Important events in the movement limit, or would you prefer a different window?"
+        },
+        {
+          "role": "user",
+          "text": "No. Only Normal events may move."
+        },
+        {
+          "role": "machine",
+          "text": "Understood. With only Normal events allowed to move, Thursday, November 5, from 10:00 to 10:30 cannot be cleared: Review occupies the entire window and is Important. No events were changed."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "No. Only Normal events may move.",
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 8,
+      "mode": "llm-only",
+      "stopReason": "power_loss_interruption",
+      "lastStage": "initial",
+      "status": "running",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 31973,
+        "output_tokens": 706,
+        "total_tokens": 32679,
+        "cached_tokens": 15156,
+        "reasoning_tokens": 411
+      },
+      "durationSeconds": null,
+      "finishedAt": null,
+      "recoveredAt": "2026-10-28T17:19:17.399916+00:00",
+      "shutdownRecovery": true,
+      "completionEvidence": null,
+      "success": false,
+      "failureCategory": "power_loss_interruption",
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": false,
+        "terminalStatus": false,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": false
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 8,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T16:53:42.519864+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "6f70ra0b9i68g2h4v6u3j2ge08",
+        "lcnvt8h8g43mfugjcpgmleipjc",
+        "hf2k4nminj1226rr53unalf8g4"
+      ],
+      "finalIds": [
+        "6f70ra0b9i68g2h4v6u3j2ge08",
+        "lcnvt8h8g43mfugjcpgmleipjc",
+        "hf2k4nminj1226rr53unalf8g4"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_0465130c4be7f740006ae228b4b7988198b946c3a82f1814ae",
+          "turnId": "turn_0465130c4be7f740006ae228b8c3808198941ed8f4b2edc9c7",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31973,
+            "input_tokens_details": {
+              "cached_tokens": 15156
+            },
+            "output_tokens": 706,
+            "output_tokens_details": {
+              "reasoning_tokens": 411
+            },
+            "total_tokens": 32679
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 9,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 2,
+        "input_tokens": 49116,
+        "output_tokens": 721,
+        "total_tokens": 49837,
+        "cached_tokens": 31910,
+        "reasoning_tokens": 367
+      },
+      "durationSeconds": 53.711,
+      "finishedAt": "2026-10-28T17:22:33.113764+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 9,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:21:45.766761+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "ra4rs374bmti7f109rkanoppms",
+        "qnioinl1ops07pvgtdflso5i8o",
+        "807tt458v5v55qi0d6hrk81rdk"
+      ],
+      "finalIds": [
+        "ra4rs374bmti7f109rkanoppms",
+        "qnioinl1ops07pvgtdflso5i8o",
+        "807tt458v5v55qi0d6hrk81rdk"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_04f4c2b82a066a74006ae22f304d4c819aa7d3ff7f1404f073",
+          "turnId": "turn_04f4c2b82a066a74006ae22f34c30c819a8f3d409d0cde62d3",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31916,
+            "input_tokens_details": {
+              "cached_tokens": 15156
+            },
+            "output_tokens": 453,
+            "output_tokens_details": {
+              "reasoning_tokens": 173
+            },
+            "total_tokens": 32369
+          }
+        },
+        {
+          "sessionId": "sess_04f4c2b82a066a74006ae22f304d4c819aa7d3ff7f1404f073",
+          "turnId": "turn_04f4c2b82a066a74006ae22f4de37c819ab8e6fe072c3f85a8",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 17200,
+            "input_tokens_details": {
+              "cached_tokens": 16754
+            },
+            "output_tokens": 268,
+            "output_tokens_details": {
+              "reasoning_tokens": 194
+            },
+            "total_tokens": 17468
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "Thursday is November 5, 2026. The 10:00–10:30 window is occupied by **Review** (10:00–10:30), which is Important (color ID 5). Your instruction allows moving Normal events only, so Review cannot move and the window cannot be cleared under that limit. **Anchor** ends at 10:00 and does not overlap the window. Would you like to allow moving Important events, or revise the window?"
+        },
+        {
+          "role": "user",
+          "text": "No. Only Normal events may move."
+        },
+        {
+          "role": "machine",
+          "text": "Understood. With movement limited to Normal events, **Review** (Important) must stay at 10:00–10:30 on Thursday, November 5, 2026. The requested window cannot be freed under that limit, so no changes were made."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "clarification"
+        },
+        {
+          "type": "message",
+          "text": "No. Only Normal events may move.",
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    },
+    {
+      "case": 9,
+      "repetition": 10,
+      "mode": "llm-only",
+      "stopReason": null,
+      "lastStage": "initial",
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "input_tokens": 31927,
+        "output_tokens": 502,
+        "total_tokens": 32429,
+        "cached_tokens": 15156,
+        "reasoning_tokens": 216
+      },
+      "durationSeconds": 38.285,
+      "finishedAt": "2026-10-28T17:23:11.487508+00:00",
+      "success": true,
+      "failureCategory": null,
+      "checks": {
+        "initialFixtureMatches": true,
+        "finalStateMatches": true,
+        "initialReadbackPresent": true,
+        "finalReadbackPresent": true,
+        "originalIdentitiesPreserved": true,
+        "emptyInitialHistory": true,
+        "runnerCompleted": true,
+        "terminalStatus": true,
+        "onlyIsolatedCalendar": true,
+        "noUnexpectedHttpErrors": true,
+        "noWrites": true,
+        "correctRefusal": true
+      },
+      "pendingUsage": 0,
+      "manifest": {
+        "case": 9,
+        "repetition": 10,
+        "mode": "llm-only",
+        "model": "gpt-6-luna",
+        "reasoning": "medium",
+        "request": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+        "operatorHash": "ee2e1a8a1439418900bce7dbc11be8e5506372730c9490950a2aae4a84b9bda5",
+        "startedAt": "2026-10-28T17:22:37.857131+00:00",
+        "weekStart": "2026-11-02T00:00:00+01:00",
+        "weekEnd": "2026-11-09T00:00:00+01:00",
+        "frozenNow": "2026-11-04T08:00:00+01:00"
+      },
+      "initial": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "expected": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "actual": [
+        {
+          "title": "Anchor",
+          "start": "2026-11-05T09:00:00+01:00",
+          "end": "2026-11-05T10:00:00+01:00",
+          "importance": 2,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Review",
+          "start": "2026-11-05T10:00:00+01:00",
+          "end": "2026-11-05T10:30:00+01:00",
+          "importance": 1,
+          "location": "",
+          "description": ""
+        },
+        {
+          "title": "Administration",
+          "start": "2026-11-05T11:00:00+01:00",
+          "end": "2026-11-05T11:30:00+01:00",
+          "importance": 0,
+          "location": "",
+          "description": ""
+        }
+      ],
+      "initialIds": [
+        "ivtfbp53htfdtu6l0mgjrqnplg",
+        "6ci90r7apklh69php5801rs0lk",
+        "qq831cb2c261j0ngju9g2ssaoo"
+      ],
+      "finalIds": [
+        "ivtfbp53htfdtu6l0mgjrqnplg",
+        "6ci90r7apklh69php5801rs0lk",
+        "qq831cb2c261j0ngju9g2ssaoo"
+      ],
+      "turns": [
+        {
+          "sessionId": "sess_06220bccb97f970d006ae22f61e77c8199a3e9957781e2304b",
+          "turnId": "turn_06220bccb97f970d006ae22f64f70c8199bcfdfb3e5bfcb43d",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 31927,
+            "input_tokens_details": {
+              "cached_tokens": 15156
+            },
+            "output_tokens": 502,
+            "output_tokens_details": {
+              "reasoning_tokens": 216
+            },
+            "total_tokens": 32429
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events."
+        },
+        {
+          "role": "machine",
+          "text": "I can’t free Thursday, November 5, 10:00–10:30 under the “Normal events only” limit. The window is occupied by **Review** (10:00–10:30), which is Important (color ID 5), so it isn’t eligible to move. **Anchor** ends at 10:00 and doesn’t overlap the window. No changes were made. To clear it, you’d need to allow moving Important events."
+        }
+      ],
+      "feedback": [],
+      "question": null,
+      "validationFailures": [],
+      "translations": [],
+      "actions": [
+        {
+          "type": "message",
+          "text": "Free Thursday from 10:00 to 10:30, moving only Normal events.",
+          "key": null,
+          "value": null,
+          "status": "answered"
+        }
+      ],
+      "mcpWriteCount": 0,
+      "remoteCancellation": []
+    }
+  ]
+}
