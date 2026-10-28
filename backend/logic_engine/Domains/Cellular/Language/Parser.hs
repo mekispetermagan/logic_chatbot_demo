@@ -1,3 +1,4 @@
+{-# LANGUAGE NoMonomorphismRestriction, FlexibleContexts #-}
 module Domains.Cellular.Language.Parser (parseEntry, parseEntryAlternatives) where
 
 import Control.Applicative ((<|>))
@@ -6,14 +7,15 @@ import Data.Char (isAlphaNum, isDigit, ord, toLower)
 import Data.List (nub)
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
-import Text.ParserCombinators.ReadP
+import qualified Text.ParserCombinators.ReadP as R
+import ControlledLanguage.Parsing
 import Domains.Cellular.Types
 import Domains.Cellular.Language.Syntax
 import Domains.Cellular.Language.Pretty (entryText)
 
 parseEntryAlternatives :: String -> Either String [Entry]
-parseEntryAlternatives source = case nub [e | (e,"") <- readP_to_S (skipSpaces *> entry <* eof) source] of
-  [] -> Left "Unsupported cellular syntax. Commands require a period; questions require a question mark."
+parseEntryAlternatives source = case nub [e | (e,"") <- R.readP_to_S (skipSpaces *> entry <* eof) source] of
+  [] -> Left (diagnose "Cellular" (skipSpaces *> entry <* eof) source)
   xs -> Right xs
 parseEntry :: String -> Either String Entry
 parseEntry source = do
@@ -22,76 +24,76 @@ parseEntry source = do
     [x] -> Right x
     _ -> Left ("Which grouping?\n" ++ unlines (map entryText xs))
 
-lexeme :: ReadP a -> ReadP a
+lexeme :: Parsing p => p a -> p a
 lexeme p = p <* skipSpaces
-symbol :: String -> ReadP String
+symbol :: Parsing p => String -> p String
 symbol = lexeme . string
-word :: String -> ReadP ()
-word text = lexeme $ do
+word :: Parsing p => String -> p ()
+word text = keywordToken text $ lexeme $ do
   _ <- traverse (\c -> satisfy ((==c) . toLower)) text
   rest <- look
   guard (case rest of c:_ -> not (isAlphaNum c); [] -> True)
-phrase :: String -> ReadP ()
+phrase :: Parsing p => String -> p ()
 phrase = mapM_ word . words
-options :: [(String,a)] -> ReadP a
+options :: Parsing p => [(String,a)] -> p a
 options = choice . map (\(s,a) -> a <$ phrase s)
-number :: Bool -> ReadP Int
+number :: Parsing p => Bool -> p Int
 number signed = lexeme $ do
   negative <- (True <$ char '-' <* guard signed) <|> pure False
   digits <- munch1 isDigit
   rest <- look
   guard (case rest of c:_ -> not (isAlphaNum c); [] -> True)
-  guard (case digits of '0':_:_ -> False; _ -> True)
+  ensure (case digits of '0':_:_ -> False; _ -> True) "Leading zeroes are not allowed in a number."
   let n = read digits :: Integer
       value = if negative then negate n else n
-  guard (not (negative && n == 0) && value >= toInteger (minBound :: Int) && value <= toInteger (maxBound :: Int))
+  ensure (not (negative && n == 0) && value >= toInteger (minBound :: Int) && value <= toInteger (maxBound :: Int)) "Integer outside supported range, or negative zero."
   pure (fromInteger value)
-boundedNumber :: Int -> Int -> ReadP Int
-boundedNumber lo hi = do n <- number False; guard (n>=lo && n<=hi); pure n
-square :: ReadP (Int,Int)
-square = lexeme $ do
+boundedNumber :: Parsing p => Int -> Int -> p Int
+boundedNumber lo hi = do n <- number False; ensure (n>=lo && n<=hi) ("Number must be between "++show lo++" and "++show hi++"."); pure n
+square :: Parsing p => p (Int,Int)
+square = labelled "a cell coordinate A1–P16" $ lexeme $ do
   c <- satisfy (\c -> toLower c `elem` ['a'..'p'])
   n <- boundedNumber 1 16
   pure (ord (toLower c)-ord 'a',n-1)
-color :: ReadP Color
+color :: Parsing p => p Color
 color = options [(map toLower (show c),c) | c <- [minBound..maxBound]]
-mode :: ReadP Neighborhood
+mode :: Parsing p => p Neighborhood
 mode = options [("moore",Moore),("von neumann",Orthogonal)]
-boolean :: ReadP Bool
+boolean :: Parsing p => p Bool
 boolean = options [("true",True),("false",False)]
-brackets :: ReadP a -> ReadP a
+brackets :: Parsing p => p a -> p a
 brackets p = symbol "[" *> p <* symbol "]"
-uniqueList :: Eq a => ReadP a -> ReadP [a]
-uniqueList p = do xs <- brackets (sepBy p (symbol ",")); guard (length xs == length (nub xs)); pure xs
-counts :: ReadP [Int]
+uniqueList :: (Parsing p, Eq a) => p a -> p [a]
+uniqueList p = do xs <- brackets (sepBy p (symbol ",")); ensure (length xs == length (nub xs)) "List entries must not be repeated."; pure xs
+counts :: Parsing p => p [Int]
 counts = Set.toAscList . Set.fromList <$> uniqueList (boundedNumber 0 8)
-rule :: ReadP Rule
+rule :: Parsing p => p Rule
 rule = do
   phrase "target"; c <- color; symbol ","; word "counts"; ns <- counts
   symbol ","; word "enabled"; active <- boolean
   pure (Rule c c (Set.fromList ns) active)
-config :: ReadP Ruleset
+config :: Parsing p => p Ruleset
 config = options [("preset game of life",life),("preset rgb cycle",rgb)] <|> do
-  word "palette"; cs <- uniqueList color; guard (length cs >= 2)
+  word "palette"; cs <- uniqueList color; ensure (length cs >= 2) "A palette requires at least two colors."
   symbol ","; word "neighborhood"; n <- mode; symbol ","; word "rules"
   rs <- brackets (sepBy ((,) <$> (color <* symbol ":") <*> rule) (symbol ","))
-  guard (length rs == length (nub (map fst rs)))
+  ensure (length rs == length (nub (map fst rs))) "Each source color may have only one rule."
   let r = Ruleset (Set.fromList cs) n (Map.fromList rs)
-  either (const pfail) pure (validateRuleset r)
+  either fail pure (validateRuleset r)
   where
     make c ns = Rule c c (Set.fromList ns) True
     life = Ruleset (Set.fromList [White,Black]) Moore (Map.fromList [(White,make Black [3]),(Black,make White [0,1,2,3,4,7,8])])
     rgb = Ruleset (Set.fromList [Red,Green,Blue]) Moore (Map.fromList [(Red,make Green [2..8]),(Green,make Blue [2..8]),(Blue,make Red [2..8])])
-baseReference :: ReadP Reference
+baseReference :: Parsing p => p Reference
 baseReference = (Cell <$> square) <|> (It <$ word "it") <|> (WithColor <$> (phrase "the cell with color" *> color))
-reference :: ReadP Reference
+reference :: Parsing p => p Reference
 reference = baseReference <|> (Matching False <$> (phrase "the cell matching" *> cellCondition True))
   <|> (Matching True <$> (phrase "the unique cell matching" *> cellCondition True))
   <|> (Relative <$> (phrase "the cell" *> options [(d,d) | d <- ["north","east","south","west"]]) <*> (word "of" *> baseReference))
 
 -- Enumerate scope instead of assigning operator precedence. Same-operator
 -- associations normalize to one reading; explicit parentheses delimit a subtree.
-condition :: Eq a => ReadP a -> ReadP (Condition a)
+condition :: (Parsing p, Eq a) => p a -> p (Condition a)
 condition atom = do
   first <- primary
   rest <- many ((,) <$> options [("and",True),("or",False)] <*> primary)
@@ -113,7 +115,7 @@ condition atom = do
     ands a = [a]
     ors (Or a b) = ors a ++ ors b
     ors a = [a]
-cellCondition :: Bool -> ReadP (Condition CellPredicate)
+cellCondition :: Parsing p => Bool -> p (Condition CellPredicate)
 cellCondition baseOnly = condition $ choice
   [ Always <$ word "true", ColorIs <$> (phrase "color is" *> color)
   , RowIs . subtract 1 <$> (phrase "row is" *> boundedNumber 1 16)
@@ -123,20 +125,20 @@ cellCondition baseOnly = condition $ choice
   , NeighborCount <$> (phrase "neighbor count for color" *> color) <*> (phrase "is in" *> counts)
   , Changes <$ phrase "changes in the next generation" ]
   where ref = if baseOnly then baseReference else reference
-boardCondition :: ReadP (Condition BoardPredicate)
+boardCondition :: Parsing p => p (Condition BoardPredicate)
 boardCondition = condition ((FixedPoint <$ phrase "fixed point") <|> (Monochromatic <$> (word "monochromatic" *> option Nothing (Just <$> (phrase "with color" *> color)))))
-collection :: ReadP Collection
+collection :: Parsing p => p Collection
 collection = (Cells <$> (word "cells" *> brackets (sepBy1 reference (symbol ","))))
   <|> (Filter <$> (phrase "cells matching" *> cellCondition False))
   <|> (Component <$> (phrase "cells connected to" *> reference))
   <|> (Rectangle <$> (phrase "cells in rectangle" *> square) <*> (word "to" *> square))
   <|> (Cells . (:[]) <$> reference)
-generations :: Bool -> ReadP Int
+generations :: Parsing p => Bool -> p Int
 generations allowZero = do
   n <- boundedNumber (if allowZero then 0 else 1) 256
   word (if n == 1 then "generation" else "generations")
   pure n
-command :: ReadP Command
+command :: Parsing p => p Command
 command = choice
   [ Paint <$> (phrase "set color of" *> collection) <*> (word "to" *> color)
   , Advance <$> (word "advance" *> generations False)
@@ -159,7 +161,7 @@ command = choice
        v <- options [("vertical",True),("horizontal",False)]; word "through"
        (p,q) <- pivot; pure (Spatial xs (Reflection v) p q) ]
   where pivot = (,) <$> (phrase "the center of rectangle" *> square) <*> (word "to" *> square)
-stateQuestion :: ReadP Question
+stateQuestion :: Parsing p => p Question
 stateQuestion = choice
   [ ColorOf <$> (phrase "what is the color of" *> reference)
   , Check <$> (word "does" *> reference) <*> (word "satisfy" *> cellCondition False)
@@ -171,7 +173,7 @@ stateQuestion = choice
   , Quantify True <$> (phrase "does every cell matching" *> cellCondition False) <*> (word "satisfy" *> cellCondition False)
   , Quantify False <$> (phrase "does some cell matching" *> cellCondition False) <*> (word "satisfy" *> cellCondition False)
   , Transition <$> (phrase "what is the next transition of" *> reference) ]
-question :: ReadP Question
+question :: Parsing p => p Question
 question = stateQuestion <|> choice
   [ Meta <$> (phrase "what is the" *> options [("generation",Generation),("palette",Palette),("neighborhood",NeighborhoodName),("ruleset revision",Revision),("ruleset",CompleteRuleset)])
   , RuleOf <$> (phrase "what is the rule for" *> color)
@@ -184,7 +186,7 @@ question = stateQuestion <|> choice
   , CountReaches <$> (phrase "does the count of cells matching" *> cellCondition False)
                  <*> (word "reach" *> boundedNumber 0 (boardSize * boardSize))
                  <*> (word "within" *> generations False) ]
-entry :: ReadP Entry
+entry :: Parsing p => p Entry
 entry = (Undo <$ (word "undo" *> symbol "."))
   <|> (Batch <$> (word "atomically" *> symbol "{" *> many1 (command <* symbol ".") <* symbol "}" <* symbol "."))
   <|> (Sequence <$> many1 ((Command <$> command <* symbol ".") <|> (Question <$> question <* symbol "?")))

@@ -530,7 +530,7 @@ class AgentTests(unittest.TestCase):
         self.status, self.question, self.translation = 'clarification', 'Do you mean isolated nodes?', 'Create object with color red and pattern -sw on B2.'
         first = self.offer('Draw something using nodes')
         self.assertEqual(first['proposal']['candidates'], [])
-        self.assertIn('network language v2:', first['proposal']['validationFailures'][0]['reason'])
+        self.assertIn('network controlled English:', first['proposal']['validationFailures'][0]['reason'])
         before = self.snapshots()
         self.status, self.question, self.translation = 'proposals', '', 'Create object with color red and pattern ---- on B2.'
         second = self.review(first, 'answer', {'text': 'Yes, isolated nodes'}).json()

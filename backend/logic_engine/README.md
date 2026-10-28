@@ -143,3 +143,12 @@ JSON preserves those boundaries for uniform reference highlighting. The tests
 concatenate parts for parsing and require all three reference forms in each domain.
 Keep examples concrete and grouped into primitive/conceptual commands/questions;
 the frontend displays these lists without maintaining its own sentence catalog.
+
+### Syntax diagnostics across domains
+
+All four supported domain parsers retain ReadP for successful surface parsing
+and ambiguity enumeration. On rejection, the same grammar runs with the shared
+Megaparsec diagnostic backend in `ControlledLanguage/Parsing.hs`. Errors point
+into the original input and name expected syntax or invalid values; no repair
+or interpretation is chosen automatically. `parser-diagnostics-tests` checks
+positions, value errors, surface syntax and preservation of Boolean readings.

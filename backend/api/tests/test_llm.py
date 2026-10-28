@@ -220,7 +220,7 @@ class LlmTests(unittest.TestCase):
         self.assertIn('Translation failed validation', offered['feedback'])
         failures = offered['proposal']['validationFailures']
         self.assertEqual(failures[0]['translation'], self.translation)
-        self.assertIn('network language v2:', failures[0]['reason'])
+        self.assertIn('network controlled English:', failures[0]['reason'])
         self.assertEqual(self.stored_world_state(), before)
         self.result_status, self.question, self.translation = 'proposals', '', 'Create object with color red and pattern --sw on A1.'
         answer = self.client.post(self.review_url(offered, 'answer'), json={'text': 'Yes, isolated nodes.'})
@@ -467,7 +467,7 @@ class LlmTests(unittest.TestCase):
         self.chat()
         rejected = [entry for entry in self.transcript_records() if entry.get('kind') == 'parser rejection'][0]
         self.assertEqual(rejected['translation'], self.translation)
-        self.assertIn('network language v2:', rejected['parserFeedback'])
+        self.assertIn('network controlled English:', rejected['parserFeedback'])
 
     def test_transcript_appends_across_restart(self):
         self.chat()
@@ -592,7 +592,7 @@ class LlmTests(unittest.TestCase):
         self.assertIn('GPT parser rejection:', feedback)
         self.assertIn(self.translation, feedback)
         self.assertIn('parserFeedback', feedback)
-        self.assertIn('network language v2:', feedback)
+        self.assertIn('network controlled English:', feedback)
 
     def test_no_clear_interpretation_preserves_original_error(self):
         self.result_status = 'unsupported'
@@ -603,7 +603,7 @@ class LlmTests(unittest.TestCase):
         self.assertEqual(self.usage(result)['status'], 'unsupported')
         self.assertIn('no clear supported interpretation', result['feedback'])
         self.assertIn('LLM explanation: ' + self.explanation, result['feedback'])
-        self.assertIn('network language v2:', result['feedback'])
+        self.assertIn('network controlled English:', result['feedback'])
         self.assertGreater(result['llmBudget']['spentUsd'], 0)
         restored = self.client.get(self.base).json()
         self.assertEqual(restored['messages'][-1]['text'], result['feedback'])

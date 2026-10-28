@@ -98,3 +98,25 @@ review and recovery alongside the existing weekly display. See
 [detailed design](proposed-calendar-language.md). Calendar uses a scoped interpreter context and separate session/event tables
 rather than a synthetic board conversation. It reuses agent provisioning,
 budgeting and interpretation review. Calendar Undo remains outside this version.
+
+## Shared syntax diagnostics
+
+ReadP remains authoritative for accepted surface entries and all alternative
+readings in Objects, Network, Cellular and Calendar. Only when it finds no
+complete reading does the shared `ControlledLanguage.Parsing` diagnostic backend
+run the same surface grammar through Megaparsec. Its errors include the original
+source line, line/column, a caret and expected syntax or a specific value-check
+reason. Keyword mismatches are reported as whole words at the token start, so
+shared-prefix alternatives remain visible instead of failing inside a spelling.
+Diagnostic backtracking retains the furthest failure, including failures
+inside optional clauses. It never selects an interpretation or repairs input.
+Objects/Network canonical parsing still validates successful surface readings;
+canonical syntax is not used to diagnose malformed surface input.
+
+New domains should use the shared parsing primitives and one grammar definition
+for both backends, rather than maintaining a separate diagnostic grammar.
+
+The existing API passes these messages to direct chat and interpreter validation
+feedback. Syntax rejection still applies none of the entry. This diagnostic
+improvement does not introduce automatic LLM repair or semantic verification of
+translations.

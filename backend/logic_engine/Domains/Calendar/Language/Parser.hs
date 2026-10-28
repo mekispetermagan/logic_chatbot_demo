@@ -1,3 +1,4 @@
+{-# LANGUAGE NoMonomorphismRestriction, FlexibleContexts #-}
 {-# LANGUAGE FlexibleContexts #-}
 module Domains.Calendar.Language.Parser (parseEntries,parseEntry) where
 import Control.Applicative ((<|>))
@@ -9,29 +10,30 @@ import qualified Data.Aeson as J
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 import qualified Data.ByteString.Lazy as B
-import Text.ParserCombinators.ReadP
+import qualified Text.ParserCombinators.ReadP as R
+import ControlledLanguage.Parsing
 import Domains.Calendar.Language.Syntax
 
 asciiDigit c=c>='0'&&c<='9'
 lexeme p=p <* skipSpaces
-word t=lexeme $ void (traverse (\c->satisfy ((==c).toLower)) t) <* (look >>= \r->guard (null r || not (isAlphaNum (head r))))
+word t=keywordToken t $ lexeme $ void (traverse (\c->satisfy ((==c).toLower)) t) <* (look >>= \r->guard (null r || not (isAlphaNum (head r))))
 phrase=mapM_ word . words
 symbol=lexeme . string
-number=lexeme $ do ds<-munch1 (\c->c>='0'&&c<='9');guard (length ds==1 || head ds/='0');pure (read ds::Integer)
-integer=do n<-number;guard (n<toInteger (maxBound::Int));pure (fromInteger n)
-quoted=lexeme $ do
+number=lexeme $ do ds<-munch1 (\c->c>='0'&&c<='9');ensure (length ds==1 || head ds/='0') "Leading zeroes are not allowed in a number.";pure (read ds::Integer)
+integer=do n<-number;ensure (n<toInteger (maxBound::Int)) "Identifier exceeds the supported integer range.";pure (fromInteger n)
+quoted=labelled "a double-quoted string" $ lexeme $ do
   raw<-gather (char '"' *> many (void (char '\\' *> get) <|> void (satisfy (\c->c/='"'&&c/='\\'&&c>=' '))) <* char '"')
-  case J.eitherDecode (B.fromStrict (T.encodeUtf8 (T.pack (fst raw)))) of Right x->pure x;Left _->pfail
+  case J.eitherDecode (B.fromStrict (T.encodeUtf8 (T.pack (fst raw)))) of Right x->pure x;Left message->fail ("Invalid quoted string: "++message)
 choiceWords xs=choice [v <$ phrase k | (k,v)<-xs]
 slot p=(Missing <$ word "unspecified") <|> (Known <$> p)
-date=choiceWords (zip ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"] (map Weekday [0..6]))
+date=labelled "a weekday, today, tomorrow, or YYYY-MM-DD" $ choiceWords (zip ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"] (map Weekday [0..6]))
   <|> (Today <$ word "today") <|> (Tomorrow <$ word "tomorrow") <|> do
     t<-lexeme (count 4 (satisfy asciiDigit) >>= \y->char '-' *> count 2 (satisfy asciiDigit) >>= \m->char '-' *> count 2 (satisfy asciiDigit) >>= \d->pure (y++"-"++m++"-"++d))
-    guard ((parseTimeM True defaultTimeLocale "%Y-%m-%d" t::Maybe Day)/=Nothing && take 4 t/="0000");pure (DateLiteral t)
+    ensure ((parseTimeM True defaultTimeLocale "%Y-%m-%d" t::Maybe Day)/=Nothing && take 4 t/="0000") "Invalid date; use a real date in YYYY-MM-DD format.";pure (DateLiteral t)
 dateSlot=(Missing <$ phrase "unspecified date") <|> (Known <$> date)
-clock=do h<-count 2 (satisfy asciiDigit);char ':';m<-count 2 (satisfy asciiDigit);guard (read h<24 && read m<60);skipSpaces;pure (read h*60+read m)
-clockTerm=(Clock <$> clock) <|> do phrase "one of";symbol "[";xs<-sepBy1 clock (symbol ",");symbol "]";guard (length xs>=2&&length xs==length(nub xs));pure (ClockChoices (sort xs))
-offset=do sign<-lexeme (satisfy (`elem` "+-"));h<-count 2 (satisfy asciiDigit);char ':';m<-count 2 (satisfy asciiDigit);skipSpaces;guard(read h<=14&&read m<60);pure ((if sign=='-' then -1 else 1)*(read h*60+read m)*60)
+clock=labelled "a time in HH:MM format (00:00–23:59)" $ do h<-count 2 (satisfy asciiDigit);char ':';m<-count 2 (satisfy asciiDigit);ensure (read h<24 && read m<60) "Invalid time; hours must be 00–23 and minutes 00–59.";skipSpaces;pure (read h*60+read m)
+clockTerm=(Clock <$> clock) <|> do phrase "one of";symbol "[";xs<-sepBy1 clock (symbol ",");symbol "]";ensure (length xs>=2&&length xs==length(nub xs)) "Clock choices require at least two distinct times.";pure (ClockChoices (sort xs))
+offset=do sign<-lexeme (satisfy (`elem` "+-"));h<-count 2 (satisfy asciiDigit);char ':';m<-count 2 (satisfy asciiDigit);skipSpaces;ensure (read h<=14&&read m<60) "Invalid UTC offset; hours must be 00–14 and minutes 00–59.";pure ((if sign=='-' then -1 else 1)*(read h*60+read m)*60)
 moment=Moment <$> dateSlot <*> (word "at" *> slot clockTerm) <*> option Nothing (Just <$> (word "offset" *> offset))
 windowValue=(SelectedWeek <$ phrase "selected week")
   <|> (Between <$> (phrase "interval from" *> slot moment) <*> (word "to" *> slot moment))
@@ -44,7 +46,7 @@ textField=choiceWords [(x,x)|x<-["title","location","description"]]
 ref=(Handle <$> (char '#' *> integer)) <|> (It <$ word "it") <|> do
   word "the";unique<-option False (True <$ word "unique");phrase "event with"
   ds<-sepBy1 descriptor (word "and");let names=map fst ds
-  guard (length names==length(nub names)&&names==sortFields names);pure(Described unique ds)
+  ensure (length names==length(nub names)) "Description fields must not be repeated.";ensure (names==sortFields names) "Description fields must be ordered title, location, description, importance, start date.";pure(Described unique ds)
   where
     descriptor=((,) <$> textField <*> quoted) <|> ((,) "importance" . show <$> (word "importance" *> importance))
       <|> ((,) "start date" . show <$> (phrase "start date" *> date))
@@ -83,7 +85,7 @@ task=do
   t<-parameters;fs<-creationFields;pure t{fields=fs}
 creationFields=do
   fs<-option [] (word "with" *> sepBy1 field (word "and"));let names=map fst fs
-  guard(length names==length(nub names)&&names==sortFields names);pure fs
+  ensure (length names==length(nub names)) "Creation fields must not be repeated.";ensure (names==sortFields names) "Creation fields must be ordered title, location, description, importance.";pure fs
   where field=((,) <$> textField <*> slot quoted) <|> ((,) "importance" . fmapSlot show <$> (word "importance" *> slot importance))
 fmapSlot f (Known x)=Known(f x);fmapSlot _ Missing=Missing
 command=choice
@@ -114,8 +116,8 @@ question=choice
 parseEntries :: String -> Either String [Entry]
 parseEntries source
   | length source>65536=Left "Entry exceeds the 64 KiB parser limit."
-  | otherwise=case nub [x|(x,"")<-readP_to_S (skipSpaces *> many1 ((command <* symbol ".") <|> (question <* symbol "?")) <* eof) source] of
-      []->Left "Invalid Calendar controlled language. Commands require a period; questions require ?. Undo and atomic batches are not supported."
+  | otherwise=case nub [x|(x,"")<-R.readP_to_S (skipSpaces *> many1 ((command <* symbol ".") <|> (question <* symbol "?")) <* eof) source] of
+      []->Left (diagnose "Calendar" (skipSpaces *> many1 ((command <* symbol ".") <|> (question <* symbol "?")) <* eof) source)
       xs->Right xs
 parseEntry :: String -> Either String Entry
 parseEntry source=do xs<-parseEntries source;case xs of [x]->Right x;_->Left "Choose an explicit Boolean grouping."

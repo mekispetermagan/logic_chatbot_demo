@@ -4,7 +4,7 @@ version: 0.1.0.0
 build-type: Simple
 
 library
-  other-modules: ControlledLanguage.Grammar, ControlledLanguage.Canonical,
+  other-modules: ControlledLanguage.Parsing, ControlledLanguage.Grammar, ControlledLanguage.Canonical,
                  ControlledLanguage.CanonicalPretty
   exposed-modules: Ontology, Domain, DomainLibrary,
                    ControlledLanguage.Help, ControlledLanguage.Example,
@@ -166,6 +166,13 @@ test-suite calendar-language-tests
 test-suite language-examples-tests
   type: exitcode-stdio-1.0
   main-is: LanguageExamplesTest.hs
+  hs-source-dirs: test
+  build-depends: base >=4.14 && <5, logic-engine
+  default-language: Haskell2010
+
+test-suite parser-diagnostics-tests
+  type: exitcode-stdio-1.0
+  main-is: ParserDiagnosticsTest.hs
   hs-source-dirs: test
   build-depends: base >=4.14 && <5, logic-engine
   default-language: Haskell2010
