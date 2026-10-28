@@ -1,0 +1,1288 @@
+{
+  "kind": "solver-only implementation revision; no new agent/cloud/token benchmark",
+  "implementation": "joint-forward-checking-2",
+  "beforeRuntimeSha256": "d70c154b4ee6cd2f3a3e5f672c8cd0d8ef2ebbf40c4137963ceef8a84a275fba",
+  "afterRuntimeSha256": "6cc87d4f93de934ddc720ba6cefb5bbcf43affeddae6bf43f396c538551422a1",
+  "sourceSha256": {
+    "Planning.hs": "9833247bcb0b369f83fd3279913fa284ea8d4a96d4e83306025ced6d7392bfb1",
+    "Evaluation.hs": "3bf8013190bc9b0fa5d5c61ffcaec3e64bfaf0076ff6545f4fe96efa7ab41f38",
+    "State.hs": "82778a66d44490c414dc372dfca68654177b0b22a5a6b0205a21adae6e8bbd8e"
+  },
+  "budgets": {
+    "nodes": 100000,
+    "checks": 1000000,
+    "candidates": 200000
+  },
+  "originalBenchmarkUnchanged": true,
+  "case10Replays": [
+    {
+      "repetition": 1,
+      "translation": "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+      "before": {
+        "status": "limited",
+        "counters": {
+          "candidates": 145,
+          "checks": 591276,
+          "nodes": 100000
+        },
+        "elapsedMs": 571.515,
+        "created": [],
+        "plan": [],
+        "message": "Joint search limit reached; feasibility unresolved."
+      },
+      "after": {
+        "status": "review",
+        "counters": {
+          "candidates": 145,
+          "checks": 4281,
+          "nodes": 42
+        },
+        "elapsedMs": 6.48,
+        "created": [
+          [
+            "Interview",
+            1793692800000000,
+            1793696400000000
+          ],
+          [
+            "Review",
+            1793606400000000,
+            1793613600000000
+          ],
+          [
+            "Training",
+            1793869200000000,
+            1793872800000000
+          ],
+          [
+            "Workshop",
+            1793781000000000,
+            1793786400000000
+          ]
+        ],
+        "plan": [
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793786400000000,
+              "location": "",
+              "start": 1793781000000000,
+              "summary": "Workshop"
+            },
+            "handle": 2,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793613600000000,
+              "location": "",
+              "start": 1793606400000000,
+              "summary": "Review"
+            },
+            "handle": 3,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793872800000000,
+              "location": "",
+              "start": 1793869200000000,
+              "summary": "Training"
+            },
+            "handle": 4,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793696400000000,
+              "location": "",
+              "start": 1793692800000000,
+              "summary": "Interview"
+            },
+            "handle": 5,
+            "type": "create"
+          }
+        ],
+        "message": "Evaluation completed."
+      }
+    },
+    {
+      "repetition": 2,
+      "translation": "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+      "before": {
+        "status": "limited",
+        "counters": {
+          "candidates": 145,
+          "checks": 591276,
+          "nodes": 100000
+        },
+        "elapsedMs": 585.019,
+        "created": [],
+        "plan": [],
+        "message": "Joint search limit reached; feasibility unresolved."
+      },
+      "after": {
+        "status": "review",
+        "counters": {
+          "candidates": 145,
+          "checks": 4281,
+          "nodes": 42
+        },
+        "elapsedMs": 6.186,
+        "created": [
+          [
+            "Interview",
+            1793692800000000,
+            1793696400000000
+          ],
+          [
+            "Review",
+            1793606400000000,
+            1793613600000000
+          ],
+          [
+            "Training",
+            1793869200000000,
+            1793872800000000
+          ],
+          [
+            "Workshop",
+            1793781000000000,
+            1793786400000000
+          ]
+        ],
+        "plan": [
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793786400000000,
+              "location": "",
+              "start": 1793781000000000,
+              "summary": "Workshop"
+            },
+            "handle": 2,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793613600000000,
+              "location": "",
+              "start": 1793606400000000,
+              "summary": "Review"
+            },
+            "handle": 3,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793872800000000,
+              "location": "",
+              "start": 1793869200000000,
+              "summary": "Training"
+            },
+            "handle": 4,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793696400000000,
+              "location": "",
+              "start": 1793692800000000,
+              "summary": "Interview"
+            },
+            "handle": 5,
+            "type": "create"
+          }
+        ],
+        "message": "Evaluation completed."
+      }
+    },
+    {
+      "repetition": 3,
+      "translation": "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+      "before": {
+        "status": "limited",
+        "counters": {
+          "candidates": 145,
+          "checks": 591276,
+          "nodes": 100000
+        },
+        "elapsedMs": 576.792,
+        "created": [],
+        "plan": [],
+        "message": "Joint search limit reached; feasibility unresolved."
+      },
+      "after": {
+        "status": "review",
+        "counters": {
+          "candidates": 145,
+          "checks": 4281,
+          "nodes": 42
+        },
+        "elapsedMs": 6.962,
+        "created": [
+          [
+            "Interview",
+            1793692800000000,
+            1793696400000000
+          ],
+          [
+            "Review",
+            1793606400000000,
+            1793613600000000
+          ],
+          [
+            "Training",
+            1793869200000000,
+            1793872800000000
+          ],
+          [
+            "Workshop",
+            1793781000000000,
+            1793786400000000
+          ]
+        ],
+        "plan": [
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793786400000000,
+              "location": "",
+              "start": 1793781000000000,
+              "summary": "Workshop"
+            },
+            "handle": 2,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793613600000000,
+              "location": "",
+              "start": 1793606400000000,
+              "summary": "Review"
+            },
+            "handle": 3,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793872800000000,
+              "location": "",
+              "start": 1793869200000000,
+              "summary": "Training"
+            },
+            "handle": 4,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793696400000000,
+              "location": "",
+              "start": 1793692800000000,
+              "summary": "Interview"
+            },
+            "handle": 5,
+            "type": "create"
+          }
+        ],
+        "message": "Evaluation completed."
+      }
+    },
+    {
+      "repetition": 4,
+      "translation": "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+      "before": {
+        "status": "limited",
+        "counters": {
+          "candidates": 145,
+          "checks": 591276,
+          "nodes": 100000
+        },
+        "elapsedMs": 598.409,
+        "created": [],
+        "plan": [],
+        "message": "Joint search limit reached; feasibility unresolved."
+      },
+      "after": {
+        "status": "review",
+        "counters": {
+          "candidates": 145,
+          "checks": 4281,
+          "nodes": 42
+        },
+        "elapsedMs": 6.317,
+        "created": [
+          [
+            "Interview",
+            1793692800000000,
+            1793696400000000
+          ],
+          [
+            "Review",
+            1793606400000000,
+            1793613600000000
+          ],
+          [
+            "Training",
+            1793869200000000,
+            1793872800000000
+          ],
+          [
+            "Workshop",
+            1793781000000000,
+            1793786400000000
+          ]
+        ],
+        "plan": [
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793786400000000,
+              "location": "",
+              "start": 1793781000000000,
+              "summary": "Workshop"
+            },
+            "handle": 2,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793613600000000,
+              "location": "",
+              "start": 1793606400000000,
+              "summary": "Review"
+            },
+            "handle": 3,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793872800000000,
+              "location": "",
+              "start": 1793869200000000,
+              "summary": "Training"
+            },
+            "handle": 4,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793696400000000,
+              "location": "",
+              "start": 1793692800000000,
+              "summary": "Interview"
+            },
+            "handle": 5,
+            "type": "create"
+          }
+        ],
+        "message": "Evaluation completed."
+      }
+    },
+    {
+      "repetition": 5,
+      "translation": "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+      "before": {
+        "status": "limited",
+        "counters": {
+          "candidates": 145,
+          "checks": 591276,
+          "nodes": 100000
+        },
+        "elapsedMs": 580.529,
+        "created": [],
+        "plan": [],
+        "message": "Joint search limit reached; feasibility unresolved."
+      },
+      "after": {
+        "status": "review",
+        "counters": {
+          "candidates": 145,
+          "checks": 4281,
+          "nodes": 42
+        },
+        "elapsedMs": 6.159,
+        "created": [
+          [
+            "Interview",
+            1793692800000000,
+            1793696400000000
+          ],
+          [
+            "Review",
+            1793606400000000,
+            1793613600000000
+          ],
+          [
+            "Training",
+            1793869200000000,
+            1793872800000000
+          ],
+          [
+            "Workshop",
+            1793781000000000,
+            1793786400000000
+          ]
+        ],
+        "plan": [
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793786400000000,
+              "location": "",
+              "start": 1793781000000000,
+              "summary": "Workshop"
+            },
+            "handle": 2,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793613600000000,
+              "location": "",
+              "start": 1793606400000000,
+              "summary": "Review"
+            },
+            "handle": 3,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793872800000000,
+              "location": "",
+              "start": 1793869200000000,
+              "summary": "Training"
+            },
+            "handle": 4,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793696400000000,
+              "location": "",
+              "start": 1793692800000000,
+              "summary": "Interview"
+            },
+            "handle": 5,
+            "type": "create"
+          }
+        ],
+        "message": "Evaluation completed."
+      }
+    },
+    {
+      "repetition": 6,
+      "translation": "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+      "before": {
+        "status": "limited",
+        "counters": {
+          "candidates": 145,
+          "checks": 591276,
+          "nodes": 100000
+        },
+        "elapsedMs": 515.605,
+        "created": [],
+        "plan": [],
+        "message": "Joint search limit reached; feasibility unresolved."
+      },
+      "after": {
+        "status": "review",
+        "counters": {
+          "candidates": 145,
+          "checks": 4281,
+          "nodes": 42
+        },
+        "elapsedMs": 6.303,
+        "created": [
+          [
+            "Interview",
+            1793692800000000,
+            1793696400000000
+          ],
+          [
+            "Review",
+            1793606400000000,
+            1793613600000000
+          ],
+          [
+            "Training",
+            1793869200000000,
+            1793872800000000
+          ],
+          [
+            "Workshop",
+            1793781000000000,
+            1793786400000000
+          ]
+        ],
+        "plan": [
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793786400000000,
+              "location": "",
+              "start": 1793781000000000,
+              "summary": "Workshop"
+            },
+            "handle": 2,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793613600000000,
+              "location": "",
+              "start": 1793606400000000,
+              "summary": "Review"
+            },
+            "handle": 3,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793872800000000,
+              "location": "",
+              "start": 1793869200000000,
+              "summary": "Training"
+            },
+            "handle": 4,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793696400000000,
+              "location": "",
+              "start": 1793692800000000,
+              "summary": "Interview"
+            },
+            "handle": 5,
+            "type": "create"
+          }
+        ],
+        "message": "Evaluation completed."
+      }
+    },
+    {
+      "repetition": 7,
+      "translation": "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+      "before": {
+        "status": "limited",
+        "counters": {
+          "candidates": 145,
+          "checks": 591276,
+          "nodes": 100000
+        },
+        "elapsedMs": 538.533,
+        "created": [],
+        "plan": [],
+        "message": "Joint search limit reached; feasibility unresolved."
+      },
+      "after": {
+        "status": "review",
+        "counters": {
+          "candidates": 145,
+          "checks": 4281,
+          "nodes": 42
+        },
+        "elapsedMs": 6.055,
+        "created": [
+          [
+            "Interview",
+            1793692800000000,
+            1793696400000000
+          ],
+          [
+            "Review",
+            1793606400000000,
+            1793613600000000
+          ],
+          [
+            "Training",
+            1793869200000000,
+            1793872800000000
+          ],
+          [
+            "Workshop",
+            1793781000000000,
+            1793786400000000
+          ]
+        ],
+        "plan": [
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793786400000000,
+              "location": "",
+              "start": 1793781000000000,
+              "summary": "Workshop"
+            },
+            "handle": 2,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793613600000000,
+              "location": "",
+              "start": 1793606400000000,
+              "summary": "Review"
+            },
+            "handle": 3,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793872800000000,
+              "location": "",
+              "start": 1793869200000000,
+              "summary": "Training"
+            },
+            "handle": 4,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793696400000000,
+              "location": "",
+              "start": 1793692800000000,
+              "summary": "Interview"
+            },
+            "handle": 5,
+            "type": "create"
+          }
+        ],
+        "message": "Evaluation completed."
+      }
+    },
+    {
+      "repetition": 8,
+      "translation": "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+      "before": {
+        "status": "limited",
+        "counters": {
+          "candidates": 145,
+          "checks": 591276,
+          "nodes": 100000
+        },
+        "elapsedMs": 582.416,
+        "created": [],
+        "plan": [],
+        "message": "Joint search limit reached; feasibility unresolved."
+      },
+      "after": {
+        "status": "review",
+        "counters": {
+          "candidates": 145,
+          "checks": 4281,
+          "nodes": 42
+        },
+        "elapsedMs": 5.981,
+        "created": [
+          [
+            "Interview",
+            1793692800000000,
+            1793696400000000
+          ],
+          [
+            "Review",
+            1793606400000000,
+            1793613600000000
+          ],
+          [
+            "Training",
+            1793869200000000,
+            1793872800000000
+          ],
+          [
+            "Workshop",
+            1793781000000000,
+            1793786400000000
+          ]
+        ],
+        "plan": [
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793786400000000,
+              "location": "",
+              "start": 1793781000000000,
+              "summary": "Workshop"
+            },
+            "handle": 2,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793613600000000,
+              "location": "",
+              "start": 1793606400000000,
+              "summary": "Review"
+            },
+            "handle": 3,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793872800000000,
+              "location": "",
+              "start": 1793869200000000,
+              "summary": "Training"
+            },
+            "handle": 4,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793696400000000,
+              "location": "",
+              "start": 1793692800000000,
+              "summary": "Interview"
+            },
+            "handle": 5,
+            "type": "create"
+          }
+        ],
+        "message": "Evaluation completed."
+      }
+    },
+    {
+      "repetition": 9,
+      "translation": "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+      "before": {
+        "status": "limited",
+        "counters": {
+          "candidates": 145,
+          "checks": 591276,
+          "nodes": 100000
+        },
+        "elapsedMs": 507.138,
+        "created": [],
+        "plan": [],
+        "message": "Joint search limit reached; feasibility unresolved."
+      },
+      "after": {
+        "status": "review",
+        "counters": {
+          "candidates": 145,
+          "checks": 4281,
+          "nodes": 42
+        },
+        "elapsedMs": 6.511,
+        "created": [
+          [
+            "Interview",
+            1793692800000000,
+            1793696400000000
+          ],
+          [
+            "Review",
+            1793606400000000,
+            1793613600000000
+          ],
+          [
+            "Training",
+            1793869200000000,
+            1793872800000000
+          ],
+          [
+            "Workshop",
+            1793781000000000,
+            1793786400000000
+          ]
+        ],
+        "plan": [
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793786400000000,
+              "location": "",
+              "start": 1793781000000000,
+              "summary": "Workshop"
+            },
+            "handle": 2,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793613600000000,
+              "location": "",
+              "start": 1793606400000000,
+              "summary": "Review"
+            },
+            "handle": 3,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793872800000000,
+              "location": "",
+              "start": 1793869200000000,
+              "summary": "Training"
+            },
+            "handle": 4,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793696400000000,
+              "location": "",
+              "start": 1793692800000000,
+              "summary": "Interview"
+            },
+            "handle": 5,
+            "type": "create"
+          }
+        ],
+        "message": "Evaluation completed."
+      }
+    },
+    {
+      "repetition": 10,
+      "translation": "Schedule events jointly [event lasting 90 minutes within any of [monday morning; tuesday morning; wednesday morning] with title \"Workshop\"; event lasting 120 minutes within monday morning with title \"Review\"; event lasting 60 minutes within any of [wednesday morning; thursday morning] with title \"Training\"; event lasting 60 minutes within tuesday morning with title \"Interview\"], on different dates, choosing earliest in listed order.",
+      "before": {
+        "status": "limited",
+        "counters": {
+          "candidates": 145,
+          "checks": 591276,
+          "nodes": 100000
+        },
+        "elapsedMs": 507.981,
+        "created": [],
+        "plan": [],
+        "message": "Joint search limit reached; feasibility unresolved."
+      },
+      "after": {
+        "status": "review",
+        "counters": {
+          "candidates": 145,
+          "checks": 4281,
+          "nodes": 42
+        },
+        "elapsedMs": 6.771,
+        "created": [
+          [
+            "Interview",
+            1793692800000000,
+            1793696400000000
+          ],
+          [
+            "Review",
+            1793606400000000,
+            1793613600000000
+          ],
+          [
+            "Training",
+            1793869200000000,
+            1793872800000000
+          ],
+          [
+            "Workshop",
+            1793781000000000,
+            1793786400000000
+          ]
+        ],
+        "plan": [
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793786400000000,
+              "location": "",
+              "start": 1793781000000000,
+              "summary": "Workshop"
+            },
+            "handle": 2,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793613600000000,
+              "location": "",
+              "start": 1793606400000000,
+              "summary": "Review"
+            },
+            "handle": 3,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793872800000000,
+              "location": "",
+              "start": 1793869200000000,
+              "summary": "Training"
+            },
+            "handle": 4,
+            "type": "create"
+          },
+          {
+            "fields": {
+              "colorId": "10",
+              "description": "",
+              "end": 1793696400000000,
+              "location": "",
+              "start": 1793692800000000,
+              "summary": "Interview"
+            },
+            "handle": 5,
+            "type": "create"
+          }
+        ],
+        "message": "Evaluation completed."
+      }
+    }
+  ],
+  "freshCases": [
+    {
+      "specification": {
+        "name": "Hall deficiency despite enough dates globally",
+        "text": "Can events [event lasting 30 minutes within any of [monday morning; tuesday morning]; event lasting 30 minutes within any of [monday morning; tuesday morning]; event lasting 30 minutes within any of [monday morning; tuesday morning]; event lasting 30 minutes within any of [wednesday morning; thursday morning]] be scheduled jointly, on different dates?",
+        "answer": false
+      },
+      "passed": true,
+      "status": "answered",
+      "counters": {
+        "candidates": 248,
+        "checks": 258,
+        "nodes": 0
+      },
+      "elapsedMs": 3.925,
+      "plan": [],
+      "feedback": [
+        "can events [event lasting 30 minutes within any of [monday morning; tuesday morning]; event lasting 30 minutes within any of [monday morning; tuesday morning]; event lasting 30 minutes within any of [monday morning; tuesday morning]; event lasting 30 minutes within any of [wednesday morning; thursday morning]] be scheduled jointly, on different dates, choosing ask?\nfalse; exhaustive joint search found no complete assignment."
+      ]
+    },
+    {
+      "specification": {
+        "name": "Matching must reassign earlier date choices",
+        "text": "Schedule events jointly [event lasting 30 minutes within any of [monday morning; tuesday morning] with title \"A\"; event lasting 60 minutes within monday morning with title \"B\"; event lasting 30 minutes within any of [tuesday morning; wednesday morning] with title \"C\"; event lasting 45 minutes within thursday morning with title \"D\"], on different dates, choosing earliest in listed order.",
+        "expected": [
+          [
+            "A",
+            1793692800000000,
+            1793694600000000
+          ],
+          [
+            "B",
+            1793606400000000,
+            1793610000000000
+          ],
+          [
+            "C",
+            1793779200000000,
+            1793781000000000
+          ],
+          [
+            "D",
+            1793865600000000,
+            1793868300000000
+          ]
+        ]
+      },
+      "passed": true,
+      "status": "review",
+      "counters": {
+        "candidates": 177,
+        "checks": 2330,
+        "nodes": 35
+      },
+      "elapsedMs": 7.814,
+      "plan": [
+        {
+          "fields": {
+            "colorId": "10",
+            "description": "",
+            "end": 1793694600000000,
+            "location": "",
+            "start": 1793692800000000,
+            "summary": "A"
+          },
+          "handle": 0,
+          "type": "create"
+        },
+        {
+          "fields": {
+            "colorId": "10",
+            "description": "",
+            "end": 1793610000000000,
+            "location": "",
+            "start": 1793606400000000,
+            "summary": "B"
+          },
+          "handle": 1,
+          "type": "create"
+        },
+        {
+          "fields": {
+            "colorId": "10",
+            "description": "",
+            "end": 1793781000000000,
+            "location": "",
+            "start": 1793779200000000,
+            "summary": "C"
+          },
+          "handle": 2,
+          "type": "create"
+        },
+        {
+          "fields": {
+            "colorId": "10",
+            "description": "",
+            "end": 1793868300000000,
+            "location": "",
+            "start": 1793865600000000,
+            "summary": "D"
+          },
+          "handle": 3,
+          "type": "create"
+        }
+      ],
+      "feedback": [
+        "schedule events jointly [event lasting 30 minutes within any of [monday morning; tuesday morning] with title \"A\"; event lasting 60 minutes within monday morning with title \"B\"; event lasting 30 minutes within any of [tuesday morning; wednesday morning] with title \"C\"; event lasting 45 minutes within thursday morning with title \"D\"], on different dates, choosing earliest in listed order.\nComplete lexicographic earliest joint schedule in listed order. Existing events remain fixed.\n#0 \"A\" 2026-11-03 09:00 Europe/Budapest (UTC+01:00) – 2026-11-03 09:30 Europe/Budapest (UTC+01:00)\n#1 \"B\" 2026-11-02 09:00 Europe/Budapest (UTC+01:00) – 2026-11-02 10:00 Europe/Budapest (UTC+01:00)\n#2 \"C\" 2026-11-04 09:00 Europe/Budapest (UTC+01:00) – 2026-11-04 09:30 Europe/Budapest (UTC+01:00)\n#3 \"D\" 2026-11-05 09:00 Europe/Budapest (UTC+01:00) – 2026-11-05 09:45 Europe/Budapest (UTC+01:00)"
+      ]
+    },
+    {
+      "specification": {
+        "name": "Same-day packing impossible without distinct-date rule",
+        "text": "Can events [event lasting 10 minutes within interval from thursday at 09:00 to thursday at 09:30; event lasting 10 minutes within interval from thursday at 09:00 to thursday at 09:30; event lasting 10 minutes within interval from thursday at 09:00 to thursday at 09:30; event lasting 10 minutes within interval from thursday at 09:00 to thursday at 09:30; event lasting 10 minutes within interval from thursday at 09:00 to thursday at 09:30] be scheduled jointly?",
+        "answer": false
+      },
+      "passed": true,
+      "status": "answered",
+      "counters": {
+        "candidates": 25,
+        "checks": 336,
+        "nodes": 23
+      },
+      "elapsedMs": 3.406,
+      "plan": [],
+      "feedback": [
+        "can events [event lasting 10 minutes within interval from thursday at 09:00 to thursday at 09:30; event lasting 10 minutes within interval from thursday at 09:00 to thursday at 09:30; event lasting 10 minutes within interval from thursday at 09:00 to thursday at 09:30; event lasting 10 minutes within interval from thursday at 09:00 to thursday at 09:30; event lasting 10 minutes within interval from thursday at 09:00 to thursday at 09:30] be scheduled jointly, choosing ask?\nfalse; exhaustive joint search found no complete assignment."
+      ]
+    },
+    {
+      "specification": {
+        "name": "Exact overnight occupancy blocks a rounded-away gap",
+        "events": [
+          {
+            "id": "overnight",
+            "summary": "Fixed",
+            "start": {
+              "dateTime": "2026-11-02T23:00:00+01:00"
+            },
+            "end": {
+              "dateTime": "2026-11-03T00:02:00+01:00"
+            }
+          }
+        ],
+        "text": "Schedule events jointly [event lasting 30 minutes within interval from tuesday at 00:00 to tuesday at 01:00 with title \"A\"; event lasting 30 minutes within starting at tuesday at 00:35 with title \"B\"], choosing earliest in listed order.",
+        "expected": [
+          [
+            "A",
+            1793660700000000,
+            1793662500000000
+          ],
+          [
+            "B",
+            1793662500000000,
+            1793664300000000
+          ]
+        ]
+      },
+      "passed": true,
+      "status": "review",
+      "counters": {
+        "candidates": 8,
+        "checks": 24,
+        "nodes": 2
+      },
+      "elapsedMs": 2.819,
+      "plan": [
+        {
+          "fields": {
+            "colorId": "10",
+            "description": "",
+            "end": 1793662500000000,
+            "location": "",
+            "start": 1793660700000000,
+            "summary": "A"
+          },
+          "handle": 1,
+          "type": "create"
+        },
+        {
+          "fields": {
+            "colorId": "10",
+            "description": "",
+            "end": 1793664300000000,
+            "location": "",
+            "start": 1793662500000000,
+            "summary": "B"
+          },
+          "handle": 2,
+          "type": "create"
+        }
+      ],
+      "feedback": [
+        "schedule events jointly [event lasting 30 minutes within interval from tuesday at 00:00 to tuesday at 01:00 with title \"A\"; event lasting 30 minutes within starting at tuesday at 00:35 with title \"B\"], choosing earliest in listed order.\nComplete lexicographic earliest joint schedule in listed order. Existing events remain fixed.\n#1 \"A\" 2026-11-03 00:05 Europe/Budapest (UTC+01:00) – 2026-11-03 00:35 Europe/Budapest (UTC+01:00)\n#2 \"B\" 2026-11-03 00:35 Europe/Budapest (UTC+01:00) – 2026-11-03 01:05 Europe/Budapest (UTC+01:00)"
+      ]
+    },
+    {
+      "specification": {
+        "name": "Different UTC dates do not satisfy different Budapest dates",
+        "text": "Can events [event lasting 30 minutes within starting at tuesday at 00:30; event lasting 30 minutes within starting at tuesday at 23:00] be scheduled jointly, on different dates?",
+        "answer": false
+      },
+      "passed": true,
+      "status": "answered",
+      "counters": {
+        "candidates": 2,
+        "checks": 2,
+        "nodes": 0
+      },
+      "elapsedMs": 2.185,
+      "plan": [],
+      "feedback": [
+        "can events [event lasting 30 minutes within starting at tuesday at 00:30; event lasting 30 minutes within starting at tuesday at 23:00] be scheduled jointly, on different dates, choosing ask?\nfalse; exhaustive joint search found no complete assignment."
+      ]
+    },
+    {
+      "specification": {
+        "name": "Same UTC date may satisfy different Budapest dates",
+        "text": "Schedule events jointly [event lasting 30 minutes within starting at monday at 23:30 with title \"A\"; event lasting 30 minutes within starting at tuesday at 00:30 with title \"B\"], on different dates, choosing earliest in listed order.",
+        "expected": [
+          [
+            "A",
+            1793658600000000,
+            1793660400000000
+          ],
+          [
+            "B",
+            1793662200000000,
+            1793664000000000
+          ]
+        ]
+      },
+      "passed": true,
+      "status": "review",
+      "counters": {
+        "candidates": 2,
+        "checks": 10,
+        "nodes": 2
+      },
+      "elapsedMs": 2.67,
+      "plan": [
+        {
+          "fields": {
+            "colorId": "10",
+            "description": "",
+            "end": 1793660400000000,
+            "location": "",
+            "start": 1793658600000000,
+            "summary": "A"
+          },
+          "handle": 0,
+          "type": "create"
+        },
+        {
+          "fields": {
+            "colorId": "10",
+            "description": "",
+            "end": 1793664000000000,
+            "location": "",
+            "start": 1793662200000000,
+            "summary": "B"
+          },
+          "handle": 1,
+          "type": "create"
+        }
+      ],
+      "feedback": [
+        "schedule events jointly [event lasting 30 minutes within starting at monday at 23:30 with title \"A\"; event lasting 30 minutes within starting at tuesday at 00:30 with title \"B\"], on different dates, choosing earliest in listed order.\nComplete lexicographic earliest joint schedule in listed order. Existing events remain fixed.\n#0 \"A\" 2026-11-02 23:30 Europe/Budapest (UTC+01:00) – 2026-11-03 00:00 Europe/Budapest (UTC+01:00)\n#1 \"B\" 2026-11-03 00:30 Europe/Budapest (UTC+01:00) – 2026-11-03 01:00 Europe/Budapest (UTC+01:00)"
+      ]
+    },
+    {
+      "specification": {
+        "name": "Eight distinct start dates cannot fit a seven-day universe",
+        "text": "Can events [event lasting 5 minutes within selected week; event lasting 5 minutes within selected week; event lasting 5 minutes within selected week; event lasting 5 minutes within selected week; event lasting 5 minutes within selected week; event lasting 5 minutes within selected week; event lasting 5 minutes within selected week; event lasting 5 minutes within selected week] be scheduled jointly, on different dates?",
+        "answer": false
+      },
+      "passed": true,
+      "status": "answered",
+      "counters": {
+        "candidates": 16128,
+        "checks": 16128,
+        "nodes": 0
+      },
+      "elapsedMs": 202.878,
+      "plan": [],
+      "feedback": [
+        "can events [event lasting 5 minutes within selected week; event lasting 5 minutes within selected week; event lasting 5 minutes within selected week; event lasting 5 minutes within selected week; event lasting 5 minutes within selected week; event lasting 5 minutes within selected week; event lasting 5 minutes within selected week; event lasting 5 minutes within selected week] be scheduled jointly, on different dates, choosing ask?\nfalse; exhaustive joint search found no complete assignment."
+      ]
+    }
+  ]
+}

@@ -805,7 +805,13 @@ in item order and committed only with the complete result. No partial creations 
 The joint engine enumerates five-minute candidates inside each separate allowed
 window, respecting fixed starts, scope and both models of existing occupancy.
 It searches complete assignments in item/start order with backtracking, checking
-mutual clashes and any different-date requirement. For explicit earliest-in-listed-order,
+mutual clashes and any different-date requirement. After each assignment, forward
+checking removes incompatible remaining placements. When distinct start dates are
+required, a bipartite date-matching feasibility check rejects partial assignments
+that cannot give all remaining events distinct local start dates. These checks never
+choose placements or reorder candidates, and their work counts against the existing
+check budget. Complete witnesses are independently checked against each other and
+fixed events. For explicit earliest-in-listed-order,
 the first complete assignment proves lexicographic minimality; a greedy prefix does not.
 Without that policy it displays up to 64 complete checked alternatives for an explicit
 choice; enumeration order is not a preference. A feasibility question may use any

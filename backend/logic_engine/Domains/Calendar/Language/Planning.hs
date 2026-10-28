@@ -5,6 +5,8 @@ import Control.Monad.Except
 import Control.Monad.State.Strict
 import Data.List(sortOn,nub)
 import Data.Maybe(fromMaybe)
+import qualified Data.Map.Strict as M
+import qualified Data.Set as S
 import Domains.Calendar.Types
 import Domains.Calendar.Language.State
 
@@ -83,3 +85,78 @@ solveAvoid forbidden cacheKey old canMove targets new bounds=do
   catchError (walk [] ordered) (\e->case e of Limited _->modify(\w->w{searchIncomplete=True});_->throwError e)
 
 preservesOrder old es=and[start a<=start b|a<-es,b<-es,x<-old,y<-old,handle x==handle a,handle y==handle b,start x<start y]
+
+-- A matching is only a necessary feasibility test, never a placement or a
+-- preference. Augmenting paths handle overlapping allowed-date sets (Hall's
+-- condition), without enumerating date combinations or changing item order.
+jointDatesPossible :: Context -> [[Event]] -> Eval Bool
+jointDatesPossible ctx domains = do
+  dates <- forM domains $ \placements -> do
+    days <- forM placements $ \event -> do
+      charge "check"
+      pure (localDate ctx (start event))
+    pure (S.toList (S.fromList days))
+  if S.size (S.fromList (concat dates)) < length dates then pure False
+  else do
+    let choices = M.fromList (zip [0 :: Int ..] dates)
+        augment item visited matching = tryDays (M.findWithDefault [] item choices) visited
+          where
+            tryDays [] seen = pure (Nothing, seen)
+            tryDays (day:rest) seen = do
+              charge "check"
+              if S.member day seen then tryDays rest seen else do
+                let seen' = S.insert day seen
+                case M.lookup day matching of
+                  Nothing -> pure (Just (M.insert day item matching), seen')
+                  Just owner -> do
+                    (moved, seen'') <- augment owner seen' matching
+                    case moved of
+                      Nothing -> tryDays rest seen''
+                      Just updated -> pure (Just (M.insert day item updated), seen'')
+        assign Nothing _ = pure Nothing
+        assign (Just matching) item = fst <$> augment item S.empty matching
+    result <- foldM assign (Just M.empty) [0 .. length dates - 1]
+    pure (maybe False (const True) result)
+
+-- Forward checking removes only candidates incompatible with an already
+-- assigned event. Surviving domains retain input/start order, so the first
+-- complete solution is still the lexicographic earliest one in listed order.
+solveJoint :: Context -> Bool -> Int -> [Event] -> [[Event]] -> Eval ()
+solveJoint ctx different cap old domains = do
+  let compatible a b = do
+        charge "check"
+        charge "check"
+        pure (not (bothClash a b) &&
+          (not different || localDate ctx (start a) /= localDate ctx (start b)))
+      feasible remaining
+        | any null remaining = pure False
+        | different = jointDatesPossible ctx remaining
+        | otherwise = pure True
+      forward _ [] = pure (Just [])
+      forward event (remaining:rest) = do
+        viable <- filterM (compatible event) remaining
+        if null viable then pure Nothing
+        else fmap (viable :) <$> forward event rest
+      walk assigned [] = do
+        -- Check complete witnesses independently of the filtering path. Existing
+        -- clashes solely between fixed old events are outside joint scheduling.
+        pairs <- and <$> forM [(a,b) | (i,a) <- zip [0 :: Int ..] assigned,
+                                       b <- drop (i+1) assigned] (uncurry compatible)
+        fixed <- and <$> forM [(a,b) | a <- assigned, b <- old] (\(a,b) -> do
+          charge "check"
+          charge "check"
+          pure (not (bothClash a b)))
+        when (pairs && fixed && all (inScope ctx) assigned) $
+          modify (\w -> w {bestPlans = bestPlans w ++ [old ++ reverse assigned]})
+      walk assigned (placements:rest) = forM_ placements $ \event -> do
+        count <- gets (length . bestPlans)
+        when (count < cap) $ do
+          charge "node"
+          remaining <- forward event rest
+          case remaining of
+            Nothing -> pure ()
+            Just viable -> do
+              possible <- feasible viable
+              when possible (walk (event:assigned) viable)
+  possible <- feasible domains
+  when possible (walk [] domains)

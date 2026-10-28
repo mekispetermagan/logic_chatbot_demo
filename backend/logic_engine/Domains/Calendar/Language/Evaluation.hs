@@ -185,14 +185,7 @@ joint k slot different earliest hypothetical=do
     pure[e|good,inScope c e]
    pure(concat ps)
   let cap=if earliest||hypothetical then 1 else 64
-      walk assigned []=modify(\w->w{bestPlans=bestPlans w++[old++reverse assigned]})
-      walk assigned (ps:rest)=forM_ ps$ \p->do
-       count<-gets(length.bestPlans)
-       when(count<cap)$ do
-        charge "node"
-        good<-and <$> forM assigned(\q->charge "check">>charge "check">>pure(not(bothClash p q) && (not different || localDate c(start p)/=localDate c(start q))))
-        when good(walk(p:assigned)rest)
-  catchError(walk [] domains)(\e->case e of Limited _->modify(\w->w{searchIncomplete=True});_->throwError e)
+  catchError(solveJoint c different cap old domains)(\e->case e of Limited _->modify(\w->w{searchIncomplete=True});_->throwError e)
  ps<-gets bestPlans;limited<-gets searchIncomplete
  if null ps then
   if limited then throwError(Limited "Joint search limit reached; feasibility unresolved.")
