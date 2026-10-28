@@ -19,6 +19,8 @@ from .llm_transcript import LlmTranscript
 from .agent_llm import AgentTranslator
 from .calendar_mcp import CalendarError, CalendarMcp
 from .calendar_dialogue import CalendarDialogue
+from .calendar_llm_dialogue import CalendarLlmDialogue
+from .calendar_llm_routes import router as calendar_llm_router
 from .calendar_routes import router as calendar_router
 from .language_help import router as language_help_router
 
@@ -44,8 +46,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.calendar = CalendarMcp(settings)
         app.state.calendar_dialogue = CalendarDialogue(database, settings.engine_path, lambda: app.state.calendar, app.state.conversation_service.translator)
         translator = app.state.conversation_service.translator
-        usage_translator = AgentTranslator(settings.openai_api_key, translator.ledger, translator.transcript)
-        usage_task = (asyncio.create_task(AgentUsageReconciler(usage_translator).run())
+        app.state.calendar_llm_only = CalendarLlmDialogue(database, settings,
+            lambda: app.state.calendar, app.state.calendar_dialogue, translator.transcript)
+        usage_task = (asyncio.create_task(AgentUsageReconciler(app.state.calendar_llm_only.agent).run())
                       if settings.openai_api_key else None)
         try:
             yield
@@ -88,6 +91,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                        allow_methods=["GET", "POST", "PATCH", "DELETE"], allow_headers=["Accept", "Content-Type"])
     app.include_router(router)
     app.include_router(calendar_router)
+    app.include_router(calendar_llm_router)
     app.include_router(language_help_router)
     return app
 

@@ -278,3 +278,17 @@ evaluation; **Accept changes** remains the separate Google-write approval.
 The interpreter sees the selected week's Haskell-scoped events and supplied
 salience, with no direct Google tools. Its JSON-valued clarification proposals
 are labeled **Clarification value**, rather than controlled-English programs.
+
+
+## Calendar LLM-only comparison mode
+
+Select **Calendar · LLM-only** for natural-language Calendar chat through the
+separate GPT agent and MCP tools. Its LLM switch stays on and disabled. **Calendar**
+continues to offer controlled English with optional translation. Both modes share
+one weekly display/editor and selected week, with independent chat histories.
+Pending work in either mode locks the editor; switch back to its owner to finish
+or cancel. Approve proposed writes explicitly. After an uncertain request, refresh
+chat status before retrying; recovery provides reconciliation and continuation
+controls. The backend must be restarted with Calendar and agent configuration
+enabled; see [setup and contracts](../docs/calendar-llm-only.md) and
+[agent sessions](../docs/agent-sessions.md).

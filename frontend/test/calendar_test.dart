@@ -470,7 +470,24 @@ void main() {
         expect(find.byTooltip('Undo'), findsNothing);
         expect(calendarRequests, hasLength(2));
         expect(conversationRequests, hasLength(1));
-        if (width < 480) {
+        if (width < 950) {
+          await tester.tap(find.byKey(const ValueKey('domain-selector')));
+          await tester.pumpAndSettle();
+        }
+        await tester.tap(find.text('Calendar · LLM-only').last);
+        await tester.pumpAndSettle();
+        expect(find.byType(CalendarWeekView), findsOneWidget);
+        final llmSwitch = tester.widget<Switch>(find.byType(Switch));
+        expect(llmSwitch.value, isTrue);
+        expect(llmSwitch.onChanged, isNull);
+        expect(
+          calendarRequests.any(
+            (r) => r.url.path.endsWith('/calendar/llm-only/dialogue'),
+          ),
+          isTrue,
+        );
+        expect(tester.takeException(), isNull);
+        if (width < 950) {
           await tester.tap(find.byKey(const ValueKey('domain-selector')));
           await tester.pumpAndSettle();
         }

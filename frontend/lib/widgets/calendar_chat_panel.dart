@@ -29,8 +29,13 @@ class CalendarChatPanel extends StatelessWidget {
       sending: controller.chatBusy,
       error: controller.chatError,
       onRefresh: controller.loadDialogue,
-      loadExamples: controller.api.examples,
-      composerKey: const ValueKey('calendar-entry'),
+      loadExamples: controller.isLlmOnly ? null : controller.api.examples,
+      emptyHint: controller.isLlmOnly
+          ? 'Ask about or change your calendar.'
+          : 'Enter a sentence to begin.',
+      composerKey: ValueKey(
+        controller.isLlmOnly ? 'calendar-llm-only-entry' : 'calendar-entry',
+      ),
       onSend: controller.sendChat,
       onAnswer: controller.proposal != null
           ? controller.answerInterpretation

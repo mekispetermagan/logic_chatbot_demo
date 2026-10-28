@@ -111,6 +111,29 @@ class CalendarMcp:
             raise CalendarError('Calendar MCP returned an invalid result.', 502)
         return data
 
+    async def describe_tools(self):
+        """Discover actual upstream schemas without executing a Calendar operation."""
+        try:
+            with anyio.fail_after(self.timeout):
+                async with self._lock:
+                    with open(os.devnull, 'w') as errors:
+                        async with stdio_client(self.parameters(), errlog=errors) as (read, write):
+                            async with ClientSession(read, write, read_timeout_seconds=timedelta(seconds=self.timeout)) as session:
+                                await session.initialize()
+                                result, cursor, seen = {}, None, set()
+                                while True:
+                                    page = await session.list_tools(cursor=cursor)
+                                    result.update({tool.name: {'description': tool.description or tool.name,
+                                                              'parameters': tool.inputSchema} for tool in page.tools})
+                                    if not page.nextCursor:
+                                        return result
+                                    if page.nextCursor in seen:
+                                        raise CalendarError('Calendar MCP tool discovery failed.', 502)
+                                    seen.add(page.nextCursor)
+                                    cursor = page.nextCursor
+        except Exception as error:
+            raise self.failure(error) or CalendarError('Calendar MCP discovery failed.') from None
+
     async def _read(self, tool, arguments):
         if tool not in READ_TOOLS:
             raise CalendarError('Unsupported Calendar operation.', 422)

@@ -10,6 +10,8 @@ import '../models/chat_message.dart';
 import '../models/interpretation_proposal.dart';
 import '../models/llm_usage.dart';
 
+enum CalendarChatMode { symbolic, llmOnly }
+
 class CalendarController extends ChangeNotifier {
   CalendarController({required this.api, DateTime Function()? now})
     : week = CalendarWeek.containing((now ?? DateTime.now)());
@@ -41,6 +43,7 @@ class CalendarController extends ChangeNotifier {
   bool _usageRefreshing = false;
   Future<void> _refreshUsage() async {
     final before = dialogue;
+    final mode = chatMode;
     if (_disposed ||
         chatBusy ||
         editing ||
@@ -50,10 +53,11 @@ class CalendarController extends ChangeNotifier {
     }
     _usageRefreshing = true;
     try {
-      final updated = await api.dialogue();
+      final updated = await _dialogueRequest();
       if (!_disposed &&
           !chatBusy &&
           !editing &&
+          chatMode == mode &&
           identical(dialogue, before)) {
         _adoptDialogue(updated);
         notifyListeners();
@@ -71,13 +75,69 @@ class CalendarController extends ChangeNotifier {
   bool loading = false;
   bool editing = false;
   bool needsRefresh = false;
-  Map<String, dynamic>? dialogue;
+  CalendarChatMode chatMode = CalendarChatMode.symbolic;
+  final _dialogues = <CalendarChatMode, Map<String, dynamic>>{};
+  final _uncertainModes = <CalendarChatMode>{};
+  Map<String, dynamic>? get dialogue => _dialogues[chatMode];
+  set dialogue(Map<String, dynamic>? value) {
+    if (value == null) {
+      _dialogues.remove(chatMode);
+    } else {
+      _dialogues[chatMode] = value;
+    }
+  }
+
+  bool get isLlmOnly => chatMode == CalendarChatMode.llmOnly;
+  bool get canSwitchChatMode => !chatBusy && !editing;
+  bool get statusUncertain => _uncertainModes.contains(chatMode);
+  bool get otherChatPending {
+    final otherMode = isLlmOnly
+        ? CalendarChatMode.symbolic
+        : CalendarChatMode.llmOnly;
+    return _uncertainModes.contains(otherMode) ||
+        (dialogue?['peerBusy'] as bool? ??
+            _pendingStatus(_dialogues[otherMode]?['status']));
+  }
+
+  Future<Map<String, dynamic>> _dialogueRequest([
+    Map<String, dynamic>? action,
+  ]) => isLlmOnly ? api.llmOnlyDialogue(action) : api.dialogue(action);
+
+  Future<void> selectChatMode(CalendarChatMode mode) async {
+    if (_disposed || !canSwitchChatMode) return;
+    chatMode = mode;
+    chatError = null;
+    notifyListeners();
+    await loadDialogue();
+  }
+
+  static bool _pendingStatus(dynamic status) => const {
+    'clarify',
+    'review',
+    'prefix',
+    'applying',
+    'recovery',
+    'interpretation',
+    'interpreting',
+    'clarification',
+    'running',
+    'suspended',
+  }.contains(status);
+
+  bool get canNavigate =>
+      !editing &&
+      !chatBusy &&
+      !otherChatPending &&
+      _uncertainModes.isEmpty &&
+      !const ['applying', 'recovery'].contains(chatStatus);
+
   bool chatBusy = false;
   String? chatError;
   bool useLlm = false;
   int? selectedInterpretationRank;
   String? _proposalId;
-  InterpretationProposal? get proposal => dialogue?['interpretation'] == null
+  InterpretationProposal? get proposal =>
+      isLlmOnly || dialogue?['interpretation'] == null
       ? null
       : InterpretationProposal.fromJson(
           Map<String, dynamic>.from(dialogue!['interpretation'] as Map),
@@ -102,6 +162,7 @@ class CalendarController extends ChangeNotifier {
   bool get canReview =>
       proposal != null && chatStatus == 'interpretation' && !chatBusy;
   bool get canToggleLlm =>
+      !isLlmOnly &&
       !chatBusy &&
       !editing &&
       !const [
@@ -160,8 +221,14 @@ class CalendarController extends ChangeNotifier {
 
   String get chatStatus => dialogue?['status'] as String? ?? 'idle';
   Map? get pendingQuestion => dialogue?['question'] as Map?;
-  bool get awaitingAnswer => chatStatus == 'clarify' && pendingQuestion != null;
+  bool get awaitingAnswer => isLlmOnly
+      ? chatStatus == 'clarification'
+      : chatStatus == 'clarify' && pendingQuestion != null;
   bool get canChat =>
+      !chatBusy &&
+      !editing &&
+      !otherChatPending &&
+      !statusUncertain &&
       dialogue != null &&
       (!dialoguePending ||
           awaitingAnswer ||
@@ -172,6 +239,8 @@ class CalendarController extends ChangeNotifier {
   ];
   bool get hasDialogueControls =>
       dialoguePending ||
+      otherChatPending ||
+      statusUncertain ||
       (dialogue?['canRevise'] == true &&
           (dialogue?['parameters'] as Map? ?? {}).isNotEmpty);
 
@@ -195,6 +264,10 @@ class CalendarController extends ChangeNotifier {
 
   Future<bool> sendChat(String text) async {
     if (_disposed || chatBusy || !canChat) return false;
+    if (isLlmOnly) {
+      await act({'type': 'message', 'text': text});
+      return !_disposed && chatError == null;
+    }
     final question = pendingQuestion;
     await act(
       awaitingAnswer && question != null
@@ -220,20 +293,14 @@ class CalendarController extends ChangeNotifier {
     ),
   });
 
-  bool get dialoguePending => const [
-    'clarify',
-    'review',
-    'prefix',
-    'applying',
-    'recovery',
-    'interpretation',
-    'interpreting',
-  ].contains(dialogue?['status']);
+  bool get dialoguePending => _pendingStatus(dialogue?['status']);
   bool get canEdit =>
       !loading &&
       !editing &&
       !chatBusy &&
       !dialoguePending &&
+      !otherChatPending &&
+      _uncertainModes.isEmpty &&
       !needsRefresh &&
       error == null;
   String? error;
@@ -271,9 +338,7 @@ class CalendarController extends ChangeNotifier {
   }
 
   Future<void> shiftWeek(int offset) {
-    if (_disposed || editing) return Future.value();
-    if (chatBusy ||
-        const ['applying', 'recovery'].contains(dialogue?['status'])) {
+    if (_disposed || !canNavigate) {
       return Future.value();
     }
     if (dialoguePending) return _cancelAndShift(offset);
@@ -295,10 +360,17 @@ class CalendarController extends ChangeNotifier {
     chatError = null;
     notifyListeners();
     try {
-      final result = await api.dialogue();
-      if (!_disposed) _adoptDialogue(result);
+      final result = await _dialogueRequest();
+      if (!_disposed) {
+        _adoptDialogue(result);
+        _uncertainModes.remove(chatMode);
+        if (isLlmOnly) await load();
+      }
     } on ApiException catch (failure) {
-      if (!_disposed) chatError = failure.message;
+      if (!_disposed) {
+        chatError = failure.message;
+        if (isLlmOnly) _uncertainModes.add(chatMode);
+      }
     } finally {
       if (!_disposed) {
         chatBusy = false;
@@ -308,27 +380,32 @@ class CalendarController extends ChangeNotifier {
   }
 
   Future<void> act(Map<String, dynamic> action) async {
-    if (_disposed || chatBusy) return;
+    if (_disposed || chatBusy || statusUncertain || otherChatPending) return;
     chatBusy = true;
     chatError = null;
     notifyListeners();
     try {
-      final result = await api.dialogue({
+      final result = await _dialogueRequest({
         ...action,
         'revision': dialogue?['revision'] ?? 0,
-        if (action['type'] == 'start') ...{
+        if (action['type'] == 'start' ||
+            (isLlmOnly && action['type'] == 'message' && !awaitingAnswer)) ...{
           'timeMin': week.start.toUtc().toIso8601String(),
           'timeMax': week.end.toUtc().toIso8601String(),
         },
       });
       if (!_disposed) {
         _adoptDialogue(result);
-        if (const ['answered', 'idle', 'recovery'].contains(result['status'])) {
+        if (isLlmOnly ||
+            const ['answered', 'idle', 'recovery'].contains(result['status'])) {
           await load();
         }
       }
     } on ApiException catch (failure) {
-      if (!_disposed) chatError = failure.message;
+      if (!_disposed) {
+        chatError = failure.message;
+        if (isLlmOnly) _uncertainModes.add(chatMode);
+      }
     } finally {
       if (!_disposed) {
         chatBusy = false;

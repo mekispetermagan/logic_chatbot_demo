@@ -34,7 +34,7 @@ class AgentStore:
     def recreate(self, domains):
         """Detach selected agents/sessions; next interpretation creates replacements."""
         domains = tuple(domains)
-        if not domains or any(domain not in ('objects', 'network', 'cellular', 'calendar') for domain in domains):
+        if not domains or any(domain not in ('objects', 'network', 'cellular', 'calendar', 'calendar-llm-only') for domain in domains):
             raise ValueError('Select objects, network, cellular or calendar')
         placeholders = ','.join('?' for _ in domains)
         with self.database.connection() as connection:
@@ -60,6 +60,10 @@ class AgentStore:
             ''', domains).rowcount
             if 'calendar' in domains:
                 sessions += connection.execute('DELETE FROM calendar_llm_sessions').rowcount
+            if 'calendar-llm-only' in domains:
+                if connection.execute("SELECT 1 FROM llm_locks WHERE expires_at > ? AND name LIKE 'conversation:calendar-llm-only:%'", (time.time(),)).fetchone():
+                    raise PendingConflict('The Calendar LLM-only agent is busy')
+                sessions += connection.execute('DELETE FROM calendar_llm_only_sessions').rowcount
             agents = connection.execute(
                 f'DELETE FROM llm_agents WHERE domain IN ({placeholders})', domains).rowcount
         return agents, sessions
@@ -72,6 +76,8 @@ class AgentStore:
 
     @staticmethod
     def _tables(conversation_id):
+        if str(conversation_id).startswith('calendar-llm-only:'):
+            return ('calendar_llm_only_sessions', 'calendar_llm_only_events')
         return ('calendar_llm_sessions', 'calendar_llm_events') if str(conversation_id).startswith('calendar:') else ('llm_sessions', 'llm_session_events')
 
     def record_event(self, conversation_id, payload):

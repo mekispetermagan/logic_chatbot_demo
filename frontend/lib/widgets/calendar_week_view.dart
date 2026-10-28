@@ -94,14 +94,14 @@ class _CalendarWeekViewState extends State<CalendarWeekView>
               children: [
                 IconButton(
                   tooltip: 'Previous week',
-                  onPressed: controller.editing
+                  onPressed: !controller.canNavigate
                       ? null
                       : () => controller.shiftWeek(-1),
                   icon: const Icon(Icons.chevron_left),
                 ),
                 IconButton(
                   tooltip: 'Next week',
-                  onPressed: controller.editing
+                  onPressed: !controller.canNavigate
                       ? null
                       : () => controller.shiftWeek(1),
                   icon: const Icon(Icons.chevron_right),

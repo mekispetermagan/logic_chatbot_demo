@@ -120,3 +120,15 @@ The existing API passes these messages to direct chat and interpreter validation
 feedback. Syntax rejection still applies none of the entry. This diagnostic
 improvement does not introduce automatic LLM repair or semantic verification of
 translations.
+
+## Calendar LLM-only backend
+
+The separate [LLM-only Calendar backend](calendar-llm-only.md) forwards agent-selected
+function calls to the local MCP adapter. It uses no Haskell context construction,
+reference resolution, evaluation or plan checking. It has separate agent/session/
+dialogue tables and shares Calendar's mutation gate, provider credentials and
+usage ledger. Agent-proposed primitive write lists require explicit approval;
+readback verifies execution only. Both Calendar agents now receive the same
+shared domain specification. The **Calendar · LLM-only** selector reuses the weekly
+display and GUI editor with a separate chat adapter in the shared chat shell.
+Its LLM switch is always on and disabled; pending work locks editing across modes.

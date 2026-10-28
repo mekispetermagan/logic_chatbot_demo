@@ -195,7 +195,12 @@ class _DemoScreenState extends State<DemoScreen> {
               ? PanelFrame(child: CalendarWeekView(controller: _calendar))
               : worldPanel;
           final displayedChatPanel = _showCalendar
-              ? PanelFrame(child: CalendarChatPanel(controller: _calendar))
+              ? PanelFrame(
+                  child: CalendarChatPanel(
+                    key: ValueKey(_calendar.chatMode),
+                    controller: _calendar,
+                  ),
+                )
               : chatPanel;
 
           return DefaultTabController(
@@ -203,20 +208,32 @@ class _DemoScreenState extends State<DemoScreen> {
             length: 2,
             child: Scaffold(
               appBar: AppBar(
-                title: wide ? const Text('Logic Chatbot Demo') : null,
+                title: constraints.maxWidth >= 1400
+                    ? const Text('Logic Chatbot Demo')
+                    : null,
                 actions: [
                   Padding(
                     padding: EdgeInsets.only(right: actionSpacing),
                     child: DomainSelector(
                       selected: _controller.domain,
-                      compact: constraints.maxWidth < 480,
-                      calendarSelected: _showCalendar,
+                      compact: constraints.maxWidth < 950,
+                      calendarSelected: _showCalendar && !_calendar.isLlmOnly,
+                      calendarLlmOnlySelected:
+                          _showCalendar && _calendar.isLlmOnly,
                       onCalendarSelected: () {
+                        if (!_calendar.canSwitchChatMode) return;
                         setState(() => _showCalendar = true);
+                        _calendar.selectChatMode(CalendarChatMode.symbolic);
                         _calendar.load();
-                        _calendar.loadDialogue();
                       },
-                      onChanged: _controller.canSwitchDomain
+                      onCalendarLlmOnlySelected: () {
+                        if (!_calendar.canSwitchChatMode) return;
+                        setState(() => _showCalendar = true);
+                        _calendar.selectChatMode(CalendarChatMode.llmOnly);
+                      },
+                      onChanged:
+                          _controller.canSwitchDomain &&
+                              (!_showCalendar || _calendar.canSwitchChatMode)
                           ? (domain) {
                               setState(() => _showCalendar = false);
                               _controller.switchDomain(domain);
@@ -227,7 +244,9 @@ class _DemoScreenState extends State<DemoScreen> {
                   Padding(
                     padding: EdgeInsets.only(right: actionSpacing),
                     child: Tooltip(
-                      message: _controller.llmAvailable
+                      message: _showCalendar && _calendar.isLlmOnly
+                          ? 'LLM-only Calendar always uses the agent'
+                          : _controller.llmAvailable
                           ? 'Activate LLM: propose interpretations after a syntax error'
                           : 'Cellular dialogue is not available yet',
                       child: Row(
@@ -237,7 +256,7 @@ class _DemoScreenState extends State<DemoScreen> {
                           Switch(
                             padding: EdgeInsets.zero,
                             value: _showCalendar
-                                ? _calendar.useLlm
+                                ? (_calendar.isLlmOnly || _calendar.useLlm)
                                 : _controller.llmEnabled,
                             onChanged: _showCalendar
                                 ? (_calendar.canToggleLlm

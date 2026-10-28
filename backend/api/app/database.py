@@ -77,6 +77,15 @@ class Database:
                     usage_json TEXT,
                     created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
                 );
+                CREATE TABLE IF NOT EXISTS calendar_llm_only_sessions (
+                    conversation_id TEXT PRIMARY KEY, session_id TEXT NOT NULL,
+                    agent_id TEXT NOT NULL, config_hash TEXT NOT NULL,
+                    last_turn_id TEXT, event_cursor INTEGER NOT NULL DEFAULT 0
+                );
+                CREATE TABLE IF NOT EXISTS calendar_llm_only_events (
+                    sequence INTEGER PRIMARY KEY AUTOINCREMENT,
+                    conversation_id TEXT NOT NULL, payload_json TEXT NOT NULL
+                );
                 CREATE TABLE IF NOT EXISTS llm_agent_turns (
                     reservation_id TEXT PRIMARY KEY REFERENCES llm_requests(id),
                     session_id TEXT NOT NULL,

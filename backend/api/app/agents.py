@@ -11,12 +11,12 @@ from .repository import PendingConflict
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', choices=['recreate'])
-    parser.add_argument('--domain', required=True, choices=['objects', 'network', 'cellular', 'calendar', 'all'])
+    parser.add_argument('--domain', required=True, choices=['objects', 'network', 'cellular', 'calendar', 'calendar-llm-only', 'all'])
     args = parser.parse_args(argv)
     settings = Settings.from_environment()
     if not settings.database_path.is_file():
         parser.exit(1, 'Application database not found. Start the backend once, or check LOGIC_CHATBOT_DB_PATH.\n')
-    domains = ('objects', 'network', 'cellular', 'calendar') if args.domain == 'all' else (args.domain,)
+    domains = ('objects', 'network', 'cellular', 'calendar', 'calendar-llm-only') if args.domain == 'all' else (args.domain,)
     try:
         agents, sessions = AgentStore(Database(settings.database_path)).recreate(domains)
     except PendingConflict as error:

@@ -102,6 +102,7 @@ class CalendarDialogue:
     def __init__(self, database, executable, adapter, translator=None):
         self.database, self.executable, self.adapter = database, executable, adapter
         self.lock = asyncio.Lock()
+        self.peer_busy = lambda: False
         with database.connection() as db:
             db.execute('''CREATE TABLE IF NOT EXISTS calendar_dialogue (
                 id INTEGER PRIMARY KEY CHECK(id=1), state TEXT NOT NULL)''')
@@ -135,12 +136,12 @@ class CalendarDialogue:
             budget = budget_in(db).model_dump()
             state = hydrate_usage(db, state)
         return {**{k: v for k, v in state.items() if k not in ('work', 'handles', 'salience', 'fingerprint', 'interpretationBase', 'interpretationPreviewWork', 'interpretationCandidatesWork', 'interpreterId')},
-                'eventHandles': state['handles'], 'canRevise': bool(state.get('work')) and not state.get('interpretation'), 'llmBudget': budget}
+                'peerBusy': self.peer_busy(), 'eventHandles': state['handles'], 'canRevise': bool(state.get('work')) and not state.get('interpretation'), 'llmBudget': budget}
 
     @asynccontextmanager
     async def manual(self):
         async with self.lock:
-            if self.read()['status'] in ACTIVE:
+            if self.peer_busy() or self.read()['status'] in ACTIVE:
                 raise CalendarError('Finish or cancel the Calendar dialogue before editing events.', 409)
             yield
             self.record_interpreter(self.read(), 'calendar_edit', notice='Manual calendar edit completed; use the fresh Google snapshot.')
@@ -188,6 +189,8 @@ class CalendarDialogue:
 
     async def act(self, body):
         async with self.lock:
+            if self.peer_busy():
+                raise CalendarError('Finish or cancel the LLM-only Calendar task first.', 409)
             state = self.read()
             if body['revision'] != state['revision']:
                 raise CalendarError('Stale Calendar dialogue revision. Refresh before responding.', 409)

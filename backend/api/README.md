@@ -511,3 +511,14 @@ budget. Preview / Accept interpretation / Reject are separate from final Google
 write approval. Typed clarification-value proposals stay bound to the pending
 Haskell question. See [Calendar interpreter](../../docs/agent-sessions.md#calendar-interpreter)
 for context, persistence and authoring sources.
+
+### Calendar LLM-only backend
+
+`GET/POST /calendar/llm-only/dialogue` provides the separate agent chat backend.
+GPT reasons and chooses primitive MCP operations; FastAPI forwards arguments and
+results and manages explicit write approval/recovery. This path never invokes
+Haskell. It uses the same key, model, Calendar MCP setup and token ledger, with
+independent agent/session/history. Select **Calendar · LLM-only** in the frontend;
+it shares the weekly display/editor and keeps its LLM switch on and disabled.
+See [the API, tool contract and tests](../../docs/calendar-llm-only.md#local-api-and-persistence).
+No live model calls or Calendar writes are made merely by starting the backend.

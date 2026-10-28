@@ -57,8 +57,11 @@ class AgentTranslator(LlmTranslator):
             raise ValueError('Invalid agent response')
         return result
 
+    def configuration(self, domain):
+        return configuration_for(domain)
+
     def ensure_agent(self, client, domain, context, deadline):
-        config = configuration_for(domain)
+        config = self.configuration(domain)
         digest = hashlib.sha256(json.dumps(config, sort_keys=True).encode()).hexdigest()
         with self.store.claim('agent:' + domain):
             saved = self.store.agent(domain)

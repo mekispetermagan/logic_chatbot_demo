@@ -285,3 +285,18 @@ Both configured transports work: app-managed Agents is the default; Responses
 uses the same Calendar instructions without saved sessions. No new model, key,
 Google consent, tool access or fallback transport is introduced. Provider tests
 use fake endpoints and fake Google data, not paid live turns or live event writes.
+
+## Calendar LLM-only agent
+
+The separate `calendar-llm-only` backend uses the same model/reasoning settings,
+shared domain specification and token ledger, with its own agent/session/history.
+It receives function tools instead of a controlled grammar or translation pairs.
+The local FastAPI bridge forwards raw MCP requests/results and handles explicit
+approval and execution recovery; it supplies no Haskell or scheduling assistance.
+See [the LLM-only backend contract](calendar-llm-only.md).
+
+Recreate its saved associations with `python -m app.agents recreate --domain
+calendar-llm-only`; `all` includes this mode. The current Calendar translator's
+configuration now also includes the shared domain specification, so its saved
+configuration refreshes automatically and subsequent new sessions use that
+version. Existing recorded dialogue and accounting remain intact.

@@ -33,7 +33,7 @@ class AgentUsageReconciler:
                 WHERE r.cost_nano IS NULL AND (t.next_poll IS NULL OR t.next_poll<=?)
                 ORDER BY r.created_at LIMIT 100''', (time.time(),))]
             sessions = {r['conversation_id']: r['session_id'] for table in
-                        ('llm_sessions', 'calendar_llm_sessions') for r in db.execute('SELECT * FROM '+table)}
+                        ('llm_sessions', 'calendar_llm_sessions', 'calendar_llm_only_sessions') for r in db.execute('SELECT * FROM '+table)}
         groups = {}
         for row in rows:
             session = row['session_id'] or sessions.get(row['conversation_id'])

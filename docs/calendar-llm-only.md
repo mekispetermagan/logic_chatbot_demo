@@ -1,6 +1,6 @@
 # Calendar LLM-only agent and integration design
 
-**Status: integration design; implementation follows in subsequent commits.** The agent-facing domain specification
+**Status: backend and frontend implemented; live LLM-only smoke test pending.** The agent-facing domain specification
 is [calendar-domain.md](calendar-domain.md). The controlled language is specified
 separately in [calendar-language-v1.md](calendar-language-v1.md); that document
 must not be included in the LLM-only agent's context.
@@ -30,7 +30,7 @@ symbolic engine internals are excluded.
   mode is not an implicit acceptance, cancellation or permission to bypass busy
   state; shared-calendar write exclusion must cover both modes.
 
-## Backend and tool contract
+## Implemented backend and tool contract
 
 The separate `calendar-llm-only` agent uses the configured `gpt-6-luna` model,
 low reasoning effort, no environment, no subagents and no code execution. It
@@ -113,7 +113,7 @@ notice that earlier tool results are not included and fresh facts may be needed.
 Both modes and GUI writes share the current Calendar mutation gate. A pending
 clarification/review/recovery in one mode blocks the other writer. Sessions and
 accounting use distinct `calendar-llm-only:` context IDs. Every user-started agent
-turn creates one accounting record; returning function results resumes the same turn.
+turn reserves budget once; returning function results resumes the same turn.
 Delayed usage reconciliation and shared token totals include this mode. Provider
 and tool failures remain recorded independently of mathematical feasibility.
 
@@ -219,7 +219,7 @@ sequence of intermediate visible appointments. These presentation requirements
 are shared by the two Calendar interfaces where applicable.
 
 
-## Frontend contract
+## Implemented frontend
 
 Select **Calendar · LLM-only** in the app bar. The LLM switch is on and disabled
 in this mode; the original Calendar mode retains its optional translator switch.

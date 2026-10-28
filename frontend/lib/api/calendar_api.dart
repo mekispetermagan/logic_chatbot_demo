@@ -82,11 +82,22 @@ class CalendarApi {
     }
   }
 
-  Future<Map<String, dynamic>> dialogue([Map<String, dynamic>? action]) async {
+  Future<Map<String, dynamic>> dialogue([Map<String, dynamic>? action]) =>
+      _dialogue(action, llmOnly: false);
+
+  Future<Map<String, dynamic>> llmOnlyDialogue([
+    Map<String, dynamic>? action,
+  ]) => _dialogue(action, llmOnly: true);
+
+  Future<Map<String, dynamic>> _dialogue(
+    Map<String, dynamic>? action, {
+    required bool llmOnly,
+  }) async {
     final uri = baseUrl.replace(
       pathSegments: [
         ...baseUrl.pathSegments.where((part) => part.isNotEmpty),
         'calendar',
+        if (llmOnly) 'llm-only',
         'dialogue',
       ],
     );
