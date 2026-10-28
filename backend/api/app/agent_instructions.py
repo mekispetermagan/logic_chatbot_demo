@@ -32,6 +32,7 @@ def configuration_for(domain: str) -> dict:
         common = common.replace('a grid world', 'the selected calendar week').replace('including after visual edits, Undo or Clear.', 'including after visual edits and verified Calendar updates.')
         common = common.replace('Do not combine\nUndo with any other sentence.', 'Calendar Undo is unsupported.')
         domain_text = source.split('## Calendar agent: domain instructions\n', 1)[1]
+        domain_text += '\n## Shared Calendar domain specification\n' + (INSTRUCTIONS_PATH.parent / 'calendar-domain.md').read_text(encoding='utf-8')
         domain_text += '\n## Calendar v1 syntax reference\n' + (PROMPTS / 'calendar.md').read_text(encoding='utf-8')
         answer_examples = json.loads((PROMPTS / 'calendar-answer-examples.json').read_text(encoding='utf-8'))
         domain_text += '\n## Typed engineAnswer examples: question + input => candidate.translation JSON value\n'

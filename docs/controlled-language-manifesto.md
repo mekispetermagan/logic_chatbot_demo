@@ -400,7 +400,7 @@ does not prove that the LLM represented every plausible human intention.
 - [Current object-domain language](object-language-v2.md)
 - [Current network-domain language](network-language-v2.md)
 - [Current cellular-domain language](cellular-language-v2.md)
-- [Proposed Calendar language and task dialogues](proposed-calendar-language.md)
+- [Calendar controlled language v1](calendar-language-v1.md)
 - [Archived atomic core](archive/controlled-english-core.md)
 - [Archived referential layer](archive/controlled-english-layer2.md)
 - [Archived object-domain conceptual layer](archive/controlled-english-layer3.md)

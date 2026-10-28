@@ -1,3 +1,7 @@
+> Archived historical design. Current contracts are [shared Calendar rules](../calendar-domain.md),
+> [Calendar language v1](../calendar-language-v1.md) and [LLM-only design](../calendar-llm-only.md).
+> Historical status statements below are not current implementation status.
+
 # Proposed Calendar controlled language and task dialogues
 
 ## 1. Status and purpose
@@ -5,15 +9,15 @@
 **Semantic version: `calendar-v1`, policy `calendar-demo-1`.** The subsequently
 authorized implementation now supplies controlled-English execution, reference
 resolution, clarification, the three task solvers and reviewed provider writes.
-See [the implementation guide](calendar-language-v1.md) for setup and current
+See [the implementation guide](../calendar-language-v1.md) for setup and current
 boundaries. This document retains its design history and detailed contracts;
 unimplemented extensions remain outside the approved inventory.
 
-The design follows the [controlled-language manifesto](controlled-language-manifesto.md)
-and the [object](object-language-v2.md), [network](network-language-v2.md) and
-[cellular](cellular-language-v2.md) conventions. The motivation is described in
-[Six problems with an LLM-only approach](logic_chatbot_demo20261021_six_problems.md).
-Current provider setup and GUI behavior are in [Calendar MCP setup](calendar-mcp.md).
+The design follows the [controlled-language manifesto](../controlled-language-manifesto.md)
+and the [object](../object-language-v2.md), [network](../network-language-v2.md) and
+[cellular](../cellular-language-v2.md) conventions. The motivation is described in
+[Six problems with an LLM-only approach](../logic_chatbot_demo20261021_six_problems.md).
+Current provider setup and GUI behavior are in [Calendar MCP setup](../calendar-mcp.md).
 
 The demonstration must establish intended meaning through dialogue, retain
 requirements, and produce checkable results. A successful scheduling algorithm
@@ -34,208 +38,31 @@ records current operational coverage:
 
 ## 2. Domain foundations
 
+These grammar-independent rules have been extracted into
+[the shared Calendar domain reference](../calendar-domain.md), which is also the
+semantic reference for the proposed LLM-only agent. This document retains the
+controlled grammar, symbolic evaluation, algorithms and execution contracts.
+The extraction does not implement the LLM-only interface or change v1 semantics.
+
 ### 2.1 Universe and scope
 
-**Agreed:** the selected Monday–Sunday week is the evaluation context, independently
-of today's date. All-day events are completely ignored by references, predicates,
-quantifiers and scheduling constraints. Cross-day timed events are supported.
-The GUI already includes timed events overlapping the week and displays daily
-segments of the same event, with full timestamps in tooltips and details.
-
-**Agreed language scope:** for week `[W0, W1)`, include an event only when
-`start >= W0` and `end <= W1`, using its exact original timestamps and requiring
-positive duration. Both boundary equalities are permitted. Events extending
-outside the week are completely outside the language universe, including its
-scheduling obstacles. Do not claim clash freedom against those excluded events.
-The GUI's broader overlap-based display remains implemented behavior; this is
-an intentional distinction from the proposed language scope.
-
-A cross-day event wholly inside the week remains one identity. Quantifiers,
-selections and descriptions use this universe only. An out-of-scope identifier
-or discourse reference produces a scope diagnostic, never a wider implicit search.
-
-**Demo policy:** chat creation and interval assignments must also remain wholly
-inside the selected week. Crossing midnight is allowed. Operations that would
-leave the week fail without their own effects. Week navigation is a separate
-explicit context operation; it cannot occur inside an unfinished scheduling task.
-Changing weeks cancels unaccepted task proposals and pending clarification work,
-preserves the transcript, and requires fresh resolution in the new universe.
-It does not silently carry a proposed schedule into another week. Navigation
-remains an explicit GUI context operation outside the first command grammar.
-Cancellation never rolls back already verified cloud writes; Section 13 defines
-when context changes are disabled and how interrupted application is recovered.
+See [Universe and scope](../calendar-domain.md#universe-and-scope).
 
 ### 2.2 Events, values and identity
 
-| Item | Agreed meaning |
-| --- | --- |
-| Event identity | Stable identity independent of time, title and display segment |
-| Interval | Start and end timestamps; end strictly after start |
-| Title | Total string; default `""` |
-| Location | Total string; default `""` |
-| Description | Total string; default `""` |
-| Importance | Total categorical value: Normal, Important or Critical; default Normal |
-| Overlap | Allowed in the event model; avoiding it is an explicit task constraint |
-
-There is no `Maybe` wrapper for the three strings or importance. Clearing text
-means assigning `""`. `(Untitled)` is a display fallback, never an implicit title
-assignment. Missing text in provider data is interpreted as an empty string.
-
-Importance maps to Google color IDs as follows:
-
-| Level | Name | Read color ID | Written when explicitly assigned |
-| --- | --- | --- | --- |
-| 0 | Normal | Every ID except 5 and 11, including absent | 10 |
-| 1 | Important | 5 | 5 |
-| 2 | Critical | 11 | 11 |
-
-Unrelated edits preserve the provider's existing color ID. Explicitly assigning
-Normal writes 10 even if another existing color already decoded to Normal.
-
-**Proposed:** intervals are half-open `[start, end)`. Two events clash exactly
-when `max(startA, startB) < min(endA, endB)`; adjacent endpoints do not clash.
-This matches the GUI's exclusive-midnight behavior. Do not clip an event's stored
-interval or duration when computing its visible slice.
-
-Current GUI/backend creation still requires a nonblank title. Allowing untitled
-creation is an agreed language design change awaiting implementation at those
-boundaries. This proposal does not claim that the implementation already accepts it.
+See [Events, values and identity](../calendar-domain.md#events-values-and-identity).
 
 ### 2.3 Five-minute model, originals and rounding
 
-**Agreed:** use a five-minute grid initially. A later switch to 15 minutes would
-be an explicit semantic/configuration change, not a mid-task adjustment. Round
-each imported endpoint to its nearest five-minute boundary; an exact halfway
-value rounds down. Examples: 02:22 -> 02:20; 02:23 -> 02:25; 02:22:30 -> 02:20;
-02:22:31 -> 02:25. If a positive original interval collapses to zero after
-rounding, set its normalized end five minutes after its normalized start:
-02:21–02:22 -> 02:20–02:25. Validate positive original duration before rounding;
-rounding does not repair malformed or reversed source data.
-
-Preserve exact Google originals alongside this temporary symbolic projection.
-Reading does not write normalization back. Text/importance-only updates retain
-exact original timestamps. Interval changes write the explicitly reviewed
-normalized interval. The existing GUI may still show exact imported times.
-No separate per-event restriction metadata is introduced.
-
-**Demo policies for safe scheduling:**
-
-- Use five-minute boundary instants in Europe/Budapest; modern Budapest offsets
-  are whole multiples of five minutes. Implement nearest-boundary rounding on
-  the instant timeline, with an earlier-instant tie-break. This preserves
-  chronological order across DST folds rather than comparing clock labels.
-- Preserve normalized **elapsed duration** when rescheduling. This may differ
-  from an off-grid original duration; disclose both in the movement preview.
-  Untouched events retain their exact intervals and exact durations.
-- Durations explicitly requested for automatic scheduling must be positive
-  multiples of five minutes. Ask for an adjusted duration rather than silently
-  rounding a stated duration. Explicit new off-grid times need confirmation of
-  their normalized values before becoming accepted commands.
-- A complete candidate must pass both normalized-model constraints and an exact
-  final-interval checker: unchanged events use originals; changed/new events use
-  their proposed intervals. No promised clash freedom may depend on rounding
-  away a real conflict. Rounding can conservatively block a real free gap; any
-  infeasibility claim is about this five-minute model and declared exact checks.
-- Each existing event has an explicit unchanged option retaining exact originals.
-  An automatic rescheduling candidate equal to its original normalized interval
-  is represented only by that unchanged option; do not also generate a rounded
-  write at the same normalized start. Every automatic interval change must shift
-  normalized start by at least one five-minute tick, so has positive movement cost.
-  Normalization-only writes are available through explicit interval assignment,
-  with the exact before/after interval reviewed, not as a zero-cost solver move.
-- Determine week membership and inferred period bounds from exact originals
-  before normalization. If minimum-duration repair pushes a projection outside
-  the week or its permitted movement envelope, do not shift it back silently.
-  Keep the original event in the universe as a fixed obstacle for this task,
-  disclose the projection problem, and allow a deliberate manual correction.
-- Example: exact 02:21–02:27 projects to 02:20–02:25, but an unchanged event still
-  blocks a proposed 02:25 start until 02:27. The next eligible grid start is 02:30.
+See [Five-minute model, originals and rounding](../calendar-domain.md#five-minute-model-originals-and-rounding).
 
 ### 2.4 Named periods and inferred rescheduling bounds
 
-**Agreed vocabulary:** periods are half-open local-time intervals.
-
-| Period | Local interval |
-| --- | --- |
-| Night | 22:00–06:00 the following date |
-| Dawn | 06:00–09:00 |
-| Morning | 09:00–12:00 |
-| Lunchtime | 12:00–13:00 |
-| Afternoon | 13:00–18:00 |
-| Evening | 18:00–22:00 |
-
-Restrictions are inferred from time, not stored event attributes. An event from
-10:15 to 10:45 is a morning event; automatic rescheduling cannot move it to the
-afternoon. A manual/explicit interval assignment can do so, and subsequent tasks
-infer its new bounds from its new interval.
-
-**Demo policy for spanning events:** partition the local timeline into the periods
-above. The movement envelope is the smallest consecutive union of those period
-occurrences containing the original complete interval. An exclusive endpoint at
-a period boundary does not recruit the next period. Thus:
-
-- 10:15–10:45 -> 09:00–12:00.
-- 11:30–12:00 -> 09:00–12:00, not 09:00–13:00.
-- 11:30–12:30 -> 09:00–13:00.
-- 11:30–13:30 -> 09:00–18:00.
-- Monday 23:00–Tuesday 01:00 -> Monday 22:00–Tuesday 06:00.
-
-Intersect this envelope with the selected week and the original endpoint-date
-constraints. Extra destination-hour restrictions for existing events are deferred
-in v1; a new event's requested placement window does not constrain their destinations. **Same-day events stay on their
-original local date. Cross-day events retain their original start date and end
-date.** This resolves the night case: Monday 23:00–23:30 may move within Monday
-22:00–24:00, but not to Tuesday 02:00. Tuesday 02:00–03:00 may move within Tuesday
-00:00–06:00. An event already crossing midnight may remain overnight, with the
-same endpoint dates and preserved normalized elapsed duration. Midnight end
-equality is allowed on the following date; no positive occupied time belongs to
-that following date. If rounding makes these constraints incompatible, retain
-the unchanged option only and explain why movement is unavailable.
-
-Freeze all inferred envelopes from the task's initial exact snapshot. Intermediate
-search moves cannot expand permission by migrating through neighboring periods.
-Recompute envelopes only for a later task after accepted changes. A rescheduling
-request cannot override an inferred envelope silently; offer an explicit manual
-interval change or report that a broader movement policy is outside this demo.
-No existing event acquires inferred permission to move: user approval is still
-required, even for Normal events.
-
-A newly requested event “on Thursday morning” must fit entirely in Thursday
-09:00–12:00. Named periods resolve bounds; they do not imply meeting duration,
-travel time, buffers, attendee availability or a default working day.
+See [Named periods and inferred rescheduling bounds](../calendar-domain.md#named-periods-and-inferred-rescheduling-bounds).
 
 ### 2.5 Other temporal terms and literal policy
 
-**Demo policies:**
-
-- Weekdays mean the named date in the selected week, not the next occurrence
-  relative to the computer clock. Dates naming days or starts must be in the week.
-  A closing endpoint may additionally name W1's local date, but only at exactly
-  00:00 and resolving to W1. This exception applies to event ends and explicit
-  containment-window ends, not starts, repair days or day/period selectors.
-- “Monday night” means Monday 22:00–Tuesday 06:00. The preceding night's early
-  hours are a different occurrence. A Sunday-night window is clipped at W1,
-  with that clipping disclosed; it does not authorize searching next week.
-- “On Monday” supplies a whole-day window, not a working-hours assumption.
-  A missing narrower window need not trigger a question when a whole-day window
-  was explicitly requested. “Thursday morning” supplies both bounds directly.
-- “At 17:00” is exact local clock time. “At 5” asks AM/PM unless established
-  constraints permit exactly one reading; if one survives, disclose the resolved
-  05:00 or 17:00. Missing dates use an explicit established task date or prompt
-  a question, never the display clock as a hidden default.
-- “After 09:00” is strict: the first eligible grid start is 09:05.
-  “At or after 09:00” includes 09:00. “Before 12:00” is a strict endpoint bound;
-  “By 12:00” permits equality. A period's containment permits ending at its end.
-- “Today” and “tomorrow” resolve from one frozen Budapest timestamp supplied
-  for the entry, with the resolved date shown. If outside the selected week,
-  report scope failure; do not change weeks. “Next Thursday” is clarified when
-  its ordinary-language reading competes with selected-week anchoring.
-- Distinguish adding elapsed hours from moving by calendar dates. Nonexistent
-  local input times fail with an explanation; ambiguous local times require
-  selecting an offset/occurrence. An imported explicit offset already determines
-  the occurrence. Never invent an occurrence or normalize through a DST gap.
-- Display minute precision; retain imported seconds in originals and exact checks.
-  Section 10 defines the proposed date/time and string literal grammar.
+See [Other temporal terms and literal policy](../calendar-domain.md#other-temporal-terms-and-literal-policy).
 
 ## 3. Layer 1: atomic commands
 
@@ -1956,7 +1783,7 @@ are outside this proposal.
 
 The implementation supplies internal/HTTP response schemas, a Calendar dialogue
 SQLite record, reserved provider-ID journaling and regression tests. The
-[implementation guide](calendar-language-v1.md) describes these artifacts and
+[implementation guide](../calendar-language-v1.md) describes these artifacts and
 local operation; they do not expand the resolved task inventory.
 
 

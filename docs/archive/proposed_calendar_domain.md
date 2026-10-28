@@ -1,7 +1,11 @@
+> Archived historical design. Current contracts are [shared Calendar rules](../calendar-domain.md),
+> [Calendar language v1](../calendar-language-v1.md) and [LLM-only design](../calendar-llm-only.md).
+> Historical status statements below are not current implementation status.
+
 # Logic Engine Demo — Google Calendar MCP integration
 
 **Progress:** Stages A and B are implemented for local read-only use; see
-[Calendar MCP setup](calendar-mcp.md) for installation, authorization, endpoints
+[Calendar MCP setup](../calendar-mcp.md) for installation, authorization, endpoints
 and validation. Stage C's scoped write endpoints are implemented with mocked
 tests. Live creation was verified by API read-back and browser inspection; the
 user also confirmed that GUI editing and deletion work (2026-10-27).
@@ -44,7 +48,7 @@ The user has prepared:
 The demo account is dedicated to single-user testing. No other writers are used
 during tests; automatic invitation addition is disabled, and birthdays, holidays
 and tasks are switched off in the Calendar interface. See the
-[controlled testing assumptions](calendar-mcp.md#controlled-testing-assumptions).
+[controlled testing assumptions](../calendar-mcp.md#controlled-testing-assumptions).
 The calendar can be populated with fictional appointments, but do not alter events
 without explicit authorization for the test operation.
 
