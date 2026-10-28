@@ -288,7 +288,9 @@ The weekly display now has a Calendar chat panel. See
 [Calendar language v1](calendar-language-v1.md) for examples, Haskell build/setup,
 clarifications, requirement revisions, acceptance and recovery. Existing MCP/OAuth
 settings also serve dialogue; no additional consent is needed. Natural-language
-LLM interpretation for this domain is not connected yet.
+interpretation is optional through the Calendar LLM switch and the existing API
+key. See [interpreter setup](agent-sessions.md#calendar-interpreter). Translation
+acceptance is distinct from final approval of Google writes.
 
 Run one local API worker. Manual event writes share a lock with dialogue and are
 blocked while a task awaits clarification/review or provider recovery. SQLite

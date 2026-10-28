@@ -2,7 +2,8 @@
 
 The local demo implements Calendar parsing, reference resolution, evaluation and
 planning in Haskell, with a controlled-English chat panel alongside the weekly
-calendar. Natural-language LLM translation for Calendar is not wired in yet.
+calendar. Optional natural-language interpretation uses the same app-managed
+agent transport, shared review UI and admission budget as the other domains.
 
 The detailed grammar, temporal rules, reference policy and decision structures
 are in [the Calendar language design](proposed-calendar-language.md). The
@@ -14,13 +15,17 @@ Build and install `logic-engine-editor` as described in
 [the engine README](../backend/logic_engine/README.md), then restart FastAPI.
 Keep the [Calendar MCP configuration](calendar-mcp.md) enabled; accepting event
 changes also needs `LOGIC_CHATBOT_CALENDAR_WRITES_ENABLED=true`. No new OAuth
-consent or LLM key is needed for controlled-English dialogue. Run one local API
+consent or LLM key is needed for controlled-English dialogue. For natural
+language, export the existing `OPENAI_API_KEY`, restart FastAPI and enable the
+LLM switch in Calendar. Its agent is provisioned on first interpretation; no
+manual agent ID or dashboard setup is needed. Run one local API
 worker against the dedicated demo account.
 
 Select **Calendar**, then enter a command ending in a period or a question ending
 in a question mark. Keywords ignore case; quoted strings preserve it.
 
 ```text
+Create event from friday at 11:00 to friday at 11:15 with title "Laundry machine mechanic".
 How many events match importance is critical and overlaps thursday?
 Schedule event lasting 30 minutes within thursday morning with title "Meeting".
 Make room for event lasting 60 minutes within starting at thursday at 09:00.
@@ -42,6 +47,9 @@ while retaining independent commitments. Importance replies are -1 (None),
 
 - Atomic creation, deletion and setters for title, location, description,
   importance and interval. Text defaults to `""`; importance defaults to Normal.
+  Creation optionally accepts title, location, description and importance in that
+  order via `with`, joining fields with `and`. Explicit `unspecified` values
+  trigger clarification before creation; fixed intervals permit overlaps.
   Empty titles display as `(Untitled)` without changing their stored value.
 - Stable `#N` handles, `it`, ordered descriptions, explicit reference choices and
   Boolean-scope clarification before evaluation. Tooltips show imported handles
@@ -91,6 +99,16 @@ claims. Explicit requirement revision records prior work and starts a new budget
 Up to 64 optimal schedule examples are retained for explicit choice; they are not
 presented as an exhaustive list or as a user preference.
 
+Natural-language requests produce a separate interpretation proposal. Preview is
+private; Accept interpretation starts/resumes provisional Haskell evaluation.
+Even an accepted translation cannot submit Google writes: the later Calendar
+change plan still requires **Accept changes**. Operational holes are clarified
+by Haskell. Free-form replies to text-valued engine questions (or replies that do
+not parse as the expected typed value) can be interpreted into reviewed JSON
+values, bound to that exact pending question. They cannot become new commands.
+Rejection restores the pending engine task; courtesy replies do not consume it.
+The current week/context fingerprint is checked again before preview/acceptance.
+
 Calendar Undo, alternative scheduling objectives, arbitrary-list/global repair,
 additional task families and public deployment remain outside this version.
 
@@ -100,7 +118,10 @@ Loopback-only `GET /calendar/dialogue` restores state. `POST /calendar/dialogue`
 accepts a `type` and current `revision`; start additionally carries `text`,
 `timeMin` and `timeMax`, while answer/revise carry a parameter `key` and typed
 `value`. Actions are `start`, `answer`, `revise`, `accept`, `cancel`, `reconcile`,
-`continue` and `keepPartial`. Stale revisions return 409. The Haskell bridge is
+`continue` and `keepPartial`. Interpretation actions are `previewInterpretation`,
+`acceptInterpretation`, `rejectInterpretation` and `answerInterpretation`, bound
+to a `proposalId` and (for preview/accept) candidate `rank`. Start/answer may carry
+`useLlm:true`; typed answer requests additionally retain their original `text`. Stale revisions return 409. The Haskell bridge is
 independent of HTTP, SQLite and Google access.
 
 Tests cover grammar round trips, real-engine semantics, a small exhaustive

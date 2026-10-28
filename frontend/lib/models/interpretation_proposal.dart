@@ -53,6 +53,7 @@ class InterpretationProposal {
     this.explanation = '',
     this.validationFailures = const [],
     this.languageVersion = 'unknown',
+    this.translationFormat = 'controlledEnglish',
   });
 
   factory InterpretationProposal.fromJson(Map<String, dynamic> json) =>
@@ -60,6 +61,8 @@ class InterpretationProposal {
         id: json['id'] as String,
         originalText: json['originalText'] as String,
         languageVersion: json['languageVersion'] as String? ?? 'unknown',
+        translationFormat:
+            json['translationFormat'] as String? ?? 'controlledEnglish',
         question: json['question'] as String? ?? '',
         explanation: json['explanation'] as String? ?? '',
         validationFailures: List.unmodifiable(
@@ -83,6 +86,7 @@ class InterpretationProposal {
   final List<InterpretationCandidate> candidates;
   final List<InterpretationFailure> validationFailures;
   final String languageVersion;
+  final String translationFormat;
 
   bool get canAnswer =>
       question.isNotEmpty ||
@@ -98,13 +102,16 @@ class InterpretationPreview {
     required this.feedback,
     this.pending,
     this.changes = const [],
+    this.hasClarification = false,
   });
 
   factory InterpretationPreview.fromJson(Map<String, dynamic> json) =>
       InterpretationPreview(
         proposalId: json['proposalId'] as String,
         rank: json['rank'] as int,
-        world: (json['world'] as Map<String, dynamic>).containsKey('cells')
+        world: json['world'] == null
+            ? null
+            : (json['world'] as Map<String, dynamic>).containsKey('cells')
             ? CellularWorld.fromJson(json['world'] as Map<String, dynamic>)
             : World.fromJson(json['world'] as Map<String, dynamic>),
         feedback: json['feedback'] as String,
@@ -113,6 +120,7 @@ class InterpretationPreview {
             (value) => WorldChange.fromJson(value as Map<String, dynamic>),
           ),
         ),
+        hasClarification: json['hasClarification'] as bool? ?? false,
         pending: json['pending'] == null
             ? null
             : PendingEntry.fromJson(json['pending'] as Map<String, dynamic>),
@@ -120,7 +128,8 @@ class InterpretationPreview {
 
   final String proposalId;
   final int rank;
-  final GridWorld world;
+  final GridWorld? world;
+  final bool hasClarification;
   World? get objectWorld => world is World ? world as World : null;
   CellularWorld? get cellularWorld =>
       world is CellularWorld ? world as CellularWorld : null;

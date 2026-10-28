@@ -113,7 +113,11 @@ class InterpretationReview extends StatelessWidget {
                     ),
                     ExpansionTile(
                       initiallyExpanded: candidate.rank == 1,
-                      title: const Text('Controlled English'),
+                      title: Text(
+                        proposal.translationFormat == 'json'
+                            ? 'Clarification value'
+                            : 'Controlled English',
+                      ),
                       childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
                       expandedCrossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -164,9 +168,9 @@ class InterpretationReview extends StatelessWidget {
                 'Preview — not applied',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              if (result.pending != null)
+              if (result.pending != null || result.hasClarification)
                 const Text(
-                  'The engine will ask for an object or square clarification after acceptance.',
+                  'The engine will ask for clarification after acceptance.',
                 ),
               if (result.pending?.stagedWorld != null)
                 const Text(

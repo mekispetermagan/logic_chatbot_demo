@@ -42,7 +42,12 @@ runSentence k s=do
      fixed=["#"++show(handle e)|e<-es,not(movablePlacement c e(normalized e))]
  pure(result++if planning && not(null fixed) then "\nFixed because normalization leaves the date/period envelope: "++intercalate ", " fixed++". Original exact intervals are retained; explicit correction is available." else "")
 runSentenceBody k s=case s of
- Create a b->do x<-resolveMoment False(k++".start")a;y<-resolveMoment True(k++".end")b;(lo,hi)<-normalizeAssignment k x y;e<-create lo hi;pure("Created "++show(handle e))
+ Create a b->runSentenceBody k(CreateWithFields a b [])
+ CreateWithFields a b fs->do
+  x<-resolveMoment False(k++".start")a;y<-resolveMoment True(k++".end")b;(lo,hi)<-normalizeAssignment k x y
+  n<-gets nextHandle
+  template<-resolveFields(k++".fields")(Task Missing Missing fs)(Event n Nothing "" "" "" (Just "10") lo hi False False False)
+  e<-create lo hi;replace template;remember template [];pure("Created "++show(handle e))
  Delete r->do e<-resolveRef(k++".subject")r;editable e;modify(\w->w{current=filter((/=handle e).handle)(current w)});pure("Deleted #"++show(handle e))
  SetText field r v->do
   e<-resolveRef(k++".subject")r;editable e;x<-textValue(k++".value")v

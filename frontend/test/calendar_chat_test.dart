@@ -62,6 +62,7 @@ void main() {
       ),
     );
     addTearDown(controller.dispose);
+    await controller.loadDialogue();
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(body: CalendarChatPanel(controller: controller)),
@@ -106,6 +107,7 @@ void main() {
       ),
     );
     addTearDown(controller.dispose);
+    await controller.loadDialogue();
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(body: CalendarChatPanel(controller: controller)),
@@ -166,6 +168,7 @@ void main() {
         ),
       );
       addTearDown(controller.dispose);
+      await controller.loadDialogue();
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(body: CalendarChatPanel(controller: controller)),
@@ -201,6 +204,71 @@ void main() {
       await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
       expect(tester.widget<TextField>(input).controller!.text, 'draft\n');
       expect(controller.dialogue!['messages'], hasLength(5));
+    },
+  );
+  testWidgets(
+    'Calendar clarification uses the shared answer composer and typed controller action',
+    (tester) async {
+      final requests = <Map<String, dynamic>>[];
+      final controller = CalendarController(
+        api: CalendarApi(
+          baseUrl: Uri.parse('http://localhost:8000'),
+          client: MockClient((request) async {
+            if (request.method == 'POST') {
+              requests.add(jsonDecode(request.body) as Map<String, dynamic>);
+              return http.Response(
+                jsonEncode({
+                  'status': 'review',
+                  'revision': 2,
+                  'messages': [],
+                  'plan': [],
+                }),
+                200,
+              );
+            }
+            return http.Response(
+              jsonEncode({
+                'status': 'clarify',
+                'revision': 1,
+                'messages': [],
+                'question': {
+                  'key': '0.threshold',
+                  'kind': 'importance',
+                  'prompt': 'Which importance?',
+                  'options': [],
+                },
+              }),
+              200,
+            );
+          }),
+        ),
+      );
+      addTearDown(controller.dispose);
+      await controller.loadDialogue();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(body: CalendarChatPanel(controller: controller)),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Calendar dialogue'), findsNothing);
+      expect(find.text('Clarification or correction'), findsOneWidget);
+      await tester.enterText(find.byKey(const ValueKey('calendar-entry')), '0');
+      await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+      await tester.pumpAndSettle();
+      expect(requests.single, {
+        'type': 'answer',
+        'key': '0.threshold',
+        'value': 0,
+        'revision': 1,
+      });
+      expect(controller.canEdit, isFalse);
+      expect(
+        tester
+            .widget<TextField>(find.byKey(const ValueKey('calendar-entry')))
+            .enabled,
+        isFalse,
+      );
     },
   );
 }

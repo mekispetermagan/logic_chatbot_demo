@@ -43,8 +43,7 @@ including 00:00; an event ending at midnight has no segment on the next day.
 Each segment's tooltip and details show both complete start/end dates and times.
 These are presentation rules; the API still returns its complete event list. Calendar is a separate
 dialogue domain: the Chat panel accepts controlled English, asks clarification
-questions and reviews net changes before submitting writes. LLM and Undo controls
-are hidden. Existing domain state is retained when switching back.
+questions and reviews net changes before submitting writes. The LLM switch enables optional interpretation proposals; Undo is hidden. Existing domain state is retained when switching back.
 
 Each selection/week change uses one `GET /calendar/events` request with explicit
 week bounds and the Budapest timezone. Loading, empty and retry states are shown;
@@ -254,3 +253,28 @@ randomly using the new palette and restart generation zero. Cancel leaves the
 draft open without sending anything. An unchanged submission adds no history.
 The form pauses during submission; uncertain failures require refreshing the
 authoritative world before retrying.
+
+
+## Controlled-English examples
+
+The **?** button beside Send opens a scrollable modal for the selected domain,
+with primitive/conceptual commands and questions. Entries are concrete, selectable
+sentences supplied by FastAPI from the Haskell domain libraries. Identifiers or
+coordinates, `it`, and definite descriptions are mixed across the static list.
+All individual reference terms share one highlight color, using reference segments
+annotated by Haskell rather than frontend text matching. Opening help
+preserves the current draft and never executes an example.
+
+
+Calendar uses the same chat shell, spacing, message bubbles and composer as the
+other domains. Its stateless adapter supplies state/actions; clarification,
+review, requirement revision and recovery controls live in a separate domain
+widget. Message conversion and typed replies are handled by CalendarController.
+
+
+Calendar natural-language interpretation uses the shared Preview / Accept /
+Reject / Submit answer interface. Accepting an interpretation only stages Haskell
+evaluation; **Accept changes** remains the separate Google-write approval.
+The interpreter sees the selected week's Haskell-scoped events and supplied
+salience, with no direct Google tools. Its JSON-valued clarification proposals
+are labeled **Clarification value**, rather than controlled-English programs.

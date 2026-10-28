@@ -7,6 +7,8 @@ import '../models/conversation_state.dart';
 import '../models/llm_usage.dart';
 import '../models/interpretation_proposal.dart';
 import 'interpretation_review.dart';
+import '../models/language_examples.dart';
+import 'language_help_dialog.dart';
 
 /// Owns composer text and recall state; conversation requests stay in the controller.
 class ChatPanel extends StatefulWidget {
@@ -40,6 +42,8 @@ class ChatPanel extends StatefulWidget {
     this.controls,
     this.composerEnabled = true,
     this.composerKey,
+    this.loadExamples,
+    this.answering = false,
   });
 
   final List<ChatMessage> messages;
@@ -70,6 +74,8 @@ class ChatPanel extends StatefulWidget {
   final Widget? controls;
   final bool composerEnabled;
   final Key? composerKey;
+  final Future<LanguageExamples> Function()? loadExamples;
+  final bool answering;
 
   @override
   State<ChatPanel> createState() => _ChatPanelState();
@@ -82,7 +88,7 @@ class _ChatPanelState extends State<ChatPanel> {
   List<String>? _inputHistory;
   int _historyIndex = 0;
   TextEditingValue? _draft;
-  bool get _answering => widget.proposal?.canAnswer == true;
+  bool get _answering => widget.answering || widget.proposal?.canAnswer == true;
   bool get _staleProposal =>
       widget.proposal != null &&
       widget.proposal!.languageVersion != widget.languageVersion;
@@ -371,82 +377,108 @@ class _ChatPanelState extends State<ChatPanel> {
           ),
           const SizedBox(height: 8),
         ],
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Expanded(
-              child: Focus(
-                onKeyEvent: _navigateHistory,
-                child: CallbackShortcuts(
-                  bindings: {
-                    const SingleActivator(
-                      LogicalKeyboardKey.enter,
-                      shift: true,
-                      includeRepeats: false,
-                    ): _insertNewline,
-                    const SingleActivator(
-                      LogicalKeyboardKey.numpadEnter,
-                      shift: true,
-                      includeRepeats: false,
-                    ): _insertNewline,
-                    const SingleActivator(
-                      LogicalKeyboardKey.enter,
-                      includeRepeats: false,
-                    ): _send,
-                    const SingleActivator(
-                      LogicalKeyboardKey.numpadEnter,
-                      includeRepeats: false,
-                    ): _send,
-                  },
-                  child: TextField(
-                    key: widget.composerKey,
-                    controller: _composer,
-                    focusNode: _composerFocus,
-                    enabled:
-                        !busy &&
-                        widget.composerEnabled &&
-                        (widget.canSendControl != null ||
-                            (!_staleProposal &&
-                                widget.pending == null &&
-                                (widget.proposal == null || _answering))),
-                    minLines: 1,
-                    maxLines: 4,
-                    textInputAction: TextInputAction.send,
-                    onSubmitted: (_) => _send(),
-                    onEditingComplete: () {},
-                    decoration: InputDecoration(
-                      hintText: widget.resetPending
-                          ? 'Reply yes or no'
-                          : _answering
-                          ? 'Clarification or correction'
-                          : widget.composerHint,
-                      border: const OutlineInputBorder(),
-                    ),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final composer = Focus(
+              onKeyEvent: _navigateHistory,
+              child: CallbackShortcuts(
+                bindings: {
+                  const SingleActivator(
+                    LogicalKeyboardKey.enter,
+                    shift: true,
+                    includeRepeats: false,
+                  ): _insertNewline,
+                  const SingleActivator(
+                    LogicalKeyboardKey.numpadEnter,
+                    shift: true,
+                    includeRepeats: false,
+                  ): _insertNewline,
+                  const SingleActivator(
+                    LogicalKeyboardKey.enter,
+                    includeRepeats: false,
+                  ): _send,
+                  const SingleActivator(
+                    LogicalKeyboardKey.numpadEnter,
+                    includeRepeats: false,
+                  ): _send,
+                },
+                child: TextField(
+                  key: widget.composerKey,
+                  controller: _composer,
+                  focusNode: _composerFocus,
+                  enabled:
+                      !busy &&
+                      widget.composerEnabled &&
+                      (widget.canSendControl != null ||
+                          (!_staleProposal &&
+                              widget.pending == null &&
+                              (widget.proposal == null || _answering))),
+                  minLines: 1,
+                  maxLines: 4,
+                  textInputAction: TextInputAction.send,
+                  onSubmitted: (_) => _send(),
+                  onEditingComplete: () {},
+                  decoration: InputDecoration(
+                    hintText: widget.resetPending
+                        ? 'Reply yes or no'
+                        : _answering
+                        ? 'Clarification or correction'
+                        : widget.composerHint,
+                    border: const OutlineInputBorder(),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(width: 8),
-            ValueListenableBuilder<TextEditingValue>(
-              valueListenable: _composer,
-              builder: (context, value, child) {
-                final submit =
-                    _canSubmit && !busy && value.text.trim().isNotEmpty
-                    ? _send
-                    : null;
-                return _answering && !_sendingControl
-                    ? FilledButton(
-                        onPressed: submit,
-                        child: const Text('Submit answer'),
-                      )
-                    : IconButton(
-                        tooltip: 'Send',
-                        onPressed: submit,
-                        icon: const Icon(Icons.send),
-                      );
-              },
-            ),
-          ],
+            );
+            final buttons = <Widget>[
+              if (widget.loadExamples case final loadExamples?)
+                IconButton(
+                  tooltip: 'Controlled English examples',
+                  icon: const Icon(Icons.help_outline),
+                  onPressed: () => showDialog<void>(
+                    context: context,
+                    builder: (_) =>
+                        LanguageHelpDialog(loadExamples: loadExamples),
+                  ),
+                ),
+              ValueListenableBuilder<TextEditingValue>(
+                valueListenable: _composer,
+                builder: (context, value, child) {
+                  final submit =
+                      _canSubmit && !busy && value.text.trim().isNotEmpty
+                      ? _send
+                      : null;
+                  return _answering && !_sendingControl
+                      ? FilledButton(
+                          onPressed: submit,
+                          child: const Text('Submit answer'),
+                        )
+                      : IconButton(
+                          tooltip: 'Send',
+                          onPressed: submit,
+                          icon: const Icon(Icons.send),
+                        );
+                },
+              ),
+            ];
+            if (_answering && constraints.maxWidth < 360) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  composer,
+                  const SizedBox(height: 8),
+                  Wrap(alignment: WrapAlignment.end, children: buttons),
+                ],
+              );
+            }
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(child: composer),
+                const SizedBox(width: 8),
+                ...buttons,
+              ],
+            );
+          },
         ),
       ],
     );

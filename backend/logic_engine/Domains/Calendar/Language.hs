@@ -35,6 +35,20 @@ processRequest input=parseEither request input >>= run
   unless(all(\e->allDay e || cancelled e || end e>start e)es)(Left "Malformed Calendar event interval")
   unless(length (map googleId es)==length(nub(map googleId es)))(Left "Duplicate Google event identities")
   case typ of
+   "checkSyntax"->do
+    entries<-parseEntries source
+    Right(object["languageVersion" .= version,"policyVersion" .= policy,"status" .= ("syntax"::String),"alternatives" .= map entryText entries])
+   "snapshot"->do
+    let (imported,updatedMaps,next)=ingest c es maps n
+        visible=maybe imported current saved
+        discourse=maybe (purge c imported rs) ranking saved
+        eventValue e=object["handle" .= handle e,"title" .= title e,"location" .= location e,"description" .= description e,
+          "importance" .= importanceName(importance e),"start" .= timeText c(start e),"end" .= timeText c(end e),
+          "normalizedStart" .= timeText c(start(normalized e)),"normalizedEnd" .= timeText c(end(normalized e)),"readOnly" .= recurring e]
+    Right(object["languageVersion" .= version,"policyVersion" .= policy,"status" .= ("snapshot"::String),"handles" .= updatedMaps,"nextHandle" .= next,
+      "world" .= object["domain" .= ("calendar"::String),"weekStart" .= timeText c(weekStart c),"weekEnd" .= timeText c(weekEnd c),
+       "frozenNow" .= timeText c(frozenNow c),"timezone" .= ("Europe/Budapest"::String),"provisional" .= (saved/=Nothing),"events" .= map eventValue visible,"salience" .= discourse,
+       "evaluation" .= fmap (\w->object["entry" .= entryText(sentences w),"completedSentences" .= completed w,"parameters" .= parameterLog w]) saved]])
    "start"->do
     alternatives<-parseEntries source
     let (imported,updatedMaps,next)=ingest c es maps n

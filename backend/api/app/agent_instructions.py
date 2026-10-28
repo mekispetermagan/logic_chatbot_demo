@@ -23,12 +23,23 @@ def configuration_for(domain: str) -> dict:
     elif domain == 'cellular':
         before, remainder = common.split('### Object and square references\n', 1)
         common = before + '### Interpret and plan resourcefully\n' + remainder.split('### Interpret and plan resourcefully\n', 1)[1]
-        domain_text = source.split('## Cellular agent: domain instructions\n', 1)[1]
+        domain_text = source.split('## Cellular agent: domain instructions\n', 1)[1].split('## Calendar agent:', 1)[0].rstrip() + '\n'
         reference = (INSTRUCTIONS_PATH.parent / 'cellular-language-v2.md').read_text(encoding='utf-8')
         domain_text += '\n## Authoritative Cellular v2 language reference\n' + reference
+    elif domain == 'calendar':
+        before, remainder = common.split('### Object and square references\n', 1)
+        common = before + '### Rank readings and clarify\n' + remainder.split('### Rank readings and clarify\n', 1)[1]
+        common = common.replace('a grid world', 'the selected calendar week').replace('including after visual edits, Undo or Clear.', 'including after visual edits and verified Calendar updates.')
+        common = common.replace('Do not combine\nUndo with any other sentence.', 'Calendar Undo is unsupported.')
+        domain_text = source.split('## Calendar agent: domain instructions\n', 1)[1]
+        domain_text += '\n## Calendar v1 syntax reference\n' + (PROMPTS / 'calendar.md').read_text(encoding='utf-8')
+        answer_examples = json.loads((PROMPTS / 'calendar-answer-examples.json').read_text(encoding='utf-8'))
+        domain_text += '\n## Typed engineAnswer examples: question + input => candidate.translation JSON value\n'
+        domain_text += '\n'.join(json.dumps(example, ensure_ascii=False) for example in answer_examples)
     else:
         raise ValueError('Unknown domain')
-    examples = json.loads((PROMPTS / 'examples.json').read_text(encoding='utf-8'))[domain]
+    examples = (json.loads((PROMPTS / 'calendar-examples.json').read_text(encoding='utf-8')) if domain == 'calendar'
+                else json.loads((PROMPTS / 'examples.json').read_text(encoding='utf-8'))[domain])
     header = f'# Gridworld Interpreter\n\nACTIVE DOMAIN: {domain}\n\n'
     instructions = (header + '## Common instructions\n' + common +
                     f'\n## Active domain: {domain}\n' + domain_text +

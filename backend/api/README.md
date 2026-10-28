@@ -364,8 +364,8 @@ Enable the frontend's LLM switch after startup; it defaults to off.
 ### Agent setup and replacement
 
 A fresh clone does not use the author's agents. Its local SQLite database starts
-without agent IDs; the first LLM interpretation in each of Objects, Network and
-Cellular creates an app-managed agent under the project accessible to your key.
+without agent IDs; the first LLM interpretation in Objects, Network,
+Cellular or Calendar creates an app-managed agent under the project accessible to your key.
 The application uploads that domain's versioned instructions, grammar and
 examples automatically. No dashboard setup or manual agent-ID configuration is
 required. Direct controlled-English input does not create agents.
@@ -378,7 +378,7 @@ From `backend/api/`, with `.venv` active and the same database settings, run:
 python -m app.agents recreate --domain all
 ```
 
-Use `--domain objects`, `--domain network` or `--domain cellular` for one domain.
+Use `--domain objects`, `--domain network`, `--domain cellular` or `--domain calendar` for one domain.
 The command clears only selected local agent/session associations; replacements
 are created on the next LLM request. It makes no provider calls, requires no key,
 and preserves worlds, chat, pending proposals, Undo, slots, outcomes and accounting.
@@ -491,3 +491,23 @@ Flutter uses generic attribute pairs and atomic port-pattern edits. The network
 language includes graph construction, color-scoped questions and distinct port,
 position, appearance and drawing operations. See [Network v2](../../docs/network-language-v2.md)
 and the [JSON contract](../../docs/json-contract.md).
+
+
+## Language examples
+
+`GET /languages/{domain}/examples` supports `objects`, `network`, `cellular` and
+`calendar`. It returns the language version and four titled sections of concrete
+sentences. Each example is a JSON array of text segments: `{"text":"it",
+"reference":true}` marks an individual reference; ordinary segments have
+`reference:false`. The API forwards a read-only `examples` request to the Haskell bridge;
+example text lives in each domain's `Language/Examples.hs`. No world, conversation
+or Google access is needed. Rebuild/install the engine when changing examples.
+
+
+Calendar interpretation is integrated with `/calendar/dialogue`: `useLlm:true`
+on a new entry enables syntax-first interpretation. The interpreter is
+provisioned lazily using the configured Agents/Responses backend and shared
+budget. Preview / Accept interpretation / Reject are separate from final Google
+write approval. Typed clarification-value proposals stay bound to the pending
+Haskell question. See [Calendar interpreter](../../docs/agent-sessions.md#calendar-interpreter)
+for context, persistence and authoring sources.

@@ -1,6 +1,11 @@
 """Bound transport history without changing stored outcomes or world semantics."""
 import json
 from collections import Counter
+from typing import Protocol
+
+
+class InterpreterWorld(Protocol):
+    def model_dump(self) -> dict: ...
 
 
 MAX_INPUT_BYTES = 40_000

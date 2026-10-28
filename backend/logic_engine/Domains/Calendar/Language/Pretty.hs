@@ -48,6 +48,7 @@ sentenceText s=body++if isQuestion s then "?" else "."
  where
  body=case s of
   Create a b->"create event from "++m a++" to "++m b
+  CreateWithFields a b fs->"create event from "++m a++" to "++m b++if null fs then "" else " with "++intercalate " and " [f++" "++slotText (if f=="importance" then importanceText.read else quoted) v|(f,v)<-fs]
   Delete r->"delete "++rtext r
   SetText k r v->"set "++k++" of "++rtext r++" to "++slotText quoted v
   SetImportance r v->"set importance of "++rtext r++" to "++slotText importanceText v

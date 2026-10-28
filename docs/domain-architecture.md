@@ -95,5 +95,6 @@ Google remains authoritative; SQLite is not used as a Calendar event mirror.
 Flutter's Calendar chat panel handles typed questions, requirement revisions,
 review and recovery alongside the existing weekly display. See
 [Calendar language v1](calendar-language-v1.md) and the
-[detailed design](proposed-calendar-language.md). Calendar LLM translation and
-Undo remain outside this implementation.
+[detailed design](proposed-calendar-language.md). Calendar uses a scoped interpreter context and separate session/event tables
+rather than a synthetic board conversation. It reuses agent provisioning,
+budgeting and interpretation review. Calendar Undo remains outside this version.

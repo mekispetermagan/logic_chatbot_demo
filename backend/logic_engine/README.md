@@ -130,3 +130,16 @@ Python supplies timestamp/offset data and owns persistence and Google writes.
 See [Calendar language v1](../../docs/calendar-language-v1.md). Run `cabal test`
 for the grammar/model suite; API tests also exercise this real executable against
 a fake provider, including write review and recovery.
+
+
+## Language help examples
+
+Each domain owns its static help list in `Domains/<Domain>/Language/Examples.hs`.
+The editor bridge accepts `{"domain":"calendar","action":{"type":"examples"}}`
+(and the other three domain IDs) without a world and returns versioned sections.
+`language-examples-tests` parses every listed sentence with its domain parser.
+Examples use `Plain` and `Reference` parts from `ControlledLanguage.Example`;
+JSON preserves those boundaries for uniform reference highlighting. The tests
+concatenate parts for parsing and require all three reference forms in each domain.
+Keep examples concrete and grouped into primitive/conceptual commands/questions;
+the frontend displays these lists without maintaining its own sentence catalog.

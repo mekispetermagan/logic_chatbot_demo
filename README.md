@@ -152,7 +152,10 @@ For the optional local Google Calendar connection, follow
 files and does not require an LLM. Reads and opt-in one-off event write endpoints
 are available in FastAPI. Select Calendar in Flutter for a weekly display with
 create/edit/delete dialogs. The [Calendar controlled-language chat](docs/calendar-language-v1.md) supports
-clarification, scheduling, clash repair and reviewed writes.
+clarification, scheduling, clash repair and reviewed writes. Enable its LLM
+switch for optional natural-language interpretation using your configured key;
+[Calendar interpreter setup](docs/agent-sessions.md#calendar-interpreter) explains
+automatic provisioning and the two separate approval stages.
 
 Run `cabal test` in `backend/logic_engine/`,
 `python -m unittest discover -s tests -v` in `backend/api/` with `.venv` active,

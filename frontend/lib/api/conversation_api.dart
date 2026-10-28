@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../models/conversation_state.dart';
+import '../models/language_examples.dart';
+import 'language_help_api.dart';
 import '../models/attribute_property.dart';
 import '../models/domain.dart';
 import '../models/cellular_world.dart';
@@ -25,6 +27,9 @@ class ConversationApi {
   final Uri baseUrl;
   final http.Client _client;
   final Duration timeout;
+
+  Future<LanguageExamples> examples(WorldDomain domain) =>
+      fetchLanguageExamples(_client, baseUrl, domain.name, timeout);
 
   Future<ConversationState> create({
     WorldDomain domain = WorldDomain.objects,

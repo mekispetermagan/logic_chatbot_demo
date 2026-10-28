@@ -19,6 +19,7 @@ import 'package:logic_chatbot/models/domain.dart';
 import 'package:logic_chatbot/storage/conversation_id_store.dart';
 import 'package:logic_chatbot/widgets/calendar_event_layout.dart';
 import 'package:logic_chatbot/widgets/calendar_week_view.dart';
+import 'package:logic_chatbot/widgets/chat_panel.dart';
 
 Map<String, dynamic> entry(
   String id,
@@ -417,6 +418,21 @@ void main() {
           await tester.tap(find.text('Chat'));
           await tester.pumpAndSettle();
         }
+        final sharedChatSize = tester.getSize(find.byType(ChatPanel));
+        final sharedComposerWidth = tester
+            .getSize(find.byType(TextField).last)
+            .width;
+        void expectUniformChat() {
+          expect(tester.getSize(find.byType(ChatPanel)), sharedChatSize);
+          expect(
+            tester.getSize(find.byType(TextField).last).width,
+            sharedComposerWidth,
+          );
+          expect(find.text('Calendar dialogue'), findsNothing);
+          expect(find.byTooltip('Refresh dialogue status'), findsNothing);
+          expect(find.text('Enter a sentence to begin.'), findsOneWidget);
+        }
+
         if (width < 480) {
           await tester.tap(find.byKey(const ValueKey('domain-selector')));
           await tester.pumpAndSettle();
@@ -437,17 +453,20 @@ void main() {
             tester.getRect(find.byType(CalendarWeekView)).right,
             lessThanOrEqualTo(width / 2),
           );
-          expect(find.text('Calendar dialogue'), findsOneWidget);
+          expect(find.byType(ChatPanel), findsOneWidget);
+          expectUniformChat();
           expect(find.byType(TabBar), findsNothing);
         } else {
           expect(find.byType(TabBar), findsOneWidget);
           await tester.tap(find.text('Chat'));
           await tester.pumpAndSettle();
-          expect(find.text('Calendar dialogue').hitTestable(), findsOneWidget);
+          expect(find.byType(ChatPanel), findsOneWidget);
+          expect(find.byType(TextField).last.hitTestable(), findsOneWidget);
+          expectUniformChat();
           await tester.tap(find.text('World'));
           await tester.pumpAndSettle();
         }
-        expect(find.byType(Switch), findsNothing);
+        expect(find.byType(Switch), findsOneWidget);
         expect(find.byTooltip('Undo'), findsNothing);
         expect(calendarRequests, hasLength(2));
         expect(conversationRequests, hasLength(1));

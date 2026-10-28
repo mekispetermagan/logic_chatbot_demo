@@ -80,12 +80,14 @@ options=Options <$> option Missing (symbol "," *> phrase "moving up to" *> slot 
   <*> option False (symbol "," *> word "choosing" *> choiceWords [("ask",False),("preserve original order",True)])
 parameters=Task <$> option Missing (word "lasting" *> slot durationValue) <*> option Missing (word "within" *> slot windowValue) <*> pure []
 task=do
-  t<-parameters;fs<-option [] (word "with" *> sepBy1 field (word "and"));let names=map fst fs
-  guard(length names==length(nub names)&&names==sortFields names);pure t{fields=fs}
+  t<-parameters;fs<-creationFields;pure t{fields=fs}
+creationFields=do
+  fs<-option [] (word "with" *> sepBy1 field (word "and"));let names=map fst fs
+  guard(length names==length(nub names)&&names==sortFields names);pure fs
   where field=((,) <$> textField <*> slot quoted) <|> ((,) "importance" . fmapSlot show <$> (word "importance" *> slot importance))
 fmapSlot f (Known x)=Known(f x);fmapSlot _ Missing=Missing
 command=choice
-  [ Create <$> (phrase "create event from" *> slot moment) <*> (word "to" *> slot moment)
+  [ createSentence <$> (phrase "create event from" *> slot moment) <*> (word "to" *> slot moment) <*> creationFields
   , Delete <$> (word "delete" *> slot ref)
   , SetText <$> (word "set" *> textField <* word "of") <*> slot ref <*> (word "to" *> slot quoted)
   , SetImportance <$> (phrase "set importance of" *> slot ref) <*> (word "to" *> slot importance)
@@ -117,3 +119,7 @@ parseEntries source
       xs->Right xs
 parseEntry :: String -> Either String Entry
 parseEntry source=do xs<-parseEntries source;case xs of [x]->Right x;_->Left "Choose an explicit Boolean grouping."
+
+-- Preserve the serialized form of existing pending creations.
+createSentence a b []=Create a b
+createSentence a b fs=CreateWithFields a b fs

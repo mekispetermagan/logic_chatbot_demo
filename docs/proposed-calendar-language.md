@@ -246,7 +246,7 @@ are unnecessary. Uppercase names below are typed placeholders; these are
 
 | Candidate form | Contract |
 | --- | --- |
-| `Create event from T1 to T2.` | Create one fresh identity with the interval, empty title/location/description and Normal importance |
+| `Create event from T1 to T2 [with fields].` | Create one fresh identity with the interval and supplied fields; omitted text fields default to empty strings and importance to Normal |
 | `Delete R.` | Delete the resolved existing event |
 | `Set title of R to S.` | Replace only title with the string S, including `""` |
 | `Set location of R to S.` | Replace only location with S |
@@ -909,7 +909,7 @@ stated anchoring and the disclosed week clipping policy in Section 2.5.
 entry = sentence, { sentence } ;
 sentence = command | question ;
 command = (atomic-command | conceptual-command), "." ;
-atomic-command = "create event from", moment-slot, "to", moment-slot
+atomic-command = "create event from", moment-slot, "to", moment-slot, [ "with", initial-field, { "and", initial-field } ]
                | "delete", event-slot
                | "set", text-field, "of", event-slot, "to", text-slot
                | "set importance of", event-slot, "to", importance-slot
@@ -931,6 +931,13 @@ Set importance of it to normal.
 Set description of it to "".
 Set interval of it from thursday at 23:00 to friday at 01:00.
 ```
+
+Creation accepts the same nonempty field subset as `Schedule event`: title,
+location, description, importance, once each in that order, joined by `and`.
+For example: `Create event from friday at 11:00 to friday at 11:15 with title "Laundry machine mechanic".`
+Omitted fields keep their defaults; explicit `unspecified` values use the existing
+typed clarification rules. All supplied fields resolve before creation takes
+effect, and the resulting event becomes the antecedent of `it`.
 
 These are explicit assignments, not automatic scheduling. They may introduce
 clashes and change a period, subject to week containment, reference validity,

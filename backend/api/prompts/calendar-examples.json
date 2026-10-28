@@ -1,0 +1,258 @@
+[
+  {
+    "input": "Create an event on Thursday from 9 to 10 in the morning",
+    "translation": "Create event from thursday at 09:00 to thursday at 10:00."
+  },
+  {
+    "input": "Create a critical appointment for the laundry machine mechanic on Friday from 11 am to 11:15 am at home",
+    "translation": "Create event from friday at 11:00 to friday at 11:15 with title \"Laundry machine mechanic\" and location \"Home\" and importance critical."
+  },
+  {
+    "input": "Create an event from Monday 11 pm to Tuesday 1 am",
+    "translation": "Create event from monday at 23:00 to tuesday at 01:00."
+  },
+  {
+    "input": "Create an event on Thursday at 5",
+    "translation": "Create event from thursday at one of [05:00, 17:00] to unspecified."
+  },
+  {
+    "input": "Create an event",
+    "translation": "Create event from unspecified to unspecified."
+  },
+  {
+    "input": "Call event #3 Budget review",
+    "translation": "Set title of #3 to \"Budget review\"."
+  },
+  {
+    "input": "Put its location as Head office",
+    "translation": "Set location of it to \"Head office\"."
+  },
+  {
+    "input": "Remove its location",
+    "translation": "Set location of it to \"\"."
+  },
+  {
+    "input": "Clear the description of event #3",
+    "translation": "Set description of #3 to \"\"."
+  },
+  {
+    "input": "Remove its title",
+    "translation": "Set title of it to \"\"."
+  },
+  {
+    "input": "Make event #3 critical",
+    "translation": "Set importance of #3 to critical."
+  },
+  {
+    "input": "Make it important",
+    "translation": "Set importance of it to important."
+  },
+  {
+    "input": "Mark it normal",
+    "translation": "Set importance of it to normal."
+  },
+  {
+    "input": "Describe event #3 as Discuss the demo",
+    "translation": "Set description of #3 to \"Discuss the demo\"."
+  },
+  {
+    "input": "Move event #3 to Friday 2 pm until 3 pm",
+    "translation": "Set interval of #3 from friday at 14:00 to friday at 15:00."
+  },
+  {
+    "input": "Delete event #3",
+    "translation": "Delete #3."
+  },
+  {
+    "input": "Delete it",
+    "translation": "Delete it."
+  },
+  {
+    "input": "Delete the event called Meeting",
+    "translation": "Delete the event with title \"Meeting\"."
+  },
+  {
+    "input": "What is event #3 called?",
+    "translation": "What is the title of #3?"
+  },
+  {
+    "input": "Where is it?",
+    "translation": "What is the location of it?"
+  },
+  {
+    "input": "What description does it have?",
+    "translation": "What is the description of it?"
+  },
+  {
+    "input": "How important is event #3?",
+    "translation": "What is the importance of #3?"
+  },
+  {
+    "input": "When does it start?",
+    "translation": "What is the start of it?"
+  },
+  {
+    "input": "When does event #3 end?",
+    "translation": "What is the end of #3?"
+  },
+  {
+    "input": "When is event #3 scheduled?",
+    "translation": "What is the interval of #3?"
+  },
+  {
+    "input": "Does event #3 exist in this week?",
+    "translation": "Does #3 exist?"
+  },
+  {
+    "input": "Is the critical event before the event called Meeting?",
+    "translation": "Does the event with importance critical satisfy before event the event with title \"Meeting\"?"
+  },
+  {
+    "input": "Does the important event overlap the critical event?",
+    "translation": "Does the event with importance important satisfy overlaps event the event with importance critical?"
+  },
+  {
+    "input": "How long is event #3?",
+    "translation": "What is the duration of #3?"
+  },
+  {
+    "input": "What is the gap between event #3 and event #5?",
+    "translation": "What is the gap between #3 and #5?"
+  },
+  {
+    "input": "How many critical events are there on Thursday?",
+    "translation": "How many events match importance is critical and overlaps thursday?"
+  },
+  {
+    "input": "Which events start on Monday?",
+    "translation": "Which events match starts on monday?"
+  },
+  {
+    "input": "Are all events starting Thursday normal?",
+    "translation": "Does every event matching starts on thursday satisfy importance is normal?"
+  },
+  {
+    "input": "Is there an important event on Friday?",
+    "translation": "Does some event matching overlaps friday satisfy importance is important?"
+  },
+  {
+    "input": "When am I free on Thursday morning?",
+    "translation": "Which intervals are free within thursday morning?"
+  },
+  {
+    "input": "Find the earliest free hour on Thursday afternoon",
+    "translation": "What is the earliest available interval lasting 60 minutes within thursday afternoon?"
+  },
+  {
+    "input": "Which pairs overlap on Thursday?",
+    "translation": "Which event pairs clash within thursday?"
+  },
+  {
+    "input": "Count overlapping event pairs on Thursday",
+    "translation": "How many overlaps occur within thursday, counting pairs?"
+  },
+  {
+    "input": "How many events are involved in overlaps on Thursday?",
+    "translation": "How many overlaps occur within thursday, counting events?"
+  },
+  {
+    "input": "How many overlaps are there?",
+    "translation": "How many overlaps occur?"
+  },
+  {
+    "input": "Schedule a meeting with Mr Black at the head office on Thursday at the first free time after 9 am",
+    "translation": "Schedule event within thursday after 09:00 with title \"Meeting with Mr Black\" and location \"Head office\"."
+  },
+  {
+    "input": "Schedule a 30 minute meeting on Thursday morning",
+    "translation": "Schedule event lasting 30 minutes within thursday morning with title \"Meeting\"."
+  },
+  {
+    "input": "Find a slot for a meeting",
+    "translation": "Schedule event with title \"Meeting\"."
+  },
+  {
+    "input": "Schedule an hour on Thursday at or after 9 am",
+    "translation": "Schedule event lasting 60 minutes within thursday at or after 09:00."
+  },
+  {
+    "input": "Schedule a half hour on Thursday at 5",
+    "translation": "Schedule event lasting 30 minutes within starting at thursday at one of [05:00, 17:00]."
+  },
+  {
+    "input": "Fit an hour at 9 on Thursday morning, moving normal events if needed",
+    "translation": "Make room for event lasting 60 minutes within starting at thursday at 09:00, moving up to normal."
+  },
+  {
+    "input": "Make room for 90 minutes on Thursday afternoon",
+    "translation": "Make room for event lasting 90 minutes within thursday afternoon."
+  },
+  {
+    "input": "Make room for an hour Thursday morning, but I do not know which events to protect yet",
+    "translation": "Make room for event lasting 60 minutes within thursday morning, protecting unspecified."
+  },
+  {
+    "input": "Make room for an hour Thursday morning, moving at most important events but keeping event #3 fixed",
+    "translation": "Make room for event lasting 60 minutes within thursday morning, moving up to important, protecting [#3]."
+  },
+  {
+    "input": "Rearrange Thursday to remove all clashes",
+    "translation": "Remove clashes on thursday."
+  },
+  {
+    "input": "Remove all Thursday clashes; only normal events may move",
+    "translation": "Remove clashes on thursday, moving up to normal."
+  },
+  {
+    "input": "Repair Thursday but keep event #3 fixed",
+    "translation": "Remove clashes on thursday, protecting [#3]."
+  },
+  {
+    "input": "Fix the clashes",
+    "translation": "Remove clashes."
+  },
+  {
+    "input": "Can an hour fit Thursday afternoon if only normal events move?",
+    "translation": "Can an event lasting 60 minutes within thursday afternoon fit, moving up to normal?"
+  },
+  {
+    "input": "What is the cheapest way to fit 90 minutes Thursday afternoon, allowing important events to move?",
+    "translation": "What is the minimum movement cost to fit an event lasting 90 minutes within thursday afternoon, moving up to important?"
+  },
+  {
+    "input": "Can Thursday be made clash free without moving anything?",
+    "translation": "Can clashes on thursday be removed, moving up to none?"
+  },
+  {
+    "input": "Can the clashes be removed?",
+    "translation": "Can clashes be removed?"
+  },
+  {
+    "input": "Which events have a clash?",
+    "translation": "Which events match has a clash?"
+  },
+  {
+    "input": "How many events last at least one hour?",
+    "translation": "How many events match duration is at least 60 minutes?"
+  },
+  {
+    "input": "How many events are critical or important?",
+    "translation": "How many events match importance is critical or importance is important?"
+  },
+  {
+    "input": "Change event #3 to a one-minute event starting Thursday at 9 am",
+    "translation": "Set interval of #3 from thursday at 09:00 to thursday at 09:01."
+  },
+  {
+    "input": "Make event #3 red",
+    "translation": "Set importance of #3 to critical."
+  },
+  {
+    "input": "Make event #3 yellow",
+    "translation": "Set importance of #3 to important."
+  },
+  {
+    "input": "Make event #3 green",
+    "translation": "Set importance of #3 to normal."
+  }
+]

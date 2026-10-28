@@ -4,6 +4,7 @@ from pathlib import Path
 
 from pydantic import Field, model_validator
 
+from .language_help import LanguageDomain, LanguageExamples
 from .schemas import Schema, WorldState, PendingEntry, DomainId, WorldChange, validate_world_domain, CELLULAR_CELL_COUNT
 
 
@@ -41,6 +42,22 @@ class LogicEngine:
     def __init__(self, executable: Path, timeout: float = 5):
         self.executable = executable
         self.timeout = timeout
+
+    def examples(self, domain: LanguageDomain) -> LanguageExamples:
+        try:
+            result = subprocess.run(
+                [str(self.executable)],
+                input=json.dumps({'domain': domain, 'action': {'type': 'examples'}}),
+                capture_output=True, text=True, encoding='utf-8',
+                timeout=self.timeout, check=True,
+            )
+            reply = LanguageExamples.model_validate_json(result.stdout)
+            version = 'calendar-v1' if domain == 'calendar' else domain + '-v2'
+            if reply.domain != domain or reply.languageVersion != version:
+                raise ValueError('Unexpected language examples domain/version')
+            return reply
+        except (OSError, subprocess.SubprocessError, ValueError) as error:
+            raise EngineUnavailable('Language examples unavailable') from error
 
     def edit(self, domain: DomainId, world: WorldState, action: dict, salience: list[dict] | None = None,
              pending: PendingEntry | None = None, next_object_id: int | None = None) -> EngineReply:

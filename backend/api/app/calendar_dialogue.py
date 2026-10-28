@@ -17,10 +17,13 @@ from zoneinfo import ZoneInfo
 from .calendar_events import CreateEvent, UpdateEvent
 from .calendar_mcp import CalendarError, CalendarMcp
 from .engine import EngineUnavailable, EngineInvalidRequest
+from .agent_store import AgentStore
+from .calendar_interpreter import CalendarInterpreter
+from .llm_budget import budget_in
 
 BUDAPEST = ZoneInfo('Europe/Budapest')
 EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
-ACTIVE = {'clarify', 'review', 'prefix', 'applying', 'recovery'}
+ACTIVE = {'clarify', 'review', 'prefix', 'applying', 'recovery', 'interpretation', 'interpreting'}
 VERSION = 'calendar-v1'
 POLICY = 'calendar-demo-1'
 
@@ -52,8 +55,14 @@ def context(start, end):
             table.append({'zoneFrom': micros(cursor), 'zoneOffset': offset})
             prior = offset
         cursor += timedelta(hours=1)
+    now = datetime.now(timezone.utc)
+    anchor = {'zoneFrom': micros(now), 'zoneOffset': int(now.astimezone(BUDAPEST).utcoffset().total_seconds())}
+    if now < a.astimezone(timezone.utc) - timedelta(days=2):
+        table.insert(0, anchor)
+    elif now > stop:
+        table.append(anchor)
     return {'weekStart': micros(a), 'weekEnd': micros(b),
-            'frozenNow': micros(datetime.now(timezone.utc)), 'zones': table}
+            'frozenNow': micros(now), 'zones': table}
 
 
 def transport_event(raw):
@@ -90,7 +99,7 @@ def provider_fields(fields):
 
 
 class CalendarDialogue:
-    def __init__(self, database, executable, adapter):
+    def __init__(self, database, executable, adapter, translator=None):
         self.database, self.executable, self.adapter = database, executable, adapter
         self.lock = asyncio.Lock()
         with database.connection() as db:
@@ -100,6 +109,15 @@ class CalendarDialogue:
                 'languageVersion': VERSION, 'policyVersion': POLICY, 'revision': 0, 'status': 'idle',
                 'handles': {}, 'nextHandle': 0, 'salience': [], 'messages': [], 'feedback': [],
                 'question': None, 'plan': [], 'work': None, 'journal': []}),))
+
+            state = json.loads(db.execute('SELECT state FROM calendar_dialogue WHERE id=1').fetchone()[0])
+            if 'interpreterId' not in state:
+                state['interpreterId'] = 'calendar:' + str(uuid4())
+                db.execute('UPDATE calendar_dialogue SET state=? WHERE id=1', (json.dumps(state),))
+        self.interpreter = CalendarInterpreter(self, translator)
+
+    def record_interpreter(self, state, kind, **values):
+        AgentStore(self.database).record_event(state['interpreterId'], {'kind': kind, **values})
 
     def read(self):
         with self.database.connection() as db:
@@ -112,10 +130,11 @@ class CalendarDialogue:
         with self.database.connection() as db:
             db.execute('UPDATE calendar_dialogue SET state=? WHERE id=1', (json.dumps(state),))
 
-    @staticmethod
-    def public(state):
-        return {**{k: v for k, v in state.items() if k not in ('work', 'handles', 'salience', 'fingerprint')},
-                'eventHandles': state['handles'], 'canRevise': bool(state.get('work'))}
+    def public(self, state):
+        with self.database.connection() as db:
+            budget = budget_in(db).model_dump()
+        return {**{k: v for k, v in state.items() if k not in ('work', 'handles', 'salience', 'fingerprint', 'interpretationBase', 'interpretationPreviewWork', 'interpretationCandidatesWork', 'interpreterId')},
+                'eventHandles': state['handles'], 'canRevise': bool(state.get('work')) and not state.get('interpretation'), 'llmBudget': budget}
 
     @asynccontextmanager
     async def manual(self):
@@ -123,6 +142,7 @@ class CalendarDialogue:
             if self.read()['status'] in ACTIVE:
                 raise CalendarError('Finish or cancel the Calendar dialogue before editing events.', 409)
             yield
+            self.record_interpreter(self.read(), 'calendar_edit', notice='Manual calendar edit completed; use the fresh Google snapshot.')
 
     async def fetch(self, ctx):
         response = await self.adapter().events(date_time(ctx['weekStart']), date_time(ctx['weekEnd']), 'Europe/Budapest')
@@ -171,6 +191,10 @@ class CalendarDialogue:
             if body['revision'] != state['revision']:
                 raise CalendarError('Stale Calendar dialogue revision. Refresh before responding.', 409)
             action = body['type']
+            if action in ('previewInterpretation', 'acceptInterpretation', 'rejectInterpretation', 'answerInterpretation'):
+                return await self.interpreter.act(state, body)
+            if state.get('interpretation') and action != 'cancel':
+                raise CalendarError('Accept or reject the pending interpretation first.', 409)
             if state['status'] == 'applying':
                 state['status'] = 'recovery'
                 self.save(state)
@@ -179,6 +203,8 @@ class CalendarDialogue:
             if state['status'] in ('applying', 'recovery'):
                 raise CalendarError('Reconcile submitted Calendar writes first.', 409)
             if action == 'cancel':
+                self.interpreter.clear(state)
+                self.record_interpreter(state, 'calendar_cancelled')
                 state.update(status='idle', question=None, plan=[], work=None, journal=[])
                 state['messages'].append({'role': 'machine', 'text': 'Pending entry cancelled. No proposed Calendar writes were submitted.'})
                 state['revision'] += 1
@@ -219,9 +245,12 @@ class CalendarDialogue:
                         'feedback': state.get('feedback', []), 'key': body['key'], 'value': body['value']})
                     state['activeSeconds'] = 0
                 command = {'type': action, 'key': body['key'], 'value': body['value']}
-                state['messages'].append({'role': 'user', 'text': str(body['value'])})
+                state['messages'].append({'role': 'user', 'text': body.get('text') or str(body['value'])})
             else:
                 raise CalendarError('Unsupported Calendar dialogue action.', 422)
+            if (action == 'answer' and body.get('useLlm') and body.get('text') and
+                    state.get('question', {}).get('kind') == 'text'):
+                return await self.interpreter.propose(state, body['text'], ctx, events, target='answer', key=body['key'])
             before_evaluation = copy.deepcopy(state)
             previous_feedback = 0 if action in ('start', 'revise') else len(state.get('feedback', []))
             try:
@@ -233,27 +262,39 @@ class CalendarDialogue:
                 if action == 'start':
                     state.update(status='error', work=None, question=None, plan=[],
                                  parameters={}, feedback=[], usage={})
+                if action == 'start' and body.get('useLlm'):
+                    return await self.interpreter.propose(state, body['text'], ctx, events, source_error=str(error))
                 state['messages'].append({'role': 'machine', 'text': str(error), 'isError': True})
                 state['messages'] = state['messages'][-200:]
                 state['revision'] += 1
                 self.save(state)
                 return self.public(state)
-            for key in ('status', 'question', 'plan', 'work', 'feedback', 'parameters', 'usage'):
-                if key in reply:
-                    state[key] = reply[key]
-            state['handles'] = reply.get('handles', state['handles'])
-            state['nextHandle'] = max(state['nextHandle'], reply.get('nextHandle', 0))
-            week_label = (f"Week {date_time(ctx['weekStart']).date()}–"
-                          f"{date_time(ctx['weekEnd']).date() - timedelta(days=1)} (Europe/Budapest). ")
-            message = week_label + reply.get('message', '') + '\n' + '\n'.join(reply.get('feedback', [])[previous_feedback:])
-            state['messages'].append({'role': 'machine', 'text': message.strip()})
-            state['messages'] = state['messages'][-200:]
-            state['revision'] += 1
-            if state['status'] == 'answered' or reply.get('commitDiscourse'):
-                state['salience'] = reply['salience']
-                state['work'] = None
-            self.save(state)
-            return self.public(state)
+            if (action == 'answer' and body.get('useLlm') and body.get('text') and
+                    reply.get('status') == 'clarify' and reply.get('question', {}).get('key') == body['key']):
+                state = before_evaluation
+                return await self.interpreter.propose(state, body['text'], ctx, events, target='answer', key=body['key'])
+            return self.complete_evaluation(state, reply, ctx, previous_feedback)
+
+    def complete_evaluation(self, state, reply, ctx, previous_feedback=0):
+        if '_activeSeconds' in reply:
+            state['activeSeconds'] = reply['_activeSeconds']
+        for key in ('status', 'question', 'plan', 'work', 'feedback', 'parameters', 'usage'):
+            if key in reply:
+                state[key] = reply[key]
+        state['handles'] = reply.get('handles', state['handles'])
+        state['nextHandle'] = max(state['nextHandle'], reply.get('nextHandle', 0))
+        week_label = (f"Week {date_time(ctx['weekStart']).date()}–"
+                      f"{date_time(ctx['weekEnd']).date() - timedelta(days=1)} (Europe/Budapest). ")
+        message = week_label + reply.get('message', '') + '\n' + '\n'.join(reply.get('feedback', [])[previous_feedback:])
+        state['messages'].append({'role': 'machine', 'text': message.strip()})
+        state['messages'] = state['messages'][-200:]
+        state['revision'] += 1
+        if state['status'] == 'answered' or reply.get('commitDiscourse'):
+            state['salience'] = reply['salience']
+            state['work'] = None
+        self.record_interpreter(state, 'engine_result', userText=next((m['text'] for m in reversed(state['messages']) if m['role'] == 'user'), None), feedback=message.strip(), isError=state['status'] in ('error', 'limited', 'prefix'), pending=state['status'] in ACTIVE)
+        self.save(state)
+        return self.public(state)
 
     async def apply(self, state):
         self.adapter().require_writes()
@@ -271,6 +312,7 @@ class CalendarDialogue:
                 record['fields'] = UpdateEvent(**record['fields']).tool_fields()
             record['before'] = originals.get(record['eventId'])
             state['journal'].append(record)
+        self.record_interpreter(state, 'calendar_write_approved', operations=len(state['plan']))
         state['status'] = 'applying'
         state['revision'] += 1
         self.save(state)
@@ -340,6 +382,7 @@ class CalendarDialogue:
         state['salience'] = confirmed['salience']
         for handle, provider_id in created.items():
             state['handles'][provider_id] = int(handle)
+        self.record_interpreter(state, 'calendar_write_confirmed', operations=len(state['journal']))
         state.update(status='answered', work=None, plan=[], question=None, journal=[])
         state['messages'].append({'role': 'machine', 'text': 'All proposed changes were read back and verified. Google Calendar is current.'})
         state['revision'] += 1
@@ -381,6 +424,7 @@ class CalendarDialogue:
             for item in state['journal']:
                 if item['type'] == 'create' and item['status'] == 'verified':
                     state['handles'][item['eventId']] = item['handle']
+            self.record_interpreter(state, 'calendar_partial_result_retained', notice='Intended task incomplete; use the fresh Google snapshot.')
             # Retain pre-entry discourse, purged by Haskell on the next fresh entry.
             state.update(status='idle', work=None, plan=[], question=None, journal=[])
             state['messages'].append({'role': 'machine', 'text': 'Verified partial result retained; the intended task was not completed.'})

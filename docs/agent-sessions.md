@@ -25,7 +25,10 @@ The key must have access to the configured model and Agents read/write operation
 4. Select Cellular and submit `Please paint A1 black` with the LLM switch enabled.
    This creates the Cellular agent with its instructions, Cellular v2 reference
    and examples. A separate session is created for each conversation.
-5. Review the returned proposal. Preview and Accept use Haskell; neither manual
+5. Configure the optional Calendar MCP connection, select Calendar, enable its
+   LLM switch and submit `Find a free half hour on Thursday morning`. This creates
+   the Calendar agent/session using the same configured key and shared budget.
+6. Review the returned proposal. Preview and Accept use Haskell; neither manual
    dashboard setup nor copying agent IDs into configuration is necessary.
 
 Direct controlled English bypasses the interpreter, so it does not provision an
@@ -53,6 +56,7 @@ Uvicorn, run one of:
 python -m app.agents recreate --domain objects
 python -m app.agents recreate --domain network
 python -m app.agents recreate --domain cellular
+python -m app.agents recreate --domain calendar
 ```
 
 For a project/account change, use all domains:
@@ -85,9 +89,10 @@ the application owns configuration assembled from the versioned local sources.
 
 ## Instructions and saved agents
 
-Each agent receives its standalone v2 language reference: [Objects v2](object-language-v2.md)
+The board-domain agents receive their standalone v2 language references: [Objects v2](object-language-v2.md)
 with 184 validated examples, [Network v2](network-language-v2.md) with 214,
-or [Cellular v2](cellular-language-v2.md) with 120.
+or [Cellular v2](cellular-language-v2.md) with 120. Calendar uses its v1 contract
+and sources described [below](#calendar-interpreter).
 Both transports assemble the same reviewed instructions for their active domain.
 Explicit creation, location/occupant distinctions, identity versus appearance,
 and consequential graph-scope alternatives are part of those contracts.
@@ -234,3 +239,49 @@ No API key is sent to Flutter or stored in SQLite.
 - [Events and items](https://developers.openai.com/api/docs/guides/agents-api/sessions/events)
 - [Best-effort usage and caching](https://developers.openai.com/api/docs/guides/agents-api/observability)
 
+
+
+## Calendar interpreter
+
+Calendar has a separate `calendar-v1` contract. The authoring source is the
+Calendar section of [agent-instructions-draft.md](agent-instructions-draft.md),
+its compact [syntax reference](../backend/api/prompts/calendar.md), and
+[64 translation examples](../backend/api/prompts/calendar-examples.json).
+Tests validate every entry example using the real Haskell parser.
+[Typed reply examples](../backend/api/prompts/calendar-answer-examples.json)
+cover JSON-valued answers to engine questions. Assembly excludes
+other domains' sections and grid-specific reference/geometric-planning policy.
+
+The backend supplies a Haskell-scoped selected-week snapshot with stable handles,
+Budapest exact/normalized intervals, importance, read-only flags and current
+salience. Provider event IDs are omitted. The interpreter must preserve event
+references and operational holes for Haskell, use native scheduling tasks rather
+than solving them, and translate calendar questions instead of answering them.
+The explicit frozen time anchors relative language. Event text is untrusted data.
+
+A natural-language entry is attempted only after the raw entry fails parsing.
+Controlled-English input bypasses the agent. Haskell validates candidates before
+review; preview remains private and is checked against the original Google
+snapshot. Accept interpretation starts provisional evaluation, including engine
+clarifications. **Accept changes** is a separate approval of the net Google plan.
+
+For a free-form reply to an engine text question, or a reply that does not parse
+as the required typed value, the agent can propose a JSON value bound to that
+question. It cannot replace the speech act or submit another command. These
+proposals have the same review/preview/reject flow; rejecting restores the
+original pending task. Numeric/option answers already understood by Haskell
+bypass interpretation. Courtesy-only responses retain the pending question.
+
+Calendar stores a stable interpreter-context ID with its dialogue. Persistent
+sessions and bounded outcome queues use `calendar_llm_sessions` and
+`calendar_llm_events`; no board conversation or event-world mirror is created.
+Configuration IDs, leases, transcripts and the global $1 admission ledger are
+shared with the existing interpreter infrastructure. Schema additions happen on
+backend startup without deleting existing conversations or accounting. Recreate
+supports `--domain calendar`; `--domain all` now includes it. Remote resources are
+still created lazily, and this command remains local-only.
+
+Both configured transports work: app-managed Agents is the default; Responses
+uses the same Calendar instructions without saved sessions. No new model, key,
+Google consent, tool access or fallback transport is introduced. Provider tests
+use fake endpoints and fake Google data, not paid live turns or live event writes.

@@ -20,7 +20,7 @@ data Options = Options {threshold :: Slot Int, protected :: Slot [Ref], preserve
   deriving (Eq,Show,Read,Generic,ToJSON,FromJSON)
 data Task = Task {duration :: Slot Integer, window :: Slot Window, fields :: [(String,Slot String)]}
   deriving (Eq,Show,Read,Generic,ToJSON,FromJSON)
-data Sentence = Create (Slot Moment) (Slot Moment) | Delete (Slot Ref) | SetText String (Slot Ref) (Slot String)
+data Sentence = Create (Slot Moment) (Slot Moment) | CreateWithFields (Slot Moment) (Slot Moment) [(String,Slot String)] | Delete (Slot Ref) | SetText String (Slot Ref) (Slot String)
   | SetImportance (Slot Ref) (Slot Int) | SetInterval (Slot Ref) (Slot Moment) (Slot Moment)
   | Schedule Task | Insert Task Options | Repair (Slot DateTerm) Options
   | Exists (Slot Int) | Query (Slot String) (Slot Ref) | Check (Slot Ref) Condition
@@ -30,4 +30,4 @@ data Sentence = Create (Slot Moment) (Slot Moment) | Delete (Slot Ref) | SetText
   deriving (Eq,Show,Read,Generic,ToJSON,FromJSON)
 type Entry = [Sentence]
 isQuestion :: Sentence -> Bool
-isQuestion s = case s of Create _ _->False;Delete _->False;SetText {}->False;SetImportance {}->False;SetInterval {}->False;Schedule _->False;Insert {}->False;Repair {}->False;_->True
+isQuestion s = case s of Create {}->False;CreateWithFields {}->False;Delete _->False;SetText {}->False;SetImportance {}->False;SetInterval {}->False;Schedule _->False;Insert {}->False;Repair {}->False;_->True

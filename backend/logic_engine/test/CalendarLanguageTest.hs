@@ -15,6 +15,8 @@ main = do
         [ "Create event from thursday at 09:00 to friday at 10:00."
         , "Set title of it to \"\". Set importance of #0 to normal. Delete #0."
         , "Set location of the unique event with title \"Meeting\" and importance important and start date thursday to \"Office\"."
+        , "Create event from friday at 11:00 to friday at 11:15 with title \"Laundry machine mechanic\" and location \"Home\" and description \"Repair\" and importance critical."
+        , "Create event from unspecified to unspecified with title unspecified and importance unspecified."
         , "Schedule event."
         , "Schedule event lasting unspecified within unspecified date morning after 09:00."
         , "Schedule event lasting 30 minutes within starting at thursday at one of [05:00, 17:00]."
@@ -38,7 +40,9 @@ main = do
     Right ast -> case parseEntry (entryText ast) of
       Left message -> error (entryText ast ++ ": " ++ message)
       Right ast' -> assert ("canonical formatting: " ++ source) (entryText ast' == entryText ast)
-  forM_ ["Undo.", "Delete #01.", "Create event from thursday at 24:00 to thursday at 25:00.",
+  forM_ ["Create event from unspecified to unspecified with title \"x\" and title \"y\".",
+         "Create event from unspecified to unspecified with importance critical and title \"x\".",
+         "Create event from unspecified to unspecified with.", "Undo.", "Delete #01.", "Create event from thursday at 24:00 to thursday at 25:00.",
          "Schedule event with title \"x\" and title \"y\".", "How many events match true.", "Create event from monday at ١٠:٠٠ to monday at 11:00."] $ \source ->
     assert ("invalid syntax accepted: " ++ source) (case parseEntries source of Left _ -> True; _ -> False)
   assert "half ticks round down" (roundTime (2*tick + tick `div` 2) == 2*tick)

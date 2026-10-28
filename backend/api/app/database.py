@@ -107,6 +107,21 @@ class Database:
                 );
                 CREATE INDEX IF NOT EXISTS llm_events_by_conversation
                     ON llm_session_events(conversation_id, sequence);
+                CREATE TABLE IF NOT EXISTS calendar_llm_sessions (
+                    conversation_id TEXT PRIMARY KEY,
+                    session_id TEXT NOT NULL,
+                    agent_id TEXT NOT NULL,
+                    config_hash TEXT NOT NULL,
+                    last_turn_id TEXT,
+                    event_cursor INTEGER NOT NULL DEFAULT 0
+                );
+                CREATE TABLE IF NOT EXISTS calendar_llm_events (
+                    sequence INTEGER PRIMARY KEY AUTOINCREMENT,
+                    conversation_id TEXT NOT NULL,
+                    payload_json TEXT NOT NULL
+                );
+                CREATE INDEX IF NOT EXISTS calendar_llm_events_by_context
+                    ON calendar_llm_events(conversation_id, sequence);
                 CREATE TABLE IF NOT EXISTS llm_locks (
                     name TEXT PRIMARY KEY,
                     token TEXT NOT NULL,

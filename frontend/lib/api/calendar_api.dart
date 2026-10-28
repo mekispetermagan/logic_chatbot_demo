@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../models/calendar_event.dart';
+import '../models/language_examples.dart';
+import 'language_help_api.dart';
 import '../models/calendar_week.dart';
 import 'conversation_api.dart' show ApiException;
 
@@ -28,6 +30,9 @@ class CalendarApi {
   final Uri baseUrl;
   final http.Client _client;
   final Duration timeout;
+
+  Future<LanguageExamples> examples() =>
+      fetchLanguageExamples(_client, baseUrl, 'calendar', timeout);
 
   Future<List<CalendarEvent>> events(CalendarWeek week) async {
     final uri = baseUrl.replace(

@@ -91,9 +91,12 @@ async def freebusy(query: CalendarInterval = Depends(interval), calendar: Calend
 
 class DialogueAction(BaseModel):
     model_config = ConfigDict(extra='forbid')
-    type: Literal['start', 'answer', 'revise', 'accept', 'cancel', 'reconcile', 'continue', 'keepPartial']
+    type: Literal['start', 'answer', 'revise', 'accept', 'cancel', 'reconcile', 'continue', 'keepPartial', 'previewInterpretation', 'acceptInterpretation', 'rejectInterpretation', 'answerInterpretation']
     revision: int = Field(ge=0)
     text: str = Field(default='', max_length=65536)
+    useLlm: bool = False
+    proposalId: str | None = Field(default=None, max_length=100)
+    rank: int | None = Field(default=None, ge=1, le=3)
     key: str = Field(default='', max_length=512)
     value: Any = None
     timeMin: AwareDatetime | None = None
@@ -105,6 +108,12 @@ class DialogueAction(BaseModel):
             raise ValueError('A new Calendar entry requires text and week bounds')
         if self.type in ('answer', 'revise') and not self.key:
             raise ValueError('An answer/revision must identify its parameter')
+        if self.type.endswith('Interpretation') and not self.proposalId:
+            raise ValueError('Identify the pending interpretation')
+        if self.type in ('previewInterpretation', 'acceptInterpretation') and self.rank is None:
+            raise ValueError('Choose an interpretation rank')
+        if self.type == 'answerInterpretation' and not self.text.strip():
+            raise ValueError('Provide an interpretation answer')
         return self
 
 

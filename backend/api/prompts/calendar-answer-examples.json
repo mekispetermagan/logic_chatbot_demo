@@ -1,0 +1,152 @@
+[
+  {
+    "question": {
+      "kind": "number",
+      "prompt": "How many elapsed minutes?"
+    },
+    "input": "half an hour",
+    "translation": "30"
+  },
+  {
+    "question": {
+      "kind": "importance",
+      "prompt": "What maximum importance may move?",
+      "options": [
+        [
+          "None",
+          -1
+        ],
+        [
+          "Normal",
+          0
+        ],
+        [
+          "Important",
+          1
+        ],
+        [
+          "Critical",
+          2
+        ]
+      ]
+    },
+    "input": "only normal ones",
+    "translation": "0"
+  },
+  {
+    "question": {
+      "kind": "importance",
+      "prompt": "What maximum importance should I consider movable for this calculation?",
+      "options": [
+        [
+          "None",
+          -1
+        ],
+        [
+          "Normal",
+          0
+        ],
+        [
+          "Important",
+          1
+        ],
+        [
+          "Critical",
+          2
+        ]
+      ]
+    },
+    "input": "none may move",
+    "translation": "-1"
+  },
+  {
+    "question": {
+      "kind": "text",
+      "prompt": "What should the title be?"
+    },
+    "input": "Call it Team meeting",
+    "translation": "\"Team meeting\""
+  },
+  {
+    "question": {
+      "kind": "text",
+      "prompt": "What should the location be?"
+    },
+    "input": "Clear it",
+    "translation": "\"\""
+  },
+  {
+    "question": {
+      "kind": "handles",
+      "prompt": "Which events must stay fixed?"
+    },
+    "input": "keep #3 and #5 fixed",
+    "translation": "[3,5]"
+  },
+  {
+    "question": {
+      "kind": "window",
+      "prompt": "What is the allowed interval?"
+    },
+    "input": "Thursday morning",
+    "translation": "\"thursday morning\""
+  },
+  {
+    "question": {
+      "kind": "moment",
+      "prompt": "Give a date and time."
+    },
+    "input": "Thursday at 9 am",
+    "translation": "\"thursday at 09:00\""
+  },
+  {
+    "question": {
+      "kind": "clock",
+      "prompt": "Which local time do you mean?",
+      "options": [
+        [
+          "05:00",
+          300
+        ],
+        [
+          "17:00",
+          1020
+        ]
+      ]
+    },
+    "input": "5 pm",
+    "translation": "1020"
+  },
+  {
+    "question": {
+      "kind": "choice",
+      "prompt": "Which event do you mean?",
+      "options": [
+        [
+          "#3",
+          3
+        ],
+        [
+          "#5",
+          5
+        ]
+      ]
+    },
+    "input": "event #5",
+    "translation": "5"
+  },
+  {
+    "question": {
+      "kind": "choice",
+      "prompt": "Approve rounding these interval endpoints to the five-minute grid?",
+      "options": [
+        [
+          "Approve",
+          true
+        ]
+      ]
+    },
+    "input": "yes",
+    "translation": "true"
+  }
+]

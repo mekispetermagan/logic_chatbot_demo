@@ -82,7 +82,7 @@ class _DemoScreenState extends State<DemoScreen> {
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: _controller,
+      listenable: Listenable.merge([_controller, _calendar]),
       builder: (context, child) => LayoutBuilder(
         builder: (context, constraints) {
           final wide = constraints.maxWidth >= 900;
@@ -159,6 +159,7 @@ class _DemoScreenState extends State<DemoScreen> {
                   ? 'Edit cells, change rules, or ask about future generations.'
                   : 'Enter a sentence to begin.',
               composerHint: 'Enter a message',
+              loadExamples: () => _controller.api.examples(_controller.domain),
               canSendControl: _controller.canRequest
                   ? _controller.canSendControl
                   : null,
@@ -213,6 +214,7 @@ class _DemoScreenState extends State<DemoScreen> {
                       onCalendarSelected: () {
                         setState(() => _showCalendar = true);
                         _calendar.load();
+                        _calendar.loadDialogue();
                       },
                       onChanged: _controller.canSwitchDomain
                           ? (domain) {
@@ -222,30 +224,34 @@ class _DemoScreenState extends State<DemoScreen> {
                           : null,
                     ),
                   ),
-                  if (!_showCalendar)
-                    Padding(
-                      padding: EdgeInsets.only(right: actionSpacing),
-                      child: Tooltip(
-                        message: _controller.llmAvailable
-                            ? 'Activate LLM: propose interpretations after a syntax error'
-                            : 'Cellular dialogue is not available yet',
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (wide) const Text('LLM'),
-                            Switch(
-                              padding: EdgeInsets.zero,
-                              value: _controller.llmEnabled,
-                              onChanged:
-                                  _controller.canSwitchDomain &&
+                  Padding(
+                    padding: EdgeInsets.only(right: actionSpacing),
+                    child: Tooltip(
+                      message: _controller.llmAvailable
+                          ? 'Activate LLM: propose interpretations after a syntax error'
+                          : 'Cellular dialogue is not available yet',
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (wide) const Text('LLM'),
+                          Switch(
+                            padding: EdgeInsets.zero,
+                            value: _showCalendar
+                                ? _calendar.useLlm
+                                : _controller.llmEnabled,
+                            onChanged: _showCalendar
+                                ? (_calendar.canToggleLlm
+                                      ? _calendar.setUseLlm
+                                      : null)
+                                : _controller.canSwitchDomain &&
                                       _controller.llmAvailable
-                                  ? _controller.setUseLlm
-                                  : null,
-                            ),
-                          ],
-                        ),
+                                ? _controller.setUseLlm
+                                : null,
+                          ),
+                        ],
                       ),
                     ),
+                  ),
                   if (!_showCalendar)
                     Padding(
                       padding: EdgeInsets.only(right: actionSpacing),

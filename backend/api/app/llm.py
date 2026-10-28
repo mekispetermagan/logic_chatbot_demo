@@ -10,7 +10,8 @@ import httpx
 
 from .llm_budget import (MODEL, MAX_INPUT_TOKENS, MAX_OUTPUT_TOKENS, MAX_REQUEST_NANO,
                          NANO_PER_USD, LlmBudgetLedger)
-from .schemas import DomainId, LlmUsage, WorldState, InterpretationCandidate
+from .schemas import LlmUsage, InterpretationCandidate
+from .agent_context import InterpreterWorld
 from .llm_transcript import LlmTranscript
 
 PROMPTS = Path(__file__).resolve().parents[1] / 'prompts'
@@ -75,8 +76,8 @@ def failure_note(stage: str, error: Exception, response: httpx.Response | None) 
     return f'LLM translation failed ({stage}: {detail}); nothing was applied.'
 
 
-def prompt_for(domain: DomainId) -> str:
-    # Both transports use the same reviewed instructions and v2 contract.
+def prompt_for(domain: str) -> str:
+    # Both transports use the same reviewed instructions and versioned contract.
     from .agent_instructions import configuration_for
     return configuration_for(domain)['instructions']
 
@@ -139,7 +140,7 @@ class LlmTranslator:
                                    headers=dict(response.headers), body=content)
         return response
 
-    def translate(self, conversation_id, domain: DomainId, text: str, world: WorldState,
+    def translate(self, conversation_id, domain: str, text: str, world: InterpreterWorld,
                   clarification: dict | None = None) -> TranslationAttempt:
         if not self._api_key:
             return TranslationAttempt(LlmUsage(status='not_configured'), note='LLM is not configured on the server.')

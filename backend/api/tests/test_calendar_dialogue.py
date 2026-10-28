@@ -51,6 +51,38 @@ class CalendarLanguageTests(unittest.TestCase):
         self.assertEqual(result['plan'][0]['fields']['colorId'], '11')
         self.assertEqual(result['plan'][0]['fields']['description'], '')
 
+    def test_creation_fields_and_anaphora(self):
+        result = run_engine('Create event from friday at 11:00 to friday at 11:15 '
+                            'with title "Laundry machine mechanic" and location "Home" '
+                            'and description "Repair" and importance critical. '
+                            'What is the title of it?')
+        self.assertEqual(result['status'], 'review')
+        self.assertEqual(len(result['plan']), 1)
+        fields = result['plan'][0]['fields']
+        self.assertEqual(fields['summary'], 'Laundry machine mechanic')
+        self.assertEqual(fields['location'], 'Home')
+        self.assertEqual(fields['description'], 'Repair')
+        self.assertEqual(fields['colorId'], '11')
+
+    def test_creation_field_clarification_and_defaults(self):
+        result = run_engine('Create event from friday at 11:00 to friday at 11:15 '
+                            'with title unspecified and importance unspecified.')
+        self.assertEqual(result['question']['key'], '0.fields.title')
+        self.assertEqual(result['work']['current'], [])
+        result = run_engine(prior=result, action={'type': 'answer',
+                            'key': '0.fields.title', 'value': 'Mechanic'})
+        self.assertEqual(result['question']['key'], '0.fields.importance')
+        result = run_engine(prior=result, action={'type': 'answer',
+                            'key': '0.fields.importance', 'value': 1})
+        self.assertEqual(result['status'], 'review')
+        self.assertEqual(len(result['plan']), 1)
+        self.assertEqual(len(result['work']['current']), 1)
+        fields = result['plan'][0]['fields']
+        self.assertEqual(fields['summary'], 'Mechanic')
+        self.assertEqual(fields['colorId'], '5')
+        self.assertEqual(fields['location'], '')
+        self.assertEqual(fields['description'], '')
+
     def test_parse_failure_discards_entire_entry(self):
         with self.assertRaises(EngineInvalidRequest):
             run_engine('Delete #0. nonsense', [event()])
