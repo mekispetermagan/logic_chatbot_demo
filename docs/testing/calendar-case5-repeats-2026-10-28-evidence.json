@@ -1,0 +1,1714 @@
+{
+  "originalFailureOutput": {
+    "candidates": [
+      {
+        "explanation": "Thursday morning is the requested repair day. The engine minimizes the weighted movement cost; movement permission will be requested if needed.",
+        "interpretation": "Remove Thursday clashes with minimum weighted movement",
+        "translation": "Remove clashes on thursday"
+      }
+    ],
+    "explanation": "The parser rejected the natural wording; the controlled command is “Remove clashes on Thursday.”",
+    "question": "",
+    "reply": "",
+    "status": "proposals"
+  },
+  "request": "Remove the clashes on Thursday morning with the least total weighted movement.",
+  "model": "gpt-6-luna",
+  "reasoning": "low",
+  "frozenNow": "2026-10-28T08:00:00+01:00",
+  "repeats": [
+    {
+      "repeat": 1,
+      "configurationMatchesOriginal": true,
+      "instructionSha256": "3a3b00fcdeaba03c3e256f02729cf3a162ce6acab0ca217b372b5145df410e39",
+      "inputExactlyMatchesOriginal": false,
+      "semanticInputMatchesIgnoringHandlesAndEventOrder": true,
+      "initialModelInput": {
+        "entry": "Remove the clashes on Thursday morning with the least total weighted movement.",
+        "world": {
+          "domain": "calendar",
+          "evaluation": null,
+          "events": [
+            {
+              "description": "",
+              "end": "2026-10-29 10:00 Europe/Budapest (UTC+01:00)",
+              "handle": 0,
+              "importance": "normal",
+              "location": "",
+              "normalizedEnd": "2026-10-29 10:00 Europe/Budapest (UTC+01:00)",
+              "normalizedStart": "2026-10-29 09:00 Europe/Budapest (UTC+01:00)",
+              "readOnly": false,
+              "start": "2026-10-29 09:00 Europe/Budapest (UTC+01:00)",
+              "title": "Preparation"
+            },
+            {
+              "description": "",
+              "end": "2026-10-29 10:30 Europe/Budapest (UTC+01:00)",
+              "handle": 1,
+              "importance": "important",
+              "location": "",
+              "normalizedEnd": "2026-10-29 10:30 Europe/Budapest (UTC+01:00)",
+              "normalizedStart": "2026-10-29 09:30 Europe/Budapest (UTC+01:00)",
+              "readOnly": false,
+              "start": "2026-10-29 09:30 Europe/Budapest (UTC+01:00)",
+              "title": "Customer meeting"
+            }
+          ],
+          "frozenNow": "2026-10-28 08:00 Europe/Budapest (UTC+01:00)",
+          "provisional": false,
+          "salience": [],
+          "timezone": "Europe/Budapest",
+          "weekEnd": "2026-11-02 00:00 Europe/Budapest (UTC+01:00)",
+          "weekStart": "2026-10-26 00:00 Europe/Budapest (UTC+01:00)"
+        },
+        "outcomes": [],
+        "clarification": {
+          "mode": "entry",
+          "engineQuestion": null,
+          "parserFeedback": "Calendar controlled English:1:8:\n  |\n1 | Remove the clashes on Thursday morning with the least total weighted movement.\n  |        ^^^\nunexpected \"the\"\nexpecting \"clashes\""
+        }
+      },
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "pending": 0,
+        "input_tokens": 19490,
+        "output_tokens": 339,
+        "total_tokens": 19829,
+        "cached_tokens": 0,
+        "reasoning_tokens": 212
+      },
+      "providerTurns": [
+        {
+          "id": "turn_07e6cf3dc636894b006ae1e7e4d92c819a8f94a87cb7311584",
+          "object": "agent.session.turn",
+          "session_id": "sess_07e6cf3dc636894b006ae1e7dd9ed4819a8ffda39acfc3b02d",
+          "agent_id": "agent_21ef4af5f2b24096b7d2ff5b8e69a69621068fcfe87a47ed8f",
+          "subagent_id": null,
+          "status": "completed",
+          "created_at": 1793189858,
+          "started_at": 1793189858,
+          "completed_at": 1793189862,
+          "error": null,
+          "usage": {
+            "input_tokens": 19490,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 339,
+            "output_tokens_details": {
+              "reasoning_tokens": 212
+            },
+            "total_tokens": 19829
+          }
+        }
+      ],
+      "initialEvents": [
+        {
+          "id": "2629dd371a29404489ce8b339dded473",
+          "summary": "Preparation",
+          "start": {
+            "dateTime": "2026-10-29T09:00:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T10:00:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=MjYyOWRkMzcxYTI5NDA0NDg5Y2U4YjMzOWRkZWQ0NzMgMDAyYjlkMzEyZTE3ODhhZWViZWEwMGMzZjZhOTI5ZTcxZGMxNzBiMTVjOTZhNTIxN2IzMzVjOThmY2YwYTk5MkBn",
+          "created": "2026-10-28T12:17:18.000Z",
+          "updated": "2026-10-28T12:17:18.245Z",
+          "colorId": "10",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "002b9d312e1788aeebea00c3f6a929e71dc170b15c96a5217b335c98fcf0a992@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 8afdd556",
+            "self": true
+          },
+          "iCalUID": "2629dd371a29404489ce8b339dded473@google.com",
+          "sequence": 0,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "002b9d312e1788aeebea00c3f6a929e71dc170b15c96a5217b335c98fcf0a992@group.calendar.google.com",
+          "accountId": "demo"
+        },
+        {
+          "id": "ba2b7b1413c74f559eb07e45ee3ae4ad",
+          "summary": "Customer meeting",
+          "start": {
+            "dateTime": "2026-10-29T09:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T10:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=YmEyYjdiMTQxM2M3NGY1NTllYjA3ZTQ1ZWUzYWU0YWQgMDAyYjlkMzEyZTE3ODhhZWViZWEwMGMzZjZhOTI5ZTcxZGMxNzBiMTVjOTZhNTIxN2IzMzVjOThmY2YwYTk5MkBn",
+          "created": "2026-10-28T12:17:22.000Z",
+          "updated": "2026-10-28T12:17:23.072Z",
+          "colorId": "5",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "002b9d312e1788aeebea00c3f6a929e71dc170b15c96a5217b335c98fcf0a992@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 8afdd556",
+            "self": true
+          },
+          "iCalUID": "ba2b7b1413c74f559eb07e45ee3ae4ad@google.com",
+          "sequence": 0,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "002b9d312e1788aeebea00c3f6a929e71dc170b15c96a5217b335c98fcf0a992@group.calendar.google.com",
+          "accountId": "demo"
+        }
+      ],
+      "finalEvents": [
+        {
+          "id": "ba2b7b1413c74f559eb07e45ee3ae4ad",
+          "summary": "Customer meeting",
+          "start": {
+            "dateTime": "2026-10-29T09:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T10:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=YmEyYjdiMTQxM2M3NGY1NTllYjA3ZTQ1ZWUzYWU0YWQgMDAyYjlkMzEyZTE3ODhhZWViZWEwMGMzZjZhOTI5ZTcxZGMxNzBiMTVjOTZhNTIxN2IzMzVjOThmY2YwYTk5MkBn",
+          "created": "2026-10-28T12:17:22.000Z",
+          "updated": "2026-10-28T12:17:23.072Z",
+          "colorId": "5",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "002b9d312e1788aeebea00c3f6a929e71dc170b15c96a5217b335c98fcf0a992@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 8afdd556",
+            "self": true
+          },
+          "iCalUID": "ba2b7b1413c74f559eb07e45ee3ae4ad@google.com",
+          "sequence": 0,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "002b9d312e1788aeebea00c3f6a929e71dc170b15c96a5217b335c98fcf0a992@group.calendar.google.com",
+          "accountId": "demo"
+        },
+        {
+          "id": "2629dd371a29404489ce8b339dded473",
+          "summary": "Preparation",
+          "start": {
+            "dateTime": "2026-10-29T10:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T11:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=MjYyOWRkMzcxYTI5NDA0NDg5Y2U4YjMzOWRkZWQ0NzMgMDAyYjlkMzEyZTE3ODhhZWViZWEwMGMzZjZhOTI5ZTcxZGMxNzBiMTVjOTZhNTIxN2IzMzVjOThmY2YwYTk5MkBn",
+          "created": "2026-10-28T12:17:18.000Z",
+          "updated": "2026-10-28T12:18:23.134Z",
+          "colorId": "10",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "002b9d312e1788aeebea00c3f6a929e71dc170b15c96a5217b335c98fcf0a992@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 8afdd556",
+            "self": true
+          },
+          "iCalUID": "2629dd371a29404489ce8b339dded473@google.com",
+          "sequence": 1,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "002b9d312e1788aeebea00c3f6a929e71dc170b15c96a5217b335c98fcf0a992@group.calendar.google.com",
+          "accountId": "demo"
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday morning with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted.",
+          "llm": {
+            "status": "proposed",
+            "model": "gpt-6-luna",
+            "requestId": "turn_07e6cf3dc636894b006ae1e7e4d92c819a8f94a87cb7311584",
+            "translation": null,
+            "inputTokens": 19490,
+            "cachedTokens": 0,
+            "cacheWriteTokens": null,
+            "outputTokens": 339,
+            "reasoningTokens": 212,
+            "costUsd": 0.00260575,
+            "reservedUsd": 0.0
+          }
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-10-26–2026-11-01 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "1"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-10-26–2026-11-01 (Europe/Budapest). Evaluation completed.\nremove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#0 2026-10-29 10:30 Europe/Budapest (UTC+01:00) – 2026-10-29 11:30 Europe/Budapest (UTC+01:00) (was 2026-10-29 09:00 Europe/Budapest (UTC+01:00) – 2026-10-29 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "outcome": "completed",
+      "rawModelOutput": {
+        "candidates": [
+          {
+            "explanation": "This applies the supported day-level repair to Thursday. The engine's repair objective minimizes total weighted movement; the command does not limit the target set to morning events.",
+            "interpretation": "Repair clashes across all of Thursday",
+            "translation": "Remove clashes on thursday, choosing ask."
+          }
+        ],
+        "explanation": "The repair operation can target a whole day, but it cannot restrict repair to Thursday morning. Should I apply the repair to all of Thursday?",
+        "question": "Do you mean remove clashes across all of Thursday?",
+        "reply": "",
+        "status": "clarification"
+      },
+      "checks": {
+        "finalStateMatches": true,
+        "originalIdentitiesPreserved": true,
+        "initial": [
+          {
+            "title": "Preparation",
+            "start": "2026-10-29T09:00:00+01:00",
+            "end": "2026-10-29T10:00:00+01:00",
+            "importance": 0,
+            "location": "",
+            "description": ""
+          },
+          {
+            "title": "Customer meeting",
+            "start": "2026-10-29T09:30:00+01:00",
+            "end": "2026-10-29T10:30:00+01:00",
+            "importance": 1,
+            "location": "",
+            "description": ""
+          }
+        ],
+        "expected": [
+          {
+            "title": "Customer meeting",
+            "start": "2026-10-29T09:30:00+01:00",
+            "end": "2026-10-29T10:30:00+01:00",
+            "importance": 1,
+            "location": "",
+            "description": ""
+          },
+          {
+            "title": "Preparation",
+            "start": "2026-10-29T10:30:00+01:00",
+            "end": "2026-10-29T11:30:00+01:00",
+            "importance": 0,
+            "location": "",
+            "description": ""
+          }
+        ],
+        "actual": [
+          {
+            "title": "Customer meeting",
+            "start": "2026-10-29T09:30:00+01:00",
+            "end": "2026-10-29T10:30:00+01:00",
+            "importance": 1,
+            "location": "",
+            "description": ""
+          },
+          {
+            "title": "Preparation",
+            "start": "2026-10-29T10:30:00+01:00",
+            "end": "2026-10-29T11:30:00+01:00",
+            "importance": 0,
+            "location": "",
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
+      "repeat": 2,
+      "configurationMatchesOriginal": true,
+      "instructionSha256": "3a3b00fcdeaba03c3e256f02729cf3a162ce6acab0ca217b372b5145df410e39",
+      "inputExactlyMatchesOriginal": true,
+      "semanticInputMatchesIgnoringHandlesAndEventOrder": true,
+      "initialModelInput": {
+        "entry": "Remove the clashes on Thursday morning with the least total weighted movement.",
+        "world": {
+          "domain": "calendar",
+          "evaluation": null,
+          "events": [
+            {
+              "description": "",
+              "end": "2026-10-29 10:30 Europe/Budapest (UTC+01:00)",
+              "handle": 0,
+              "importance": "important",
+              "location": "",
+              "normalizedEnd": "2026-10-29 10:30 Europe/Budapest (UTC+01:00)",
+              "normalizedStart": "2026-10-29 09:30 Europe/Budapest (UTC+01:00)",
+              "readOnly": false,
+              "start": "2026-10-29 09:30 Europe/Budapest (UTC+01:00)",
+              "title": "Customer meeting"
+            },
+            {
+              "description": "",
+              "end": "2026-10-29 10:00 Europe/Budapest (UTC+01:00)",
+              "handle": 1,
+              "importance": "normal",
+              "location": "",
+              "normalizedEnd": "2026-10-29 10:00 Europe/Budapest (UTC+01:00)",
+              "normalizedStart": "2026-10-29 09:00 Europe/Budapest (UTC+01:00)",
+              "readOnly": false,
+              "start": "2026-10-29 09:00 Europe/Budapest (UTC+01:00)",
+              "title": "Preparation"
+            }
+          ],
+          "frozenNow": "2026-10-28 08:00 Europe/Budapest (UTC+01:00)",
+          "provisional": false,
+          "salience": [],
+          "timezone": "Europe/Budapest",
+          "weekEnd": "2026-11-02 00:00 Europe/Budapest (UTC+01:00)",
+          "weekStart": "2026-10-26 00:00 Europe/Budapest (UTC+01:00)"
+        },
+        "outcomes": [],
+        "clarification": {
+          "mode": "entry",
+          "engineQuestion": null,
+          "parserFeedback": "Calendar controlled English:1:8:\n  |\n1 | Remove the clashes on Thursday morning with the least total weighted movement.\n  |        ^^^\nunexpected \"the\"\nexpecting \"clashes\""
+        }
+      },
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "pending": 0,
+        "input_tokens": 19490,
+        "output_tokens": 85,
+        "total_tokens": 19575,
+        "cached_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "providerTurns": [
+        {
+          "id": "turn_0f3569ed7ef5dec7006ae1e7e8dde0819bb67d0bd0b99fca4d",
+          "object": "agent.session.turn",
+          "session_id": "sess_0f3569ed7ef5dec7006ae1e7e40bf0819bb3e4659ea9047202",
+          "agent_id": "agent_bd9d9f02fb184b28bed72f5ea8910b9714c0644d49f54f3889",
+          "subagent_id": null,
+          "status": "completed",
+          "created_at": 1793189862,
+          "started_at": 1793189862,
+          "completed_at": 1793189864,
+          "error": null,
+          "usage": {
+            "input_tokens": 19490,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 85,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 19575
+          }
+        }
+      ],
+      "initialEvents": [
+        {
+          "id": "e5986a61c77b483694dea60fd7d63593",
+          "summary": "Preparation",
+          "start": {
+            "dateTime": "2026-10-29T09:00:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T10:00:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=ZTU5ODZhNjFjNzdiNDgzNjk0ZGVhNjBmZDdkNjM1OTMgMmIxZGFmZjJhNTBlMzU4YmMyZjZhZGFlMjE3Yjc4MmJlOWZmZTBjNWVjODFhYjdjYmVhZmY4YTZjN2M5MDhmMkBn",
+          "created": "2026-10-28T12:17:29.000Z",
+          "updated": "2026-10-28T12:17:29.153Z",
+          "colorId": "10",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "2b1daff2a50e358bc2f6adae217b782be9ffe0c5ec81ab7cbeaff8a6c7c908f2@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 d8364328",
+            "self": true
+          },
+          "iCalUID": "e5986a61c77b483694dea60fd7d63593@google.com",
+          "sequence": 0,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "2b1daff2a50e358bc2f6adae217b782be9ffe0c5ec81ab7cbeaff8a6c7c908f2@group.calendar.google.com",
+          "accountId": "demo"
+        },
+        {
+          "id": "e00efc91d03d46c9a2d9e8effc7bd37c",
+          "summary": "Customer meeting",
+          "start": {
+            "dateTime": "2026-10-29T09:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T10:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=ZTAwZWZjOTFkMDNkNDZjOWEyZDllOGVmZmM3YmQzN2MgMmIxZGFmZjJhNTBlMzU4YmMyZjZhZGFlMjE3Yjc4MmJlOWZmZTBjNWVjODFhYjdjYmVhZmY4YTZjN2M5MDhmMkBn",
+          "created": "2026-10-28T12:17:33.000Z",
+          "updated": "2026-10-28T12:17:33.382Z",
+          "colorId": "5",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "2b1daff2a50e358bc2f6adae217b782be9ffe0c5ec81ab7cbeaff8a6c7c908f2@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 d8364328",
+            "self": true
+          },
+          "iCalUID": "e00efc91d03d46c9a2d9e8effc7bd37c@google.com",
+          "sequence": 0,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "2b1daff2a50e358bc2f6adae217b782be9ffe0c5ec81ab7cbeaff8a6c7c908f2@group.calendar.google.com",
+          "accountId": "demo"
+        }
+      ],
+      "finalEvents": [
+        {
+          "id": "e00efc91d03d46c9a2d9e8effc7bd37c",
+          "summary": "Customer meeting",
+          "start": {
+            "dateTime": "2026-10-29T09:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T10:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=ZTAwZWZjOTFkMDNkNDZjOWEyZDllOGVmZmM3YmQzN2MgMmIxZGFmZjJhNTBlMzU4YmMyZjZhZGFlMjE3Yjc4MmJlOWZmZTBjNWVjODFhYjdjYmVhZmY4YTZjN2M5MDhmMkBn",
+          "created": "2026-10-28T12:17:33.000Z",
+          "updated": "2026-10-28T12:17:33.382Z",
+          "colorId": "5",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "2b1daff2a50e358bc2f6adae217b782be9ffe0c5ec81ab7cbeaff8a6c7c908f2@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 d8364328",
+            "self": true
+          },
+          "iCalUID": "e00efc91d03d46c9a2d9e8effc7bd37c@google.com",
+          "sequence": 0,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "2b1daff2a50e358bc2f6adae217b782be9ffe0c5ec81ab7cbeaff8a6c7c908f2@group.calendar.google.com",
+          "accountId": "demo"
+        },
+        {
+          "id": "e5986a61c77b483694dea60fd7d63593",
+          "summary": "Preparation",
+          "start": {
+            "dateTime": "2026-10-29T10:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T11:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=ZTU5ODZhNjFjNzdiNDgzNjk0ZGVhNjBmZDdkNjM1OTMgMmIxZGFmZjJhNTBlMzU4YmMyZjZhZGFlMjE3Yjc4MmJlOWZmZTBjNWVjODFhYjdjYmVhZmY4YTZjN2M5MDhmMkBn",
+          "created": "2026-10-28T12:17:29.000Z",
+          "updated": "2026-10-28T12:18:23.187Z",
+          "colorId": "10",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "2b1daff2a50e358bc2f6adae217b782be9ffe0c5ec81ab7cbeaff8a6c7c908f2@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 d8364328",
+            "self": true
+          },
+          "iCalUID": "e5986a61c77b483694dea60fd7d63593@google.com",
+          "sequence": 1,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "2b1daff2a50e358bc2f6adae217b782be9ffe0c5ec81ab7cbeaff8a6c7c908f2@group.calendar.google.com",
+          "accountId": "demo"
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday morning with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted.",
+          "llm": {
+            "status": "proposed",
+            "model": "gpt-6-luna",
+            "requestId": "turn_0f3569ed7ef5dec7006ae1e7e8dde0819bb67d0bd0b99fca4d",
+            "translation": null,
+            "inputTokens": 19490,
+            "cachedTokens": 0,
+            "cacheWriteTokens": null,
+            "outputTokens": 85,
+            "reasoningTokens": 0,
+            "costUsd": 0.00247875,
+            "reservedUsd": 0.0
+          }
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-10-26–2026-11-01 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "1"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-10-26–2026-11-01 (Europe/Budapest). Evaluation completed.\nremove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#1 2026-10-29 10:30 Europe/Budapest (UTC+01:00) – 2026-10-29 11:30 Europe/Budapest (UTC+01:00) (was 2026-10-29 09:00 Europe/Budapest (UTC+01:00) – 2026-10-29 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "outcome": "completed",
+      "rawModelOutput": {
+        "candidates": [
+          {
+            "explanation": "Repairs the parser wording and asks Haskell to repair clashes on Thursday, using the built-in weighted movement objective. The engine will ask for the maximum movable importance if movement is needed.",
+            "interpretation": "Remove clashes on Thursday",
+            "translation": "Remove clashes on thursday."
+          }
+        ],
+        "explanation": "",
+        "question": "",
+        "reply": "",
+        "status": "proposals"
+      },
+      "checks": {
+        "finalStateMatches": true,
+        "originalIdentitiesPreserved": true,
+        "initial": [
+          {
+            "title": "Preparation",
+            "start": "2026-10-29T09:00:00+01:00",
+            "end": "2026-10-29T10:00:00+01:00",
+            "importance": 0,
+            "location": "",
+            "description": ""
+          },
+          {
+            "title": "Customer meeting",
+            "start": "2026-10-29T09:30:00+01:00",
+            "end": "2026-10-29T10:30:00+01:00",
+            "importance": 1,
+            "location": "",
+            "description": ""
+          }
+        ],
+        "expected": [
+          {
+            "title": "Customer meeting",
+            "start": "2026-10-29T09:30:00+01:00",
+            "end": "2026-10-29T10:30:00+01:00",
+            "importance": 1,
+            "location": "",
+            "description": ""
+          },
+          {
+            "title": "Preparation",
+            "start": "2026-10-29T10:30:00+01:00",
+            "end": "2026-10-29T11:30:00+01:00",
+            "importance": 0,
+            "location": "",
+            "description": ""
+          }
+        ],
+        "actual": [
+          {
+            "title": "Customer meeting",
+            "start": "2026-10-29T09:30:00+01:00",
+            "end": "2026-10-29T10:30:00+01:00",
+            "importance": 1,
+            "location": "",
+            "description": ""
+          },
+          {
+            "title": "Preparation",
+            "start": "2026-10-29T10:30:00+01:00",
+            "end": "2026-10-29T11:30:00+01:00",
+            "importance": 0,
+            "location": "",
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
+      "repeat": 3,
+      "configurationMatchesOriginal": true,
+      "instructionSha256": "3a3b00fcdeaba03c3e256f02729cf3a162ce6acab0ca217b372b5145df410e39",
+      "inputExactlyMatchesOriginal": true,
+      "semanticInputMatchesIgnoringHandlesAndEventOrder": true,
+      "initialModelInput": {
+        "entry": "Remove the clashes on Thursday morning with the least total weighted movement.",
+        "world": {
+          "domain": "calendar",
+          "evaluation": null,
+          "events": [
+            {
+              "description": "",
+              "end": "2026-10-29 10:30 Europe/Budapest (UTC+01:00)",
+              "handle": 0,
+              "importance": "important",
+              "location": "",
+              "normalizedEnd": "2026-10-29 10:30 Europe/Budapest (UTC+01:00)",
+              "normalizedStart": "2026-10-29 09:30 Europe/Budapest (UTC+01:00)",
+              "readOnly": false,
+              "start": "2026-10-29 09:30 Europe/Budapest (UTC+01:00)",
+              "title": "Customer meeting"
+            },
+            {
+              "description": "",
+              "end": "2026-10-29 10:00 Europe/Budapest (UTC+01:00)",
+              "handle": 1,
+              "importance": "normal",
+              "location": "",
+              "normalizedEnd": "2026-10-29 10:00 Europe/Budapest (UTC+01:00)",
+              "normalizedStart": "2026-10-29 09:00 Europe/Budapest (UTC+01:00)",
+              "readOnly": false,
+              "start": "2026-10-29 09:00 Europe/Budapest (UTC+01:00)",
+              "title": "Preparation"
+            }
+          ],
+          "frozenNow": "2026-10-28 08:00 Europe/Budapest (UTC+01:00)",
+          "provisional": false,
+          "salience": [],
+          "timezone": "Europe/Budapest",
+          "weekEnd": "2026-11-02 00:00 Europe/Budapest (UTC+01:00)",
+          "weekStart": "2026-10-26 00:00 Europe/Budapest (UTC+01:00)"
+        },
+        "outcomes": [],
+        "clarification": {
+          "mode": "entry",
+          "engineQuestion": null,
+          "parserFeedback": "Calendar controlled English:1:8:\n  |\n1 | Remove the clashes on Thursday morning with the least total weighted movement.\n  |        ^^^\nunexpected \"the\"\nexpecting \"clashes\""
+        }
+      },
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "pending": 0,
+        "input_tokens": 19490,
+        "output_tokens": 330,
+        "total_tokens": 19820,
+        "cached_tokens": 0,
+        "reasoning_tokens": 190
+      },
+      "providerTurns": [
+        {
+          "id": "turn_07bfb246176c16e7006ae1e7ea0a60819a87723ed0cd4b64ab",
+          "object": "agent.session.turn",
+          "session_id": "sess_07bfb246176c16e7006ae1e7e4acb8819a9a2a74bc0638cbbd",
+          "agent_id": "agent_2be534e6fed84872af154147c6b4eaf09c5b71667e6945a298",
+          "subagent_id": null,
+          "status": "completed",
+          "created_at": 1793189865,
+          "started_at": 1793189865,
+          "completed_at": 1793189868,
+          "error": null,
+          "usage": {
+            "input_tokens": 19490,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 330,
+            "output_tokens_details": {
+              "reasoning_tokens": 190
+            },
+            "total_tokens": 19820
+          }
+        }
+      ],
+      "initialEvents": [
+        {
+          "id": "246061fd074c4487a5fbaa3dde2a5f61",
+          "summary": "Preparation",
+          "start": {
+            "dateTime": "2026-10-29T09:00:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T10:00:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=MjQ2MDYxZmQwNzRjNDQ4N2E1ZmJhYTNkZGUyYTVmNjEgMDhjYTVkMjNmZjM1OGVkNTVmNWZmMDA0MGY0YjkyMGU1ZTlhY2M2MTNkNGQ1NWNhMGRkNmI4MWNhYjIzOGEwN0Bn",
+          "created": "2026-10-28T12:17:28.000Z",
+          "updated": "2026-10-28T12:17:28.961Z",
+          "colorId": "10",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "08ca5d23ff358ed55f5ff0040f4b920e5e9acc613d4d55ca0dd6b81cab238a07@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 1e13055d",
+            "self": true
+          },
+          "iCalUID": "246061fd074c4487a5fbaa3dde2a5f61@google.com",
+          "sequence": 0,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "08ca5d23ff358ed55f5ff0040f4b920e5e9acc613d4d55ca0dd6b81cab238a07@group.calendar.google.com",
+          "accountId": "demo"
+        },
+        {
+          "id": "23ceaaf3d06f4cbcb79849c1e756aec6",
+          "summary": "Customer meeting",
+          "start": {
+            "dateTime": "2026-10-29T09:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T10:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=MjNjZWFhZjNkMDZmNGNiY2I3OTg0OWMxZTc1NmFlYzYgMDhjYTVkMjNmZjM1OGVkNTVmNWZmMDA0MGY0YjkyMGU1ZTlhY2M2MTNkNGQ1NWNhMGRkNmI4MWNhYjIzOGEwN0Bn",
+          "created": "2026-10-28T12:17:33.000Z",
+          "updated": "2026-10-28T12:17:33.345Z",
+          "colorId": "5",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "08ca5d23ff358ed55f5ff0040f4b920e5e9acc613d4d55ca0dd6b81cab238a07@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 1e13055d",
+            "self": true
+          },
+          "iCalUID": "23ceaaf3d06f4cbcb79849c1e756aec6@google.com",
+          "sequence": 0,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "08ca5d23ff358ed55f5ff0040f4b920e5e9acc613d4d55ca0dd6b81cab238a07@group.calendar.google.com",
+          "accountId": "demo"
+        }
+      ],
+      "finalEvents": [
+        {
+          "id": "23ceaaf3d06f4cbcb79849c1e756aec6",
+          "summary": "Customer meeting",
+          "start": {
+            "dateTime": "2026-10-29T09:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T10:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=MjNjZWFhZjNkMDZmNGNiY2I3OTg0OWMxZTc1NmFlYzYgMDhjYTVkMjNmZjM1OGVkNTVmNWZmMDA0MGY0YjkyMGU1ZTlhY2M2MTNkNGQ1NWNhMGRkNmI4MWNhYjIzOGEwN0Bn",
+          "created": "2026-10-28T12:17:33.000Z",
+          "updated": "2026-10-28T12:17:33.345Z",
+          "colorId": "5",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "08ca5d23ff358ed55f5ff0040f4b920e5e9acc613d4d55ca0dd6b81cab238a07@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 1e13055d",
+            "self": true
+          },
+          "iCalUID": "23ceaaf3d06f4cbcb79849c1e756aec6@google.com",
+          "sequence": 0,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "08ca5d23ff358ed55f5ff0040f4b920e5e9acc613d4d55ca0dd6b81cab238a07@group.calendar.google.com",
+          "accountId": "demo"
+        },
+        {
+          "id": "246061fd074c4487a5fbaa3dde2a5f61",
+          "summary": "Preparation",
+          "start": {
+            "dateTime": "2026-10-29T10:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T11:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=MjQ2MDYxZmQwNzRjNDQ4N2E1ZmJhYTNkZGUyYTVmNjEgMDhjYTVkMjNmZjM1OGVkNTVmNWZmMDA0MGY0YjkyMGU1ZTlhY2M2MTNkNGQ1NWNhMGRkNmI4MWNhYjIzOGEwN0Bn",
+          "created": "2026-10-28T12:17:28.000Z",
+          "updated": "2026-10-28T12:18:23.138Z",
+          "colorId": "10",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "08ca5d23ff358ed55f5ff0040f4b920e5e9acc613d4d55ca0dd6b81cab238a07@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 1e13055d",
+            "self": true
+          },
+          "iCalUID": "246061fd074c4487a5fbaa3dde2a5f61@google.com",
+          "sequence": 1,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "08ca5d23ff358ed55f5ff0040f4b920e5e9acc613d4d55ca0dd6b81cab238a07@group.calendar.google.com",
+          "accountId": "demo"
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday morning with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted.",
+          "llm": {
+            "status": "proposed",
+            "model": "gpt-6-luna",
+            "requestId": "turn_07bfb246176c16e7006ae1e7ea0a60819a87723ed0cd4b64ab",
+            "translation": null,
+            "inputTokens": 19490,
+            "cachedTokens": 0,
+            "cacheWriteTokens": null,
+            "outputTokens": 330,
+            "reasoningTokens": 190,
+            "costUsd": 0.00260125,
+            "reservedUsd": 0.0
+          }
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-10-26–2026-11-01 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "1"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-10-26–2026-11-01 (Europe/Budapest). Evaluation completed.\nremove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#1 2026-10-29 10:30 Europe/Budapest (UTC+01:00) – 2026-10-29 11:30 Europe/Budapest (UTC+01:00) (was 2026-10-29 09:00 Europe/Budapest (UTC+01:00) – 2026-10-29 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "outcome": "completed",
+      "rawModelOutput": {
+        "candidates": [
+          {
+            "explanation": "This treats the request as repairing clashes across all of Thursday; the supported repair operation targets a whole day, and minimum weighted movement is its default objective.",
+            "interpretation": "Repair clashes for all of Thursday",
+            "translation": "Remove clashes on thursday."
+          }
+        ],
+        "explanation": "The calendar language can repair clashes on a specified day, but not only within a morning period. The parser feedback was caused by the wording; the candidate uses the supported command form.",
+        "question": "Should I repair clashes across all of Thursday, or did you mean to limit the repair to Thursday morning?",
+        "reply": "",
+        "status": "clarification"
+      },
+      "checks": {
+        "finalStateMatches": true,
+        "originalIdentitiesPreserved": true,
+        "initial": [
+          {
+            "title": "Preparation",
+            "start": "2026-10-29T09:00:00+01:00",
+            "end": "2026-10-29T10:00:00+01:00",
+            "importance": 0,
+            "location": "",
+            "description": ""
+          },
+          {
+            "title": "Customer meeting",
+            "start": "2026-10-29T09:30:00+01:00",
+            "end": "2026-10-29T10:30:00+01:00",
+            "importance": 1,
+            "location": "",
+            "description": ""
+          }
+        ],
+        "expected": [
+          {
+            "title": "Customer meeting",
+            "start": "2026-10-29T09:30:00+01:00",
+            "end": "2026-10-29T10:30:00+01:00",
+            "importance": 1,
+            "location": "",
+            "description": ""
+          },
+          {
+            "title": "Preparation",
+            "start": "2026-10-29T10:30:00+01:00",
+            "end": "2026-10-29T11:30:00+01:00",
+            "importance": 0,
+            "location": "",
+            "description": ""
+          }
+        ],
+        "actual": [
+          {
+            "title": "Customer meeting",
+            "start": "2026-10-29T09:30:00+01:00",
+            "end": "2026-10-29T10:30:00+01:00",
+            "importance": 1,
+            "location": "",
+            "description": ""
+          },
+          {
+            "title": "Preparation",
+            "start": "2026-10-29T10:30:00+01:00",
+            "end": "2026-10-29T11:30:00+01:00",
+            "importance": 0,
+            "location": "",
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
+      "repeat": 4,
+      "configurationMatchesOriginal": true,
+      "instructionSha256": "3a3b00fcdeaba03c3e256f02729cf3a162ce6acab0ca217b372b5145df410e39",
+      "inputExactlyMatchesOriginal": false,
+      "semanticInputMatchesIgnoringHandlesAndEventOrder": true,
+      "initialModelInput": {
+        "entry": "Remove the clashes on Thursday morning with the least total weighted movement.",
+        "world": {
+          "domain": "calendar",
+          "evaluation": null,
+          "events": [
+            {
+              "description": "",
+              "end": "2026-10-29 10:00 Europe/Budapest (UTC+01:00)",
+              "handle": 0,
+              "importance": "normal",
+              "location": "",
+              "normalizedEnd": "2026-10-29 10:00 Europe/Budapest (UTC+01:00)",
+              "normalizedStart": "2026-10-29 09:00 Europe/Budapest (UTC+01:00)",
+              "readOnly": false,
+              "start": "2026-10-29 09:00 Europe/Budapest (UTC+01:00)",
+              "title": "Preparation"
+            },
+            {
+              "description": "",
+              "end": "2026-10-29 10:30 Europe/Budapest (UTC+01:00)",
+              "handle": 1,
+              "importance": "important",
+              "location": "",
+              "normalizedEnd": "2026-10-29 10:30 Europe/Budapest (UTC+01:00)",
+              "normalizedStart": "2026-10-29 09:30 Europe/Budapest (UTC+01:00)",
+              "readOnly": false,
+              "start": "2026-10-29 09:30 Europe/Budapest (UTC+01:00)",
+              "title": "Customer meeting"
+            }
+          ],
+          "frozenNow": "2026-10-28 08:00 Europe/Budapest (UTC+01:00)",
+          "provisional": false,
+          "salience": [],
+          "timezone": "Europe/Budapest",
+          "weekEnd": "2026-11-02 00:00 Europe/Budapest (UTC+01:00)",
+          "weekStart": "2026-10-26 00:00 Europe/Budapest (UTC+01:00)"
+        },
+        "outcomes": [],
+        "clarification": {
+          "mode": "entry",
+          "engineQuestion": null,
+          "parserFeedback": "Calendar controlled English:1:8:\n  |\n1 | Remove the clashes on Thursday morning with the least total weighted movement.\n  |        ^^^\nunexpected \"the\"\nexpecting \"clashes\""
+        }
+      },
+      "status": "error",
+      "usage": {
+        "turns": 1,
+        "pending": 0,
+        "input_tokens": 19490,
+        "output_tokens": 200,
+        "total_tokens": 19690,
+        "cached_tokens": 0,
+        "reasoning_tokens": 127
+      },
+      "providerTurns": [
+        {
+          "id": "turn_039160e2e3538e11006ae1e7e79fc8819aa3685759a7b7ae98",
+          "object": "agent.session.turn",
+          "session_id": "sess_039160e2e3538e11006ae1e7e4a418819aacca2dae29f3a7e7",
+          "agent_id": "agent_cb9fd42e252f44a0b182eb81d3a20a4b2602bd706e4741829f",
+          "subagent_id": null,
+          "status": "completed",
+          "created_at": 1793189862,
+          "started_at": 1793189862,
+          "completed_at": 1793189867,
+          "error": null,
+          "usage": {
+            "input_tokens": 19490,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 200,
+            "output_tokens_details": {
+              "reasoning_tokens": 127
+            },
+            "total_tokens": 19690
+          }
+        }
+      ],
+      "initialEvents": [
+        {
+          "id": "1667efdaa571444285fca580ae469841",
+          "summary": "Preparation",
+          "start": {
+            "dateTime": "2026-10-29T09:00:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T10:00:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=MTY2N2VmZGFhNTcxNDQ0Mjg1ZmNhNTgwYWU0Njk4NDEgZmQ3MGRjNjkwNjRhNDMwY2M0NGE2ODRiYzZkODVkMzFjZjQxNTY0OGE2MTUxNzc5ZmY4YTEyYTFlNDA3OWY4ZkBn",
+          "created": "2026-10-28T12:17:28.000Z",
+          "updated": "2026-10-28T12:17:29.157Z",
+          "colorId": "10",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "fd70dc69064a430cc44a684bc6d85d31cf415648a6151779ff8a12a1e4079f8f@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 8ede3076",
+            "self": true
+          },
+          "iCalUID": "1667efdaa571444285fca580ae469841@google.com",
+          "sequence": 0,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "fd70dc69064a430cc44a684bc6d85d31cf415648a6151779ff8a12a1e4079f8f@group.calendar.google.com",
+          "accountId": "demo"
+        },
+        {
+          "id": "8c140d2c0e184f4c9bee61cc971ad6be",
+          "summary": "Customer meeting",
+          "start": {
+            "dateTime": "2026-10-29T09:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T10:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=OGMxNDBkMmMwZTE4NGY0YzliZWU2MWNjOTcxYWQ2YmUgZmQ3MGRjNjkwNjRhNDMwY2M0NGE2ODRiYzZkODVkMzFjZjQxNTY0OGE2MTUxNzc5ZmY4YTEyYTFlNDA3OWY4ZkBn",
+          "created": "2026-10-28T12:17:32.000Z",
+          "updated": "2026-10-28T12:17:33.054Z",
+          "colorId": "5",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "fd70dc69064a430cc44a684bc6d85d31cf415648a6151779ff8a12a1e4079f8f@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 8ede3076",
+            "self": true
+          },
+          "iCalUID": "8c140d2c0e184f4c9bee61cc971ad6be@google.com",
+          "sequence": 0,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "fd70dc69064a430cc44a684bc6d85d31cf415648a6151779ff8a12a1e4079f8f@group.calendar.google.com",
+          "accountId": "demo"
+        }
+      ],
+      "finalEvents": [
+        {
+          "id": "1667efdaa571444285fca580ae469841",
+          "summary": "Preparation",
+          "start": {
+            "dateTime": "2026-10-29T09:00:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T10:00:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=MTY2N2VmZGFhNTcxNDQ0Mjg1ZmNhNTgwYWU0Njk4NDEgZmQ3MGRjNjkwNjRhNDMwY2M0NGE2ODRiYzZkODVkMzFjZjQxNTY0OGE2MTUxNzc5ZmY4YTEyYTFlNDA3OWY4ZkBn",
+          "created": "2026-10-28T12:17:28.000Z",
+          "updated": "2026-10-28T12:17:29.157Z",
+          "colorId": "10",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "fd70dc69064a430cc44a684bc6d85d31cf415648a6151779ff8a12a1e4079f8f@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 8ede3076",
+            "self": true
+          },
+          "iCalUID": "1667efdaa571444285fca580ae469841@google.com",
+          "sequence": 0,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "fd70dc69064a430cc44a684bc6d85d31cf415648a6151779ff8a12a1e4079f8f@group.calendar.google.com",
+          "accountId": "demo"
+        },
+        {
+          "id": "8c140d2c0e184f4c9bee61cc971ad6be",
+          "summary": "Customer meeting",
+          "start": {
+            "dateTime": "2026-10-29T09:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T10:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=OGMxNDBkMmMwZTE4NGY0YzliZWU2MWNjOTcxYWQ2YmUgZmQ3MGRjNjkwNjRhNDMwY2M0NGE2ODRiYzZkODVkMzFjZjQxNTY0OGE2MTUxNzc5ZmY4YTEyYTFlNDA3OWY4ZkBn",
+          "created": "2026-10-28T12:17:32.000Z",
+          "updated": "2026-10-28T12:17:33.054Z",
+          "colorId": "5",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "fd70dc69064a430cc44a684bc6d85d31cf415648a6151779ff8a12a1e4079f8f@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 8ede3076",
+            "self": true
+          },
+          "iCalUID": "8c140d2c0e184f4c9bee61cc971ad6be@google.com",
+          "sequence": 0,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "fd70dc69064a430cc44a684bc6d85d31cf415648a6151779ff8a12a1e4079f8f@group.calendar.google.com",
+          "accountId": "demo"
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday morning with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Calendar controlled English:1:8:\n  |\n1 | Remove the clashes on Thursday morning with the least total weighted movement.\n  |        ^^^\nunexpected \"the\"\nexpecting \"clashes\"",
+          "isError": true
+        },
+        {
+          "role": "machine",
+          "text": "LLM found no clear supported interpretation.\nLLM explanation: Clash removal can target a whole day, but the controlled language cannot limit the repair set to events that clash during only the morning. I can’t translate this into a Thursday-wide repair without changing which events may be moved.\nLLM found no clear supported interpretation.\nLLM explanation: Clash removal can target a whole day, but the controlled language cannot limit the repair set to events that clash during only the morning. I can’t translate this into a Thursday-wide repair without changing which events may be moved.",
+          "llm": {
+            "status": "unsupported",
+            "model": "gpt-6-luna",
+            "requestId": "turn_039160e2e3538e11006ae1e7e79fc8819aa3685759a7b7ae98",
+            "translation": null,
+            "inputTokens": null,
+            "cachedTokens": null,
+            "cacheWriteTokens": null,
+            "outputTokens": null,
+            "reasoningTokens": null,
+            "costUsd": null,
+            "reservedUsd": 0.0035
+          }
+        }
+      ],
+      "outcome": "unsupported refusal",
+      "rawModelOutput": {
+        "candidates": [],
+        "explanation": "Clash removal can target a whole day, but the controlled language cannot limit the repair set to events that clash during only the morning. I can’t translate this into a Thursday-wide repair without changing which events may be moved.",
+        "question": "",
+        "reply": "",
+        "status": "unsupported"
+      },
+      "checks": {
+        "finalStateMatches": false,
+        "originalIdentitiesPreserved": true,
+        "initial": [
+          {
+            "title": "Preparation",
+            "start": "2026-10-29T09:00:00+01:00",
+            "end": "2026-10-29T10:00:00+01:00",
+            "importance": 0,
+            "location": "",
+            "description": ""
+          },
+          {
+            "title": "Customer meeting",
+            "start": "2026-10-29T09:30:00+01:00",
+            "end": "2026-10-29T10:30:00+01:00",
+            "importance": 1,
+            "location": "",
+            "description": ""
+          }
+        ],
+        "expected": [
+          {
+            "title": "Customer meeting",
+            "start": "2026-10-29T09:30:00+01:00",
+            "end": "2026-10-29T10:30:00+01:00",
+            "importance": 1,
+            "location": "",
+            "description": ""
+          },
+          {
+            "title": "Preparation",
+            "start": "2026-10-29T10:30:00+01:00",
+            "end": "2026-10-29T11:30:00+01:00",
+            "importance": 0,
+            "location": "",
+            "description": ""
+          }
+        ],
+        "actual": [
+          {
+            "title": "Preparation",
+            "start": "2026-10-29T09:00:00+01:00",
+            "end": "2026-10-29T10:00:00+01:00",
+            "importance": 0,
+            "location": "",
+            "description": ""
+          },
+          {
+            "title": "Customer meeting",
+            "start": "2026-10-29T09:30:00+01:00",
+            "end": "2026-10-29T10:30:00+01:00",
+            "importance": 1,
+            "location": "",
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
+      "repeat": 5,
+      "configurationMatchesOriginal": true,
+      "instructionSha256": "3a3b00fcdeaba03c3e256f02729cf3a162ce6acab0ca217b372b5145df410e39",
+      "inputExactlyMatchesOriginal": true,
+      "semanticInputMatchesIgnoringHandlesAndEventOrder": true,
+      "initialModelInput": {
+        "entry": "Remove the clashes on Thursday morning with the least total weighted movement.",
+        "world": {
+          "domain": "calendar",
+          "evaluation": null,
+          "events": [
+            {
+              "description": "",
+              "end": "2026-10-29 10:30 Europe/Budapest (UTC+01:00)",
+              "handle": 0,
+              "importance": "important",
+              "location": "",
+              "normalizedEnd": "2026-10-29 10:30 Europe/Budapest (UTC+01:00)",
+              "normalizedStart": "2026-10-29 09:30 Europe/Budapest (UTC+01:00)",
+              "readOnly": false,
+              "start": "2026-10-29 09:30 Europe/Budapest (UTC+01:00)",
+              "title": "Customer meeting"
+            },
+            {
+              "description": "",
+              "end": "2026-10-29 10:00 Europe/Budapest (UTC+01:00)",
+              "handle": 1,
+              "importance": "normal",
+              "location": "",
+              "normalizedEnd": "2026-10-29 10:00 Europe/Budapest (UTC+01:00)",
+              "normalizedStart": "2026-10-29 09:00 Europe/Budapest (UTC+01:00)",
+              "readOnly": false,
+              "start": "2026-10-29 09:00 Europe/Budapest (UTC+01:00)",
+              "title": "Preparation"
+            }
+          ],
+          "frozenNow": "2026-10-28 08:00 Europe/Budapest (UTC+01:00)",
+          "provisional": false,
+          "salience": [],
+          "timezone": "Europe/Budapest",
+          "weekEnd": "2026-11-02 00:00 Europe/Budapest (UTC+01:00)",
+          "weekStart": "2026-10-26 00:00 Europe/Budapest (UTC+01:00)"
+        },
+        "outcomes": [],
+        "clarification": {
+          "mode": "entry",
+          "engineQuestion": null,
+          "parserFeedback": "Calendar controlled English:1:8:\n  |\n1 | Remove the clashes on Thursday morning with the least total weighted movement.\n  |        ^^^\nunexpected \"the\"\nexpecting \"clashes\""
+        }
+      },
+      "status": "answered",
+      "usage": {
+        "turns": 1,
+        "pending": 0,
+        "input_tokens": 19490,
+        "output_tokens": 85,
+        "total_tokens": 19575,
+        "cached_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "providerTurns": [
+        {
+          "id": "turn_08f50591a2d4e32d006ae1e7e97a988199beddd457db609520",
+          "object": "agent.session.turn",
+          "session_id": "sess_08f50591a2d4e32d006ae1e7e446bc8199b55b1b7521b7b485",
+          "agent_id": "agent_13d5ece1d5e44c9bac09004a7d5d7ab0a6015df1691f42358c",
+          "subagent_id": null,
+          "status": "completed",
+          "created_at": 1793189864,
+          "started_at": 1793189864,
+          "completed_at": 1793189867,
+          "error": null,
+          "usage": {
+            "input_tokens": 19490,
+            "input_tokens_details": {
+              "cached_tokens": 0
+            },
+            "output_tokens": 85,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 19575
+          }
+        }
+      ],
+      "initialEvents": [
+        {
+          "id": "b6ddee4e7c9e43638d9227d3e0960b16",
+          "summary": "Preparation",
+          "start": {
+            "dateTime": "2026-10-29T09:00:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T10:00:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=YjZkZGVlNGU3YzllNDM2MzhkOTIyN2QzZTA5NjBiMTYgZmQ4NzQxYWQ2MmI2NWVjODA4N2JkNTAxYzY3NzNkMDE1ZTM2MTljYjAzN2E2NjBkMjEzY2IyNTQ1YzU1ZWU3NEBn",
+          "created": "2026-10-28T12:17:29.000Z",
+          "updated": "2026-10-28T12:17:29.609Z",
+          "colorId": "10",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "fd8741ad62b65ec8087bd501c6773d015e3619cb037a660d213cb2545c55ee74@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 1bc4fceb",
+            "self": true
+          },
+          "iCalUID": "b6ddee4e7c9e43638d9227d3e0960b16@google.com",
+          "sequence": 0,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "fd8741ad62b65ec8087bd501c6773d015e3619cb037a660d213cb2545c55ee74@group.calendar.google.com",
+          "accountId": "demo"
+        },
+        {
+          "id": "80b5765ddbf34921b6eddfeb392c345a",
+          "summary": "Customer meeting",
+          "start": {
+            "dateTime": "2026-10-29T09:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T10:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=ODBiNTc2NWRkYmYzNDkyMWI2ZWRkZmViMzkyYzM0NWEgZmQ4NzQxYWQ2MmI2NWVjODA4N2JkNTAxYzY3NzNkMDE1ZTM2MTljYjAzN2E2NjBkMjEzY2IyNTQ1YzU1ZWU3NEBn",
+          "created": "2026-10-28T12:17:33.000Z",
+          "updated": "2026-10-28T12:17:33.518Z",
+          "colorId": "5",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "fd8741ad62b65ec8087bd501c6773d015e3619cb037a660d213cb2545c55ee74@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 1bc4fceb",
+            "self": true
+          },
+          "iCalUID": "80b5765ddbf34921b6eddfeb392c345a@google.com",
+          "sequence": 0,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "fd8741ad62b65ec8087bd501c6773d015e3619cb037a660d213cb2545c55ee74@group.calendar.google.com",
+          "accountId": "demo"
+        }
+      ],
+      "finalEvents": [
+        {
+          "id": "80b5765ddbf34921b6eddfeb392c345a",
+          "summary": "Customer meeting",
+          "start": {
+            "dateTime": "2026-10-29T09:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T10:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=ODBiNTc2NWRkYmYzNDkyMWI2ZWRkZmViMzkyYzM0NWEgZmQ4NzQxYWQ2MmI2NWVjODA4N2JkNTAxYzY3NzNkMDE1ZTM2MTljYjAzN2E2NjBkMjEzY2IyNTQ1YzU1ZWU3NEBn",
+          "created": "2026-10-28T12:17:33.000Z",
+          "updated": "2026-10-28T12:17:33.518Z",
+          "colorId": "5",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "fd8741ad62b65ec8087bd501c6773d015e3619cb037a660d213cb2545c55ee74@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 1bc4fceb",
+            "self": true
+          },
+          "iCalUID": "80b5765ddbf34921b6eddfeb392c345a@google.com",
+          "sequence": 0,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "fd8741ad62b65ec8087bd501c6773d015e3619cb037a660d213cb2545c55ee74@group.calendar.google.com",
+          "accountId": "demo"
+        },
+        {
+          "id": "b6ddee4e7c9e43638d9227d3e0960b16",
+          "summary": "Preparation",
+          "start": {
+            "dateTime": "2026-10-29T10:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "end": {
+            "dateTime": "2026-10-29T11:30:00+01:00",
+            "timeZone": "Europe/Budapest"
+          },
+          "startDayOfWeek": "Thursday",
+          "endDayOfWeek": "Thursday",
+          "status": "confirmed",
+          "htmlLink": "https://www.google.com/calendar/event?eid=YjZkZGVlNGU3YzllNDM2MzhkOTIyN2QzZTA5NjBiMTYgZmQ4NzQxYWQ2MmI2NWVjODA4N2JkNTAxYzY3NzNkMDE1ZTM2MTljYjAzN2E2NjBkMjEzY2IyNTQ1YzU1ZWU3NEBn",
+          "created": "2026-10-28T12:17:29.000Z",
+          "updated": "2026-10-28T12:18:23.288Z",
+          "colorId": "10",
+          "creator": {
+            "email": "logic.engine.demo@gmail.com"
+          },
+          "organizer": {
+            "email": "fd8741ad62b65ec8087bd501c6773d015e3619cb037a660d213cb2545c55ee74@group.calendar.google.com",
+            "displayName": "Logic chatbot isolated comparison 2026-10-28 1bc4fceb",
+            "self": true
+          },
+          "iCalUID": "b6ddee4e7c9e43638d9227d3e0960b16@google.com",
+          "sequence": 1,
+          "reminders": {
+            "useDefault": true
+          },
+          "eventType": "default",
+          "calendarId": "fd8741ad62b65ec8087bd501c6773d015e3619cb037a660d213cb2545c55ee74@group.calendar.google.com",
+          "accountId": "demo"
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "text": "Remove the clashes on Thursday morning with the least total weighted movement."
+        },
+        {
+          "role": "machine",
+          "text": "Interpretations ready for review; no Calendar changes were submitted.",
+          "llm": {
+            "status": "proposed",
+            "model": "gpt-6-luna",
+            "requestId": "turn_08f50591a2d4e32d006ae1e7e97a988199beddd457db609520",
+            "translation": null,
+            "inputTokens": 19490,
+            "cachedTokens": 0,
+            "cacheWriteTokens": null,
+            "outputTokens": 85,
+            "reasoningTokens": 0,
+            "costUsd": 0.00247875,
+            "reservedUsd": 0.0
+          }
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-10-26–2026-11-01 (Europe/Budapest). What maximum importance may be moved? None, Normal, Important or Critical?"
+        },
+        {
+          "role": "user",
+          "text": "1"
+        },
+        {
+          "role": "machine",
+          "text": "Week 2026-10-26–2026-11-01 (Europe/Budapest). Evaluation completed.\nremove clashes on thursday, moving up to unspecified, protecting [], choosing ask.\nProven minimum weighted movement cost: 1.5\n#1 2026-10-29 10:30 Europe/Budapest (UTC+01:00) – 2026-10-29 11:30 Europe/Budapest (UTC+01:00) (was 2026-10-29 09:00 Europe/Budapest (UTC+01:00) – 2026-10-29 10:00 Europe/Budapest (UTC+01:00); weight 1, cost 1.5)\nPolicy: importance weights 1/4/9; dates, period envelopes and normalized durations preserved."
+        },
+        {
+          "role": "machine",
+          "text": "All proposed changes were read back and verified. Google Calendar is current."
+        }
+      ],
+      "outcome": "completed",
+      "rawModelOutput": {
+        "candidates": [
+          {
+            "explanation": "Thursday morning is the specified repair day. The engine applies the minimum weighted movement objective for clash removal; it will ask for a movement threshold if movement is needed.",
+            "interpretation": "Remove clashes on Thursday, minimizing total weighted movement.",
+            "translation": "Remove clashes on thursday."
+          }
+        ],
+        "explanation": "",
+        "question": "",
+        "reply": "",
+        "status": "proposals"
+      },
+      "checks": {
+        "finalStateMatches": true,
+        "originalIdentitiesPreserved": true,
+        "initial": [
+          {
+            "title": "Preparation",
+            "start": "2026-10-29T09:00:00+01:00",
+            "end": "2026-10-29T10:00:00+01:00",
+            "importance": 0,
+            "location": "",
+            "description": ""
+          },
+          {
+            "title": "Customer meeting",
+            "start": "2026-10-29T09:30:00+01:00",
+            "end": "2026-10-29T10:30:00+01:00",
+            "importance": 1,
+            "location": "",
+            "description": ""
+          }
+        ],
+        "expected": [
+          {
+            "title": "Customer meeting",
+            "start": "2026-10-29T09:30:00+01:00",
+            "end": "2026-10-29T10:30:00+01:00",
+            "importance": 1,
+            "location": "",
+            "description": ""
+          },
+          {
+            "title": "Preparation",
+            "start": "2026-10-29T10:30:00+01:00",
+            "end": "2026-10-29T11:30:00+01:00",
+            "importance": 0,
+            "location": "",
+            "description": ""
+          }
+        ],
+        "actual": [
+          {
+            "title": "Customer meeting",
+            "start": "2026-10-29T09:30:00+01:00",
+            "end": "2026-10-29T10:30:00+01:00",
+            "importance": 1,
+            "location": "",
+            "description": ""
+          },
+          {
+            "title": "Preparation",
+            "start": "2026-10-29T10:30:00+01:00",
+            "end": "2026-10-29T11:30:00+01:00",
+            "importance": 0,
+            "location": "",
+            "description": ""
+          }
+        ]
+      }
+    }
+  ]
+}
