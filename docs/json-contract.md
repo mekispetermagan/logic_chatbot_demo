@@ -269,7 +269,9 @@ to the engine response. Other failures do not set it. These fields are internal
 to the FastAPI/Haskell boundary; Python does not parse controlled English.
 
 Public conversation responses add `llmBudget`: `limitUsd`, `spentUsd`,
-`reservedUsd`, `remainingUsd`, and `requestCount`, shared globally. Machine
+`reservedUsd`, `remainingUsd`, and `requestCount`, shared globally. `limitUsd` and
+`remainingUsd` are `null`: there is no local spending cap. The legacy object name
+is retained for compatibility. Machine
 messages from translation attempts add nullable `llm` metadata containing status,
 model, requestId, translation, inputTokens, cachedTokens, cacheWriteTokens,
 outputTokens (including reasoning), reasoningTokens, costUsd, and reservedUsd.
@@ -277,7 +279,7 @@ Messages without an attempt omit `llm`. An unknown charge has null costUsd and
 retains its maximum reservedUsd. API keys never appear in either contract.
 
 Spending is not part of undoable world/discourse snapshots. See
-[LLM translation](llm-translation.md) for the persistent $1 budget and failure rules.
+[LLM translation](llm-translation.md) for the persistent usage accounting and failure rules.
 
 ## Interpretation review contract
 

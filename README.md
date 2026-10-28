@@ -94,7 +94,7 @@ set +a
 `set -a` exports the loaded variables so the backend inherits them; `set +a` turns
 automatic exporting off afterward. Skip this block for controlled-English-only
 use. See the [API README](backend/api/README.md#optional-llm-translation) for key
-permissions, the default Agents transport and the shared $1 admission budget.
+permissions, the default Agents transport and the shared token-usage accounting.
 
 A fresh clone does not depend on the author's agents: the backend automatically
 creates an app-managed agent for each domain on its first LLM request, using your

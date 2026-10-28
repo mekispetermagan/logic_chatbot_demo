@@ -654,3 +654,17 @@ class AgentTests(unittest.TestCase):
         self.assertEqual(self.snapshots(), before)
         with Database(self.settings.database_path).connection() as connection:
             self.assertEqual(connection.execute('SELECT COUNT(*) FROM llm_session_events').fetchone()[0], events)
+
+    def test_prior_spending_and_pending_accounting_do_not_block_translation(self):
+        from app.llm_budget import NANO_PER_USD
+        with Database(self.settings.database_path).connection() as db:
+            db.execute('INSERT INTO llm_requests (id,conversation_id,reserved_nano,cost_nano) VALUES (?,?,?,?)',
+                       ('spent','old',10*NANO_PER_USD,10*NANO_PER_USD))
+            db.execute('INSERT INTO llm_requests (id,conversation_id,reserved_nano) VALUES (?,?,?)',
+                       ('pending','old',10*NANO_PER_USD))
+        result=self.offer()
+        self.assertIsNotNone(result['proposal'])
+        self.assertEqual(len(self.sessions),1)
+        self.assertIsNone(result['llmBudget']['limitUsd'])
+        self.assertIsNone(result['llmBudget']['remainingUsd'])
+        self.assertEqual(result['llmBudget']['requestCount'],3)

@@ -121,8 +121,6 @@ class AgentTranslator(LlmTranslator):
     def translate(self, conversation_id, domain, text, world, clarification=None):
         if not self._api_key:
             return TranslationAttempt(LlmUsage(status='not_configured'), note='LLM is not configured on the server.')
-        if not self.ledger.can_reserve():
-            return TranslationAttempt(LlmUsage(status='budget_exhausted'), note='The shared $1 LLM budget is exhausted.')
         current_world = world.model_dump()
         try:
             # Reject genuinely oversized requests before configuring an agent or
@@ -166,8 +164,6 @@ class AgentTranslator(LlmTranslator):
                         previous = self.latest_turn(client, session_id, context, deadline)
                         previous_turn = previous['id'] if previous else None
                     reservation = self.ledger.reserve(conversation_id)
-                    if reservation is None:
-                        return TranslationAttempt(LlmUsage(status='budget_exhausted'), note='The shared $1 LLM budget is exhausted.')
                     metadata = LlmUsage(status='unavailable', requestId=reservation,
                                         reservedUsd=MAX_REQUEST_NANO / NANO_PER_USD)
                     stage = 'agent turn'

@@ -10,7 +10,6 @@ REASONING_EFFORT = "medium"
 MAX_INPUT_TOKENS = 20_000
 MAX_OUTPUT_TOKENS = 2_000
 NANO_PER_USD = 1_000_000_000
-BUDGET_NANO = NANO_PER_USD
 # Standard USD token rates, expressed as integer nanodollars per token.
 INPUT_RATE, CACHE_RATE, WRITE_RATE, OUTPUT_RATE = 100, 10, 125, 500
 MAX_REQUEST_NANO = MAX_INPUT_TOKENS * WRITE_RATE + MAX_OUTPUT_TOKENS * OUTPUT_RATE
@@ -27,7 +26,6 @@ def budget_in(connection) -> LlmBudget:
     return LlmBudget(inputTokens=row['input_tokens'], outputTokens=row['output_tokens'],
                      pendingUsageCount=row['pending'], spentUsd=row['spent'] / NANO_PER_USD,
                      reservedUsd=row['reserved'] / NANO_PER_USD,
-                     remainingUsd=max(0, BUDGET_NANO - row['spent'] - row['reserved']) / NANO_PER_USD,
                      requestCount=row['requests'])
 
 
@@ -35,25 +33,14 @@ class LlmBudgetLedger:
     def __init__(self, database: Database):
         self.database = database
 
-    def reserve(self, conversation_id) -> str | None:
+    def reserve(self, conversation_id) -> str:
+        """Record a pending attempt for accounting; never deny it based on spend."""
         with self.database.connection() as connection:
             connection.execute('BEGIN IMMEDIATE')
-            used = connection.execute(
-                'SELECT COALESCE(SUM(COALESCE(cost_nano, reserved_nano)), 0) FROM llm_requests'
-            ).fetchone()[0]
-            if used + MAX_REQUEST_NANO > BUDGET_NANO:
-                return None
             identifier = str(uuid4())
             connection.execute('INSERT INTO llm_requests (id, conversation_id, reserved_nano) VALUES (?, ?, ?)',
                                (identifier, str(conversation_id), MAX_REQUEST_NANO))
             return identifier
-
-    def can_reserve(self) -> bool:
-        with self.database.connection() as connection:
-            used = connection.execute(
-                'SELECT COALESCE(SUM(COALESCE(cost_nano, reserved_nano)), 0) FROM llm_requests'
-            ).fetchone()[0]
-            return used + MAX_REQUEST_NANO <= BUDGET_NANO
 
     def settle(self, identifier: str, response: dict, *, agent: bool = False) -> LlmUsage:
         """Unknown/invalid usage leaves the full reservation in place."""

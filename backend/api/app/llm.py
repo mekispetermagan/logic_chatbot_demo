@@ -144,8 +144,6 @@ class LlmTranslator:
                   clarification: dict | None = None) -> TranslationAttempt:
         if not self._api_key:
             return TranslationAttempt(LlmUsage(status='not_configured'), note='LLM is not configured on the server.')
-        if not self.ledger.can_reserve():
-            return TranslationAttempt(LlmUsage(status='budget_exhausted'), note='The shared $1 LLM budget is exhausted.')
         if len(text.encode('utf-8')) > 40_000:
             return TranslationAttempt(LlmUsage(status='input_too_long'), note='Entry exceeds the LLM input limit.')
         headers = {'Authorization': 'Bearer ' + self._api_key}
@@ -175,8 +173,6 @@ class LlmTranslator:
                 if input_tokens > MAX_INPUT_TOKENS:
                     return TranslationAttempt(LlmUsage(status='input_too_long'), note='Entry exceeds the LLM input limit.')
                 reservation = self.ledger.reserve(conversation_id)
-                if reservation is None:
-                    return TranslationAttempt(LlmUsage(status='budget_exhausted'), note='The shared $1 LLM budget is exhausted.')
                 metadata = LlmUsage(status='unavailable', requestId=reservation,
                                     reservedUsd=MAX_REQUEST_NANO / NANO_PER_USD)
                 try:

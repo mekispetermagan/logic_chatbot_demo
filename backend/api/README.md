@@ -396,25 +396,25 @@ Keys, raw responses, provider messages and exception text are never included in
 these diagnostics. Unknown provider codes are omitted. Retry the entry manually
 after addressing the reported issue; there are no automatic retries.
 
-The experiment admission budget is **$1 total**, shared across all domains and
-conversations and preserved across restarts. `llm_requests` stores maximum
-reservations and estimated token costs independently of world snapshots. The
-optional Responses transport caps input at 20,000 tokens and output at 2,000
-including reasoning; Agents manages context and output length and limits this
-app's new input to 40,000 bytes. Agent usage is best-effort, without separate
-cache-write counts; estimates charge noncached input at the higher write rate.
-The local guard cannot guarantee a hard cap on an in-flight managed turn. Every
-generation reserves $0.0035 first; uncertain attempts keep that reservation.
-There are no automatic retries and Undo/Clear cannot refund or reset spending.
-Do not delete or change the database to restart experiments unintentionally.
+There is **no local monetary spending cap**. Accumulated spending and pending
+usage never block a new LLM request. `llm_requests` retains durable usage and
+estimated token costs independently of world snapshots. The optional Responses
+transport still caps input at 20,000 tokens and output at 2,000 including reasoning;
+Agents manages context/output length and limits this app's new input to 40,000
+bytes. Agent usage is best-effort, without separate cache-write counts; local
+estimates charge noncached input at the higher write rate. Each generation records
+a $0.0035 pending estimate for accounting only. Uncertain attempts stay pending
+until usage is available. There are no automatic retries, and Undo/Clear does not
+remove accounting history.
 
 Responses include `llmBudget` with `limitUsd`, `spentUsd`, `reservedUsd`,
-`remainingUsd`, and `requestCount`. A machine message from an LLM attempt also
+`remainingUsd`, and `requestCount`; `limitUsd` and `remainingUsd` are `null`
+because no local cap is enforced. A machine message from an LLM attempt also
 has `llm` metadata: status, model, translation, token counts, calculated
 `costUsd`, and any `reservedUsd`. Token cost is a local estimate at the pinned
 rates; compare it with the provider's usage dashboard. Mocked HTTP tests incur
 no API charges. See [LLM translation](../../docs/llm-translation.md)
-for the prompt files, budget assumptions, and limitations.
+for the prompt files, accounting assumptions, and limitations.
 
 Review endpoints return normal edit state:
 
@@ -426,7 +426,7 @@ Review endpoints return normal edit state:
 | `/interpretations/{proposalId}/answer` | `{"text":"Use isolated nodes."}` | Interpret the answer in context and replace the draft; do not apply it. |
 
 All four use POST. Preview, Accept and Reject make no GPT calls; Submit answer
-makes one new bounded call under the existing $1 budget. Pending proposals and
+makes one new bounded call recorded in the usage ledger. Pending proposals and
 accumulated answers survive restart and
 appear as `proposal` in GET responses; previews do not persist. Editing, chat,
 clarification and Undo are blocked while review is pending. Consumed proposals,
@@ -507,7 +507,7 @@ or Google access is needed. Rebuild/install the engine when changing examples.
 Calendar interpretation is integrated with `/calendar/dialogue`: `useLlm:true`
 on a new entry enables syntax-first interpretation. The interpreter is
 provisioned lazily using the configured Agents/Responses backend and shared
-budget. Preview / Accept interpretation / Reject are separate from final Google
+usage ledger. Preview / Accept interpretation / Reject are separate from final Google
 write approval. Typed clarification-value proposals stay bound to the pending
 Haskell question. See [Calendar interpreter](../../docs/agent-sessions.md#calendar-interpreter)
 for context, persistence and authoring sources.

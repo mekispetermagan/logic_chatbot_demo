@@ -47,7 +47,7 @@ It sends `useLlm` on each chat entry; it never changes another client's setting.
    When clarification is needed, the input stays enabled with **Submit answer**.
    Answers request a fresh proposal using the original entry, previous question,
    candidates, parser failures and accumulated answers; they never execute a
-   translation. Each submitted answer is a new bounded, budgeted GPT call.
+   translation. Each submitted answer is a new bounded, accounted GPT call.
 7. Before saving a proposal, and again before preview/accept, the repository
    checks the world, discourse state and message revision. Changed state returns
    HTTP 409; a stale proposal can still be rejected. No model call is retried
@@ -108,7 +108,7 @@ is included in token counting before generation.
 In Responses mode, follow-up requests add `clarification`, containing ordered question/answer
 `turns`, `previousCandidates` and `validationFailures`. The original `entry`
 remains unchanged. The same full input is counted before each generation, so
-growing clarification context stays within the existing token and cost caps.
+growing clarification context stays within the existing token limits.
 Context is explicitly supplied with each fresh request, as supported by the
 [official OpenAI conversation-state documentation](https://developers.openai.com/api/docs/guides/conversation-state).
 Provider failures replace the old candidate set with a failure draft, preserving
@@ -126,35 +126,31 @@ before generation. The complete input limit is 20,000 tokens and the output
 limit is 2,000 tokens including reasoning. Each HTTP operation times out after
 30 seconds; Flutter gives opted-in chat requests 90 seconds and never retries.
 
-## Persistent $1 experiment budget
+## Persistent usage accounting
 
-The total budget is **USD 1 across all requests, conversations and domains**,
-persisted in the application's SQLite database. It does not reset with app/API
-restart, Undo, Clear, or creation of a new conversation. There is no public reset
-endpoint. Deleting/changing the database also changes its accounting history.
+There is **no local monetary spending cap**. Requests are not denied because of
+past spending or pending accounting. Usage remains persisted in SQLite across
+restart, Undo, Clear and creation of new conversations; none resets the ledger.
+Deleting/changing the database also changes its accounting history.
 
-The ledger uses integer nanodollars. The following caps and exact-count settlement
-describe the optional Responses transport; Agents uses the accounting described
+The ledger uses integer nanodollars for local cost estimates. A pending attempt
+records a $0.0035 estimate before generation; this is bookkeeping, not a spend
+reservation that authorizes or limits requests. The optional Responses transport
+retains its per-request input/output limits; Agents uses the accounting described
 in [Persistent Interpreter Agents](agent-sessions.md).
-Rates verified October 17, 2026, per million
-tokens: uncached input $0.10, cached input $0.01, cache writes $0.125, output $0.50.
-It reserves $0.0035 before each generation: maximum input at the cache-write
-rate plus maximum output. A serialized SQLite transaction prevents concurrent
-reservations from exceeding $1. Generation is refused if its maximum cost no
-longer fits, even if a small balance remains.
 
 Reported input, cached, cache-write, total output and reasoning counts are
-recorded, with reasoning included in output rather than charged twice. Reported
-usage settles the reservation at the calculated token cost, including invalid,
-unsupported or incomplete translations. If the response/usage is unavailable,
-the maximum reservation stays counted indefinitely; it is never assumed free
-or automatically retried. Ledger transactions are separate from world/message
-persistence, so rolling back a conversation does not refund a paid attempt.
+recorded, with reasoning included in output rather than counted twice. Reported
+usage settles the attempt at the estimated token cost, including invalid,
+unsupported or incomplete translations. If usage is unavailable, the attempt
+stays pending until provider accounting is available. Missing usage is not assumed
+to be zero, and input is never automatically resubmitted. Ledger transactions
+are separate from world/message persistence.
 
-Chat shows request cost and the global spent/reserved totals. These are local
-calculations using the published rates, not the provider's invoice. The guard
-covers this app at these rates, not unrelated account usage or future rate changes.
-Compare with the OpenAI usage dashboard when enabling live calls.
+Chat shows request and global input/output tokens, with unavailable usage marked
+pending. Cost estimates remain available in tooltips; they are not the provider's
+invoice. The legacy `llmBudget` response object remains for compatibility, with
+`limitUsd` and `remainingUsd` set to `null` to indicate no local cap.
 
 ## Configuration
 
@@ -198,7 +194,7 @@ validated `x-request-id` when available, following the official
 [request debugging guidance](https://developers.openai.com/api/reference/overview#debugging-requests).
 Provider messages, raw bodies, exception text and credentials are excluded;
 unrecognized diagnostic fields are omitted. Diagnostics do not change retries,
-world updates or budget reservations.
+world updates or usage accounting.
 
 References: [model and rates](https://developers.openai.com/api/docs/models/gpt-6-luna),
 [token counting](https://developers.openai.com/api/docs/guides/token-counting),

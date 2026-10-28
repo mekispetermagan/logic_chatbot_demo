@@ -229,3 +229,16 @@ class CalendarLlmOnlyTests(unittest.TestCase):
         self.post('message',expected=409,text='Hello',timeMin=START,timeMax=END)
         state['status']='idle';symbolic.save(state)
         self.assertEqual(self.provider.configs,[])
+
+    def test_prior_spending_and_pending_accounting_do_not_block_a_turn(self):
+        from app.llm_budget import NANO_PER_USD
+        with self.app.state.calendar_llm_only.database.connection() as db:
+            db.execute('INSERT INTO llm_requests (id,conversation_id,reserved_nano,cost_nano) VALUES (?,?,?,?)',
+                       ('spent','old',10*NANO_PER_USD,10*NANO_PER_USD))
+            db.execute('INSERT INTO llm_requests (id,conversation_id,reserved_nano) VALUES (?,?,?)',
+                       ('pending','old',10*NANO_PER_USD))
+        result=self.message('Hello')
+        self.assertEqual(result['status'],'answered')
+        self.assertIsNone(result['llmBudget']['limitUsd'])
+        self.assertIsNone(result['llmBudget']['remainingUsd'])
+        self.assertEqual(result['llmBudget']['requestCount'],3)

@@ -113,7 +113,7 @@ notice that earlier tool results are not included and fresh facts may be needed.
 Both modes and GUI writes share the current Calendar mutation gate. A pending
 clarification/review/recovery in one mode blocks the other writer. Sessions and
 accounting use distinct `calendar-llm-only:` context IDs. Every user-started agent
-turn reserves budget once; returning function results resumes the same turn.
+turn creates one accounting record; returning function results resumes the same turn.
 Delayed usage reconciliation and shared token totals include this mode. Provider
 and tool failures remain recorded independently of mathematical feasibility.
 

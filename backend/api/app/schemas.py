@@ -124,10 +124,10 @@ class LlmUsage(Schema):
 
 
 class LlmBudget(Schema):
-    limitUsd: float = 1
+    limitUsd: float | None = None
     spentUsd: float = 0
     reservedUsd: float = 0
-    remainingUsd: float = 1
+    remainingUsd: float | None = None
     requestCount: int = 0
     inputTokens: int = 0
     outputTokens: int = 0

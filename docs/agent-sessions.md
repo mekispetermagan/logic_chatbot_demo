@@ -27,7 +27,7 @@ The key must have access to the configured model and Agents read/write operation
    and examples. A separate session is created for each conversation.
 5. Configure the optional Calendar MCP connection, select Calendar, enable its
    LLM switch and submit `Find a free half hour on Thursday morning`. This creates
-   the Calendar agent/session using the same configured key and shared budget.
+   the Calendar agent/session using the same configured key and shared usage ledger.
 6. Review the returned proposal. Preview and Accept use Haskell; neither manual
    dashboard setup nor copying agent IDs into configuration is necessary.
 
@@ -36,7 +36,7 @@ agent. Only domains actually used for LLM interpretation need remote agents.
 Check the backend's `agent configured` log for the new ID and domain, and the
 usual proposal/usage feedback for a completed interpretation. Setup/transport
 errors remain explicit. Without a key, all controlled-English features work.
-These examples request normal model turns under the shared admission budget;
+These examples request normal model turns recorded in the shared usage ledger;
 they are not free connectivity probes. The optional Responses backend does not
 create or use saved agents.
 
@@ -77,7 +77,7 @@ Worlds, salience, chat, pending review/clarification, Undo, saved slots, queued
 outcomes, and all usage/reservations remain unchanged. A new session receives
 the authoritative world, bounded queued outcomes and explicit clarification
 context; it does not recover the old remote session's full memory. The command
-does not invoke the provider, need a key, or reset the budget. It does not delete
+does not invoke the provider, need a key, or clear the usage ledger. It does not delete
 old remote agents or sessions, cancel uncertain remote turns, or undo their costs.
 
 After a key/project change, edit `.env`, reload/export it in the backend terminal,
@@ -160,12 +160,12 @@ Programs and feedback are never cut into misleading partial sentences.
 
 The current world, user entry and clarification are always complete. If these
 alone exceed the limit, the backend rejects the request before agent setup or
-spend reservation. Outcome compaction applies on first use, session reuse and
+pending accounting. Outcome compaction applies on first use, session reuse and
 session replacement, including conversations with large pre-existing backlogs.
 Only transport context is bounded: SQLite outcome records, chat, worlds, Undo
 history and saved slots are retained. The outcome cursor advances across the
 complete fetched range after the remote turn is observed, including entries
-represented by summaries or omission counts. Failed admission and uncertain
+represented by summaries or omission counts. Rejected requests and uncertain
 turns do not advance it; a subsequent request can compact that backlog again.
 
 `llm_session_events` is a durable outcome queue. Accepted programs, rejection,
@@ -217,9 +217,20 @@ remain explicit errors. There is no silent switch away from Luna.
 
 ## Accounting and logging
 
-The global $1 admission guard and durable usage ledger remain independent of
-Undo. Each submitted agent turn reserves $0.0035; reported turn usage settles
-the reservation. Unknown usage leaves it reserved and the UI shows cost unknown.
+There is no local monetary spending cap. The durable usage ledger remains
+independent of Undo. Each submitted agent turn records a $0.0035 pending estimate;
+reported turn usage settles that accounting record. Neither accumulated spending
+nor pending estimates block another turn. Usage can arrive after a turn completes.
+A background read-only reconciler checks pending turns and settles each reservation once; it never sends
+another agent input. Turn/session accounting links survive restarts and agent
+recreation. Chat labels show provider-reported input/output tokens, and the shared
+footer totals those counts across all domains/conversations. Output includes
+reasoning. Outstanding counts are shown as pending; quiet frontend refreshes pick
+up settled usage. Cost estimates remain in tooltips.
+
+Older turns without accounting links are recovered only when a saved session and
+an unambiguous reservation/turn timestamp match are available. Unmatched or
+invalid usage retains its reservation and stays pending; counts are never guessed.
 Failure and cancellation do not imply a refund.
 
 Agents provides best-effort turn usage and no separate cache-write count. Local
@@ -228,9 +239,9 @@ are conservative estimates of the reported token usage, not final invoices;
 recorded counts can later change. The previous Responses-specific 20,000-input
 and 2,000-output caps are not Agents configuration fields. Agent inputs sent by
 this app are limited to 40,000 UTF-8 bytes; the managed session controls its
-history/compaction and generated length. Consequently the $1 guard blocks new
-turns based on accounting/reservations, but cannot guarantee a hard provider
-spending ceiling for an in-flight managed turn.
+history/compaction and generated length. These are technical request limits,
+not a monetary spending guard. The legacy `llmBudget.limitUsd` and `remainingUsd`
+fields are `null`; token totals, cost estimates and pending usage remain available.
 
 The existing credential-redacted JSONL transcript records saved-agent setup,
 session creation, follow-up inputs, polling, paginated output, cancellation and
@@ -280,7 +291,7 @@ bypass interpretation. Courtesy-only responses retain the pending question.
 Calendar stores a stable interpreter-context ID with its dialogue. Persistent
 sessions and bounded outcome queues use `calendar_llm_sessions` and
 `calendar_llm_events`; no board conversation or event-world mirror is created.
-Configuration IDs, leases, transcripts and the global $1 admission ledger are
+Configuration IDs, leases, transcripts and the global usage ledger are
 shared with the existing interpreter infrastructure. Schema additions happen on
 backend startup without deleting existing conversations or accounting. Recreate
 supports `--domain calendar`; `--domain all` now includes it. Remote resources are

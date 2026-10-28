@@ -15,7 +15,7 @@ from app.database import Database
 from app.engine import LogicEngine
 from app.llm import prompt_for, PROMPTS
 from app.llm_transcript import LlmTranscript
-from app.llm_budget import (LlmBudgetLedger, budget_in, BUDGET_NANO, MAX_REQUEST_NANO,
+from app.llm_budget import (LlmBudgetLedger, budget_in, NANO_PER_USD, MAX_REQUEST_NANO,
                             MAX_INPUT_TOKENS, MAX_OUTPUT_TOKENS)
 from app.main import create_app
 from app.schemas import CellularWorld, World
@@ -738,17 +738,23 @@ class LlmTests(unittest.TestCase):
         self.assertEqual(result['llmBudget']['requestCount'], 0)
         self.assertEqual(self.usage(result)['status'], 'input_too_long')
 
-    def test_exhausted_global_budget_survives_restart_and_domain_switch(self):
+    def test_prior_spending_does_not_block_requests_after_restart_or_domain_switch(self):
         with Database(self.settings.database_path).connection() as connection:
             connection.execute('INSERT INTO llm_requests (id, conversation_id, reserved_nano, cost_nano) VALUES (?, ?, ?, ?)',
-                               ('seed', 'previous', BUDGET_NANO, BUDGET_NANO))
+                               ('seed', 'previous', 10 * NANO_PER_USD, 10 * NANO_PER_USD))
         result = self.chat()
-        self.assertEqual(self.usage(result)['status'], 'budget_exhausted')
-        self.assertEqual(self.calls, [])
+        self.assertNotEqual(self.usage(result)['status'], 'budget_exhausted')
+        self.assertEqual(len(self.calls), 2)
+        self.assertIsNone(result['llmBudget']['limitUsd'])
+        self.assertIsNone(result['llmBudget']['remainingUsd'])
         with TestClient(create_app(self.settings)) as restarted:
             other = restarted.post('/conversations', json={'domain': 'objects'}).json()
-            self.assertEqual(other['llmBudget']['remainingUsd'], 0)
-            self.assertEqual(other['llmBudget']['spentUsd'], 1)
+            self.assertIsNone(other['llmBudget']['remainingUsd'])
+            self.assertGreaterEqual(other['llmBudget']['spentUsd'], 10)
+            response = restarted.post('/conversations/' + other['conversationId'] + '/chat',
+                                      json={'text': 'Make a red object', 'useLlm': True})
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(len(self.calls), 4)
 
     def test_missing_key_is_nonfatal_and_never_contacts_provider(self):
         settings = Settings(database_path=self.settings.database_path)
@@ -831,20 +837,23 @@ class LlmTests(unittest.TestCase):
 
 
 class BudgetConcurrencyTests(unittest.TestCase):
-    def test_concurrent_reservations_never_exceed_one_dollar(self):
+    def test_concurrent_attempts_keep_unique_accounting_beyond_old_cap(self):
         with tempfile.TemporaryDirectory() as directory:
             database = Database(Path(directory) / 'budget.sqlite3')
             database.initialize()
             ledger = LlmBudgetLedger(database)
             with ThreadPoolExecutor(max_workers=8) as pool:
                 reservations = list(pool.map(ledger.reserve, range(300)))
-            expected = BUDGET_NANO // MAX_REQUEST_NANO
-            self.assertEqual(sum(value is not None for value in reservations), expected)
+            self.assertEqual(len(set(reservations)), 300)
+            self.assertTrue(all(isinstance(value, str) for value in reservations))
             with database.connection() as connection:
                 budget = budget_in(connection)
-            self.assertLessEqual(budget.reservedUsd, 1)
-            self.assertFalse(ledger.can_reserve())
-            self.assertIsNone(ledger.reserve('one-more'))
+            self.assertEqual(budget.requestCount, 300)
+            self.assertAlmostEqual(budget.reservedUsd, 300 * MAX_REQUEST_NANO / NANO_PER_USD)
+            self.assertGreater(budget.reservedUsd, 1)
+            self.assertIsNone(budget.limitUsd)
+            self.assertIsNone(budget.remainingUsd)
+            self.assertIsInstance(ledger.reserve('one-more'), str)
 
 
 class TranscriptTests(unittest.TestCase):

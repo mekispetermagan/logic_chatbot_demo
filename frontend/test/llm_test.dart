@@ -29,10 +29,10 @@ Map<String, dynamic> state({bool translated = false}) => {
   'canUndo': translated,
   'world': {'width': 8, 'height': 8, 'objects': []},
   'llmBudget': {
-    'limitUsd': 1,
+    'limitUsd': null,
     'spentUsd': translated ? 0.0001095 : 0,
     'reservedUsd': 0,
-    'remainingUsd': translated ? 0.9998905 : 1,
+    'remainingUsd': null,
     'requestCount': translated ? 1 : 0,
     'inputTokens': translated ? 1000 : 0,
     'outputTokens': translated ? 50 : 0,

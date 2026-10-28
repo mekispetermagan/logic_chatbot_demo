@@ -167,8 +167,6 @@ class CalendarLlmDialogue:
     async def message(self,state,body):
         if not self.settings.openai_api_key:
             raise CalendarError('LLM is not configured on the server.',503)
-        if not self.agent.ledger.can_reserve():
-            raise CalendarError('The shared LLM budget is exhausted.',429)
         if not body.get('text','').strip():
             raise CalendarError('Message must not be blank.',422)
         if state['status']=='clarification':
@@ -212,8 +210,6 @@ class CalendarLlmDialogue:
             previous=(await self.rpc(state,'GET',f'/sessions/{sid}/turns',deadline,params={'order':'desc','limit':1}))['data']
             previous=previous[0]['id'] if previous else None
         reservation=self.agent.ledger.reserve(state['conversationId'])
-        if reservation is None:
-            raise CalendarError('The shared LLM budget is exhausted.',429)
         state.update(status='running', previousTurn=previous, turnId=None, reservationId=reservation,
             llm={'status':'pending','model':MODEL,'requestId':reservation,'reservedUsd':MAX_REQUEST_NANO/NANO_PER_USD})
         self.save(state)  # Submission intent is durable; input is never automatically replayed.
