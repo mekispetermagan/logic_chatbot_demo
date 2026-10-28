@@ -7,7 +7,7 @@ from .engine import EngineReply
 from .schemas import (ChatMessage, ConversationState, EditState, World, WorldState, CellularWorld,
                       PendingEntry, DomainId, LlmUsage, world_from_json,
                       InterpretationProposal, InterpretationPreview, WorldSlot)
-from .llm_budget import budget_in
+from .llm_budget import budget_in, hydrate_usage
 
 
 class PendingConflict(Exception):
@@ -107,6 +107,9 @@ class ConversationRepository:
                       resetPending=bool(row['reset_pending']),
                       proposal=InterpretationProposal.model_validate_json(proposal['proposal_json']) if proposal else None,
                       worldSlots=[WorldSlot(slot=slot, savedAt=saved_slots.get(slot)) for slot in range(1, 6)])
+        values['messages'] = [ChatMessage.model_validate(hydrate_usage(connection, m.model_dump(mode='json'))) for m in messages]
+        if values['proposal']:
+            values['proposal'] = InterpretationProposal.model_validate(hydrate_usage(connection, values['proposal'].model_dump(mode='json')))
         return ConversationState(**values) if feedback is None else EditState(**values, feedback=feedback)
 
     def create(self, conversation_id: UUID, world: WorldState, domain: DomainId) -> ConversationState:

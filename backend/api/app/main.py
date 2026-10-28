@@ -1,4 +1,6 @@
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, suppress
+import asyncio
+from .agent_usage import AgentUsageReconciler
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -41,7 +43,17 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         )
         app.state.calendar = CalendarMcp(settings)
         app.state.calendar_dialogue = CalendarDialogue(database, settings.engine_path, lambda: app.state.calendar, app.state.conversation_service.translator)
-        yield
+        translator = app.state.conversation_service.translator
+        usage_translator = AgentTranslator(settings.openai_api_key, translator.ledger, translator.transcript)
+        usage_task = (asyncio.create_task(AgentUsageReconciler(usage_translator).run())
+                      if settings.openai_api_key else None)
+        try:
+            yield
+        finally:
+            if usage_task:
+                usage_task.cancel()
+                with suppress(asyncio.CancelledError):
+                    await usage_task
 
     app = FastAPI(title="Logic Chatbot Demo API", lifespan=lifespan)
 

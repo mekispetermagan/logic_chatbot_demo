@@ -365,13 +365,13 @@ class _ChatPanelState extends State<ChatPanel> {
         if (widget.llmBudget case final budget?) ...[
           Tooltip(
             message:
-                'Estimated spend shared across all conversations and domains. '
-                'Remaining: \$${budget.remainingUsd.toStringAsFixed(6)}. '
-                'Uncertain requests retain their maximum reservation.',
+                'Provider-reported token totals across all conversations and domains. Output includes reasoning. '
+                'Estimated spend: \$${budget.spentUsd.toStringAsFixed(6)}. '
+                'Requests with unavailable usage remain pending.',
             child: Text(
-              'LLM: \$${budget.spentUsd.toStringAsFixed(6)} / '
-              '\$${budget.limitUsd.toStringAsFixed(2)}'
-              '${budget.reservedUsd > 0 ? ' · \$${budget.reservedUsd.toStringAsFixed(6)} reserved' : ''}',
+              'Total tokens: ${_tokenCount(budget.inputTokens)} input · '
+              '${_tokenCount(budget.outputTokens)} output'
+              '${budget.pendingUsageCount > 0 ? ' · ${budget.pendingUsageCount} usage pending' : ''}',
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ),
@@ -541,14 +541,13 @@ class ChatBubble extends StatelessWidget {
                   message:
                       'Estimated token cost at configured Standard rates.\n'
                       '${usage.model} · ${usage.status}\n'
+                      '${usage.costUsd != null ? 'Estimated cost: \$${usage.costUsd!.toStringAsFixed(6)}' : 'Estimated cost unavailable'}\n'
+                      'Reserved: \$${usage.reservedUsd.toStringAsFixed(6)}\n'
                       'Input: ${usage.inputTokens ?? 'unknown'} tokens; '
                       'output including reasoning: ${usage.outputTokens ?? 'unknown'} tokens.',
                   child: Text(
-                    usage.costUsd != null
-                        ? 'LLM cost: \$${usage.costUsd!.toStringAsFixed(6)}'
-                        : usage.reservedUsd > 0
-                        ? 'LLM cost unknown · \$${usage.reservedUsd.toStringAsFixed(6)} reserved'
-                        : 'LLM cost: \$0.000000',
+                    'Tokens: ${usage.inputTokens == null && usage.reservedUsd > 0 ? 'pending' : _tokenCount(usage.inputTokens)} input · '
+                    '${usage.outputTokens == null && usage.reservedUsd > 0 ? 'pending' : _tokenCount(usage.outputTokens)} output',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ),
@@ -560,3 +559,10 @@ class ChatBubble extends StatelessWidget {
     );
   }
 }
+
+String _tokenCount(int? count) => count == null
+    ? 'unavailable'
+    : count.toString().replaceAllMapped(
+        RegExp(r'(\d)(?=(\d{3})+$)'),
+        (match) => '${match[1]},',
+      );

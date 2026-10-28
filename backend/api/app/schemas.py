@@ -129,6 +129,9 @@ class LlmBudget(Schema):
     reservedUsd: float = 0
     remainingUsd: float = 1
     requestCount: int = 0
+    inputTokens: int = 0
+    outputTokens: int = 0
+    pendingUsageCount: int = 0
 
 
 class ChatMessage(Schema):

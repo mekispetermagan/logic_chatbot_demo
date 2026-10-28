@@ -77,6 +77,12 @@ class Database:
                     usage_json TEXT,
                     created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
                 );
+                CREATE TABLE IF NOT EXISTS llm_agent_turns (
+                    reservation_id TEXT PRIMARY KEY REFERENCES llm_requests(id),
+                    session_id TEXT NOT NULL,
+                    turn_id TEXT NOT NULL UNIQUE,
+                    next_poll REAL NOT NULL DEFAULT 0
+                );
                 CREATE TABLE IF NOT EXISTS interpretation_proposals (
                     id TEXT PRIMARY KEY,
                     conversation_id TEXT NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,

@@ -182,6 +182,10 @@ class AgentTranslator(LlmTranslator):
                     turn_id = remote_id(turn['id'])
                     self.store.finish_turn(conversation_id, session_id, turn_id, next_cursor)
                     metadata.requestId = turn_id
+                    with self.ledger.database.connection() as connection:
+                        connection.execute('INSERT OR IGNORE INTO llm_agent_turns '
+                            '(reservation_id, session_id, turn_id) VALUES (?, ?, ?)',
+                            (reservation, session_id, turn_id))
                     stage = 'agent usage'
                     if turn.get('usage') is not None:
                         metadata = self.ledger.settle(reservation, {'id': turn_id, 'model': MODEL,

@@ -19,7 +19,7 @@ from .calendar_mcp import CalendarError, CalendarMcp
 from .engine import EngineUnavailable, EngineInvalidRequest
 from .agent_store import AgentStore
 from .calendar_interpreter import CalendarInterpreter
-from .llm_budget import budget_in
+from .llm_budget import budget_in, hydrate_usage
 
 BUDAPEST = ZoneInfo('Europe/Budapest')
 EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
@@ -133,6 +133,7 @@ class CalendarDialogue:
     def public(self, state):
         with self.database.connection() as db:
             budget = budget_in(db).model_dump()
+            state = hydrate_usage(db, state)
         return {**{k: v for k, v in state.items() if k not in ('work', 'handles', 'salience', 'fingerprint', 'interpretationBase', 'interpretationPreviewWork', 'interpretationCandidatesWork', 'interpreterId')},
                 'eventHandles': state['handles'], 'canRevise': bool(state.get('work')) and not state.get('interpretation'), 'llmBudget': budget}
 

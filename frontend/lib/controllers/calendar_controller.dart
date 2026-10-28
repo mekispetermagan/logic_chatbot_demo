@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
@@ -12,6 +13,57 @@ import '../models/llm_usage.dart';
 class CalendarController extends ChangeNotifier {
   CalendarController({required this.api, DateTime Function()? now})
     : week = CalendarWeek.containing((now ?? DateTime.now)());
+
+  @override
+  void notifyListeners() {
+    if (!_disposed && hasListeners && (llmBudget?.pendingUsageCount ?? 0) > 0) {
+      _usageTimer ??= Timer.periodic(
+        const Duration(seconds: 5),
+        (_) => _refreshUsage(),
+      );
+    } else {
+      _usageTimer?.cancel();
+      _usageTimer = null;
+    }
+    super.notifyListeners();
+  }
+
+  @override
+  void removeListener(VoidCallback listener) {
+    super.removeListener(listener);
+    if (!hasListeners) {
+      _usageTimer?.cancel();
+      _usageTimer = null;
+    }
+  }
+
+  Timer? _usageTimer;
+  bool _usageRefreshing = false;
+  Future<void> _refreshUsage() async {
+    final before = dialogue;
+    if (_disposed ||
+        chatBusy ||
+        editing ||
+        _usageRefreshing ||
+        (llmBudget?.pendingUsageCount ?? 0) == 0) {
+      return;
+    }
+    _usageRefreshing = true;
+    try {
+      final updated = await api.dialogue();
+      if (!_disposed &&
+          !chatBusy &&
+          !editing &&
+          identical(dialogue, before)) {
+        _adoptDialogue(updated);
+        notifyListeners();
+      }
+    } catch (_) {
+      // Accounting refresh must not interrupt the pending dialogue.
+    } finally {
+      _usageRefreshing = false;
+    }
+  }
 
   final CalendarApi api;
   CalendarWeek week;
@@ -317,6 +369,7 @@ class CalendarController extends ChangeNotifier {
 
   @override
   void dispose() {
+    _usageTimer?.cancel();
     _disposed = true;
     ++_request;
     api.close();

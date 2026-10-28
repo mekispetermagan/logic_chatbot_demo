@@ -1,3 +1,4 @@
+import 'dart:async';
 import '../models/domain.dart';
 import '../models/network_shape.dart';
 import '../models/attribute_property.dart';
@@ -14,6 +15,60 @@ import '../storage/conversation_id_store.dart';
 /// Keeps local selection state and displays worlds returned by the server.
 class ConversationController extends ChangeNotifier {
   ConversationController({required this.api, required this.store});
+
+  @override
+  void notifyListeners() {
+    if (!_disposed &&
+        hasListeners &&
+        (conversation?.llmBudget?.pendingUsageCount ?? 0) > 0) {
+      _usageTimer ??= Timer.periodic(
+        const Duration(seconds: 5),
+        (_) => _refreshUsage(),
+      );
+    } else {
+      _usageTimer?.cancel();
+      _usageTimer = null;
+    }
+    super.notifyListeners();
+  }
+
+  @override
+  void removeListener(VoidCallback listener) {
+    super.removeListener(listener);
+    if (!hasListeners) {
+      _usageTimer?.cancel();
+      _usageTimer = null;
+    }
+  }
+
+  Timer? _usageTimer;
+  bool _usageRefreshing = false;
+  Future<void> _refreshUsage() async {
+    final before = conversation;
+    if (_disposed ||
+        loading ||
+        editing ||
+        _usageRefreshing ||
+        before == null ||
+        (before.llmBudget?.pendingUsageCount ?? 0) == 0) {
+      return;
+    }
+    _usageRefreshing = true;
+    try {
+      final updated = await api.get(before.id);
+      if (!_disposed &&
+          !loading &&
+          !editing &&
+          identical(conversation, before)) {
+        conversation = updated;
+        notifyListeners();
+      }
+    } catch (_) {
+      // Keep the last known counts during transient accounting refresh failures.
+    } finally {
+      _usageRefreshing = false;
+    }
+  }
 
   WorldDomain domain = WorldDomain.objects;
   NetworkShape selectedNetworkShape = NetworkShape.empty;
@@ -426,6 +481,7 @@ class ConversationController extends ChangeNotifier {
 
   @override
   void dispose() {
+    _usageTimer?.cancel();
     _disposed = true;
     api.close();
     super.dispose();

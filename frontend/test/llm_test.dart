@@ -34,6 +34,9 @@ Map<String, dynamic> state({bool translated = false}) => {
     'reservedUsd': 0,
     'remainingUsd': translated ? 0.9998905 : 1,
     'requestCount': translated ? 1 : 0,
+    'inputTokens': translated ? 1000 : 0,
+    'outputTokens': translated ? 50 : 0,
+    'pendingUsageCount': 0,
   },
   'messages': translated
       ? [
@@ -56,6 +59,43 @@ Map<String, dynamic> state({bool translated = false}) => {
 };
 
 void main() {
+  testWidgets('pending counts refresh quietly and stop after settlement', (
+    tester,
+  ) async {
+    var reads = 0;
+    final controller = ConversationController(
+      api: ConversationApi(
+        baseUrl: Uri.parse('http://localhost'),
+        client: MockClient((request) async {
+          reads++;
+          final payload =
+              jsonDecode(jsonEncode(state(translated: true)))
+                  as Map<String, dynamic>;
+          if (reads == 1) {
+            payload['llmBudget']['pendingUsageCount'] = 1;
+            payload['llmBudget']['inputTokens'] = 0;
+            payload['llmBudget']['outputTokens'] = 0;
+            payload['messages'][1]['llm']['inputTokens'] = null;
+            payload['messages'][1]['llm']['outputTokens'] = null;
+          }
+          return http.Response(jsonEncode(payload), 200);
+        }),
+      ),
+      store: SavedConversation(),
+    );
+    controller.addListener(() {});
+    addTearDown(controller.dispose);
+    await controller.load();
+    expect(controller.conversation!.llmBudget!.pendingUsageCount, 1);
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pumpAndSettle();
+    expect(controller.conversation!.llmBudget!.inputTokens, 1000);
+    expect(controller.conversation!.messages.last.llm!.outputTokens, 50);
+    final settledReads = reads;
+    await tester.pump(const Duration(seconds: 10));
+    expect(reads, settledReads);
+  });
+
   test(
     'each chat request carries the current opt-in flag, initially false',
     () async {
@@ -120,8 +160,11 @@ void main() {
       await tester.pump();
       await tester.tap(find.byTooltip('Send'));
       await tester.pumpAndSettle();
-      expect(find.text('LLM cost: \$0.000110'), findsOneWidget);
-      expect(find.text('LLM: \$0.000110 / \$1.00'), findsOneWidget);
+      expect(find.text('Tokens: 1,000 input · 50 output'), findsOneWidget);
+      expect(
+        find.text('Total tokens: 1,000 input · 50 output'),
+        findsOneWidget,
+      );
       expect(find.textContaining('Interpreted as:'), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
@@ -146,8 +189,42 @@ void main() {
         home: Scaffold(body: ChatBubble(message: message)),
       ),
     );
-    expect(find.text('LLM cost unknown · \$0.003500 reserved'), findsOneWidget);
+    expect(find.text('Tokens: pending input · pending output'), findsOneWidget);
   });
+
+  for (final counts in <List<int?>>[
+    [0, 0],
+    [8420, null],
+  ]) {
+    testWidgets('token counts preserve zeros and partial usage $counts', (
+      tester,
+    ) async {
+      final message = ChatMessage.fromJson({
+        'role': 'machine',
+        'text': 'Reply',
+        'isError': false,
+        'llm': {
+          'status': 'proposed',
+          'model': 'gpt-6-luna',
+          'inputTokens': counts[0],
+          'outputTokens': counts[1],
+        },
+      });
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(body: ChatBubble(message: message)),
+        ),
+      );
+      expect(
+        find.text(
+          counts[0] == 0
+              ? 'Tokens: 0 input · 0 output'
+              : 'Tokens: 8,420 input · unavailable output',
+        ),
+        findsOneWidget,
+      );
+    });
+  }
 
   testWidgets('courtesy displays as chat without a proposal or world change', (
     tester,

@@ -1,5 +1,6 @@
 """Global, durable spend accounting; independent of conversation Undo."""
 from uuid import uuid4
+import json
 
 from .database import Database
 from .schemas import LlmBudget, LlmUsage
@@ -17,9 +18,13 @@ MAX_REQUEST_NANO = MAX_INPUT_TOKENS * WRITE_RATE + MAX_OUTPUT_TOKENS * OUTPUT_RA
 def budget_in(connection) -> LlmBudget:
     row = connection.execute("""SELECT COUNT(*) AS requests,
         COALESCE(SUM(cost_nano), 0) AS spent,
-        COALESCE(SUM(CASE WHEN cost_nano IS NULL THEN reserved_nano ELSE 0 END), 0) AS reserved
+        COALESCE(SUM(CASE WHEN cost_nano IS NULL THEN reserved_nano ELSE 0 END), 0) AS reserved,
+        COALESCE(SUM(CASE WHEN cost_nano IS NOT NULL THEN json_extract(usage_json, '$.inputTokens') ELSE 0 END), 0) AS input_tokens,
+        COALESCE(SUM(CASE WHEN cost_nano IS NOT NULL THEN json_extract(usage_json, '$.outputTokens') ELSE 0 END), 0) AS output_tokens,
+        COALESCE(SUM(CASE WHEN cost_nano IS NULL THEN 1 ELSE 0 END), 0) AS pending
         FROM llm_requests""").fetchone()
-    return LlmBudget(spentUsd=row['spent'] / NANO_PER_USD,
+    return LlmBudget(inputTokens=row['input_tokens'], outputTokens=row['output_tokens'],
+                     pendingUsageCount=row['pending'], spentUsd=row['spent'] / NANO_PER_USD,
                      reservedUsd=row['reserved'] / NANO_PER_USD,
                      remainingUsd=max(0, BUDGET_NANO - row['spent'] - row['reserved']) / NANO_PER_USD,
                      requestCount=row['requests'])
@@ -81,3 +86,21 @@ class LlmBudgetLedger:
                                (cost, metadata.model_dump_json(), identifier))
         return metadata
 
+
+
+def hydrate_usage(connection, value):
+    """Project canonical accounting onto messages without changing dialogue state."""
+    if isinstance(value, list):
+        return [hydrate_usage(connection, item) for item in value]
+    if not isinstance(value, dict):
+        return value
+    result = {k: hydrate_usage(connection, v) for k, v in value.items()}
+    if value.get('requestId'):
+        row = connection.execute(
+            'SELECT usage_json FROM llm_requests WHERE cost_nano IS NOT NULL AND '
+            "json_extract(usage_json, '$.requestId') = ?", (value['requestId'],)).fetchone()
+        if row:
+            result.update({k: v for k, v in json.loads(row['usage_json']).items()
+                           if k in ('inputTokens', 'outputTokens', 'cachedTokens', 'cacheWriteTokens',
+                                    'reasoningTokens', 'costUsd', 'reservedUsd')})
+    return result

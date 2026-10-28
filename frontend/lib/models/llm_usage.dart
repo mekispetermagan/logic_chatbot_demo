@@ -27,21 +27,30 @@ class LlmUsage {
 
 class LlmBudget {
   const LlmBudget({
-    required this.limitUsd,
+    this.limitUsd,
     required this.spentUsd,
     required this.reservedUsd,
-    required this.remainingUsd,
+    this.remainingUsd,
+    this.inputTokens = 0,
+    this.outputTokens = 0,
+    this.pendingUsageCount = 0,
   });
 
   factory LlmBudget.fromJson(Map<String, dynamic> json) => LlmBudget(
-    limitUsd: (json['limitUsd'] as num).toDouble(),
+    limitUsd: (json['limitUsd'] as num?)?.toDouble(),
     spentUsd: (json['spentUsd'] as num).toDouble(),
     reservedUsd: (json['reservedUsd'] as num).toDouble(),
-    remainingUsd: (json['remainingUsd'] as num).toDouble(),
+    remainingUsd: (json['remainingUsd'] as num?)?.toDouble(),
+    inputTokens: json['inputTokens'] as int? ?? 0,
+    outputTokens: json['outputTokens'] as int? ?? 0,
+    pendingUsageCount: json['pendingUsageCount'] as int? ?? 0,
   );
 
-  final double limitUsd;
+  final double? limitUsd;
   final double spentUsd;
   final double reservedUsd;
-  final double remainingUsd;
+  final double? remainingUsd;
+  final int inputTokens;
+  final int outputTokens;
+  final int pendingUsageCount;
 }
